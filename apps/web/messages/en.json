@@ -1,7 +1,8 @@
 {
   "meta": {
     "title": "REBP Portal",
-    "description": "Register, get licensed and verify Real Estate Brokerage Practitioners and Firms."
+    "description": "Register, get licensed and verify Real Estate Brokerage Practitioners and Firms.",
+    "homeTitle": "Real estate brokerage licensing and public register"
   },
   "brand": {
     "name": "REBP Portal",
@@ -34,7 +35,8 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "pilotBanner": "Pilot release — sample data only. Fees and legal texts are placeholders pending approval.",
-    "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body."
+    "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body.",
+    "dismiss": "Dismiss"
   },
   "nav": {
     "home": "Home",
@@ -68,7 +70,9 @@
     "breadcrumb": "Breadcrumb",
     "mainNavigation": "Main navigation",
     "myAccess": "My access",
-    "access": "Access control"
+    "access": "Access control",
+    "more": "More",
+    "tabBar": "Primary"
   },
   "theme": {
     "toggle": "Change theme",
@@ -159,6 +163,21 @@
       "REBF": {
         "name": "Real Estate Brokerage Firm",
         "summary": "A legal entity licensed to carry on brokerage, led by a Principal Broker."
+      }
+    },
+    "faqTitle": "Common questions",
+    "faq": {
+      "which": {
+        "q": "Which category should I apply for?",
+        "a": "It depends on your age, education, experience and any licence you already hold. The eligibility check recommends a category in about a minute."
+      },
+      "upgrade": {
+        "q": "How do I move up to a higher category?",
+        "a": "Most upgrades need three years of documented practice in the category below, plus the training and exam for the new one. Your experience carries forward."
+      },
+      "firm": {
+        "q": "Can a company be licensed?",
+        "a": "Yes. A Real Estate Brokerage Firm registers as a legal entity and must name a licensed Principal Broker."
       }
     }
   },
@@ -314,7 +333,21 @@
     "securityBody": "Turn on two-step verification so only you can sign in.",
     "securityCta": "Set up two-step verification",
     "securityOn": "Two-step verification is on.",
-    "roles": "Your roles"
+    "roles": "Your roles",
+    "startShort": "Five steps from draft to licence.",
+    "journey": "Application journey",
+    "setupTitle": "Finish setting up",
+    "setupDone": "Account secured",
+    "setupBody": "Three quick checks keep your account safe.",
+    "setupProgress": "{done} of {total} setup steps done",
+    "setup": {
+      "email": "Email verified",
+      "phone": "Phone verified",
+      "twoStep": "Two-step verification"
+    },
+    "noLicence": "No licence yet",
+    "activity": "Recent activity",
+    "noActivity": "Nothing yet."
   },
   "security": {
     "title": "Security",
@@ -577,7 +610,8 @@
     "rights": "© {year} Professional Body for Real Estate Brokerage Practitioners",
     "privacy": "Privacy",
     "accessibility": "Accessibility",
-    "contact": "Contact"
+    "contact": "Contact",
+    "navLabel": "Footer"
   },
   "devMode": {
     "codeLabel": "Dev mode · simulated code",
@@ -810,5 +844,230 @@
     "count": "{count} of {total} permissions",
     "mfa": "Your roles require two-step verification.",
     "requestNote": "Need more access? Ask a system administrator — every change is recorded in the audit trail."
+  },
+  "ladder": {
+    "title": "The career ladder",
+    "marker": {
+      "current": "You",
+      "recommended": "Best fit",
+      "next": "Next"
+    },
+    "prepare": "Documents to prepare",
+    "check": "Check my eligibility",
+    "req": {
+      "education": "Education",
+      "experienceShort": "{years} yrs",
+      "exam": "Exam",
+      "licenceShort": "Licence",
+      "supervised": "Supervised",
+      "adult": "Aged 18 or over",
+      "training": "Approved training certificate",
+      "examFull": "Licensing examination",
+      "experience": "{years} years documented as {category}",
+      "licence": "Holds a valid {category} licence",
+      "supervisedFull": "Works under a named supervisor",
+      "firm": "A registered company with a Principal Broker",
+      "territory": "A proposed field territory"
+    },
+    "education": {
+      "NONE": "No minimum qualification",
+      "A2": "A2 certificate or equivalent",
+      "A1_OR_HIGHER": "Relevant A1, A0 or bachelor's degree",
+      "REAL_ESTATE_DEGREE": "Degree in real estate, valuation or estate management"
+    }
+  },
+  "status": {
+    "application": {
+      "DRAFT": "Draft",
+      "PENDING_PAYMENT": "Awaiting payment",
+      "PENDING_CONFIRMATIONS": "Awaiting confirmation",
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under review",
+      "ACTION_REQUIRED": "Action required",
+      "FURTHER_ASSESSMENT": "Further assessment",
+      "PENDING_DECISION": "Awaiting decision",
+      "APPROVED": "Approved",
+      "APPROVED_WITH_CONDITIONS": "Approved with conditions",
+      "DEFERRED": "Deferred",
+      "REJECTED": "Rejected",
+      "LICENSE_ISSUED": "Licence issued",
+      "WITHDRAWN": "Withdrawn",
+      "EXPIRED_DRAFT": "Expired draft"
+    },
+    "licence": {
+      "ACTIVE": "Valid",
+      "EXPIRED": "Expired",
+      "LAPSED": "Lapsed",
+      "SUSPENDED": "Suspended",
+      "REVOKED": "Revoked",
+      "SURRENDERED": "Surrendered",
+      "SUPERSEDED": "Superseded"
+    },
+    "confirmation": {
+      "PENDING": "Pending",
+      "CONFIRMED": "Confirmed",
+      "DECLINED": "Declined",
+      "EXPIRED": "Expired",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "journey": {
+    "label": "Stage: {stage}",
+    "stages": {
+      "draft": "Draft",
+      "payment": "Payment",
+      "confirmation": "Confirmation",
+      "review": "Review",
+      "decision": "Decision"
+    }
+  },
+  "eligibility": {
+    "documents": {
+      "nationalId": "National ID or passport",
+      "photo": "Passport photo",
+      "education": "Education certificate",
+      "referralArrangement": "Referral arrangement",
+      "entryTraining": "Entry-level training certificate",
+      "supervisorConfirmation": "Supervisor's confirmation",
+      "professionalTraining": "Professional training certificate",
+      "reaExam": "REA exam result",
+      "experience": "Proof of experience",
+      "advancedTraining": "Advanced Broker training",
+      "brokerExam": "Broker exam result",
+      "brokerLicence": "Broker licence",
+      "firmAffiliation": "Firm affiliation letter",
+      "branchDetails": "Branch details",
+      "indemnityInsurance": "Indemnity insurance",
+      "companyRegistration": "Company registration (RDB)",
+      "directorsList": "Directors and shareholders",
+      "principalBroker": "Principal Broker designation",
+      "officeAddress": "Registered office address"
+    },
+    "title": "Am I eligible?",
+    "eyebrow": "Eligibility check · 1 minute",
+    "metaDescription": "Answer a few questions to find the right real estate licence category and the documents to prepare.",
+    "back": "Previous question",
+    "progress": "Question {step} of {total}",
+    "seeResult": "See my result",
+    "fewer": "One year fewer",
+    "more": "One year more",
+    "yearsUnit": "{count, plural, one {year} other {years}}",
+    "disclaimer": "This check is indicative. Your application is assessed against the full rules when you apply.",
+    "shareText": "I can apply as a {category}.",
+    "q": {
+      "who": "Who is applying?",
+      "age": "Are you 18 or older?",
+      "education": "Your highest qualification?",
+      "licence": "Do you hold a licence today?",
+      "years": "Years practising as {category}?"
+    },
+    "a": {
+      "individual": "Me, as an individual",
+      "firm": "A company (brokerage firm)",
+      "yes": "Yes",
+      "no": "Not yet",
+      "noLicence": "No licence yet"
+    },
+    "educationLevels": {
+      "NONE": "Below A2",
+      "A2": "A2 certificate",
+      "A1_OR_HIGHER": "A1, A0 or bachelor's",
+      "REAL_ESTATE_DEGREE": "Real estate or valuation degree"
+    },
+    "result": {
+      "youCanApply": "You can apply as",
+      "notYet": "Not eligible yet",
+      "noneTitle": "Let's find your path",
+      "towards": "Towards {category}",
+      "yearsOf": "{years} of {required} years",
+      "eligibleFor": "Eligible categories",
+      "prepare": "Documents to prepare",
+      "start": "Create my account",
+      "share": "Share",
+      "restart": "Start again",
+      "ladder": "Where you stand"
+    }
+  },
+  "palette": {
+    "open": "Search and commands",
+    "placeholder": "Search or jump to…",
+    "results": "Results",
+    "empty": "Nothing matches.",
+    "searchRegister": "Search the register for “{query}”",
+    "checkLicence": "Check licence {query}",
+    "groups": {
+      "search": "Search",
+      "go": "Go to",
+      "prefs": "Preferences"
+    }
+  },
+  "licence": {
+    "expires": "Expires",
+    "sample": "Sample"
+  },
+  "verify": {
+    "label": "Search the public register",
+    "placeholder": "Name or licence number",
+    "submit": "Search",
+    "scan": "Scan a licence QR code",
+    "scanTitle": "Scan the QR code",
+    "scanBody": "Point your camera at the code on the licence certificate.",
+    "scanError": "We couldn't open the camera. Type the licence number instead."
+  },
+  "register": {
+    "title": "Public register",
+    "subtitle": "Check that a practitioner or firm is licensed.",
+    "metaDescription": "Search licensed real estate practitioners and brokerage firms by name, licence number or category.",
+    "filterCategory": "Filter by category",
+    "filterStatus": "Filter by status",
+    "all": "All",
+    "emptyTitle": "No entries yet",
+    "noResults": "No match for “{query}”"
+  },
+  "check": {
+    "title": "Verify a licence",
+    "subtitle": "Type the licence number or scan the QR code on the certificate.",
+    "metaDescription": "Check in seconds whether a real estate licence is valid.",
+    "resultTitle": "Licence {number}",
+    "notFound": "No licence found",
+    "notFoundBody": "Check the number and try again. A practitioner without a valid licence must not offer brokerage services.",
+    "checkedAt": "Checked {time}"
+  },
+  "activity": {
+    "account_created": "Account created",
+    "account_phone_changed": "Phone number changed",
+    "auth_signin": "Signed in",
+    "auth_signout": "Signed out",
+    "auth_password_reset": "Password reset",
+    "mfa_enabled": "Two-step verification turned on",
+    "mfa_disabled": "Two-step verification turned off",
+    "mfa_recovery_codes_regenerated": "New recovery codes",
+    "auth_sessions_revoked": "Signed out everywhere"
+  },
+  "backoffice": {
+    "kpis": "Key figures",
+    "accounts": "Accounts",
+    "newThisWeek": "+{count} this week",
+    "sessions": "Active sessions",
+    "sessionsHint": "Signed in right now",
+    "twoStep": "Two-step on",
+    "twoStepHint": "{count} accounts protected",
+    "events": "Audit events",
+    "eventsUnit": "events",
+    "last14": "Last 14 days",
+    "activityTitle": "Activity",
+    "byRole": "People by role",
+    "consoles": "Consoles"
+  },
+  "offline": {
+    "title": "You're offline",
+    "body": "Check your connection. Anything you saved is safe and will be here when you're back."
+  },
+  "design": {
+    "title": "Design system",
+    "colours": "Colour tokens",
+    "buttons": "Buttons",
+    "status": "Status tones",
+    "data": "Data graphics"
   }
 }

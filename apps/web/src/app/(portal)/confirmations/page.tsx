@@ -12,11 +12,6 @@ export default async function ConfirmationsPage() {
   await requireCapability("confirmation.decide");
   const t = await getTranslations("placeholders");
   return (
-    <ComingSoon
-      icon={Inbox}
-      title={t("confirmationsTitle")}
-      description={t("confirmationsBody")}
-      milestone="D3 — WP-2.4"
-    />
+    <ComingSoon icon={Inbox} title={t("confirmationsTitle")} description={t("confirmationsBody")} />
   );
 }

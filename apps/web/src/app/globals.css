@@ -5,95 +5,157 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens. Colours are OKLCH so light/dark pairs keep perceived contrast;
- * every foreground/background pair targets WCAG 2.2 AA (≥ 4.5:1) (UX-002).
+ * Design tokens (ADR-009). Colours are OKLCH so light/dark pairs keep perceived contrast.
+ * Every documented foreground/background pair is asserted ≥ 4.5:1 (text) or ≥ 3:1 (UI
+ * boundaries) by src/lib/__tests__/tokens.test.ts (UX-002, WCAG 1.4.3 / 1.4.11).
+ *
+ * Palette: "Imena Emerald" primary (from the flag green), Sky for information (a darkened
+ * flag blue), Sun for highlights (flag yellow). Neutrals are cool (hue ≈ 250).
  */
 :root {
-  --radius: 0.875rem;
+  color-scheme: light;
+  --radius: 1rem;
+  --header-h: 4rem;
+  --bottom-nav-h: 0rem;
 
-  --background: oklch(0.988 0.005 165);
-  --foreground: oklch(0.23 0.03 255);
+  --background: oklch(0.985 0.004 160);
+  --foreground: oklch(0.21 0.02 250);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
+  --surface-2: oklch(0.97 0.006 250);
+  --surface-3: oklch(0.945 0.008 250);
 
-  /* Primary: friendly, trustworthy teal-green. */
-  --primary: oklch(0.49 0.11 172);
-  --primary-foreground: oklch(0.99 0.005 165);
-  --secondary: oklch(0.955 0.025 170);
-  --secondary-foreground: oklch(0.33 0.07 172);
-  /* Accent: warm sunshine for highlights and celebration moments. */
+  --primary: oklch(0.47 0.11 160);
+  --primary-foreground: oklch(0.99 0.005 160);
+  --primary-soft: oklch(0.95 0.035 160);
+  --primary-soft-foreground: oklch(0.36 0.08 160);
+  --secondary: var(--primary-soft);
+  --secondary-foreground: var(--primary-soft-foreground);
+
+  /* Sun: celebration and highlights. Never used as text on light surfaces. */
+  --sun: oklch(0.87 0.16 92);
+  --sun-foreground: oklch(0.3 0.06 70);
   --accent: oklch(0.95 0.06 92);
-  --accent-foreground: oklch(0.36 0.08 70);
-  --muted: oklch(0.965 0.008 250);
-  --muted-foreground: oklch(0.47 0.02 255);
+  --accent-foreground: oklch(0.34 0.07 70);
+  /* Sky: information and data links. */
+  --sky: oklch(0.5 0.14 245);
 
-  --destructive: oklch(0.55 0.2 25);
+  --muted: oklch(0.965 0.006 250);
+  --muted-foreground: oklch(0.48 0.018 250);
+
+  --destructive: oklch(0.54 0.2 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.52 0.13 150);
-  --success-soft: oklch(0.96 0.04 150);
-  --warning: oklch(0.6 0.13 70);
-  --warning-strong: oklch(0.47 0.11 60);
-  --warning-soft: oklch(0.97 0.05 90);
-  --info: oklch(0.52 0.13 245);
-  --info-soft: oklch(0.96 0.03 245);
-  --danger-soft: oklch(0.96 0.03 25);
+  --success: oklch(0.5 0.12 150);
+  --success-soft: oklch(0.955 0.04 150);
+  --warning: oklch(0.52 0.12 65);
+  --warning-soft: oklch(0.965 0.045 85);
+  --info: var(--sky);
+  --info-soft: oklch(0.955 0.025 245);
+  --danger-soft: oklch(0.955 0.03 25);
 
-  --border: oklch(0.915 0.01 250);
-  --input: oklch(0.88 0.012 250);
-  --ring: oklch(0.58 0.12 172);
+  --border: oklch(0.91 0.008 250);
+  /* Form-control boundary: ≥ 3:1 against cards and the page (WCAG 1.4.11). */
+  --input: oklch(0.62 0.015 250);
+  --ring: oklch(0.55 0.13 160);
 
-  --sidebar: oklch(0.975 0.01 170);
+  --sidebar: oklch(0.975 0.008 160);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.93 0.03 170);
+  --sidebar-accent: oklch(0.935 0.03 160);
 
+  /* Categorical chart slots: the validated dataviz reference order (ADR-009). */
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #6250d6;
+  --chart-8: #e34948;
+
+  --shadow-1: 0 1px 2px oklch(0.21 0.02 250 / 0.06);
   --shadow-soft:
-    0 1px 2px oklch(0.23 0.03 255 / 0.05), 0 8px 24px -12px oklch(0.23 0.03 255 / 0.12);
+    0 1px 2px oklch(0.21 0.02 250 / 0.05), 0 8px 24px -12px oklch(0.21 0.02 250 / 0.14);
+  --shadow-3: 0 2px 4px oklch(0.21 0.02 250 / 0.06), 0 24px 48px -16px oklch(0.21 0.02 250 / 0.22);
+  --highlight: inset 0 1px 0 oklch(1 0 0 / 0);
+
+  /* Motion (ADR-009 §motion): Material 3 emphasised easing, short durations for low-end phones. */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-spring: linear(0, 0.38 9%, 0.81 20%, 1.02 31%, 1.07 38%, 1.03 49%, 0.99 62%, 1);
+  --dur-1: 100ms;
+  --dur-2: 160ms;
+  --dur-3: 240ms;
+  --dur-4: 360ms;
+  --dur-5: 600ms;
+
+  --imigongo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M0 12 12 0l12 12L36 0l12 12M0 36l12-12 12 12 12-12 12 12' fill='none' stroke='black' stroke-width='2.5'/%3E%3Cpath d='m24 18 6 6-6 6-6-6z' fill='black'/%3E%3C/svg%3E");
 }
 
+/* Dark: "Ink" — near-black with a faint cool tint, never #000. Elevation = lighter surface. */
 .dark {
-  --background: oklch(0.17 0.02 255);
-  --foreground: oklch(0.955 0.01 250);
-  --card: oklch(0.21 0.022 255);
+  color-scheme: dark;
+  --background: oklch(0.165 0.01 258);
+  --foreground: oklch(0.965 0.004 250);
+  --card: oklch(0.198 0.012 258);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.22 0.022 255);
+  --popover: oklch(0.232 0.014 258);
   --popover-foreground: var(--foreground);
+  --surface-2: oklch(0.232 0.014 258);
+  --surface-3: oklch(0.265 0.015 258);
 
-  --primary: oklch(0.75 0.12 172);
-  --primary-foreground: oklch(0.2 0.04 200);
-  --secondary: oklch(0.28 0.035 190);
-  --secondary-foreground: oklch(0.9 0.04 172);
-  --accent: oklch(0.33 0.05 85);
-  --accent-foreground: oklch(0.93 0.07 92);
-  --muted: oklch(0.25 0.02 255);
-  --muted-foreground: oklch(0.72 0.02 255);
+  --primary: oklch(0.78 0.14 160);
+  --primary-foreground: oklch(0.18 0.04 160);
+  --primary-soft: oklch(0.27 0.05 162);
+  --primary-soft-foreground: oklch(0.88 0.09 160);
 
-  --destructive: oklch(0.68 0.19 25);
-  --destructive-foreground: oklch(0.18 0.02 25);
-  --success: oklch(0.74 0.14 150);
-  --success-soft: oklch(0.28 0.05 150);
-  --warning: oklch(0.8 0.13 80);
-  --warning-strong: oklch(0.86 0.12 85);
-  --warning-soft: oklch(0.3 0.05 80);
-  --info: oklch(0.75 0.11 245);
-  --info-soft: oklch(0.28 0.05 245);
-  --danger-soft: oklch(0.29 0.06 25);
+  --sun: oklch(0.86 0.15 92);
+  --sun-foreground: oklch(0.25 0.05 70);
+  --accent: oklch(0.3 0.05 85);
+  --accent-foreground: oklch(0.92 0.08 92);
+  --sky: oklch(0.74 0.12 235);
 
-  --border: oklch(0.3 0.02 255);
-  --input: oklch(0.36 0.02 255);
-  --ring: oklch(0.72 0.12 172);
+  --muted: oklch(0.232 0.014 258);
+  --muted-foreground: oklch(0.72 0.015 250);
 
-  --sidebar: oklch(0.19 0.022 255);
+  --destructive: oklch(0.7 0.17 25);
+  --destructive-foreground: oklch(0.17 0.02 25);
+  --success: oklch(0.77 0.14 150);
+  --success-soft: oklch(0.26 0.045 150);
+  --warning: oklch(0.82 0.13 80);
+  --warning-soft: oklch(0.27 0.045 75);
+  --info-soft: oklch(0.26 0.045 245);
+  --danger-soft: oklch(0.27 0.055 25);
+
+  --border: oklch(0.3 0.014 258);
+  --input: oklch(0.52 0.016 258);
+  --ring: oklch(0.72 0.13 160);
+
+  --sidebar: oklch(0.185 0.011 258);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.26 0.03 190);
+  --sidebar-accent: oklch(0.265 0.03 165);
 
-  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 24px -12px oklch(0 0 0 / 0.5);
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+
+  /* No shadows in the dark: surfaces carry elevation; a hairline highlight gives the edge. */
+  --shadow-1: 0 0 0 transparent;
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.35);
+  --shadow-3: 0 24px 48px -16px oklch(0 0 0 / 0.6);
+  --highlight: inset 0 1px 0 oklch(1 0 0 / 0.045);
 }
 
 @theme inline {
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
 
   --color-background: var(--background);
@@ -102,10 +164,17 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-foreground: var(--primary-soft-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-sun: var(--sun);
+  --color-sun-foreground: var(--sun-foreground);
+  --color-sky: var(--sky);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-muted: var(--muted);
@@ -116,8 +185,6 @@
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
-  /* AA text colour on light surfaces and on warning-soft. */
-  --color-warning-strong: var(--warning-strong);
   --color-info: var(--info);
   --color-info-soft: var(--info-soft);
   --color-danger-soft: var(--danger-soft);
@@ -127,18 +194,38 @@
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
 
-  --radius-sm: calc(var(--radius) - 6px);
-  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 6px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 10px);
+  --radius-2xl: calc(var(--radius) + 8px);
 
+  --shadow-1: var(--shadow-1);
   --shadow-soft: var(--shadow-soft);
+  --shadow-3: var(--shadow-3);
+
+  --ease-standard: var(--ease-standard);
+  --ease-enter: var(--ease-enter);
+  --ease-exit: var(--ease-exit);
+  --ease-spring: var(--ease-spring);
 
   /* Breakpoints: 320 px → 2560 px (UX-001). `xs` covers small phones. */
   --breakpoint-xs: 26rem;
   --breakpoint-3xl: 120rem;
+
+  --animate-rise: rise var(--dur-4) var(--ease-enter) both;
+  --animate-pop: pop var(--dur-4) var(--ease-spring) both;
+  --animate-pulse-ring: pulse-ring 2s var(--ease-standard) infinite;
+  --animate-draw: draw var(--dur-5) var(--ease-enter) both;
 }
 
 @layer base {
@@ -149,6 +236,9 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+    /* WCAG 2.2 2.4.11: focused elements are never hidden under the sticky bars. */
+    scroll-padding-top: calc(var(--header-h) + 0.5rem);
+    scroll-padding-bottom: calc(var(--bottom-nav-h) + 0.5rem);
   }
 
   body {
@@ -160,29 +250,36 @@
   h2,
   h3,
   h4 {
-    @apply font-display tracking-tight text-balance;
-    font-optical-sizing: auto;
+    @apply font-display text-balance;
+    letter-spacing: -0.02em;
+    /* Kinyarwanda has long agglutinated words; never overflow a 320 px screen. */
+    overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   /* Fluid type scale: comfortable on a 320 px phone, generous on desktop. */
   h1 {
-    font-size: clamp(1.75rem, 1.35rem + 2vw, 3rem);
-    line-height: 1.1;
-    font-weight: 700;
+    font-size: clamp(1.5rem, 1.25rem + 1.4vw, 2.25rem);
+    line-height: 1.12;
+    font-weight: 750;
   }
   h2 {
-    font-size: clamp(1.35rem, 1.15rem + 1vw, 2rem);
+    font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
     line-height: 1.2;
-    font-weight: 650;
+    font-weight: 700;
   }
   h3 {
-    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.3rem);
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
     line-height: 1.3;
-    font-weight: 600;
+    font-weight: 650;
   }
 
   p {
     text-wrap: pretty;
+  }
+
+  label {
+    overflow-wrap: anywhere;
   }
 
   :focus-visible {
@@ -191,6 +288,13 @@
 
   ::selection {
     background: color-mix(in oklch, var(--primary) 25%, transparent);
+  }
+}
+
+/* Phones with the bottom tab bar: keep focused fields clear of it (WCAG 2.4.11). */
+@media (width < 48rem) {
+  html:has([data-bottom-nav]) {
+    --bottom-nav-h: calc(4.5rem + env(safe-area-inset-bottom));
   }
 }
 
@@ -212,6 +316,17 @@
   min-width: 2.75rem;
 }
 
+/* Tabular figures for every number that is compared or counted. */
+@utility num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Hairline highlight on raised dark surfaces (no-op in light). */
+@utility raised {
+  box-shadow: var(--highlight), var(--shadow-soft);
+}
+
 @utility bg-grid {
   background-image:
     linear-gradient(
@@ -227,29 +342,219 @@
   background-size: 2.5rem 2.5rem;
 }
 
-/* UX-002: respect reduced-motion preferences everywhere. */
+/* Ambient glow behind hero areas: Emerald and Sky, very low opacity. */
+@utility bg-ambient {
+  background:
+    radial-gradient(
+      60rem 30rem at 85% -10%,
+      color-mix(in oklch, var(--primary) 12%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40rem 24rem at -10% 10%,
+      color-mix(in oklch, var(--sky) 9%, transparent),
+      transparent 70%
+    );
+}
+
+/* Imigongo-inspired zig-zag motif (decorative, < 1 KB), tinted by `currentColor` via mask. */
+@utility bg-imigongo {
+  background-color: currentColor;
+  mask-image: var(--imigongo);
+  mask-size: 48px 48px;
+}
+
+/* The motif fading out downwards (or upwards): both masks intersect, so the pattern survives. */
+@utility bg-imigongo-fade {
+  background-color: currentColor;
+  mask-image: var(--imigongo), linear-gradient(to bottom, black, transparent);
+  mask-size:
+    48px 48px,
+    100% 100%;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: intersect;
+}
+
+@utility bg-imigongo-fade-up {
+  background-color: currentColor;
+  mask-image: var(--imigongo), linear-gradient(to top, black, transparent);
+  mask-size:
+    48px 48px,
+    100% 100%;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: intersect;
+}
+
+/* Brand surface for hero cards (licence card, auth panel). */
+@utility bg-brand {
+  background:
+    radial-gradient(120% 80% at 100% 0%, oklch(0.5 0.12 175 / 0.95), transparent 60%),
+    /* Every stop stays ≤ L 0.5 so white text keeps ≥ 5.2:1. */
+      radial-gradient(90% 70% at 0% 100%, oklch(0.4 0.1 220 / 0.85), transparent 60%),
+    oklch(0.4 0.1 160);
+  color: oklch(0.99 0.005 160);
+}
+
+/* ——— Motion ——— */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 45%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--draw-length, 100);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ring-in {
+  from {
+    stroke-dashoffset: var(--ring-c);
+  }
+}
+
+@keyframes meter-in {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes bar-in {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/*
+ * Scroll reveal: <Reveal> toggles data-reveal via a shared IntersectionObserver. Movement only —
+ * never opacity — so content is always at full contrast, even mid-animation (WCAG 1.4.3).
+ */
+[data-reveal] {
+  transition: transform var(--dur-5) var(--ease-enter);
+  transition-delay: calc(var(--stagger, 0) * 50ms);
+}
+[data-reveal="hidden"] {
+  transform: translateY(24px) scale(0.98);
+}
+
+/* Route transitions: React <ViewTransition> in each route group's template (Next 16). */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(.page) {
+  animation: var(--dur-2) var(--ease-exit) both vt-fade reverse;
+}
+::view-transition-new(.page) {
+  animation:
+    var(--dur-3) var(--ease-enter) var(--dur-1) both vt-fade,
+    var(--dur-4) var(--ease-enter) both vt-rise;
+}
+::view-transition-group(app-header),
+::view-transition-group(app-bottom-nav),
+::view-transition-group(app-sidebar) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(app-header),
+::view-transition-old(app-bottom-nav),
+::view-transition-old(app-sidebar) {
+  display: none;
+}
+::view-transition-new(app-header),
+::view-transition-new(app-bottom-nav),
+::view-transition-new(app-sidebar) {
+  animation: none;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vt-rise {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/*
+ * UX-002 reduced motion: remove movement (slides, scale, count-ups, pulses) but keep short
+ * opacity fades, which aid orientation and don't trigger vestibular discomfort.
+ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: var(--dur-1) !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: var(--dur-1) !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Role colour identity (access control). Hue comes from --role-hue; tuned for AA contrast in both themes. */
-@utility role-tint {
-  background-color: oklch(0.94 0.05 var(--role-hue, 172));
-  color: oklch(0.37 0.1 var(--role-hue, 172));
-  @variant dark {
-    background-color: oklch(0.31 0.06 var(--role-hue, 172));
-    color: oklch(0.9 0.07 var(--role-hue, 172));
+  [data-reveal="hidden"] {
+    transform: none;
+  }
+  .animate-pulse-ring {
+    animation: none !important;
+  }
+  ::view-transition-new(.page) {
+    animation: var(--dur-2) linear both vt-fade !important;
+  }
+  ::view-transition-old(.page) {
+    animation: var(--dur-1) linear both vt-fade reverse !important;
   }
 }
 
-@utility role-ring {
-  border-color: oklch(0.62 0.13 var(--role-hue, 172));
-  box-shadow: 0 0 0 3px oklch(0.62 0.13 var(--role-hue, 172) / 0.18);
+/* Low-data mode: drop purely decorative layers (FR: low-bandwidth-first, SRS §11.1). */
+@media (prefers-reduced-data: reduce) {
+  .bg-imigongo,
+  .bg-imigongo-fade,
+  .bg-imigongo-fade-up,
+  .bg-ambient {
+    display: none;
+  }
+}
+
+/* Windows High Contrast: keep boundaries visible where we rely on fills. */
+@media (forced-colors: active) {
+  [data-slot="card"],
+  [data-slot="badge"] {
+    border: 1px solid CanvasText;
+  }
 }

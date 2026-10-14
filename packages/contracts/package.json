@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "description": "Shared contracts: enums, Zod schemas, RBAC matrix. Source of truth for web and API.",
   "exports": {
     ".": "./src/index.ts"

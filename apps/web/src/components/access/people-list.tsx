@@ -73,7 +73,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                       <ShieldCheck className="size-3.5" aria-hidden /> {t("mfaOn")}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 font-semibold text-warning-strong">
+                    <span className="text-warning-strong inline-flex items-center gap-1 font-semibold">
                       <ShieldAlert className="size-3.5" aria-hidden /> {t("noMfa")}
                     </span>
                   )}

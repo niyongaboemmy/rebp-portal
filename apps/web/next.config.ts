@@ -43,7 +43,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react", "radix-ui"],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // The service worker must always be revalidated so updates roll out (UX-015).
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, max-age=0" }] },
+    ];
   },
 };
 

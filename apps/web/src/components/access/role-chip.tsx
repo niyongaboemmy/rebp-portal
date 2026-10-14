@@ -25,7 +25,7 @@ export function RoleChip({
     <span
       style={roleStyle(role)}
       className={cn(
-        "inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full role-tint font-semibold whitespace-nowrap",
+        "role-tint inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full font-semibold whitespace-nowrap",
         size === "sm" ? "px-2.5 py-0.5 text-xs [&_svg]:size-3" : "px-3 py-1 text-sm [&_svg]:size-4",
         className,
       )}
@@ -42,7 +42,7 @@ export function RoleIcon({ role, className }: { role: Role; className?: string }
     <span
       style={roleStyle(role)}
       className={cn(
-        "inline-flex size-10 shrink-0 items-center justify-center rounded-2xl role-tint [&_svg]:size-5",
+        "role-tint inline-flex size-10 shrink-0 items-center justify-center rounded-2xl [&_svg]:size-5",
         className,
       )}
       aria-hidden

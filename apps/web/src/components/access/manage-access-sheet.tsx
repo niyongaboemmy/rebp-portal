@@ -159,7 +159,7 @@ export default function ManageAccessSheet({
                       blocked && "opacity-40",
                     )}
                   >
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl role-tint [&_svg]:size-[1.1rem]">
+                    <span className="role-tint inline-flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[1.1rem]">
                       <Icon aria-hidden />
                     </span>
                     <span className="flex min-w-0 flex-col gap-0.5 pr-5">
@@ -297,7 +297,7 @@ export default function ManageAccessSheet({
             )}
           >
             {warnings.includes("sodCombined") && (
-              <AlertTriangle className="size-5 shrink-0 text-warning-strong" aria-hidden />
+              <AlertTriangle className="text-warning-strong size-5 shrink-0" aria-hidden />
             )}
             <Button
               variant="ghost"

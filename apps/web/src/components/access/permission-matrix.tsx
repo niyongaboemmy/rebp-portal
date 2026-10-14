@@ -145,11 +145,11 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               onMouseLeave={() => setHover({})}
               className={cn(
                 "min-w-44 snap-start rounded-2xl border bg-card p-3.5 transition-all duration-200",
-                hover.role === role && "-translate-y-0.5 role-ring",
+                hover.role === role && "role-ring -translate-y-0.5",
               )}
             >
               <div className="flex items-center gap-2.5">
-                <span className="inline-flex size-9 items-center justify-center rounded-xl role-tint [&_svg]:size-[1.1rem]">
+                <span className="role-tint inline-flex size-9 items-center justify-center rounded-xl [&_svg]:size-[1.1rem]">
                   <Icon aria-hidden />
                 </span>
                 <div className="min-w-0">
@@ -252,7 +252,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
                       )}
                     >
                       <span className="flex flex-col items-center gap-1.5">
-                        <span className="inline-flex size-8 items-center justify-center rounded-xl role-tint [&_svg]:size-4">
+                        <span className="role-tint inline-flex size-8 items-center justify-center rounded-xl [&_svg]:size-4">
                           <Icon aria-hidden />
                         </span>
                         <span className="text-center text-[0.7rem] leading-tight font-semibold">

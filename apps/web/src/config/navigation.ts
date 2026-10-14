@@ -25,6 +25,7 @@ import type { Capability } from "@rebp/contracts";
 export type NavLabelKey =
   | "home"
   | "register"
+  | "verify"
   | "eligibility"
   | "categories"
   | "dashboard"
@@ -54,6 +55,8 @@ export interface NavItem {
   capability?: Capability;
   /** Only highlight on an exact path match (for index routes). */
   exact?: boolean;
+  /** Shown as a bottom-bar tab on phones (max three per area; the rest live under "More"). */
+  tab?: boolean;
 }
 
 export interface NavSection {
@@ -64,6 +67,7 @@ export interface NavSection {
 export const PUBLIC_NAV: NavItem[] = [
   { href: "/", label: "home", icon: Home, exact: true },
   { href: "/register", label: "register", icon: BookUser },
+  { href: "/check", label: "verify", icon: ShieldCheck },
   { href: "/categories", label: "categories", icon: FileStack },
   { href: "/eligibility", label: "eligibility", icon: ListChecks },
 ];
@@ -72,9 +76,9 @@ export const PORTAL_NAV: NavSection[] = [
   {
     label: "sectionApplicant",
     items: [
-      { href: "/dashboard", label: "dashboard", icon: LayoutDashboard },
-      { href: "/applications", label: "applications", icon: FileStack },
-      { href: "/licenses", label: "licenses", icon: Wallet },
+      { href: "/dashboard", label: "dashboard", icon: LayoutDashboard, tab: true },
+      { href: "/applications", label: "applications", icon: FileStack, tab: true },
+      { href: "/licenses", label: "licenses", icon: Wallet, tab: true },
       {
         href: "/confirmations",
         label: "confirmations",
@@ -93,7 +97,7 @@ export const PORTAL_NAV: NavSection[] = [
   },
 ];
 
-/** Back-office areas. `milestone` drives the placeholder until the console ships. */
+/** Back-office areas. `milestone` is the delivery-plan reference for developers (never shown to users). */
 export const BACKOFFICE_SECTIONS = {
   queue: {
     label: "queue",
@@ -148,12 +152,14 @@ export const BACKOFFICE_NAV: NavSection[] = [
         icon: LayoutDashboard,
         exact: true,
         capability: "backoffice.access",
+        tab: true,
       },
       ...Object.entries(BACKOFFICE_SECTIONS).map(([slug, s]) => ({
         href: `/backoffice/${slug}` as Route,
         label: s.label,
         icon: s.icon,
         capability: s.capability,
+        tab: slug === "queue" || slug === "decisions",
       })),
       { href: "/backoffice/access", label: "access", icon: UsersRound, capability: "access.view" },
       { href: "/backoffice/audit", label: "audit", icon: ScrollText, capability: "audit.view" },
@@ -208,4 +214,15 @@ export function isActivePath(pathname: string, item: Pick<NavItem, "href" | "exa
   const href = item.href as string;
   if (item.exact || href === "/") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/**
+ * Bottom-bar tabs for phones (UX-001): up to three destinations the user can reach — tab-marked
+ * items first, topped up with their other destinations so no role gets a near-empty bar.
+ */
+export function mobileTabs(sections: NavSection[]): NavItem[] {
+  const items = sections.flatMap((section) => section.items);
+  const marked = items.filter((item) => item.tab);
+  const rest = items.filter((item) => !item.tab);
+  return [...marked, ...rest].slice(0, 3);
 }

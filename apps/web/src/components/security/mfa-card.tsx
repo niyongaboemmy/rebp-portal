@@ -156,7 +156,7 @@ export function MfaCard({
                     {t(`mfa.methods.${method}.description`)}
                   </p>
                   {blocked && !isOn && (
-                    <p className="text-xs font-medium text-warning-strong">
+                    <p className="text-warning-strong text-xs font-medium">
                       {t("mfa.otpSetup.phoneRequired")}
                     </p>
                   )}

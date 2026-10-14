@@ -1,7 +1,7 @@
 import type { Route } from "next";
 import { describe, expect, it } from "vitest";
 import { applyOverrides, capabilitiesFor, type PermissionMatrix, type Role } from "@rebp/contracts";
-import { isActivePath, navForArea } from "../navigation";
+import { isActivePath, mobileTabs, navForArea } from "../navigation";
 
 const hrefs = (area: "portal" | "backoffice", roles: Role[], matrix?: PermissionMatrix) =>
   navForArea(area, capabilitiesFor(roles, matrix)).flatMap((s) =>
@@ -55,5 +55,25 @@ describe("isActivePath", () => {
     expect(isActivePath("/backoffice/queue", { href: "/backoffice", exact: true })).toBe(false);
     expect(isActivePath("/backoffice/queue", { href: "/backoffice/queue" as Route })).toBe(true);
     expect(isActivePath("/register", { href: "/" })).toBe(false);
+  });
+});
+
+describe("mobileTabs (UX-001)", () => {
+  const tabs = (area: "portal" | "backoffice", roles: Role[]) =>
+    mobileTabs(navForArea(area, capabilitiesFor(roles))).map((i) => i.href as string);
+
+  it("gives applicants their three primary destinations", () => {
+    expect(tabs("portal", ["APPLICANT"])).toEqual(["/dashboard", "/applications", "/licenses"]);
+  });
+
+  it("puts the queue first for reviewing officers", () => {
+    expect(tabs("backoffice", ["REVIEWING_OFFICER"]).slice(0, 2)).toEqual([
+      "/backoffice",
+      "/backoffice/queue",
+    ]);
+  });
+
+  it("tops up roles with few tab-marked areas so the bar is never near-empty", () => {
+    expect(tabs("backoffice", ["SYSTEM_ADMIN"])).toHaveLength(3);
   });
 });

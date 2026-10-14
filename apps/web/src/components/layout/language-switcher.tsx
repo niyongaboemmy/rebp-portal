@@ -1,9 +1,7 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,15 +12,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLocaleSwitch } from "@/hooks/use-locale-switch";
 import { LOCALE_LABELS, LOCALES } from "@/i18n/config";
-import { setLocaleAction } from "@/server/actions/auth";
+import { cn } from "@/lib/utils";
 
 /** UX-003: language switcher on every page; the choice is remembered. */
-export function LanguageSwitcher() {
-  const locale = useLocale();
+export function LanguageSwitcher({ className }: { className?: string }) {
   const t = useTranslations("language");
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const { locale, switchTo, pending } = useLocaleSwitch();
 
   return (
     <DropdownMenu>
@@ -32,7 +29,7 @@ export function LanguageSwitcher() {
           size="icon"
           aria-label={t("label")}
           disabled={pending}
-          className="w-auto gap-1.5 px-2.5"
+          className={cn("w-auto gap-1.5 px-2.5", className)}
         >
           <Languages className="size-5" />
           <span className="text-xs font-bold uppercase">{locale}</span>
@@ -40,15 +37,7 @@ export function LanguageSwitcher() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{t("label")}</DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={locale}
-          onValueChange={(next) =>
-            startTransition(async () => {
-              await setLocaleAction(next);
-              router.refresh();
-            })
-          }
-        >
+        <DropdownMenuRadioGroup value={locale} onValueChange={switchTo}>
           {LOCALES.map((code) => (
             <DropdownMenuRadioItem key={code} value={code} lang={code}>
               {LOCALE_LABELS[code].native}

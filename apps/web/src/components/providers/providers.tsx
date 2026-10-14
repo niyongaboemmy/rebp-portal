@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ServiceWorker } from "./service-worker";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ export function Providers({ children, locale, messages }: ProvidersProps) {
         <QueryClientProvider client={queryClient}>
           <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
           <Toaster />
+          <ServiceWorker />
         </QueryClientProvider>
       </ThemeProvider>
     </NextIntlClientProvider>

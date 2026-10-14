@@ -12,8 +12,16 @@ export function Logo({
   text?: string;
 }) {
   return (
-    <Link href="/" className={cn("group inline-flex items-center gap-2.5 rounded-lg", className)}>
-      <svg viewBox="0 0 32 32" className="size-9 shrink-0" aria-hidden>
+    <Link
+      href="/"
+      aria-label={showText ? undefined : text}
+      className={cn("group inline-flex items-center gap-2.5 rounded-lg", className)}
+    >
+      <svg
+        viewBox="0 0 32 32"
+        className="size-9 shrink-0 transition-transform duration-(--dur-3) ease-spring group-hover:-rotate-6 group-active:scale-90"
+        aria-hidden
+      >
         <rect width="32" height="32" rx="10" className="fill-primary" />
         <path
           d="M8 15.5 16 9l8 6.5V24a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z"
@@ -27,7 +35,7 @@ export function Logo({
           strokeLinejoin="round"
           className="stroke-primary"
         />
-        <circle cx="25" cy="8" r="3" className="fill-accent" />
+        <circle cx="25" cy="8" r="3" className="fill-sun" />
       </svg>
       {showText && <span className="font-display text-lg font-bold tracking-tight">{text}</span>}
     </Link>
