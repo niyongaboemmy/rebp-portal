@@ -71,6 +71,38 @@ async function main() {
     });
   }
   console.info(`Seeded ${DEMO_USERS.length} demo users. Password: ${DEMO_PASSWORD}`);
+
+  // Optional personal administrator, configured in the git-ignored .env so credentials never reach the repo.
+  const adminEmail = process.env.SEED_ADMIN_EMAIL?.trim().toLowerCase();
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+  if (adminEmail && adminPassword) {
+    const adminHash = await hash(adminPassword, {
+      algorithm: 2,
+      memoryCost: 19456,
+      timeCost: 2,
+      parallelism: 1,
+    });
+    await db.user.upsert({
+      where: { email: adminEmail },
+      update: {
+        roles: ["SYSTEM_ADMIN"],
+        passwordHash: adminHash,
+        passwordChangedAt: now,
+        disabledAt: null,
+        disabledReason: null,
+      },
+      create: {
+        email: adminEmail,
+        fullName: process.env.SEED_ADMIN_NAME?.trim() || adminEmail.split("@")[0]!,
+        roles: ["SYSTEM_ADMIN"],
+        emailVerifiedAt: now,
+        phoneVerifiedAt: now,
+        passwordHash: adminHash,
+        passwordChangedAt: now,
+      },
+    });
+    console.info(`Seeded administrator ${adminEmail} (password from SEED_ADMIN_PASSWORD).`);
+  }
   console.info(
     "Staff and Principal Broker accounts are asked to set up two-step verification on first sign-in.",
   );
