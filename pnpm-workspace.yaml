@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Supply-chain hygiene: only these dependencies may run install scripts.
+allowBuilds:
+  "@prisma/engines": true
+  prisma: true
+  esbuild: true
+  "@parcel/watcher": true
+  unrs-resolver: true
+  "@swc/core": false

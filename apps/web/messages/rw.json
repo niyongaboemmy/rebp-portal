@@ -1,0 +1,63 @@
+{
+  "brand": { "tagline": "Impushya z'abakomisiyoneri b'imitungo itimukanwa" },
+  "common": {
+    "skipToContent": "Jya ku bikubiyemo",
+    "loading": "Biratunganywa…",
+    "continue": "Komeza",
+    "cancel": "Hagarika",
+    "close": "Funga",
+    "back": "Subira inyuma",
+    "save": "Bika",
+    "confirm": "Emeza",
+    "copy": "Koporora",
+    "copied": "Byakoporowe",
+    "verified": "Byemejwe",
+    "unverified": "Ntibiremezwa",
+    "comingSoon": "Biraza vuba",
+    "openMenu": "Fungura urutonde",
+    "closeMenu": "Funga urutonde",
+    "pilotBanner": "Igerageza — amakuru y'icyitegererezo gusa. Amafaranga n'inyandiko z'amategeko ntibiremezwa."
+  },
+  "nav": {
+    "home": "Ahabanza",
+    "register": "Igitabo rusange",
+    "verify": "Genzura uruhushya",
+    "eligibility": "Ese nujuje ibisabwa?",
+    "categories": "Ibyiciro",
+    "signIn": "Injira",
+    "signUp": "Fungura konti",
+    "dashboard": "Imbonerahamwe",
+    "applications": "Ubusabe",
+    "licenses": "Impushya zanjye",
+    "security": "Umutekano",
+    "signOut": "Sohoka",
+    "account": "Konti"
+  },
+  "language": { "label": "Ururimi", "draft": "umushinga" },
+  "landing": {
+    "eyebrow": "Urubuga rwemewe rw'impushya",
+    "title": "Irembo ryizewe ry'impushya z'ubukomisiyoneri bw'imitungo",
+    "primaryCta": "Tangira ubusabe",
+    "secondaryCta": "Ese nujuje ibisabwa?",
+    "verifyButton": "Shakisha"
+  },
+  "auth": {
+    "continueWithGoogle": "Komeza ukoresheje Google",
+    "signIn": {
+      "title": "Murakaza neza",
+      "email": "Imeyili",
+      "password": "Ijambobanga",
+      "forgot": "Wibagiwe ijambobanga?",
+      "submit": "Injira",
+      "createAccount": "Fungura konti"
+    },
+    "signUp": {
+      "title": "Fungura konti yawe",
+      "fullName": "Amazina yombi",
+      "email": "Imeyili",
+      "phone": "Nimero ya telefoni",
+      "password": "Ijambobanga",
+      "submit": "Fungura konti"
+    }
+  }
+}
