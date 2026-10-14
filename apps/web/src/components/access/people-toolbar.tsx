@@ -7,6 +7,7 @@ import { ROLES, USER_STATUS_FILTERS } from "@rebp/contracts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUrlState } from "@/hooks/use-url-state";
+import { inputClass } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 /** Search (debounced) + role and status filters, all mirrored in the URL. */
@@ -57,7 +58,7 @@ export function PeopleToolbar() {
           id="role-filter"
           value={role}
           onChange={(e) => set({ role: e.target.value || null })}
-          className="h-11 rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 sm:h-10 sm:w-56"
+          className={cn(inputClass, "w-full bg-card sm:w-56 dark:bg-transparent")}
         >
           <option value="">{t("access.people.allRoles")}</option>
           {ROLES.map((r) => (

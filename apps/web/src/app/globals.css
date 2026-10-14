@@ -277,6 +277,8 @@
   --animate-chip-in: chip-in 600ms var(--ease-spring) both;
   --animate-arrow-nudge: arrow-nudge 2.2s var(--ease-standard) infinite;
   --animate-edge-flow: edge-flow 1.2s linear infinite;
+  --animate-shake: shake 360ms var(--ease-standard) 1;
+  --animate-skeleton-sweep: skeleton-sweep 1.6s ease-in-out infinite;
   --animate-lock-click: lock-click 3.2s var(--ease-spring) infinite;
   --animate-lang-cycle: lang-cycle 6s var(--ease-standard) infinite;
   --animate-station-select: station-select 2.6s var(--ease-standard) infinite;
@@ -354,12 +356,12 @@
   }
 }
 
-/* Smooth in-page anchor scrolling, only for people who haven't asked for less motion. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/*
+ * No global `scroll-behavior: smooth`: on navigation Next/React scroll each root node of the new
+ * page into view in turn, and smooth scrolling let an earlier section's animation win, so the
+ * landing page opened on its second section. Smooth scrolling is applied per action instead
+ * (journey steps, back to top).
+ */
 
 /* Phones with the bottom tab bar: keep focused fields clear of it (WCAG 2.4.11). */
 @media (width < 48rem) {
@@ -947,6 +949,37 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   }
 }
 
+/* Loading: a brand-coloured light band sweeps across skeletons. */
+@keyframes skeleton-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Top route progress line: the blue-sky-Sun gradient flows along it. */
+@keyframes progress-pan {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Form fields: one small shake when a field becomes invalid. */
+@keyframes shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
 /* Category map: the lit path flows towards the active station. */
 @keyframes edge-flow {
   to {
@@ -1132,6 +1165,7 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   .animate-lock-click,
   .animate-lang-cycle,
   .animate-station-select,
+  .after\:animate-skeleton-sweep::after,
   .animate-card-deal,
   .animate-deal-glow,
   .animate-notify-loop,

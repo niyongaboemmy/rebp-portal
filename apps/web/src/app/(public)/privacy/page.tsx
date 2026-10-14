@@ -1,6 +1,7 @@
 import { Eye, FileDown, Globe2, Lock, ScanSearch } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { PageHero } from "@/components/layout/page-hero";
 import { Reveal } from "@/components/motion/reveal";
 import { Alert } from "@/components/ui/alert";
 import { publicPageMetadata } from "@/server/seo";
@@ -29,29 +30,32 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPage() {
   const t = await getTranslations("privacy");
   return (
-    <article className="container-page flex max-w-3xl flex-col gap-8 py-10 sm:py-14">
-      <header className="flex flex-col gap-3">
-        <h1>{t("title")}</h1>
-        <Alert variant="warning">{t("draft")}</Alert>
-      </header>
-      <ul className="grid gap-3 sm:grid-cols-2" aria-label={t("highlightsLabel")}>
-        {HIGHLIGHTS.map(({ key, icon: Icon }, index) => (
-          <Reveal key={key} stagger={index}>
-            <li className="flex items-center gap-4 rounded-2xl border bg-card p-4 raised last:sm:col-span-2">
-              <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary-soft-foreground">
-                <Icon className="size-6" aria-hidden />
-              </span>
-              <span className="text-sm font-semibold sm:text-base">{t(`highlights.${key}`)}</span>
-            </li>
-          </Reveal>
-        ))}
-      </ul>
-      <section aria-labelledby="notice-title" className="flex flex-col gap-3">
-        <h2 id="notice-title" className="text-lg">
-          {t("fullNotice")}
-        </h2>
-        <p className="leading-relaxed text-muted-foreground">{t("body")}</p>
-      </section>
+    <article className="flex flex-col">
+      <PageHero eyebrow={t("highlightsLabel")} title={t("title")}>
+        <Alert variant="warning" className="max-w-2xl">
+          {t("draft")}
+        </Alert>
+      </PageHero>
+      <div className="container-page flex flex-col gap-12 pb-20 sm:pb-28 [&>*]:max-w-4xl">
+        <ul className="grid gap-3 sm:grid-cols-2" aria-label={t("highlightsLabel")}>
+          {HIGHLIGHTS.map(({ key, icon: Icon }, index) => (
+            <Reveal key={key} stagger={index}>
+              <li className="group flex items-center gap-4 rounded-2xl bg-surface-2 p-4 transition-colors hover:bg-primary-soft/40 sm:p-5 last:sm:col-span-2 dark:bg-white/[0.03] dark:hover:bg-primary/[0.08]">
+                <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(140deg,var(--primary),color-mix(in_oklch,var(--primary)_65%,var(--sky)))] text-primary-foreground shadow-[inset_0_1px_0_rgb(255_255_255/0.3)] transition-transform duration-(--dur-3) ease-spring group-hover:scale-105 group-hover:-rotate-3">
+                  <Icon filled className="size-6" aria-hidden />
+                </span>
+                <span className="text-sm font-semibold sm:text-base">{t(`highlights.${key}`)}</span>
+              </li>
+            </Reveal>
+          ))}
+        </ul>
+        <section aria-labelledby="notice-title" className="flex flex-col gap-3">
+          <h2 id="notice-title" className="text-xl">
+            {t("fullNotice")}
+          </h2>
+          <p className="leading-relaxed text-muted-foreground">{t("body")}</p>
+        </section>
+      </div>
     </article>
   );
 }

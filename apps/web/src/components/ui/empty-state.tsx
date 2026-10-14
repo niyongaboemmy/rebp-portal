@@ -30,7 +30,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl bg-card px-6 py-12 text-center",
+        "relative flex animate-rise flex-col items-center gap-5 overflow-hidden rounded-[2rem] bg-card/80 px-6 py-12 text-center backdrop-blur-xl dark:bg-white/[0.03]",
         className,
       )}
     >
@@ -46,7 +46,7 @@ export function EmptyState({
         </span>
       )}
       <div className="relative flex max-w-md flex-col gap-1.5">
-        <Heading className="text-xl sm:text-2xl">{title}</Heading>
+        <Heading className="text-xl font-bold tracking-[-0.02em] sm:text-2xl">{title}</Heading>
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
       {action && <div className="relative">{action}</div>}

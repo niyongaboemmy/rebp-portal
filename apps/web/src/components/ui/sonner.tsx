@@ -11,7 +11,15 @@ export function Toaster() {
       position="top-center"
       richColors
       closeButton
-      toastOptions={{ classNames: { toast: "rounded-xl! font-sans!" } }}
+      offset={20}
+      toastOptions={{
+        classNames: {
+          toast:
+            "rounded-2xl! font-sans! backdrop-blur-2xl! shadow-[0_20px_44px_-16px_oklch(0.3_0.12_264/0.4)]! border-0! gap-3! px-4! py-3!",
+          title: "font-semibold!",
+          closeButton: "border-0! bg-card!",
+        },
+      }}
     />
   );
 }

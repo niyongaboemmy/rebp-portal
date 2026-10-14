@@ -1,6 +1,8 @@
-import { ShieldCheck } from "@/components/icons";
+import { Languages, Lock, QrCode, ShieldCheck, Timer } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { OrbitArt } from "@/components/motion/orbit-art";
+import { PageHero } from "@/components/layout/page-hero";
 import { VerifySearch } from "@/components/register/verify-search";
 import { publicPageMetadata } from "@/server/seo";
 
@@ -13,20 +15,40 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+const FACTS = [
+  { key: "secure", icon: Lock },
+  { key: "live", icon: Timer },
+  { key: "languages", icon: Languages },
+] as const;
+
 /** FR-REG-004 entry point: type a licence number or scan the certificate's QR code. */
 export default async function CheckIndexPage() {
   const t = await getTranslations("check");
+  const tl = await getTranslations("landing");
   return (
-    <div className="relative isolate flex flex-1">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
-      <div className="container-page flex max-w-xl flex-col items-center gap-6 py-14 text-center sm:py-20">
-        <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.75rem] bg-primary-soft text-link">
-          <ShieldCheck className="size-10" aria-hidden />
-        </span>
-        <h1>{t("title")}</h1>
-        <p className="text-muted-foreground">{t("subtitle")}</p>
-        <VerifySearch className="w-full" />
-      </div>
+    <div className="flex flex-1 flex-col">
+      <PageHero
+        align="center"
+        icon={<ShieldCheck />}
+        eyebrow={tl("eyebrow")}
+        title={t("title")}
+        description={t("subtitle")}
+        className="flex-1"
+      >
+        <VerifySearch className="w-full max-w-xl" />
+        <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+          {FACTS.map(({ key, icon: Icon }) => (
+            <li key={key} className="inline-flex items-center gap-1.5">
+              <Icon className="size-4 text-link" aria-hidden />
+              {tl(`trustItems.${key}.title`)}
+            </li>
+          ))}
+        </ul>
+        <OrbitArt
+          className="mt-4 max-w-[18rem] opacity-80 sm:max-w-xs"
+          center={<QrCode className="size-14 text-link" />}
+        />
+      </PageHero>
     </div>
   );
 }

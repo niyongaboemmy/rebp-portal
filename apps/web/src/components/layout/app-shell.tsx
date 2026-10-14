@@ -41,7 +41,16 @@ export async function AppShell({ area, user, children }: AppShellProps) {
             <AppNav area={area} capabilities={capabilities} variant="rail" />
           </div>
         </aside>
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="relative isolate flex min-w-0 flex-1 flex-col">
+          {/* The landing page's ambient light and Imigongo fade, behind every page's header. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 opacity-80 bg-ambient"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-56 bg-imigongo-fade text-link opacity-[0.04]"
+          />
           <header
             style={{ viewTransitionName: "app-header" }}
             className="sticky top-0 z-30 flex h-16 items-center gap-2 bg-card/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-card/70 sm:px-6"

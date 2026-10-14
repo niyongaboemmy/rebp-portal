@@ -37,7 +37,8 @@
     "pilotBanner": "Version pilote — données d'exemple uniquement. Les frais et textes juridiques sont provisoires, en attente d'approbation.",
     "unapprovedTranslation": "Cette traduction est un brouillon en attente d'approbation par l'Ordre professionnel.",
     "dismiss": "Ignorer",
-    "notice": "Avis"
+    "notice": "Avis",
+    "capsLock": "Verr. Maj activé"
   },
   "nav": {
     "home": "Accueil",
@@ -243,7 +244,8 @@
       "MANAGING_BROKER": "Gérant",
       "PRINCIPAL_BROKER": "Principal",
       "REBF": "Cabinet"
-    }
+    },
+    "eyebrow": "Huit catégories"
   },
   "placeholders": {
     "registerTitle": "Registre public",
@@ -387,6 +389,11 @@
       "match": "Les mots de passe correspondent",
       "met": "OK",
       "notMet": "Pas encore"
+    },
+    "toast": {
+      "signedIn": "Bon retour !",
+      "created": "Compte créé. Vérifions vos coordonnées.",
+      "codeSent": "Code envoyé. Consultez votre e-mail."
     }
   },
   "dashboard": {
@@ -640,7 +647,8 @@
     "nameTooShort": "Saisissez votre nom complet.",
     "nameTooLong": "Utilisez 120 caractères maximum.",
     "privacyRequired": "Veuillez confirmer que vous avez lu l'avis de confidentialité.",
-    "rolesRequired": "Choisissez au moins un rôle."
+    "rolesRequired": "Choisissez au moins un rôle.",
+    "fixFields": "{count, plural, one {Veuillez vérifier le champ signalé} other {Veuillez vérifier les # champs signalés}}"
   },
   "errors": {
     "unexpected": "Une erreur s'est produite. Veuillez réessayer.",
@@ -1157,7 +1165,8 @@
     "filterStatus": "Filtrer par statut",
     "all": "Tous",
     "emptyTitle": "Aucune inscription pour l'instant",
-    "noResults": "Aucun résultat pour « {query} »"
+    "noResults": "Aucun résultat pour « {query} »",
+    "eyebrow": "Registre public"
   },
   "check": {
     "title": "Vérifier une licence",

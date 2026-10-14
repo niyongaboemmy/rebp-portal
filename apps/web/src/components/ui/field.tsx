@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertTriangle } from "@/components/icons";
 import { Slot } from "radix-ui";
 import { createContext, useContext, useId } from "react";
 import { useErrorMessage } from "@/hooks/use-error-message";
@@ -66,8 +67,9 @@ export function Field({
           <p
             id={value.errorId}
             role="alert"
-            className="text-xs leading-relaxed font-medium text-destructive"
+            className="flex animate-rise items-start gap-1.5 text-xs leading-relaxed font-medium text-destructive [animation-duration:var(--dur-3)]"
           >
+            <AlertTriangle className="mt-px size-3.5 shrink-0" aria-hidden />
             {message}
           </p>
         )}

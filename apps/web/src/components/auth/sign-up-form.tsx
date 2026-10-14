@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, User } from "@/components/icons";
+import { AlertTriangle, ArrowRight, Building2, Mail, User } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -9,8 +9,10 @@ import { signUpSchema, type AccountType } from "@rebp/contracts";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldControl } from "@/components/ui/field";
+import { Flag } from "@/components/ui/flag";
 import { Input } from "@/components/ui/input";
 import { PasswordChecklist, PasswordInput, PasswordStrength } from "@/components/ui/password-input";
+import { startRouteProgress } from "@/components/layout/route-progress";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useErrorMessage } from "@/hooks/use-error-message";
 import { cn } from "@/lib/utils";
@@ -29,6 +31,7 @@ const ACCOUNT_OPTIONS: {
 export function SignUpForm() {
   const t = useTranslations("auth.signUp");
   const errorMessage = useErrorMessage();
+  const tt = useTranslations("auth.toast");
   const router = useRouter();
   const { form, submit, pending } = useActionForm({
     schema: signUpSchema,
@@ -42,7 +45,9 @@ export function SignUpForm() {
       acceptPrivacy: false as unknown as true,
     },
     action: signUpAction,
+    successMessage: tt("created"),
     onSuccess: ({ redirectTo }) => {
+      startRouteProgress();
       router.replace(redirectTo as never);
       router.refresh();
     },
@@ -53,19 +58,27 @@ export function SignUpForm() {
   const confirmPassword = form.watch("confirmPassword");
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+    <form onSubmit={submit} noValidate data-wide className="flex flex-col gap-5">
+      {/* Account type: a two-option segmented switch with a sliding highlight. */}
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-sm font-semibold">{t("accountType")}</legend>
-        <div role="radiogroup" className="grid grid-cols-2 gap-3">
+        <div
+          role="radiogroup"
+          className="relative grid grid-cols-2 gap-1 rounded-2xl bg-foreground/[0.04] p-1 dark:bg-white/[0.05]"
+        >
+          <span
+            aria-hidden
+            className={cn(
+              "absolute inset-y-1 left-1 w-[calc(50%-0.375rem)] rounded-xl bg-card shadow-[0_1px_2px_oklch(0.3_0.08_264/0.1),0_4px_12px_-6px_oklch(0.3_0.12_264/0.3)] transition-transform duration-(--dur-4) ease-spring dark:bg-white/[0.09] dark:shadow-none",
+              accountType === "ORGANISATION" && "translate-x-[calc(100%+0.25rem)]",
+            )}
+          />
           {ACCOUNT_OPTIONS.map(({ value, icon: Icon, label, hint }) => {
             const checked = accountType === value;
             return (
               <label
                 key={value}
-                className={cn(
-                  "flex cursor-pointer flex-col gap-1.5 rounded-xl border p-3.5 transition-colors has-focus-visible:ring-[3px] has-focus-visible:ring-ring/40",
-                  checked ? "border-primary bg-secondary" : "hover:bg-muted",
-                )}
+                className="relative flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 transition-colors has-focus-visible:ring-[3px] has-focus-visible:ring-ring/40"
               >
                 <input
                   type="radio"
@@ -73,12 +86,24 @@ export function SignUpForm() {
                   className="sr-only"
                   {...form.register("accountType")}
                 />
-                <Icon
-                  className={cn("size-5", checked ? "text-link" : "text-muted-foreground")}
-                  aria-hidden
-                />
-                <span className="text-sm font-semibold">{t(label)}</span>
-                <span className="text-xs text-muted-foreground">{t(hint)}</span>
+                <span
+                  className={cn(
+                    "inline-flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-(--dur-3)",
+                    checked ? "bg-primary text-primary-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  <Icon className="size-4" aria-hidden />
+                </span>
+                <span className="flex min-w-0 flex-col leading-tight">
+                  <span
+                    className={cn("text-sm font-semibold", !checked && "text-muted-foreground")}
+                  >
+                    {t(label)}
+                  </span>
+                  <span className="hidden truncate text-xs text-muted-foreground xs:block">
+                    {t(hint)}
+                  </span>
+                </span>
               </label>
             );
           })}
@@ -90,54 +115,58 @@ export function SignUpForm() {
         error={errors.fullName?.message}
       >
         <FieldControl>
-          <Input autoComplete="name" {...form.register("fullName")} />
+          <Input
+            autoComplete={accountType === "ORGANISATION" ? "organization" : "name"}
+            leading={accountType === "ORGANISATION" ? <Building2 /> : <User />}
+            {...form.register("fullName")}
+          />
         </FieldControl>
       </Field>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label={t("email")} error={errors.email?.message}>
-          <FieldControl>
-            <Input
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              {...form.register("email")}
-            />
-          </FieldControl>
-        </Field>
-        <Field label={t("phone")} error={errors.phone?.message} description={t("phoneHint")}>
-          {/* W-02: Rwanda cue; local (078…) and international (+250…) formats both work. */}
-          <div className="relative">
-            <span
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 rounded-md bg-muted px-1.5 py-0.5 text-xs font-bold text-muted-foreground"
-            >
-              RW
-            </span>
+      <Field label={t("email")} error={errors.email?.message}>
+        <FieldControl>
+          <Input
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            leading={<Mail />}
+            {...form.register("email")}
+          />
+        </FieldControl>
+      </Field>
+      {/* W-02: Rwanda cue; local (078…) and international (+250…) formats both work. */}
+      <Field label={t("phone")} error={errors.phone?.message} description={t("phoneHint")}>
+        <FieldControl>
+          <Input
+            type="tel"
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="078 123 4567"
+            leading={<Flag locale="rw" className="h-3! w-4!" />}
+            {...form.register("phone")}
+          />
+        </FieldControl>
+      </Field>
+      {/* Passwords side by side when there is room; strength and rules span both. */}
+      <div className="flex flex-col gap-2.5">
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-4">
+          <Field label={t("password")} error={errors.password?.message}>
             <FieldControl>
-              <Input
-                type="tel"
-                autoComplete="tel"
-                inputMode="tel"
-                placeholder="078 123 4567"
-                className="pl-12"
-                {...form.register("phone")}
-              />
+              <PasswordInput autoComplete="new-password" {...form.register("password")} />
             </FieldControl>
-          </div>
-        </Field>
+          </Field>
+          <Field label={t("confirmPassword")} error={errors.confirmPassword?.message}>
+            <FieldControl>
+              <PasswordInput autoComplete="new-password" {...form.register("confirmPassword")} />
+            </FieldControl>
+          </Field>
+        </div>
+        {password ? (
+          <PasswordStrength password={password} />
+        ) : (
+          <p className="text-xs leading-relaxed text-muted-foreground">{t("passwordHint")}</p>
+        )}
+        <PasswordChecklist password={password} confirm={confirmPassword} />
       </div>
-      <Field label={t("password")} error={errors.password?.message} description={t("passwordHint")}>
-        <FieldControl>
-          <PasswordInput autoComplete="new-password" {...form.register("password")} />
-        </FieldControl>
-      </Field>
-      <PasswordStrength password={password} />
-      <Field label={t("confirmPassword")} error={errors.confirmPassword?.message}>
-        <FieldControl>
-          <PasswordInput autoComplete="new-password" {...form.register("confirmPassword")} />
-        </FieldControl>
-      </Field>
-      <PasswordChecklist password={password} confirm={confirmPassword} />
 
       <div className="flex flex-col gap-2">
         <div className="flex items-start gap-3">
@@ -166,14 +195,18 @@ export function SignUpForm() {
           </label>
         </div>
         {errors.acceptPrivacy && (
-          <p role="alert" className="text-xs font-medium text-destructive">
+          <p
+            role="alert"
+            className="flex animate-rise items-start gap-1.5 text-xs font-medium text-destructive"
+          >
+            <AlertTriangle className="mt-px size-3.5 shrink-0" aria-hidden />
             {errorMessage(errors.acceptPrivacy.message)}
           </p>
         )}
       </div>
 
-      <Button type="submit" size="lg" loading={pending}>
-        {t("submit")}
+      <Button type="submit" size="lg" className="rounded-full" loading={pending}>
+        {t("submit")} <ArrowRight />
       </Button>
     </form>
   );

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { Route } from "next";
 import { getTranslations } from "next-intl/server";
+import { PageHero } from "@/components/layout/page-hero";
+import { OrbitArt } from "@/components/motion/orbit-art";
 import { CATEGORIES, CATEGORY_INFO, LICENSE_STATUSES } from "@rebp/contracts";
 import { VerifySearch } from "@/components/register/verify-search";
 import { chipClassName, ChipRow } from "@/components/ui/chip";
@@ -41,53 +43,60 @@ export default async function RegisterPage({ searchParams }: PageProps<"/registe
   const status = typeof params.status === "string" ? params.status : undefined;
 
   return (
-    <div className="relative isolate">
-      <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-72 bg-ambient" />
-      <div className="container-page flex flex-col gap-6 py-8 sm:py-12">
-        <div className="flex flex-col gap-1.5">
-          <h1>{t("register.title")}</h1>
-          <p className="text-muted-foreground">{t("register.subtitle")}</p>
-        </div>
+    <div className="flex flex-col">
+      <PageHero
+        eyebrow={t("register.eyebrow")}
+        title={t("register.title")}
+        description={t("register.subtitle")}
+      >
         <VerifySearch defaultValue={q} className="max-w-2xl" />
-
-        <nav aria-label={t("register.filterCategory")} className="flex flex-col gap-2">
-          <ChipRow>
-            <Link
-              href={href({ q, status })}
-              aria-current={!category ? "true" : undefined}
-              className={chipClassName(!category)}
-            >
-              {t("register.all")}
-            </Link>
-            {CATEGORIES.map((c) => (
+        <div className="flex flex-col gap-2.5">
+          <nav aria-label={t("register.filterCategory")}>
+            <ChipRow>
               <Link
-                key={c}
-                href={href({ q, status, category: c })}
-                aria-current={category === c ? "true" : undefined}
-                className={chipClassName(category === c)}
+                href={href({ q, status })}
+                aria-current={!category ? "true" : undefined}
+                className={chipClassName(!category)}
               >
-                {CATEGORY_INFO[c].abbreviation}
+                {t("register.all")}
               </Link>
-            ))}
-          </ChipRow>
-        </nav>
-        <nav aria-label={t("register.filterStatus")}>
-          <ChipRow>
-            {PUBLIC_STATUSES.map((s) => (
-              <Link
-                key={s}
-                href={href({ q, category, status: status === s ? undefined : s })}
-                aria-current={status === s ? "true" : undefined}
-                className={chipClassName(status === s)}
-              >
-                {t(`status.licence.${s}`)}
-              </Link>
-            ))}
-          </ChipRow>
-        </nav>
-
+              {CATEGORIES.map((c) => (
+                <Link
+                  key={c}
+                  href={href({ q, status, category: c })}
+                  aria-current={category === c ? "true" : undefined}
+                  className={chipClassName(category === c)}
+                >
+                  {CATEGORY_INFO[c].abbreviation}
+                </Link>
+              ))}
+            </ChipRow>
+          </nav>
+          <nav aria-label={t("register.filterStatus")}>
+            <ChipRow>
+              {PUBLIC_STATUSES.map((s) => (
+                <Link
+                  key={s}
+                  href={href({ q, category, status: status === s ? undefined : s })}
+                  aria-current={status === s ? "true" : undefined}
+                  className={chipClassName(status === s)}
+                >
+                  {t(`status.licence.${s}`)}
+                </Link>
+              ))}
+            </ChipRow>
+          </nav>
+        </div>
+      </PageHero>
+      <div className="container-page pb-20 sm:pb-28">
         <EmptyState
           icon={BookUser}
+          art={
+            <OrbitArt
+              className="max-w-[16rem]"
+              center={<BookUser className="size-12 text-link" />}
+            />
+          }
           title={q ? t("register.noResults", { query: q }) : t("register.emptyTitle")}
           description={t("placeholders.registerBody")}
         />

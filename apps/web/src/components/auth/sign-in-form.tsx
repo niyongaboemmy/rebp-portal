@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight, Mail } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,17 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldControl } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { startRouteProgress } from "@/components/layout/route-progress";
 import { useActionForm } from "@/hooks/use-action-form";
 import { signInAction } from "@/server/actions/auth";
 
 export function SignInForm({ next }: { next?: string }) {
   const t = useTranslations("auth.signIn");
+  const tt = useTranslations("auth.toast");
   const router = useRouter();
   const { form, submit, pending } = useActionForm({
     schema: signInSchema,
     defaultValues: { email: "", password: "", next },
     action: signInAction,
+    successMessage: tt("signedIn"),
     onSuccess: ({ redirectTo }) => {
+      startRouteProgress();
       router.replace(redirectTo as never);
       router.refresh();
     },
@@ -34,6 +39,7 @@ export function SignInForm({ next }: { next?: string }) {
             autoComplete="email"
             inputMode="email"
             autoFocus
+            leading={<Mail />}
             {...form.register("email")}
           />
         </FieldControl>
@@ -54,8 +60,8 @@ export function SignInForm({ next }: { next?: string }) {
           <PasswordInput autoComplete="current-password" {...form.register("password")} />
         </FieldControl>
       </Field>
-      <Button type="submit" size="lg" loading={pending}>
-        {t("submit")}
+      <Button type="submit" size="lg" className="rounded-full" loading={pending}>
+        {t("submit")} <ArrowRight />
       </Button>
     </form>
   );
