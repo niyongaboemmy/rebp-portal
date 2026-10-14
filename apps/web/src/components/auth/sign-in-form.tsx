@@ -44,7 +44,7 @@ export function SignInForm({ next }: { next?: string }) {
         labelAction={
           <Link
             href="/forgot-password"
-            className="hit-area text-sm font-semibold text-primary hover:underline"
+            className="hit-area text-sm font-semibold text-link hover:underline"
           >
             {t("forgot")}
           </Link>

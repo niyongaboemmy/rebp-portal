@@ -36,7 +36,7 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
       >
         <div aria-hidden className="absolute inset-0 -z-10 bg-imigongo opacity-[0.06]" />
         <div className="container-page flex flex-col items-center gap-3 py-12 text-center sm:py-16">
-          <span className="inline-flex size-20 animate-pop items-center justify-center rounded-full bg-card shadow-soft">
+          <span className="inline-flex size-20 animate-pop items-center justify-center rounded-full border bg-card">
             <SearchX className="size-10" aria-hidden />
           </span>
           <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] font-extrabold tracking-tight uppercase">

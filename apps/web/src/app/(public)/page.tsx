@@ -61,7 +61,7 @@ export default async function LandingPage() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 -z-10 h-80 bg-imigongo-fade text-primary opacity-[0.05]"
+          className="absolute inset-x-0 top-0 -z-10 h-80 bg-imigongo-fade text-link opacity-[0.05]"
         />
         <div className="container-page grid gap-10 pt-10 pb-14 sm:pt-16 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:py-24">
           <div className="flex flex-col gap-6">
@@ -89,7 +89,7 @@ export default async function LandingPage() {
                     {t("landing.primaryCta")} <ArrowRight />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="tonal">
+                <Button asChild size="lg" variant="outline">
                   <Link href="/eligibility">{t("landing.secondaryCta")}</Link>
                 </Button>
               </div>
@@ -121,7 +121,7 @@ export default async function LandingPage() {
               className="absolute -top-1 left-0 sm:-left-4"
               style={parallaxStyle(-14)}
             >
-              <span className="flex animate-float items-center gap-2 rounded-2xl border bg-card/90 px-3 py-2 text-sm font-semibold shadow-3 backdrop-blur">
+              <span className="flex animate-float items-center gap-2 rounded-2xl border bg-card px-3 py-2 text-sm font-semibold">
                 <span className="inline-flex size-7 items-center justify-center rounded-lg bg-success-soft text-success">
                   <ScanLine className="size-4" />
                 </span>
@@ -133,7 +133,7 @@ export default async function LandingPage() {
               className="absolute right-0 -bottom-9 sm:-right-4 sm:-bottom-2"
               style={parallaxStyle(-20)}
             >
-              <span className="flex animate-float items-center gap-3 rounded-2xl border bg-card/90 px-3 py-2 shadow-3 backdrop-blur [animation-delay:-2s]">
+              <span className="flex animate-float items-center gap-3 rounded-2xl border bg-card px-3 py-2 [animation-delay:-2s]">
                 <ProgressRing value={1} total={1} tone="good" className="size-9" thickness={4}>
                   <Check className="size-4 text-success" strokeWidth={3} />
                 </ProgressRing>
@@ -150,7 +150,7 @@ export default async function LandingPage() {
               className="absolute -bottom-6 left-6 hidden sm:block"
               style={parallaxStyle(-10)}
             >
-              <span className="flex animate-float items-center gap-2 rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold shadow-3 backdrop-blur [animation-delay:-4s]">
+              <span className="flex animate-float items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-xs font-semibold [animation-delay:-4s]">
                 <span className="size-2 animate-pulse rounded-full bg-sun" />
                 {t("landing.scene.languages")}
               </span>
@@ -184,7 +184,7 @@ export default async function LandingPage() {
           {TRUST.map(({ key, icon: Icon }, index) => (
             <Reveal key={key} stagger={index}>
               <li className="spotlight flex items-center gap-3 rounded-2xl bg-surface-2 p-4 text-sm font-medium">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-card text-primary raised">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-card text-link raised">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 {t(`landing.trust.${key}`)}

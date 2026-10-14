@@ -165,7 +165,7 @@ export default async function BackofficeOverview() {
                     <Icon className="size-5" aria-hidden />
                   </span>
                   <span className="text-sm font-semibold">{t(`nav.${s.label}`)}</span>
-                  <span className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
+                  <span className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-ember-text">
                     <Sparkles className="size-3" aria-hidden /> {t("common.comingSoon")}
                     <ArrowRight
                       className="ml-auto size-3.5 transition-transform group-hover:translate-x-0.5"

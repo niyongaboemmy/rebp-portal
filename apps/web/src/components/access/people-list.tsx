@@ -41,7 +41,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                 type="button"
                 onClick={() => setSelectedId(user.id)}
                 data-testid={`person-${user.email}`}
-                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-all outline-none hover:border-primary/40 hover:shadow-soft focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.995] sm:gap-4 sm:p-4"
+                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-all outline-none hover:border-primary/40 hover:bg-surface-2 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.995] sm:gap-4 sm:p-4"
               >
                 <div className="relative">
                   <Avatar name={user.fullName} className="size-11" />
@@ -83,7 +83,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                       : t("neverSignedIn")}
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors group-hover:text-primary">
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors group-hover:text-link">
                   <span className="hidden sm:inline">
                     {canManage && !isSelf ? t("manage") : t("view")}
                   </span>

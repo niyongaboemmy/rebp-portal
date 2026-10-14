@@ -38,3 +38,35 @@
   `oklch(0.24 0.14 285)`; a test asserts white text ≥ 7:1 on every stop.
 - **Primary buttons** get `btn-gloss`: a soft top highlight and a navy-tinted shadow.
 - Icons, Open Graph card, PWA icons, manifest and `theme-color` are re-coloured to match.
+
+## Amendment v3 (2026-10-14) — royal blue, flat surfaces, physical motion
+
+- **Primary is a vivid royal blue from the brand hue**: `oklch(0.52 0.23 264)` light and `oklch(0.56 0.21 263)`
+  dark. Buttons stay blue with white text in both themes (≥ 4.7:1); fills keep ≥ 3:1 against the page. The navy
+  `#010080` is kept as **brand ink** (`--brand`): logo and brand surfaces. Reason: navy read as too dark for
+  interactive elements on light backgrounds.
+- **`--link`** is primary used as text: the same blue in light mode, periwinkle `oklch(0.74 0.14 266)` in dark
+  mode. A blue that can carry white text is too dim to read as text on near-black. All `text-primary` usages
+  became `text-link`.
+- **Flat design.** Surfaces separate by hairline borders and tone, not shadows. Decorative borders are alpha
+  hairlines (9% light, 8% dark) that blend with any surface. Form-field borders stay ≥ 3:1 (WCAG 1.4.11), the
+  one place a border must be visible. Shadows are reserved for real overlays: menus, dialogs, sheets, tooltips.
+- **Physical, minimal button motion** (no shadows):
+  - press compresses to 97% and springs back on release (`--ease-spring`)
+  - a ripple spreads from the touch point (`<Interactions />`, one delegated listener)
+  - the fill deepens on hover
+  - a trailing arrow nudges forward
+  - all off under reduced motion
+- **Button hierarchy:**
+  - `default`: the one main action per view
+  - `outline`: secondary actions and equal alternatives, e.g. "Sign in" next to "Create account", "Am I
+    eligible?" next to "Start", "Set up" when several methods are offered, Share, error-page second routes
+  - `tonal`: supportive actions inside cards
+  - `ghost`: tertiary and icon actions
+  - `link`: inline navigation
+- **Secondary colours have one job each:**
+  - **Sun** (yellow) for highlights and delight: step numerals, sketch underlines, the "Best fit" marker, the
+    logo dot.
+  - **Ember** (orange) for time and "what's next" cues that are _not_ a status: coming-soon chips, the
+    mobile-money countdown, "Next" category, experience progress towards the next category.
+  - Neither replaces the status colours (warning, critical), which always carry an icon.

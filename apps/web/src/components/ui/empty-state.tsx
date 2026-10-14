@@ -36,7 +36,7 @@ export function EmptyState({
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-imigongo-fade text-primary opacity-[0.05]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-imigongo-fade text-link opacity-[0.05]"
       />
       {art ?? (
         <span className="relative inline-flex size-20 animate-pop items-center justify-center">
@@ -45,7 +45,7 @@ export function EmptyState({
             aria-hidden
             className="absolute -inset-3 rounded-[2.25rem] border border-primary/15"
           />
-          <Icon className="relative size-9 text-primary" aria-hidden />
+          <Icon className="relative size-9 text-link" aria-hidden />
         </span>
       )}
       <div className="relative flex max-w-md flex-col gap-1.5">

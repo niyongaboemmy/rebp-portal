@@ -41,7 +41,7 @@ export function Alert({ className, variant = "info", title, children, ...props }
       <div className="flex min-w-0 flex-col gap-1">
         {title && <p className="font-semibold">{title}</p>}
         {children && (
-          <div className="text-muted-foreground [&_a]:text-primary [&_a]:underline">{children}</div>
+          <div className="text-muted-foreground [&_a]:text-link [&_a]:underline">{children}</div>
         )}
       </div>
     </div>

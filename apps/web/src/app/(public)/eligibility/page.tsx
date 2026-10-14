@@ -20,7 +20,7 @@ export default async function EligibilityPage() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
       <div className="container-page flex max-w-2xl flex-col gap-6 py-8 sm:py-14">
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-primary">{t("eyebrow")}</span>
+          <span className="text-sm font-semibold text-link">{t("eyebrow")}</span>
           <h1 className="sr-only">{t("title")}</h1>
         </div>
         <EligibilityQuiz />

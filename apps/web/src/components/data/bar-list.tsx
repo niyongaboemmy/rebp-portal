@@ -34,7 +34,7 @@ export function BarList({
                 animationDelay: `${index * 40}ms`,
               }}
             />
-            <span className="relative flex min-w-0 items-center gap-2 px-3 text-sm font-medium [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-primary">
+            <span className="relative flex min-w-0 items-center gap-2 px-3 text-sm font-medium [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-link">
               {item.icon}
               <span className="truncate">{item.label}</span>
             </span>

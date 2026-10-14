@@ -20,7 +20,7 @@ export default async function CheckIndexPage() {
     <div className="relative isolate flex flex-1">
       <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
       <div className="container-page flex max-w-xl flex-col items-center gap-6 py-14 text-center sm:py-20">
-        <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.75rem] bg-primary-soft text-primary">
+        <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.75rem] bg-primary-soft text-link">
           <ShieldCheck className="size-10" aria-hidden />
         </span>
         <h1>{t("title")}</h1>

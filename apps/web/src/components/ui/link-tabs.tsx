@@ -33,7 +33,7 @@ export function LinkTabs({
           className={cn(
             "inline-flex tap-target flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all sm:flex-none [&_svg]:size-4",
             tab.active
-              ? "bg-card text-foreground shadow-soft"
+              ? "bg-card text-foreground ring-1 ring-border"
               : "text-muted-foreground hover:text-foreground",
           )}
         >

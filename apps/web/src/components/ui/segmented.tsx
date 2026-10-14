@@ -46,7 +46,7 @@ export function Segmented<T extends string>({
     >
       <span
         aria-hidden
-        className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/var(--count))] translate-x-[calc(100%*var(--index))] rounded-xl bg-card shadow-soft transition-transform duration-(--dur-3) ease-spring"
+        className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/var(--count))] translate-x-[calc(100%*var(--index))] rounded-xl bg-card ring-1 ring-border transition-transform duration-(--dur-3) ease-spring"
       />
       {options.map((option) => (
         <ToggleGroup.Item

@@ -137,7 +137,7 @@ export function JourneyDiagram() {
                   className={cn(
                     "relative inline-flex size-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-(--dur-3)",
                     selected
-                      ? "bg-primary btn-gloss text-primary-foreground"
+                      ? "bg-primary text-primary-foreground"
                       : "bg-primary-soft text-primary-soft-foreground",
                   )}
                 >
@@ -197,7 +197,7 @@ export function JourneyDiagram() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 -z-10 h-40 bg-imigongo-fade text-primary opacity-[0.06]"
+          className="absolute inset-x-0 top-0 -z-10 h-40 bg-imigongo-fade text-link opacity-[0.06]"
         />
         <PhoneSketch key={step.key}>
           {step.key === "account" && <AccountSketch />}
@@ -215,7 +215,7 @@ function PhoneSketch({ children }: { children: React.ReactNode }) {
   return (
     <div
       aria-hidden
-      className="relative w-56 animate-pop rounded-[2.25rem] border-[3px] border-foreground/80 bg-card p-3 shadow-3"
+      className="relative w-56 animate-pop rounded-[2.25rem] border-[3px] border-foreground/80 bg-card p-3"
     >
       <span className="mx-auto mb-3 block h-1.5 w-16 rounded-full bg-foreground/20" />
       <div className="flex h-80 flex-col gap-3 overflow-hidden rounded-[1.5rem] bg-background p-4">
@@ -324,7 +324,7 @@ function PaySketch() {
           />
         ))}
       </div>
-      <ProgressRing value={3} total={4} tone="warning" className="size-12" thickness={3}>
+      <ProgressRing value={3} total={4} tone="ember" className="size-12" thickness={3}>
         <span className="text-[0.65rem] font-bold num">0:45</span>
       </ProgressRing>
     </div>

@@ -191,3 +191,23 @@ Requested in review: smoother motion and more modern, interactive graphics.
 - the journey diagram's keyboard and reduced-motion behaviour
 
 Unit tests pass (contracts 57, web 174). Lint, typecheck, format check and the production build pass.
+
+## 8. Review round v3 (2026-10-14)
+
+| Feedback                                     | Change                                                                                | Detail                                                                                    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Borders look too solid                       | Decorative borders are alpha hairlines (9% light, 8% dark)                            | Form-field borders keep ≥ 3:1 (WCAG 1.4.11)                                               |
+| Primary too dark in light mode               | Royal blue `oklch(0.52 0.23 264)` from the navy hue; navy `#010080` kept as brand ink | [ADR-009 v3](adr/ADR-009-visual-language.md)                                              |
+| Buttons blue in dark mode too                | Same blue fill with white text in both themes                                         | Text links use a separate `--link` token                                                  |
+| No button shadows; realistic, minimal motion | Flat buttons; spring press, tap ripple, hover deepening, arrow nudge                  | All off under reduced motion                                                              |
+| Categories without shadows                   | Flat ladder rungs: hairline borders, tint on hover, ripple, sliding arrow             | Markers: blue "You", Sun "Best fit", Ember "Next"                                         |
+| Where to use outline buttons                 | Secondary actions and equal alternatives                                              | Header "Sign in", "Am I eligible?", multiple "Set up", Share, error pages, licence wallet |
+| Orange and yellow secondary colours          | Sun = highlight; Ember = time and "next" cues                                         | Never a substitute for status colours                                                     |
+| Flat professional design                     | Shadows only on overlays (menus, dialogs, sheets, tooltips)                           | —                                                                                         |
+
+**Verification:**
+
+- **E2E:** 57 of 57 pass.
+- **Unit tests:** 246 pass.
+- **Accessibility and layout:** axe and overflow are clean on 40 page and device combinations in each of en, fr and rw.
+- **Token contrast:** 80 checks pass.

@@ -33,14 +33,14 @@ export default async function LicensesPage() {
               <span className="h-3.5 w-28 rounded-full bg-primary/25" />
               <span className="h-2.5 w-20 rounded-full bg-primary/15" />
             </div>
-            <span className="inline-flex size-14 items-center justify-center rounded-xl bg-card text-primary">
+            <span className="inline-flex size-14 items-center justify-center rounded-xl bg-card text-link">
               <QrCode className="size-8" />
             </span>
           </div>
         </div>
       }
       action={
-        <Button asChild variant="tonal">
+        <Button asChild variant="outline">
           <Link href="/check">
             {t("nav.verify")} <ArrowRight />
           </Link>

@@ -86,7 +86,7 @@ export function MoreSheet({
                           active && "bg-primary-soft text-primary-soft-foreground",
                         )}
                       >
-                        <Icon className={cn("size-5", active ? "" : "text-primary")} aria-hidden />
+                        <Icon className={cn("size-5", active ? "" : "text-link")} aria-hidden />
                         <span className="line-clamp-2">{t(`nav.${item.label}`)}</span>
                       </Link>
                     </li>

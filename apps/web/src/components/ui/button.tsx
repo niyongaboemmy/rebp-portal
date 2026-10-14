@@ -3,20 +3,31 @@ import { Slot } from "radix-ui";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Flat, physical buttons (ADR-009 v3): no shadows. Feedback is motion and tone — the fill deepens
+ * on hover, a press compresses to 97 % and springs back on release, a ripple spreads from the
+ * touch point (<Interactions />), and a trailing arrow nudges forward on hover.
+ *
+ * Hierarchy: `default` = the one main action per view · `outline` = secondary actions and equal
+ * alternatives (Cancel, Change, Share, Sign in) · `tonal` = supportive actions inside cards ·
+ * `ghost` = tertiary and icon actions · `link` = inline navigation.
+ */
 export const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-(--dur-2) ease-standard outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.97] active:duration-(--dur-1) disabled:pointer-events-none disabled:opacity-55 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-xl text-sm font-semibold whitespace-nowrap transition-[background-color,border-color,color,transform] duration-(--dur-3) ease-spring outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.97] active:duration-(--dur-1) active:ease-out disabled:pointer-events-none disabled:opacity-55 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>svg:last-child:not(:first-child)]:transition-transform [&>svg:last-child:not(:first-child)]:duration-(--dur-3) hover:[&>svg:last-child:not(:first-child)]:translate-x-0.5",
   {
     variants: {
       variant: {
-        default: "bg-primary btn-gloss text-primary-foreground hover:bg-primary/90",
-        /** Secondary emphasis: brand-tinted fill (ADR-009 hierarchy). */
-        tonal: "bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft/75",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        outline: "border border-input bg-card hover:bg-muted",
-        ghost: "hover:bg-muted",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        default:
+          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary)_86%,black)]",
+        tonal: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
+        secondary: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
+        outline:
+          "border border-foreground/15 bg-transparent text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04]",
+        ghost: "hover:bg-foreground/[0.06]",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-[color-mix(in_oklch,var(--destructive)_86%,black)]",
         accent: "bg-accent text-accent-foreground hover:bg-accent/80",
-        link: "h-auto px-0 text-primary underline-offset-4 hover:underline",
+        link: "h-auto overflow-visible px-0 text-link underline-offset-4 hover:underline active:scale-100",
       },
       size: {
         // Mobile-first: 44 px touch targets (UX-001), slightly denser from `sm` up.
@@ -25,7 +36,7 @@ export const buttonVariants = cva(
         sm: "h-11 rounded-xl px-4 text-sm sm:h-9 sm:rounded-lg sm:px-3 sm:text-xs",
         lg: "h-12 rounded-2xl px-6 text-base",
         /** Floating action button: the single hero action on a mobile screen. */
-        fab: "h-14 rounded-2xl px-5 text-base shadow-3",
+        fab: "h-14 rounded-2xl px-5 text-base",
         icon: "size-11 sm:size-10",
         "icon-sm": "size-11 sm:size-9",
       },

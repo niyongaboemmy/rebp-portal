@@ -189,7 +189,12 @@ export function MfaCard({
                     </Button>
                   </>
                 ) : (
-                  <Button size="sm" disabled={busy || blocked} onClick={() => startSetup(method)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={busy || blocked}
+                    onClick={() => startSetup(method)}
+                  >
                     {t("mfa.setUp")}
                   </Button>
                 )}

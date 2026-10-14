@@ -22,7 +22,7 @@ export default async function ForbiddenPage() {
                 <LayoutDashboard /> {t("forbidden.cta")}
               </Link>
             </Button>
-            <Button asChild variant="tonal">
+            <Button asChild variant="outline">
               <Link href="/settings/access">
                 <KeyRound /> {t("nav.myAccess")}
               </Link>

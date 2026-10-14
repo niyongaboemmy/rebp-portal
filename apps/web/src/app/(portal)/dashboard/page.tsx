@@ -129,7 +129,12 @@ export default async function DashboardPage() {
                 {t("placeholders.applicationsCta")} <ArrowRight />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="ghost" className="text-white hover:bg-white/10">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/40 text-white hover:border-white/70 hover:bg-white/10"
+            >
               <Link href="/eligibility">{t("nav.eligibility")}</Link>
             </Button>
           </div>
@@ -211,7 +216,7 @@ export default async function DashboardPage() {
           className="flex flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
         >
           <div className="flex items-center gap-2">
-            <History className="size-4 text-primary" aria-hidden />
+            <History className="size-4 text-link" aria-hidden />
             <h2 id="activity-title" className="text-lg">
               {t("dashboard.activity")}
             </h2>

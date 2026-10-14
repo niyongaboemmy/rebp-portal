@@ -18,7 +18,7 @@ export async function SiteFooter() {
     <footer className="relative mt-auto overflow-hidden border-t bg-card">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-imigongo-fade-up text-primary opacity-[0.04]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-imigongo-fade-up text-link opacity-[0.04]"
       />
       <div className="relative container-page flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-3">

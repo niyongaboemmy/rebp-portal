@@ -34,11 +34,12 @@ const TIERS: { tier: CategoryTier; categories: Category[] }[] = [
   { tier: "firm", categories: ["REBF"] },
 ];
 
+/** Tier tint for the section badge: one hue per tier, low-saturation fills (flat, v3). */
 const TIER_STYLE: Record<CategoryTier, string> = {
-  entry: "bg-chart-3/15 text-foreground",
-  agent: "bg-chart-1/15 text-foreground",
-  broker: "bg-chart-7/15 text-foreground",
-  firm: "bg-chart-4/20 text-foreground",
+  entry: "bg-chart-3/12 text-foreground",
+  agent: "bg-chart-1/12 text-foreground",
+  broker: "bg-chart-7/12 text-foreground",
+  firm: "bg-chart-4/15 text-foreground",
 };
 
 export interface LadderMarker {
@@ -94,12 +95,14 @@ export function CategoryLadder({
                   <li key={code}>
                     <button
                       type="button"
+                      data-ripple
                       onClick={() => setOpen(code)}
                       aria-haspopup="dialog"
                       className={cn(
-                        "group spotlight flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left raised transition-[transform,border-color] duration-(--dur-2) ease-standard outline-none hover:-translate-y-0.5 hover:border-primary/40 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.98]",
-                        marker?.kind === "current" && "border-primary ring-2 ring-primary/25",
-                        marker?.kind === "recommended" && "border-success ring-2 ring-success/25",
+                        "group spotlight flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-[background-color,border-color,transform] duration-(--dur-3) ease-spring outline-none hover:border-primary/35 hover:bg-primary/[0.03] focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.985] active:duration-(--dur-1)",
+                        marker?.kind === "current" && "border-primary/60 bg-primary/[0.04]",
+                        marker?.kind === "recommended" && "border-sun bg-sun/[0.08]",
+                        marker?.kind === "next" && "border-dashed border-ember/60",
                       )}
                     >
                       <span
@@ -121,15 +124,15 @@ export function CategoryLadder({
                           className={cn(
                             "shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold",
                             marker.kind === "current" && "bg-primary text-primary-foreground",
-                            marker.kind === "recommended" && "bg-success-soft text-success",
-                            marker.kind === "next" && "bg-warning-soft text-warning",
+                            marker.kind === "recommended" && "bg-sun text-sun-foreground",
+                            marker.kind === "next" && "bg-ember-soft text-ember-text",
                           )}
                         >
                           {t(`marker.${marker.kind}`)}
                         </span>
                       ) : (
                         <ChevronRight
-                          className="size-4 shrink-0 text-muted-foreground transition-transform duration-(--dur-2) group-hover:translate-x-0.5"
+                          className="size-4 shrink-0 text-muted-foreground transition-[transform,color] duration-(--dur-3) ease-spring group-hover:translate-x-1 group-hover:text-link"
                           aria-hidden
                         />
                       )}

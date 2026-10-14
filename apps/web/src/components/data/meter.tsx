@@ -19,7 +19,8 @@ export function Meter({
   max: number;
   /** Draws a tick at this value (e.g. the requirement). */
   target?: number;
-  tone?: StatusTone;
+  /** Status tone, or "ember" for progress towards something (not a status). */
+  tone?: StatusTone | "ember";
   label: React.ReactNode;
   /** Visible and announced value, e.g. "2 of 3 years". */
   valueText: string;
@@ -44,7 +45,7 @@ export function Meter({
         <div
           className={cn(
             "h-full origin-left animate-[meter-in_var(--dur-5)_var(--ease-enter)_both] rounded-full",
-            tone ? TONE_FILL[tone] : "bg-primary",
+            tone === "ember" ? "bg-ember" : tone ? TONE_FILL[tone] : "bg-primary",
           )}
           style={{ transform: `scaleX(${ratio})` }}
         />

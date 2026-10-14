@@ -27,7 +27,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/sign-in">
       footer={
         <>
           {t("signIn.noAccount")}{" "}
-          <Link href="/sign-up" className="hit-area font-semibold text-primary hover:underline">
+          <Link href="/sign-up" className="hit-area font-semibold text-link hover:underline">
             {t("signIn.createAccount")}
           </Link>
         </>

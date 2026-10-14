@@ -47,7 +47,7 @@ export function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem className={cn(itemClass, "pr-8", className)} {...props}>
       {children}
       <DropdownMenuPrimitive.ItemIndicator className="absolute right-2.5">
-        <Check className="text-primary!" />
+        <Check className="text-link!" />
       </DropdownMenuPrimitive.ItemIndicator>
     </DropdownMenuPrimitive.RadioItem>
   );

@@ -27,7 +27,7 @@ export function Sparkline({
   return (
     <svg
       viewBox={`-3 0 ${width + 6} ${height}`}
-      className={cn("h-8 w-24 overflow-visible text-primary", className)}
+      className={cn("h-8 w-24 overflow-visible text-link", className)}
       aria-hidden
     >
       <path d={`${d} L${width} ${height} L0 ${height} Z`} className="fill-current opacity-10" />

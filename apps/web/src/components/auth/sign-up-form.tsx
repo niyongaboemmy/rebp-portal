@@ -74,7 +74,7 @@ export function SignUpForm() {
                   {...form.register("accountType")}
                 />
                 <Icon
-                  className={cn("size-5", checked ? "text-primary" : "text-muted-foreground")}
+                  className={cn("size-5", checked ? "text-link" : "text-muted-foreground")}
                   aria-hidden
                 />
                 <span className="text-sm font-semibold">{t(label)}</span>
@@ -158,11 +158,7 @@ export function SignUpForm() {
           <label htmlFor="acceptPrivacy" className="text-sm leading-relaxed">
             {t.rich("acceptPrivacy", {
               link: (chunks) => (
-                <Link
-                  href="/privacy"
-                  target="_blank"
-                  className="font-semibold text-primary underline"
-                >
+                <Link href="/privacy" target="_blank" className="font-semibold text-link underline">
                   {chunks}
                 </Link>
               ),

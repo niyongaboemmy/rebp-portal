@@ -27,7 +27,7 @@ export async function ComingSoon({
       action={
         <div className="flex flex-col items-center gap-3">
           {action}
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-ember-soft px-3 py-1 text-xs font-semibold text-ember-text">
             <Sparkles className="size-3.5" aria-hidden /> {t("comingSoon")}
           </span>
         </div>

@@ -30,7 +30,7 @@ export async function SiteHeader() {
             <UserMenu name={current.user.fullName} email={current.user.email} />
           ) : (
             <>
-              <Button asChild variant="ghost" className="hidden sm:inline-flex">
+              <Button asChild variant="outline" className="hidden sm:inline-flex">
                 <Link href="/sign-in">{t("signIn")}</Link>
               </Button>
               <Button asChild>

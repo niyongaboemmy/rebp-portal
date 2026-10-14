@@ -46,7 +46,7 @@ export async function LicenceCard({
   return (
     <div className={cn("[perspective:1000px]", className)}>
       <article
-        className="group relative isolate flex aspect-[1.586] w-full flex-col justify-between overflow-hidden rounded-[1.75rem] bg-brand p-5 shadow-3 transition-transform duration-(--dur-4) ease-standard sm:p-6 [@media(hover:hover)]:hover:[transform:rotateX(5deg)_rotateY(-7deg)]"
+        className="group relative isolate flex aspect-[1.586] w-full flex-col justify-between overflow-hidden rounded-[1.75rem] bg-brand p-5 transition-transform duration-(--dur-4) ease-standard sm:p-6 [@media(hover:hover)]:hover:[transform:rotateX(5deg)_rotateY(-7deg)]"
         aria-label={`${categoryName} — ${holder}`}
       >
         <div aria-hidden className="absolute inset-0 -z-10 bg-imigongo text-white opacity-[0.07]" />

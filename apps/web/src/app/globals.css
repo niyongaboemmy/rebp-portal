@@ -9,8 +9,8 @@
  * Every documented foreground/background pair is asserted ≥ 4.5:1 (text) or ≥ 3:1 (UI
  * boundaries) by src/lib/__tests__/tokens.test.ts (UX-002, WCAG 1.4.3 / 1.4.11).
  *
- * Palette (ADR-009, amended v2): the client's navy #010080 as primary — periwinkle of the same
- * hue in dark mode — Sky for information, Sun for highlights, green reserved for "success".
+ * Palette (ADR-009, amended v3): royal blue primary from the client's navy hue (navy itself is
+ * the brand ink), Sun and Ember as secondary accents, Sky for information, green for "success".
  * Neutrals are cool (hue ≈ 265).
  */
 :root {
@@ -28,12 +28,16 @@
   --surface-2: oklch(0.97 0.007 265);
   --surface-3: oklch(0.945 0.01 265);
 
-  /* Brand: the client's navy #010080. Text on primary ≥ 15:1. */
+  /* Brand ink: the client's navy #010080 — logo, brand surfaces, white chips on them. */
   --brand: oklch(0.272 0.188 264.4);
-  --primary: oklch(0.272 0.188 264.4);
+  /* Primary (v3): a vivid royal blue derived from the brand hue; the same blue fills buttons
+   * in both themes (white text ≥ 4.5:1). `--link` is primary as text: equal to primary here,
+   * a lighter periwinkle in dark mode where the fill blue is too dim to read as text. */
+  --link: oklch(0.52 0.23 264);
+  --primary: oklch(0.52 0.23 264);
   --primary-foreground: oklch(0.99 0.005 265);
-  --primary-soft: oklch(0.95 0.03 270);
-  --primary-soft-foreground: oklch(0.33 0.17 265);
+  --primary-soft: oklch(0.955 0.03 266);
+  --primary-soft-foreground: oklch(0.42 0.2 264);
   --secondary: var(--primary-soft);
   --secondary-foreground: var(--primary-soft-foreground);
 
@@ -42,6 +46,12 @@
   --sun-foreground: oklch(0.3 0.06 70);
   --accent: oklch(0.95 0.06 92);
   --accent-foreground: oklch(0.34 0.07 70);
+  /* Ember: secondary orange for time and "next" cues that are not a status (countdowns,
+   * coming-soon, next category). Sun (yellow) stays for highlights and delight. */
+  --ember: oklch(0.72 0.17 50);
+  --ember-foreground: oklch(0.28 0.07 45);
+  --ember-soft: oklch(0.96 0.04 60);
+  --ember-text: oklch(0.53 0.15 45);
   /* Sky: information and data links. */
   --sky: oklch(0.52 0.13 235);
 
@@ -58,14 +68,14 @@
   --info-soft: oklch(0.955 0.025 245);
   --danger-soft: oklch(0.955 0.03 25);
 
-  --border: oklch(0.91 0.01 265);
+  --border: oklch(0.25 0.04 265 / 0.09);
   /* Form-control boundary: ≥ 3:1 against cards and the page (WCAG 1.4.11). */
-  --input: oklch(0.62 0.02 265);
-  --ring: oklch(0.5 0.2 266);
+  --input: oklch(0.64 0.02 265);
+  --ring: oklch(0.55 0.22 264);
 
   --sidebar: oklch(0.975 0.006 265);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.94 0.028 270);
+  --sidebar-accent: oklch(0.95 0.03 266);
 
   /* Categorical chart slots: the validated dataviz reference order (ADR-009). */
   --chart-1: #2a78d6;
@@ -109,16 +119,21 @@
   --surface-2: oklch(0.232 0.018 268);
   --surface-3: oklch(0.265 0.02 268);
 
-  --primary: oklch(0.75 0.13 270);
-  --primary-foreground: oklch(0.2 0.09 266);
-  --primary-soft: oklch(0.29 0.075 268);
-  --primary-soft-foreground: oklch(0.88 0.06 270);
+  --primary: oklch(0.56 0.21 263);
+  --primary-foreground: oklch(0.99 0.005 265);
+  --primary-soft: oklch(0.28 0.08 266);
+  --primary-soft-foreground: oklch(0.86 0.08 266);
 
   --sun: oklch(0.86 0.15 92);
   --sun-foreground: oklch(0.25 0.05 70);
   --accent: oklch(0.3 0.05 85);
   --accent-foreground: oklch(0.92 0.08 92);
   --sky: oklch(0.74 0.12 235);
+  --link: oklch(0.74 0.14 266);
+  --ember: oklch(0.75 0.16 55);
+  --ember-foreground: oklch(0.26 0.06 45);
+  --ember-soft: oklch(0.29 0.06 50);
+  --ember-text: oklch(0.8 0.13 55);
 
   --muted: oklch(0.232 0.018 268);
   --muted-foreground: oklch(0.72 0.02 265);
@@ -132,13 +147,13 @@
   --info-soft: oklch(0.26 0.045 245);
   --danger-soft: oklch(0.27 0.055 25);
 
-  --border: oklch(0.3 0.018 268);
-  --input: oklch(0.52 0.02 268);
-  --ring: oklch(0.72 0.14 270);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(0.51 0.02 268);
+  --ring: oklch(0.7 0.16 266);
 
   --sidebar: oklch(0.185 0.015 268);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.27 0.05 268);
+  --sidebar-accent: oklch(0.26 0.05 266);
 
   --chart-1: #3987e5;
   --chart-2: #d95926;
@@ -170,6 +185,11 @@
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
   --color-brand: var(--brand);
+  --color-link: var(--link);
+  --color-ember: var(--ember);
+  --color-ember-foreground: var(--ember-foreground);
+  --color-ember-soft: var(--ember-soft);
+  --color-ember-text: var(--ember-text);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
@@ -371,9 +391,10 @@
   letter-spacing: -0.01em;
 }
 
-/* Hairline highlight on raised dark surfaces (no-op in light). */
+/* Flat design (v3): surfaces separate by hairline borders and tone, not shadows. Shadows are
+ * reserved for overlays (menus, dialogs, sheets, toasts). Dark mode keeps a 1 px top highlight. */
 @utility raised {
-  box-shadow: var(--highlight), var(--shadow-soft);
+  box-shadow: var(--highlight);
 }
 
 @utility bg-grid {
@@ -434,23 +455,31 @@
   mask-composite: intersect;
 }
 
-/* Brand surface (hero cards, licence, auth panel): navy lit by royal blue. Every stop stays
- * dark enough that white text keeps ≥ 7:1. */
+/* Brand surface (hero cards, licence, auth panel): royal blue deepening into the brand navy.
+ * Every stop keeps white text ≥ 4.5:1 (tokens test). */
 @utility bg-brand {
   background:
-    radial-gradient(120% 90% at 100% 0%, oklch(0.42 0.2 262 / 0.9), transparent 60%),
-    radial-gradient(90% 80% at 0% 100%, oklch(0.24 0.14 285 / 0.9), transparent 60%),
-    oklch(0.272 0.188 264.4);
+    radial-gradient(120% 90% at 100% 0%, oklch(0.5 0.23 262 / 0.95), transparent 60%),
+    radial-gradient(90% 80% at 0% 100%, oklch(0.27 0.17 270 / 0.95), transparent 65%),
+    oklch(0.4 0.22 264);
   color: oklch(0.99 0.005 265);
 }
 
-/* Lit primary fill: a soft top highlight and coloured shadow (premium CTA, ADR-009 v2). */
-@utility btn-gloss {
-  background-image: linear-gradient(to bottom, oklch(1 0 0 / 0.14), oklch(1 0 0 / 0) 55%);
-  box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 0.2),
-    0 1px 2px oklch(0.2 0.05 265 / 0.2),
-    0 8px 20px -8px color-mix(in oklch, var(--primary) 60%, transparent);
+/* Tap ripple (Material-style physical feedback): <Interactions /> injects the span. */
+.ripple {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.18;
+  transform: scale(0);
+  animation: ripple var(--dur-5) var(--ease-enter) forwards;
+}
+@keyframes ripple {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 /* ——— Motion ——— */

@@ -64,7 +64,7 @@ export function NavLink({ item, variant = "sidebar", onNavigate }: NavLinkProps)
           <Icon
             className={cn(
               "size-[1.15rem] shrink-0",
-              active ? "text-primary" : "text-muted-foreground",
+              active ? "text-link" : "text-muted-foreground",
             )}
             aria-hidden
           />

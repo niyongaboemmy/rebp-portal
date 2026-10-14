@@ -73,7 +73,7 @@ export function VerifySearch({
             type="button"
             onClick={() => setScanning(true)}
             aria-label={t("scan")}
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-primary transition-colors hover:bg-primary-soft"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-link transition-colors hover:bg-primary-soft"
           >
             <ScanLine className="size-5" aria-hidden />
           </button>

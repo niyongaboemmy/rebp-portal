@@ -21,8 +21,8 @@ export function ProgressRing({
 }: {
   value: number;
   total?: number;
-  /** Defaults to the brand primary. */
-  tone?: StatusTone;
+  /** Status tone, or "ember" for time cues that are not a status. Defaults to primary. */
+  tone?: StatusTone | "ember";
   thickness?: number;
   className?: string;
   /** Accessible description, e.g. "4 of 7 documents uploaded". */
@@ -54,7 +54,7 @@ export function ProgressRing({
           strokeLinecap="round"
           className={cn(
             "animate-[ring-in_var(--dur-5)_var(--ease-enter)_both] transition-[stroke-dashoffset] duration-(--dur-5) ease-enter",
-            tone ? TONE_STROKE[tone] : "stroke-primary",
+            tone === "ember" ? "stroke-ember" : tone ? TONE_STROKE[tone] : "stroke-primary",
             ratio === 0 && "opacity-0",
           )}
           style={{ "--ring-c": CIRCUMFERENCE } as React.CSSProperties}

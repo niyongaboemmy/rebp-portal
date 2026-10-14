@@ -23,7 +23,7 @@ export default async function NotFound() {
                 <Home /> {t("notFound.cta")}
               </Link>
             </Button>
-            <Button asChild variant="tonal">
+            <Button asChild variant="outline">
               <Link href="/register">
                 <BookUser /> {t("nav.register")}
               </Link>

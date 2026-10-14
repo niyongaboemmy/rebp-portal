@@ -74,7 +74,7 @@ function CategoryDetail({ category }: { category: Category }) {
   return (
     <>
       <DialogHeader>
-        <span className="font-mono text-xs font-bold text-primary">
+        <span className="font-mono text-xs font-bold text-link">
           {CATEGORY_INFO[category].section} · {CATEGORY_INFO[category].abbreviation}
         </span>
         <DialogTitle>{tc(`items.${category}.name`)}</DialogTitle>

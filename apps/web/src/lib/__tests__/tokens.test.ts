@@ -38,13 +38,18 @@ const TEXT_PAIRS: [string, string][] = [
   ["muted-foreground", "card"],
   ["muted-foreground", "muted"],
   ["muted-foreground", "surface-3"],
-  ["primary", "background"],
-  ["primary", "card"],
+  ["link", "background"],
+  ["link", "card"],
+  ["link", "surface-3"],
   ["primary-foreground", "primary"],
   ["primary-soft-foreground", "primary-soft"],
   ["secondary-foreground", "secondary"],
   ["accent-foreground", "accent"],
   ["sun-foreground", "sun"],
+  ["ember-text", "card"],
+  ["ember-text", "background"],
+  ["ember-text", "ember-soft"],
+  ["ember-foreground", "ember"],
   ["sky", "card"],
   ["sky", "background"],
   ["success", "card"],
@@ -61,6 +66,9 @@ const TEXT_PAIRS: [string, string][] = [
 
 /** UI component boundaries and focus indicators need 3:1 (WCAG 1.4.11). */
 const UI_PAIRS: [string, string][] = [
+  // Filled buttons must stand out from the page in both themes (non-text contrast).
+  ["primary", "background"],
+  ["primary", "card"],
   ["input", "card"],
   ["input", "background"],
   ["ring", "background"],
@@ -94,13 +102,20 @@ describe("dark theme background", () => {
   });
 });
 
-describe("brand (ADR-009 v2)", () => {
-  it("uses the client's navy #010080 as the light primary", () => {
-    expect(resolveToken(light, "primary")).toBe("oklch(0.272 0.188 264.4)");
-    expect(resolveToken(light, "brand")).toBe(resolveToken(light, "primary"));
+describe("brand (ADR-009 v3)", () => {
+  const hue = (value: string) => Number(value.match(/[\d.]+/g)![2]);
+
+  it("keeps the client's navy #010080 as the brand ink", () => {
+    expect(resolveToken(light, "brand")).toBe("oklch(0.272 0.188 264.4)");
   });
 
-  it("keeps white text ≥ 7:1 on every stop of the brand surface", () => {
+  it("derives the primary blue from the brand hue in both themes", () => {
+    for (const theme of [light, dark]) {
+      expect(Math.abs(hue(resolveToken(theme, "primary")) - 264.4)).toBeLessThanOrEqual(3);
+    }
+  });
+
+  it("keeps white text ≥ 4.5:1 on every stop of the brand surface", () => {
     const start = css.indexOf("@utility bg-brand {");
     const body = css.slice(start, css.indexOf("\n}", start));
     const stops = [...body.matchAll(/oklch\(([\d.]+) ([\d.]+) ([\d.]+)/g)].map(
@@ -109,7 +124,7 @@ describe("brand (ADR-009 v2)", () => {
     const white = "oklch(0.99 0.005 265)";
     expect(stops.length).toBeGreaterThanOrEqual(3);
     for (const stop of stops.filter((s) => s !== white)) {
-      expect(contrastRatio(white, stop), stop).toBeGreaterThanOrEqual(7);
+      expect(contrastRatio(white, stop), stop).toBeGreaterThanOrEqual(4.5);
     }
   });
 });

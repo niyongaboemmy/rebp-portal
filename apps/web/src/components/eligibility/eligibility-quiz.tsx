@@ -226,7 +226,7 @@ function YearsPicker({ value, onChange }: { value: number; onChange: (v: number)
   return (
     <div className="flex items-center justify-center gap-6 rounded-3xl border bg-card p-6 raised">
       <Button
-        variant="tonal"
+        variant="outline"
         size="icon"
         className="size-14 rounded-2xl"
         onClick={() => onChange(Math.max(0, value - 1))}
@@ -244,7 +244,7 @@ function YearsPicker({ value, onChange }: { value: number; onChange: (v: number)
         </span>
       </output>
       <Button
-        variant="tonal"
+        variant="outline"
         size="icon"
         className="size-14 rounded-2xl"
         onClick={() => onChange(Math.min(10, value + 1))}
@@ -329,7 +329,7 @@ function Result({ answers, onRestart }: { answers: PrecheckAnswers; onRestart: (
             value={next.experience.years}
             max={next.experience.required}
             target={next.experience.required}
-            tone="warning"
+            tone="ember"
             valueText={t("result.yearsOf", {
               years: next.experience.years,
               required: next.experience.required,
@@ -377,7 +377,7 @@ function Result({ answers, onRestart }: { answers: PrecheckAnswers; onRestart: (
             {t("result.start")} <ArrowRight />
           </Link>
         </Button>
-        <Button size="lg" variant="tonal" onClick={share}>
+        <Button size="lg" variant="outline" onClick={share}>
           <Share2 /> {t("result.share")}
         </Button>
         <Button size="lg" variant="ghost" onClick={onRestart}>
