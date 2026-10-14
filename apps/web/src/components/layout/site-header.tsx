@@ -1,45 +1,40 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { getCurrentSession } from "@/server/auth/current";
+import { AuthMenu } from "./auth-menu";
 import { CommandPalette } from "./command-palette";
+import { HeaderNav } from "./header-nav";
+import { HeaderShell } from "./header-shell";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileNav } from "./mobile-nav";
-import { PublicNav } from "./public-nav";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeSwitch } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
+/**
+ * Public header: logo · priority+ links (overflow in "⋯") · icon search · language menu ·
+ * theme switch · one account button. Transparent over the landing hero, frosted with a soft
+ * shadow on scroll. Below md the links move into the drawer.
+ */
 export async function SiteHeader() {
-  const [t, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
+  const [, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
   return (
-    <header
-      style={{ viewTransitionName: "app-header" }}
-      className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70"
-    >
-      <div className="container-page flex h-16 items-center gap-2">
-        <MobileNav area="public" />
-        <Logo className="mr-2 hidden sm:inline-flex lg:mr-4" />
-        <Logo className="sm:hidden" showText={false} />
-        <PublicNav />
-        <div className="ml-auto flex items-center gap-1">
-          <CommandPalette area="public" className="md:min-w-0 lg:min-w-48" />
-          <LanguageSwitcher />
-          <ThemeToggle className="hidden xs:inline-flex" />
+    <HeaderShell>
+      <div className="container-page flex h-16 items-center gap-2 lg:gap-4">
+        <Logo className="hidden shrink-0 sm:max-md:inline-flex lg:inline-flex" />
+        <Logo className="shrink-0 sm:max-md:hidden lg:hidden" showText={false} />
+        <HeaderNav />
+        <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+          <CommandPalette area="public" compact />
+          <LanguageSwitcher className="rounded-full" />
+          <ThemeSwitch />
           {current ? (
             <UserMenu name={current.user.fullName} email={current.user.email} />
           ) : (
-            <>
-              <Button asChild variant="outline" className="hidden sm:inline-flex">
-                <Link href="/sign-in">{t("signIn")}</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/sign-up">{t("signUp")}</Link>
-              </Button>
-            </>
+            <AuthMenu />
           )}
+          <MobileNav area="public" />
         </div>
       </div>
-    </header>
+    </HeaderShell>
   );
 }

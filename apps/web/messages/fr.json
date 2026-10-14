@@ -73,7 +73,9 @@
     "myAccess": "Mes accès",
     "access": "Contrôle d'accès",
     "more": "Plus",
-    "tabBar": "Principal"
+    "tabBar": "Principal",
+    "signInHint": "Reprenez là où vous vous êtes arrêté",
+    "signUpHint": "Nouveau ? Cela prend deux minutes"
   },
   "theme": {
     "toggle": "Changer de thème",
@@ -87,8 +89,8 @@
   },
   "landing": {
     "eyebrow": "Portail officiel des licences",
-    "title": "Votre porte d'entrée de confiance vers les licences immobilières",
-    "subtitle": "Déposez votre demande, suivez-la en temps réel et obtenez une licence électronique vérifiable — depuis votre téléphone, dans votre langue.",
+    "title": "Licences immobilières, en toute simplicité",
+    "subtitle": "Postulez, suivez et vérifiez — au même endroit.",
     "primaryCta": "Commencer ma demande",
     "secondaryCta": "Suis-je éligible ?",
     "verifyTitle": "Vérifier un praticien",
@@ -249,12 +251,12 @@
       "signIn": "Se connecter"
     },
     "strength": {
-      "label": "Robustesse du mot de passe",
       "0": "Trop court",
       "1": "Faible",
       "2": "Moyen",
       "3": "Fort",
-      "4": "Très fort"
+      "4": "Très fort",
+      "label": "Robustesse du mot de passe"
     },
     "twoStep": {
       "title": "Vérification en deux étapes",

@@ -69,8 +69,8 @@ const UI_PAIRS: [string, string][] = [
   // Filled buttons must stand out from the page in both themes (non-text contrast).
   ["primary", "background"],
   ["primary", "card"],
-  ["input", "card"],
-  ["input", "background"],
+  // Text-field borders are a faint hairline by design (ADR-009 v4); the focus border/ring must
+  // still reach 3:1 so the active field is unmistakable.
   ["ring", "background"],
   ["ring", "card"],
 ];
@@ -126,5 +126,46 @@ describe("brand (ADR-009 v3)", () => {
     for (const stop of stops.filter((s) => s !== white)) {
       expect(contrastRatio(white, stop), stop).toBeGreaterThanOrEqual(4.5);
     }
+  });
+});
+
+describe("utilities other components depend on", () => {
+  it.each(["role-tint", "role-ring", "bg-brand", "spotlight", "hit-area"])(
+    "defines @utility %s",
+    (name) => {
+      expect(css).toContain(`@utility ${name} {`);
+    },
+  );
+
+  it("draws no borders by default (borderless system, ADR-009 v4)", () => {
+    expect(css).toMatch(/\*\s*{\s*border-color:\s*transparent;/);
+  });
+});
+
+describe("theme configuration (both themes)", () => {
+  /** Colour tokens that are deliberately the same in both themes. */
+  const SHARED = new Set(["brand"]);
+  const NON_COLOUR = /^(radius|header-h|bottom-nav-h|imigongo|ease-|dur-)/;
+
+  it("defines every colour token for dark mode (or aliases one that is)", () => {
+    const missing = Object.entries(light)
+      .filter(([name]) => !NON_COLOUR.test(name) && !SHARED.has(name))
+      .filter(([name, value]) => !(name in block(".dark")) && !value.startsWith("var("))
+      .map(([name]) => name);
+    expect(missing).toEqual([]);
+  });
+
+  it("keeps the browser theme-color equal to the page background", async () => {
+    const { THEME_COLORS } = await import("@/components/providers/theme-meta");
+    const { oklchToLinearRgb } = await import("../color");
+    const hex = (value: string) => {
+      const [l, c, h] = value.match(/[\d.]+/g)!.map(Number);
+      return `#${oklchToLinearRgb(l!, c!, h!)
+        .map((x) => Math.round((x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055) * 255))
+        .map((n) => n.toString(16).padStart(2, "0"))
+        .join("")}`;
+    };
+    expect(THEME_COLORS.light).toBe(hex(resolveToken(light, "background")));
+    expect(THEME_COLORS.dark).toBe(hex(resolveToken(dark, "background")));
   });
 });

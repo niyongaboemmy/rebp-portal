@@ -18,7 +18,7 @@ import {
   KeyRound,
   UsersRound,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Capability } from "@rebp/contracts";
 
 /** Keys under the "nav" message namespace. */

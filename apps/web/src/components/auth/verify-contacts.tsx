@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Mail, Smartphone } from "lucide-react";
+import { CheckCircle2, Mail, Smartphone } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";

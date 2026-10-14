@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog as DialogPrimitive } from "radix-ui";
-import { X } from "lucide-react";
+import { X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 

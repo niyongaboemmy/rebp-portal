@@ -10,12 +10,20 @@ const RIPPLE = '[data-slot="button"]:not(:disabled), [data-ripple]';
  * - tap ripple: a soft circle grows from the press point on buttons and `[data-ripple]` hosts;
  * - cursor spotlight: writes --spot-x/--spot-y into the hovered `.spotlight` card (rAF).
  * Both skip reduced motion; the spotlight ignores touch.
+ * - input modality: <html data-input="pointer|keyboard"> follows the last kind of input, so focus
+ *   rings show for keyboard users but not after a click (the top bar uses it, globals.css).
  */
 export function Interactions() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+    const root = document.documentElement;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey || event.altKey || (event.ctrlKey && event.key !== "Tab")) return;
+      root.dataset.input = "keyboard";
+    };
     const onPointerDown = (event: PointerEvent) => {
+      root.dataset.input = "pointer";
       if (reduced.matches || event.button !== 0) return;
       const host = (event.target as Element | null)?.closest?.<HTMLElement>(RIPPLE);
       if (!host || host.closest("[data-no-ripple]")) return;
@@ -49,10 +57,12 @@ export function Interactions() {
       if (!frame) frame = requestAnimationFrame(applySpotlight);
     };
 
-    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("keydown", onKeyDown, { capture: true, passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { capture: true, passive: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => {
-      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown, { capture: true });
+      window.removeEventListener("pointerdown", onPointerDown, { capture: true });
       window.removeEventListener("pointermove", onPointerMove);
       cancelAnimationFrame(frame);
     };

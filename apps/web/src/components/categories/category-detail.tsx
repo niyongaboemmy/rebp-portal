@@ -11,7 +11,7 @@ import {
   MapPin,
   PenLine,
   UserCheck,
-} from "lucide-react";
+} from "@/components/icons";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import {

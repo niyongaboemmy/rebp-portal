@@ -1,4 +1,4 @@
-import { Sparkles, type LucideIcon } from "lucide-react";
+import { Sparkles, type LucideIcon } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";
 

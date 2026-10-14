@@ -73,7 +73,9 @@
     "myAccess": "Uburenganzira bwanjye",
     "access": "Gucunga uburenganzira",
     "more": "Ibindi",
-    "tabBar": "Ibyingenzi"
+    "tabBar": "Ibyingenzi",
+    "signInHint": "Komeza aho wari ugeze",
+    "signUpHint": "Uri mushya? Bifata iminota ibiri"
   },
   "theme": {
     "toggle": "Hindura isura",
@@ -87,8 +89,8 @@
   },
   "landing": {
     "eyebrow": "Urubuga rwemewe rw'impushya",
-    "title": "Irembo ryizewe ry'impushya z'ubukomisiyoneri bw'imitungo",
-    "subtitle": "Saba, ukurikirane ubusabe bwawe igihe cyose kandi uhabwe uruhushya rw'ikoranabuhanga rushobora kugenzurwa — kuri telefoni yawe, mu rurimi rwawe.",
+    "title": "Impushya z'ubukomisiyoneri, byoroshye",
+    "subtitle": "Saba, ukurikirane kandi ugenzure — byose ahantu hamwe.",
     "primaryCta": "Tangira ubusabe",
     "secondaryCta": "Ese nujuje ibisabwa?",
     "verifyTitle": "Genzura umukomisiyoneri",
@@ -249,12 +251,12 @@
       "signIn": "Injira"
     },
     "strength": {
-      "label": "Ubukomere bw'ijambobanga",
       "0": "Ni rigufi cyane",
       "1": "Ntirikomeye",
       "2": "Rirahagije",
       "3": "Rirakomeye",
-      "4": "Rirakomeye cyane"
+      "4": "Rirakomeye cyane",
+      "label": "Ubukomere bw'ijambobanga"
     },
     "twoStep": {
       "title": "Igenzura ry'intambwe ebyiri",

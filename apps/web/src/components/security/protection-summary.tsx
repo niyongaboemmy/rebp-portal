@@ -1,4 +1,4 @@
-import { ArrowDown, Check, KeyRound, Mail, ShieldCheck, Smartphone } from "lucide-react";
+import { ArrowDown, Check, KeyRound, Mail, ShieldCheck, Smartphone } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 import { ProgressRing } from "@/components/data/progress-ring";
 import { cn } from "@/lib/utils";

@@ -1,4 +1,4 @@
-import { Building2 } from "lucide-react";
+import { Building2 } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/layout/coming-soon";

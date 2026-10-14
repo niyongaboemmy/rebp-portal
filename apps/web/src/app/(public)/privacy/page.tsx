@@ -1,4 +1,4 @@
-import { Eye, FileDown, Globe2, Lock, ScanSearch } from "lucide-react";
+import { Eye, FileDown, Globe2, Lock, ScanSearch } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/motion/reveal";

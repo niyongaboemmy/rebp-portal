@@ -1,4 +1,4 @@
-import { BookUser } from "lucide-react";
+import { BookUser } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Route } from "next";

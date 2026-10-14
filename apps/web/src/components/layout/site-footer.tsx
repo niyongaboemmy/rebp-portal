@@ -15,7 +15,7 @@ const LINKS = [
 export async function SiteFooter() {
   const [t, locale] = await Promise.all([getTranslations(), getLocale()]);
   return (
-    <footer className="relative mt-auto overflow-hidden border-t bg-card">
+    <footer className="relative mt-auto overflow-hidden bg-card">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-imigongo-fade-up text-link opacity-[0.04]"
@@ -46,14 +46,14 @@ export async function SiteFooter() {
               hrefLang={code}
               lang={code}
               aria-current={code === locale ? "true" : undefined}
-              className="inline-flex h-9 items-center rounded-full border px-3.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=true]:border-transparent aria-[current=true]:bg-foreground aria-[current=true]:text-background"
+              className="inline-flex h-11 items-center rounded-full bg-surface-2 px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-3 hover:text-foreground aria-[current=true]:bg-foreground aria-[current=true]:text-background sm:h-9"
             >
               {LOCALE_LABELS[code].native}
             </Link>
           ))}
         </nav>
       </div>
-      <div className="relative border-t">
+      <div className="relative bg-surface-2/60">
         <p className="container-page py-4 text-xs text-muted-foreground">
           {t("footer.rights", { year: new Date().getFullYear() })}
         </p>

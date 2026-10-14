@@ -1,4 +1,4 @@
-import { KeyRound } from "lucide-react";
+import { KeyRound } from "@/components/icons";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { emailSchema } from "@rebp/contracts";

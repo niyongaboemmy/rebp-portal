@@ -19,14 +19,14 @@
   --header-h: 4rem;
   --bottom-nav-h: 0rem;
 
-  --background: oklch(0.985 0.004 265);
+  --background: oklch(0.972 0.006 265);
   --foreground: oklch(0.2 0.03 265);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
-  --surface-2: oklch(0.97 0.007 265);
-  --surface-3: oklch(0.945 0.01 265);
+  --surface-2: oklch(0.962 0.008 265);
+  --surface-3: oklch(0.94 0.01 265);
 
   /* Brand ink: the client's navy #010080 — logo, brand surfaces, white chips on them. */
   --brand: oklch(0.272 0.188 264.4);
@@ -55,7 +55,7 @@
   /* Sky: information and data links. */
   --sky: oklch(0.52 0.13 235);
 
-  --muted: oklch(0.965 0.007 265);
+  --muted: oklch(0.955 0.008 265);
   --muted-foreground: oklch(0.48 0.02 265);
 
   --destructive: oklch(0.54 0.2 27);
@@ -69,11 +69,12 @@
   --danger-soft: oklch(0.955 0.03 25);
 
   --border: oklch(0.25 0.04 265 / 0.09);
-  /* Form-control boundary: ≥ 3:1 against cards and the page (WCAG 1.4.11). */
-  --input: oklch(0.64 0.02 265);
+  /* Text-field boundary (v4): a faint hairline by design request. Fields stay identifiable by
+   * their tinted fill, a darker hover border and a ≥ 3:1 focus border + ring; see ADR-009 v4. */
+  --input: oklch(0.25 0.04 265 / 0.16);
   --ring: oklch(0.55 0.22 264);
 
-  --sidebar: oklch(0.975 0.006 265);
+  --sidebar: oklch(0.985 0.004 265);
   --sidebar-foreground: var(--foreground);
   --sidebar-accent: oklch(0.95 0.03 266);
 
@@ -91,7 +92,9 @@
   --shadow-soft:
     0 1px 2px oklch(0.21 0.02 250 / 0.05), 0 8px 24px -12px oklch(0.21 0.02 250 / 0.14);
   --shadow-3: 0 2px 4px oklch(0.21 0.02 250 / 0.06), 0 24px 48px -16px oklch(0.21 0.02 250 / 0.22);
-  --highlight: inset 0 1px 0 oklch(1 0 0 / 0);
+  --highlight: 0 0 0 transparent;
+  /* Recessed band (sections that sit "below" the page): white here, deeper than the page in dark. */
+  --sunken: oklch(1 0 0);
 
   /* Motion (ADR-009 §motion): Material 3 emphasised easing, short durations for low-end phones. */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -148,7 +151,7 @@
   --danger-soft: oklch(0.27 0.055 25);
 
   --border: oklch(1 0 0 / 0.08);
-  --input: oklch(0.51 0.02 268);
+  --input: oklch(1 0 0 / 0.14);
   --ring: oklch(0.7 0.16 266);
 
   --sidebar: oklch(0.185 0.015 268);
@@ -168,7 +171,8 @@
   --shadow-1: 0 0 0 transparent;
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.35);
   --shadow-3: 0 24px 48px -16px oklch(0 0 0 / 0.6);
-  --highlight: inset 0 1px 0 oklch(1 0 0 / 0.045);
+  --highlight: 0 0 0 transparent;
+  --sunken: oklch(0.135 0.012 268);
 }
 
 @theme inline {
@@ -182,6 +186,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-sunken: var(--sunken);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
   --color-brand: var(--brand);
@@ -251,12 +256,23 @@
   --animate-pulse-ring: pulse-ring 2s var(--ease-standard) infinite;
   --animate-draw: draw var(--dur-5) var(--ease-enter) both;
   --animate-float: float 6s var(--ease-standard) infinite;
+  --animate-card-in: card-in 1.2s var(--ease-enter) both;
+  --animate-card-drift: card-drift 10s ease-in-out infinite;
+  --animate-card-sheen: card-sheen 8s var(--ease-standard) infinite;
+  --animate-card-ground: card-ground 10s ease-in-out infinite;
   --animate-scan-beam: scan-beam 2.4s var(--ease-standard) infinite;
 }
 
 @layer base {
+  /*
+   * Borderless system (ADR-009 v4): surfaces separate by tone and spacing, never by lines. The
+   * default border colour is transparent, so a bare `border` draws nothing; only form controls
+   * opt in (`border-input`, ≥ 3:1, WCAG 1.4.11). Graphics (timeline nodes, the QR viewfinder,
+   * the "Sample" stamp) may still use strokes — they are drawings, not containers.
+   */
   * {
-    @apply border-border outline-ring/50;
+    border-color: transparent;
+    @apply outline-ring/50;
   }
 
   html {
@@ -385,14 +401,33 @@
   }
 }
 
+/* Role colour identity (access control). Hue comes from --role-hue; tuned for AA contrast in
+ * both themes. Restored after being dropped in the v1 token rewrite. */
+@utility role-tint {
+  background-color: oklch(0.94 0.05 var(--role-hue, 264));
+  color: oklch(0.37 0.1 var(--role-hue, 264));
+  @variant dark {
+    background-color: oklch(0.31 0.06 var(--role-hue, 264));
+    color: oklch(0.9 0.07 var(--role-hue, 264));
+  }
+}
+
+/* Selected role (borderless, v4): a soft wash in the role's hue instead of a coloured border. */
+@utility role-ring {
+  background-color: oklch(0.96 0.035 var(--role-hue, 264));
+  @variant dark {
+    background-color: oklch(0.27 0.05 var(--role-hue, 264));
+  }
+}
+
 /* Tabular figures for every number that is compared or counted. */
 @utility num {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
 }
 
-/* Flat design (v3): surfaces separate by hairline borders and tone, not shadows. Shadows are
- * reserved for overlays (menus, dialogs, sheets, toasts). Dark mode keeps a 1 px top highlight. */
+/* Flat, borderless design (v4): surfaces separate by tone alone. Shadows are reserved for
+ * overlays (menus, dialogs, sheets, toasts). Kept as a hook for future elevation tweaks. */
 @utility raised {
   box-shadow: var(--highlight);
 }
@@ -465,6 +500,13 @@
   color: oklch(0.99 0.005 265);
 }
 
+/* Top bar: no focus ring after a click or tap (it reads as a stray outline); keyboard users keep
+   theirs. <Interactions /> sets html[data-input]. */
+html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Tap ripple (Material-style physical feedback): <Interactions /> injects the span. */
 .ripple {
   position: absolute;
@@ -535,6 +577,53 @@
   }
 }
 
+/* Hero licence (landing): flips in, then drifts in 3D like a card held in the hand. */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: rotateY(-34deg) rotateX(16deg) translate3d(0, 48px, 0) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes card-drift {
+  0%,
+  100% {
+    transform: rotateX(8deg) rotateY(-13deg) rotateZ(-1.5deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotateX(3deg) rotateY(-4deg) rotateZ(0deg) translate3d(0, -12px, 0);
+  }
+}
+
+/* A band of light crosses the laminate every few seconds. */
+@keyframes card-sheen {
+  0%,
+  60% {
+    transform: translateX(-160%) skewX(-20deg);
+  }
+  90%,
+  100% {
+    transform: translateX(360%) skewX(-20deg);
+  }
+}
+
+/* Contact shadow: tightens and fades as the card lifts. */
+@keyframes card-ground {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(0.84);
+    opacity: 0.32;
+  }
+}
+
 @keyframes scan-beam {
   0% {
     transform: translateY(0);
@@ -562,6 +651,45 @@
 @keyframes ring-in {
   from {
     stroke-dashoffset: var(--ring-c);
+  }
+}
+
+/* Landing phone: the Dynamic Island opens like a Live Activity, then settles. */
+@keyframes island-live {
+  0% {
+    width: 5.25rem;
+  }
+  14%,
+  78% {
+    width: 6.25rem; /* leaves the clock and battery visible, as on an iPhone */
+  }
+  100% {
+    width: 5.25rem;
+  }
+}
+
+@keyframes island-content {
+  0%,
+  10% {
+    opacity: 0;
+  }
+  20%,
+  72% {
+    opacity: 1;
+  }
+  86%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* A light sweep across the glass when the screen changes. */
+@keyframes glass-sheen {
+  from {
+    transform: translateX(-120%) rotate(12deg);
+  }
+  to {
+    transform: translateX(220%) rotate(12deg);
   }
 }
 
@@ -653,7 +781,11 @@
   }
   .animate-pulse-ring,
   .animate-float,
-  .animate-scan-beam {
+  .animate-scan-beam,
+  .animate-card-drift,
+  .animate-card-sheen,
+  .animate-card-ground,
+  [data-phone-live] {
     animation: none !important;
   }
   ::view-transition-new(.page) {

@@ -10,7 +10,7 @@ import {
   UserRound,
   Wallet,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Role } from "@rebp/contracts";
 
 /** Visual identity per role: an icon and a hue used by `.role-tint` (light/dark aware). */

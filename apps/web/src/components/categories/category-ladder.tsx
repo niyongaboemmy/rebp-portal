@@ -8,7 +8,7 @@ import {
   PenLine,
   UserCheck,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -99,10 +99,10 @@ export function CategoryLadder({
                       onClick={() => setOpen(code)}
                       aria-haspopup="dialog"
                       className={cn(
-                        "group spotlight flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-[background-color,border-color,transform] duration-(--dur-3) ease-spring outline-none hover:border-primary/35 hover:bg-primary/[0.03] focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.985] active:duration-(--dur-1)",
-                        marker?.kind === "current" && "border-primary/60 bg-primary/[0.04]",
-                        marker?.kind === "recommended" && "border-sun bg-sun/[0.08]",
-                        marker?.kind === "next" && "border-dashed border-ember/60",
+                        "group spotlight flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-[background-color,border-color,transform] duration-(--dur-3) ease-spring outline-none hover:bg-primary/[0.03] hover:bg-primary/[0.05] focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.985] active:duration-(--dur-1)",
+                        marker?.kind === "current" && "bg-primary/[0.07]",
+                        marker?.kind === "recommended" && "bg-sun/15",
+                        marker?.kind === "next" && "bg-ember-soft/60",
                       )}
                     >
                       <span

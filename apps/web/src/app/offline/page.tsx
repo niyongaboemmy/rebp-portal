@@ -1,4 +1,4 @@
-import { WifiOff } from "lucide-react";
+import { WifiOff } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { EmptyState } from "@/components/ui/empty-state";

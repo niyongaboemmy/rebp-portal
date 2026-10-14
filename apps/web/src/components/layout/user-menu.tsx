@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, LogOut, ShieldCheck } from "@/components/icons";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Avatar } from "@/components/ui/avatar";

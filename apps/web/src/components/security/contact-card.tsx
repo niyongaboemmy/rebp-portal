@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, Smartphone } from "lucide-react";
+import { Mail, Smartphone } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Search, X } from "lucide-react";
+import { Loader2, Search, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { ROLES, USER_STATUS_FILTERS } from "@rebp/contracts";

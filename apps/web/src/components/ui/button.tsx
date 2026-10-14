@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 /**
@@ -22,7 +22,7 @@ export const buttonVariants = cva(
         tonal: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
         secondary: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
         outline:
-          "border border-foreground/15 bg-transparent text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04]",
+          "border border-foreground/12 bg-transparent text-foreground hover:border-foreground/20 hover:bg-foreground/[0.04]",
         ghost: "hover:bg-foreground/[0.06]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-[color-mix(in_oklch,var(--destructive)_86%,black)]",

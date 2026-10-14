@@ -1,4 +1,4 @@
-import { FlaskConical, MailWarning } from "lucide-react";
+import { FlaskConical, MailWarning } from "@/components/icons";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { isDevMode } from "@/server/env";

@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react";
+import { Inbox } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/layout/coming-soon";

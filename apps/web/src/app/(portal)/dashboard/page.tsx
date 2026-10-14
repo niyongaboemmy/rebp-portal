@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   Smartphone,
   Wallet,
-} from "lucide-react";
+} from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Route } from "next";
@@ -105,7 +105,7 @@ export default async function DashboardPage() {
                 <span className="flex w-full items-center">
                   <span className={cn("h-0.5 flex-1", index === 0 ? "opacity-0" : "bg-white/35")} />
                   <span
-                    className="inline-flex size-8 shrink-0 animate-pop items-center justify-center rounded-full bg-white/15 text-xs font-bold num text-white ring-1 ring-white/40"
+                    className="inline-flex size-8 shrink-0 animate-pop items-center justify-center rounded-full bg-white/15 text-xs font-bold num text-white"
                     style={{ animationDelay: `${index * 70}ms` }}
                   >
                     {index + 1}
@@ -195,7 +195,7 @@ export default async function DashboardPage() {
         {/* Licence wallet slot: an outline of the card that will live here. */}
         <Link
           href="/licenses"
-          className="group flex flex-col gap-4 rounded-3xl border bg-card p-5 raised transition-[border-color,transform] duration-(--dur-2) hover:border-primary/40 active:scale-[0.99] sm:p-6"
+          className="group flex flex-col gap-4 rounded-3xl border bg-card p-5 raised transition-[border-color,transform] duration-(--dur-2) hover:bg-primary/[0.05] active:scale-[0.99] sm:p-6"
         >
           <div className="flex items-center justify-between">
             <h2 className="text-lg">{t("nav.licenses")}</h2>
@@ -204,7 +204,7 @@ export default async function DashboardPage() {
               aria-hidden
             />
           </div>
-          <div className="flex aspect-[2.6] items-center justify-center gap-3 rounded-2xl border-2 border-dashed text-muted-foreground">
+          <div className="flex aspect-[2.6] items-center justify-center gap-3 rounded-2xl bg-surface-2 text-muted-foreground">
             <Wallet className="size-6" aria-hidden />
             <span className="text-sm font-medium">{t("dashboard.noLicence")}</span>
           </div>

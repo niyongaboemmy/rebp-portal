@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, User } from "lucide-react";
+import { Building2, User } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";

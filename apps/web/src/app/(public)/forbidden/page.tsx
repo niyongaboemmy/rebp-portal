@@ -1,4 +1,4 @@
-import { KeyRound, LayoutDashboard, ShieldAlert } from "lucide-react";
+import { KeyRound, LayoutDashboard, ShieldAlert } from "@/components/icons";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";

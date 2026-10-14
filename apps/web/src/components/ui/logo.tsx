@@ -37,7 +37,11 @@ export function Logo({
         />
         <circle cx="25" cy="8" r="3" className="fill-sun" />
       </svg>
-      {showText && <span className="font-display text-lg font-bold tracking-tight">{text}</span>}
+      {showText && (
+        <span className="font-display text-lg font-bold tracking-tight whitespace-nowrap">
+          {text}
+        </span>
+      )}
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { estimatePasswordStrength, PASSWORD_MIN_LENGTH } from "@rebp/contracts";

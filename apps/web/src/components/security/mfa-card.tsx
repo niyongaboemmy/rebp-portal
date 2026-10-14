@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyRound, Mail, MessageSquare, Smartphone, Star } from "lucide-react";
+import { KeyRound, Mail, MessageSquare, Smartphone, Star } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";

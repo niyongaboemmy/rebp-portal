@@ -1,4 +1,4 @@
-import { BookUser, Home } from "lucide-react";
+import { BookUser, Home } from "@/components/icons";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";

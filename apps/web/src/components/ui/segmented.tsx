@@ -7,6 +7,8 @@ interface SegmentedOption<T extends string> {
   value: T;
   label: React.ReactNode;
   icon?: React.ReactNode;
+  /** Accessible name when the visible label is an abbreviation (e.g. "EN" → "English"). */
+  ariaLabel?: string;
 }
 
 /**
@@ -46,12 +48,13 @@ export function Segmented<T extends string>({
     >
       <span
         aria-hidden
-        className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/var(--count))] translate-x-[calc(100%*var(--index))] rounded-xl bg-card ring-1 ring-border transition-transform duration-(--dur-3) ease-spring"
+        className="absolute inset-y-1 left-1 w-[calc((100%-0.5rem)/var(--count))] translate-x-[calc(100%*var(--index))] rounded-xl bg-card transition-transform duration-(--dur-3) ease-spring"
       />
       {options.map((option) => (
         <ToggleGroup.Item
           key={option.value}
           value={option.value}
+          aria-label={option.ariaLabel}
           className={cn(
             "relative z-10 inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl px-3 font-semibold text-muted-foreground transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40 data-[state=on]:text-foreground [&_svg]:size-4 [&_svg]:shrink-0",
             size === "sm" ? "h-9 text-xs" : "tap-target text-sm",

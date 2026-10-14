@@ -73,7 +73,9 @@
     "myAccess": "My access",
     "access": "Access control",
     "more": "More",
-    "tabBar": "Primary"
+    "tabBar": "Primary",
+    "signInHint": "Pick up where you left off",
+    "signUpHint": "New here? It takes two minutes"
   },
   "theme": {
     "toggle": "Change theme",
@@ -87,8 +89,8 @@
   },
   "landing": {
     "eyebrow": "Official licensing portal",
-    "title": "Your trusted front door to real estate licensing",
-    "subtitle": "Apply, track your application in real time and get a verifiable electronic licence — from your phone, in your language.",
+    "title": "Real estate licensing, made simple",
+    "subtitle": "Apply, track and verify — all in one place.",
     "primaryCta": "Start your application",
     "secondaryCta": "Am I eligible?",
     "verifyTitle": "Verify a practitioner",
@@ -249,12 +251,12 @@
       "signIn": "Sign in"
     },
     "strength": {
-      "label": "Password strength",
       "0": "Too short",
       "1": "Weak",
       "2": "Fair",
       "3": "Strong",
-      "4": "Very strong"
+      "4": "Very strong",
+      "label": "Password strength"
     },
     "twoStep": {
       "title": "Two-step verification",

@@ -1,4 +1,11 @@
-import { ChevronDown, ChevronRight, Link2, ListFilter, ShieldCheck, ShieldX } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Link2,
+  ListFilter,
+  ShieldCheck,
+  ShieldX,
+} from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Route } from "next";
@@ -88,7 +95,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/backoffice
           aria-labelledby="chain-title"
           className={cn(
             "flex items-center gap-5 rounded-3xl border p-5 raised sm:p-6",
-            chain.ok ? "bg-card" : "border-destructive/40 bg-danger-soft",
+            chain.ok ? "bg-card" : "bg-danger-soft",
           )}
         >
           <ProgressRing

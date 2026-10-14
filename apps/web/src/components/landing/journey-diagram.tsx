@@ -10,8 +10,9 @@ import {
   Play,
   Smartphone,
   UserPlus,
+  Wifi,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { ProgressRing } from "@/components/data/progress-ring";
@@ -95,6 +96,21 @@ export function JourneyDiagram() {
 
   const step = STEPS[active]!;
 
+  // The phone leans a little towards the pointer (3D), springing back when it leaves.
+  const phone = useRef<HTMLDivElement>(null);
+  const tilt = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (reduced || event.pointerType !== "mouse" || !phone.current) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - box.left) / box.width - 0.5;
+    const y = (event.clientY - box.top) / box.height - 0.5;
+    phone.current.style.setProperty("--tilt-x", `${(-y * 10).toFixed(2)}deg`);
+    phone.current.style.setProperty("--tilt-y", `${(x * 14).toFixed(2)}deg`);
+  };
+  const untilt = () => {
+    phone.current?.style.setProperty("--tilt-x", "0deg");
+    phone.current?.style.setProperty("--tilt-y", "0deg");
+  };
+
   return (
     <div
       className="grid items-center gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-14"
@@ -128,9 +144,7 @@ export function JourneyDiagram() {
                 onClick={() => select(index)}
                 className={cn(
                   "group spotlight relative flex items-center gap-4 overflow-hidden rounded-2xl border p-4 text-left transition-[background-color,border-color,box-shadow] duration-(--dur-3) outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40",
-                  selected
-                    ? "border-primary/30 bg-card raised"
-                    : "border-transparent hover:bg-card/60",
+                  selected ? "bg-card" : "hover:bg-card/60",
                 )}
               >
                 <span
@@ -192,14 +206,22 @@ export function JourneyDiagram() {
         role="tabpanel"
         id={`${id}-panel`}
         aria-labelledby={`${id}-tab-${step.key}`}
-        className="relative isolate order-first flex min-h-[25rem] items-center justify-center overflow-hidden rounded-[2rem] border bg-surface-2 p-6 lg:order-none"
+        onPointerMove={tilt}
+        onPointerLeave={untilt}
+        className="relative isolate order-first flex min-h-[25rem] items-center justify-center overflow-hidden rounded-[2rem] bg-surface-2 p-6 lg:order-none dark:bg-white/[0.025]"
       >
-        <div aria-hidden className="absolute inset-0 -z-10 bg-ambient" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-ambient dark:opacity-60" />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 -z-10 h-40 bg-imigongo-fade text-link opacity-[0.06]"
+          className="absolute inset-x-0 top-0 -z-10 h-40 bg-imigongo-fade text-link opacity-[0.06] dark:opacity-[0.035]"
         />
-        <PhoneSketch key={step.key}>
+        <PhoneSketch
+          ref={phone}
+          stepKey={step.key}
+          stepIndex={active}
+          total={STEPS.length}
+          icon={step.icon}
+        >
           {step.key === "account" && <AccountSketch />}
           {step.key === "apply" && <ApplySketch />}
           {step.key === "pay" && <PaySketch />}
@@ -210,20 +232,142 @@ export function JourneyDiagram() {
   );
 }
 
-/** A phone outline drawn in the brand's line style; the screen content animates in. */
-function PhoneSketch({ children }: { children: React.ReactNode }) {
+/** The time shown in the status bar: 9:41 (Apple's) until the page runs, then the real time. */
+function useClock() {
+  const [now, setNow] = useState<string | null>(null);
+  useEffect(() => {
+    const tick = () =>
+      setNow(
+        new Date()
+          .toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+          .replace(/\s?[AP]M$/i, ""),
+      );
+    tick();
+    const timer = window.setInterval(tick, 15_000);
+    return () => window.clearInterval(timer);
+  }, []);
+  return now ?? "9:41";
+}
+
+/**
+ * An iPhone (Pro style), drawn like the real thing and alive:
+ * - a thin titanium frame (quiet: low opacity on the dark theme), side buttons, a black bezel;
+ * - a status bar (live clock, signal, Wi-Fi, battery), a home indicator, a faint glass glare;
+ * - the Dynamic Island opens like a Live Activity for each step (its icon and progress), a light
+ *   sheen crosses the glass, the phone floats and leans towards the pointer.
+ * Everything moving stops under reduced motion; it is decorative (the tabs carry the meaning).
+ */
+const PhoneSketch = function PhoneSketch({
+  ref,
+  children,
+  stepKey,
+  stepIndex,
+  total,
+  icon: Icon,
+}: {
+  ref?: React.Ref<HTMLDivElement>;
+  children: React.ReactNode;
+  stepKey: string;
+  stepIndex: number;
+  total: number;
+  icon: LucideIcon;
+}) {
+  const time = useClock();
+  const side =
+    "absolute w-[3px] bg-linear-to-b from-zinc-300 to-zinc-400 dark:from-zinc-500/25 dark:to-zinc-700/25";
   return (
-    <div
-      aria-hidden
-      className="relative w-56 animate-pop rounded-[2.25rem] border-[3px] border-foreground/80 bg-card p-3"
-    >
-      <span className="mx-auto mb-3 block h-1.5 w-16 rounded-full bg-foreground/20" />
-      <div className="flex h-80 flex-col gap-3 overflow-hidden rounded-[1.5rem] bg-background p-4">
-        {children}
+    <div aria-hidden className="[perspective:1100px]">
+      <div
+        ref={ref}
+        data-phone-live
+        className="relative w-[14.5rem] animate-float transition-transform duration-500 ease-out [transform-style:preserve-3d]"
+        style={{ transform: "rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg))" }}
+      >
+        {/* Side buttons: action, volume up/down (left); side button (right). */}
+        <span className={cn(side, "top-[5.5rem] -left-[2px] h-6 rounded-l-[2px]")} />
+        <span className={cn(side, "top-[8rem] -left-[2px] h-11 rounded-l-[2px]")} />
+        <span className={cn(side, "top-[11.25rem] -left-[2px] h-11 rounded-l-[2px]")} />
+        <span className={cn(side, "top-[9rem] -right-[2px] h-16 rounded-r-[2px]")} />
+
+        {/* Titanium frame: a soft metallic edge, low opacity on dark. */}
+        <div className="rounded-[3rem] bg-linear-to-br from-zinc-300/60 via-zinc-100/50 to-zinc-400/60 p-[2.5px] shadow-[0_30px_60px_-22px_rgb(15_23_42/0.5),0_8px_20px_-12px_rgb(15_23_42/0.25)] dark:from-zinc-400/15 dark:via-zinc-600/10 dark:to-zinc-500/15 dark:shadow-[0_34px_70px_-24px_rgb(0_0_0/0.9)]">
+          {/* Black bezel. */}
+          <div className="rounded-[calc(3rem-2.5px)] bg-black p-[7px] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.04)] dark:shadow-[inset_0_0_0_1px_rgb(255_255_255/0.02)]">
+            {/* Screen. */}
+            <div className="relative h-[28rem] overflow-hidden rounded-[2.45rem] bg-background dark:bg-[oklch(0.145_0.012_268)]">
+              {/* Status bar. */}
+              <div className="absolute inset-x-0 top-0 z-20 flex h-10 items-center justify-between px-3.5 text-[0.62rem] font-semibold num text-foreground">
+                <span className="w-11 text-center tracking-tight">{time}</span>
+                <span className="flex w-11 items-center justify-end gap-[2px]">
+                  <span className="flex items-end gap-[1px]">
+                    {[3, 5, 7, 9].map((h) => (
+                      <span
+                        key={h}
+                        className="w-[2px] rounded-[1px] bg-foreground"
+                        style={{ height: h }}
+                      />
+                    ))}
+                  </span>
+                  <Wifi className="size-2.5" strokeWidth={3} />
+                  <span className="relative flex h-[0.55rem] w-[1rem] items-center rounded-[3px] border border-foreground/45 p-[1.5px]">
+                    <span className="h-full w-[78%] rounded-[1.5px] bg-foreground" />
+                    <span className="absolute top-1/2 -right-[3px] h-1 w-[1.5px] -translate-y-1/2 rounded-r-full bg-foreground/45" />
+                  </span>
+                </span>
+              </div>
+
+              {/* Dynamic Island: opens as a Live Activity for each step, then settles. */}
+              <div
+                key={`island-${stepKey}`}
+                data-phone-live
+                className="absolute top-2.5 left-1/2 z-30 flex h-[1.45rem] w-[5.25rem] -translate-x-1/2 animate-[island-live_2.4s_var(--ease-spring)_both] items-center justify-between overflow-hidden rounded-full bg-black px-1.5"
+              >
+                <span
+                  data-phone-live
+                  className="flex animate-[island-content_2.4s_ease_both] items-center gap-1.5 opacity-0"
+                >
+                  <span className="inline-flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                    <Icon className="size-2.5" strokeWidth={2.5} />
+                  </span>
+                </span>
+                <span
+                  data-phone-live
+                  className="flex animate-[island-content_2.4s_ease_both] items-center gap-[2px] pr-0.5 opacity-0"
+                >
+                  {Array.from({ length: total }, (_, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "size-[4px] rounded-full",
+                        i <= stepIndex ? "bg-success" : "bg-white/25",
+                      )}
+                    />
+                  ))}
+                </span>
+              </div>
+
+              {/* The step's screen. */}
+              <div key={stepKey} className="flex h-full animate-pop flex-col gap-3 px-4 pt-12 pb-8">
+                {children}
+              </div>
+
+              {/* Home indicator. */}
+              <span className="absolute bottom-2 left-1/2 z-20 h-1 w-24 -translate-x-1/2 rounded-full bg-foreground/35" />
+
+              {/* Glass: a faint static glare and a sheen that crosses it when the screen changes. */}
+              <span className="pointer-events-none absolute inset-0 z-10 bg-linear-to-br from-white/[0.07] via-transparent to-transparent dark:from-white/[0.04]" />
+              <span
+                key={`sheen-${stepKey}`}
+                data-phone-live
+                className="pointer-events-none absolute -inset-y-10 left-0 z-10 w-1/3 animate-[glass-sheen_1.4s_var(--ease-enter)_both] bg-linear-to-r from-transparent via-white/[0.12] to-transparent dark:via-white/[0.06]"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 function Bar({ className, delay = 0 }: { className?: string; delay?: number }) {
   return (

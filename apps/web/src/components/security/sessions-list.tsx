@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Laptop, LogOut } from "lucide-react";
+import { ChevronDown, Laptop, LogOut } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";

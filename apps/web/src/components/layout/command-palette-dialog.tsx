@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Sun,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";

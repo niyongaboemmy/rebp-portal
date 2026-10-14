@@ -1,4 +1,4 @@
-import { CloudUpload, ListChecks, Lock } from "lucide-react";
+import { CloudUpload, ListChecks, Lock } from "@/components/icons";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { CATEGORY_INFO } from "@rebp/contracts";
 import { DevModeChip } from "@/components/layout/dev-mode-chip";

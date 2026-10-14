@@ -1,12 +1,13 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Menu } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { Capability } from "@rebp/contracts";
 import { PUBLIC_NAV } from "@/config/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -29,11 +30,16 @@ export function MobileNav(props: MobileNavProps) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label={t("common.openMenu")}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("rounded-full", props.area === "public" ? "md:hidden" : "lg:hidden")}
+          aria-label={t("common.openMenu")}
+        >
           <Menu className="size-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent side="right">
         <SheetTitle className="sr-only">{t("nav.mainNavigation")}</SheetTitle>
         <SheetDescription className="sr-only">{t("brand.tagline")}</SheetDescription>
         <div className="pt-1 pb-2">
@@ -45,7 +51,8 @@ export function MobileNav(props: MobileNavProps) {
               <NavLink key={item.href} item={item} onNavigate={close} />
             ))}
           </nav>
-        ) : (
+        ) : null}
+        {props.area !== "public" && (
           <AppNav area={props.area} capabilities={props.capabilities} onNavigate={close} />
         )}
       </SheetContent>

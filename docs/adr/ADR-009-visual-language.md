@@ -70,3 +70,30 @@
   - **Ember** (orange) for time and "what's next" cues that are _not_ a status: coming-soon chips, the
     mobile-money countdown, "Next" category, experience progress towards the next category.
   - Neither replaces the status colours (warning, critical), which always carry an icon.
+
+## Amendment v4 (2026-10-14): borderless surfaces and the landing header
+
+- **Borderless by default.** `* { border-color: transparent }`. Block elements separate by tone (`bg-surface-*`,
+  `bg-sunken`), never by a line. Only form fields opt in, with `border-input`.
+- **Input hairline (accepted trade-off).** Field borders are the lowest-opacity hairline (16% light, 14% dark),
+  below the WCAG 1.4.11 3:1 non-text contrast. Fields stay identifiable through a tinted fill, a label and a
+  placeholder. The hover border strengthens, and the focus border and ring stay ≥ 3:1.
+- **Header (UX-001):**
+  - Transparent over the full-height landing hero, then frosted with a small shadow once scrolled.
+  - Labels never wrap. Links that don't fit fold into a "⋯" menu; widths are measured live, per locale.
+  - Search is an icon.
+  - Language is a dropdown.
+  - The theme switch is one tap.
+  - Signed-out visitors get one account button with a Sign in / Create account menu.
+  - Below md, the links move into the drawer.
+- **Hero:**
+  - Minimal copy: a title of about four words and a one-line subtitle.
+  - No floating background decoration.
+  - The only motion is the licence card:
+    - it flips in, then drifts in 3D like a card held in the hand
+    - a sheen crosses its laminate, and a glare follows the pointer
+    - a contact shadow softens as the card lifts
+    - status chips pop in one after another
+  - The card is still under reduced motion.
+- **Themes.** `meta[name=theme-color]` follows the resolved theme. Every colour token has a dark value (a test
+  enforces this).

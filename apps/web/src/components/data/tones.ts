@@ -5,7 +5,7 @@ import {
   OctagonX,
   TriangleAlert,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/icons";
 import type { StatusTone } from "@rebp/contracts";
 
 /**

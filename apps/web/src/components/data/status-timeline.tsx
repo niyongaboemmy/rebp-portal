@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check } from "@/components/icons";
 import type { StatusTone } from "@rebp/contracts";
 import { cn } from "@/lib/utils";
 import { TONE_FILL, TONE_ICONS, TONE_TEXT } from "./tones";

@@ -1,4 +1,4 @@
-import { SearchX } from "lucide-react";
+import { SearchX } from "@/components/icons";
 import type { Metadata } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { VerifySearch } from "@/components/register/verify-search";

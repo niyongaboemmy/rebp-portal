@@ -44,7 +44,7 @@ export async function AppShell({ area, user, children }: AppShellProps) {
         <div className="flex min-w-0 flex-1 flex-col">
           <header
             style={{ viewTransitionName: "app-header" }}
-            className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b bg-background/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 sm:px-6"
+            className="sticky top-0 z-30 flex h-16 items-center gap-2 bg-card/85 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-card/70 sm:px-6"
           >
             <Logo className="md:hidden" showText={false} />
             <CommandPalette area={area} capabilities={capabilities} className="md:ml-0" />

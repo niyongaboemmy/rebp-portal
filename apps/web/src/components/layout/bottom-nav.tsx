@@ -32,7 +32,7 @@ export function BottomNav({
       aria-label={t("tabBar")}
       data-bottom-nav
       style={{ viewTransitionName: "app-bottom-nav" }}
-      className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/75 md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 bg-card/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 md:hidden"
     >
       <ul
         className="mx-auto grid h-[4.5rem] max-w-md px-2"

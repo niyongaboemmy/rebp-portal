@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Interactions } from "@/components/motion/interactions";
 import { ServiceWorker } from "./service-worker";
+import { ThemeMeta } from "./theme-meta";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export function Providers({ children, locale, messages }: ProvidersProps) {
           <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
           <Toaster />
           <ServiceWorker />
+          <ThemeMeta />
           <Interactions />
         </QueryClientProvider>
       </ThemeProvider>

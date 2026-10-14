@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ScanLine, Search } from "lucide-react";
+import { ArrowRight, ScanLine, Search } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
@@ -53,7 +53,7 @@ export function VerifySearch({
         role="search"
         aria-label={t("label")}
         className={cn(
-          "flex items-center gap-1 rounded-2xl border bg-card p-1.5 raised transition-shadow focus-within:ring-[3px] focus-within:ring-ring/30",
+          "flex items-center gap-1 rounded-2xl border border-input bg-card p-1.5 transition-[border-color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/30 hover:border-foreground/25",
           className,
         )}
       >

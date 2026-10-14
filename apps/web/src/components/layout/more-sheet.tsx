@@ -1,6 +1,6 @@
 "use client";
 
-import { Grip, LogOut, Monitor, Moon, Sun } from "lucide-react";
+import { Grip, LogOut, Monitor, Moon, Sun } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";

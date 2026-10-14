@@ -211,3 +211,23 @@ Unit tests pass (contracts 57, web 174). Lint, typecheck, format check and the p
 - **Unit tests:** 246 pass.
 - **Accessibility and layout:** axe and overflow are clean on 40 page and device combinations in each of en, fr and rw.
 - **Token contrast:** 80 checks pass.
+
+## 9. Review rounds v4 and v5 (2026-10-14)
+
+| Feedback                                 | Change                                                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| No borders except form inputs            | Borderless base; tone separates surfaces; inputs use a 16% / 14% hairline                               |
+| Microsoft-style icons                    | Fluent UI icons, generated as plain SVG; filled variant marks the active state                          |
+| Modern, responsive navbar                | Measured priority+ links on one line, overflow in "⋯"; icon search; language dropdown; one account menu |
+| Transparent navbar until scroll          | Transparent over the hero; frosted with a small shadow after 8 px                                       |
+| Full-height hero, sized by screen height | `min-h-svh`; type and spacing clamp on `vh`                                                             |
+| Floating hero icons looked messy         | Removed. The licence card is now the only motion: 3D drift, sheen, pointer glare, contact shadow        |
+| More space between sections              | Landing sections use 80 / 112 / 128 px vertical padding (phone / tablet / desktop)                      |
+| Minimal hero copy                        | Title of about four words and a one-line subtitle in en, fr and rw                                      |
+| Theme configuration                      | `theme-color` meta follows the theme; token parity test for dark values                                 |
+
+**Verification:**
+
+- **E2E:** 66 of 66 pass, including header tests at 800, 1024, 1280 and 1600 px.
+- **Unit tests:** 250 pass.
+- **Accessibility and layout:** axe and overflow are clean on 40 page and device combinations in each of en, fr and rw.

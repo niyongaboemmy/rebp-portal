@@ -1,4 +1,4 @@
-import { ArrowRight, QrCode, Wallet } from "lucide-react";
+import { ArrowRight, QrCode, Wallet } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -22,7 +22,7 @@ export default async function LicensesPage() {
       art={
         <div
           aria-hidden
-          className="relative flex aspect-[1.586] w-full max-w-xs animate-pop flex-col justify-between rounded-[1.5rem] border-2 border-dashed border-primary/40 bg-primary-soft/40 p-4"
+          className="relative flex aspect-[1.586] w-full max-w-xs animate-pop flex-col justify-between rounded-[1.5rem] bg-primary-soft/40 p-4"
         >
           <div className="flex justify-between">
             <span className="h-3 w-24 rounded-full bg-primary/20" />

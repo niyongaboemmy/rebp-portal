@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
@@ -30,7 +30,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl border border-dashed bg-card px-6 py-12 text-center",
+        "relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl bg-card px-6 py-12 text-center",
         className,
       )}
     >
@@ -41,10 +41,7 @@ export function EmptyState({
       {art ?? (
         <span className="relative inline-flex size-20 animate-pop items-center justify-center">
           <span aria-hidden className="absolute inset-0 rounded-[1.75rem] bg-primary-soft" />
-          <span
-            aria-hidden
-            className="absolute -inset-3 rounded-[2.25rem] border border-primary/15"
-          />
+          <span aria-hidden className="absolute -inset-3 rounded-[2.25rem] bg-primary-soft/40" />
           <Icon className="relative size-9 text-link" aria-hidden />
         </span>
       )}

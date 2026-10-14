@@ -1,4 +1,4 @@
-import { CheckCircle2, FileStack, Inbox, ShieldCheck, UsersRound } from "lucide-react";
+import { CheckCircle2, FileStack, Inbox, ShieldCheck, UsersRound } from "@/components/icons";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { APPLICATION_STATUS_TONES, JOURNEY_STAGES, LICENSE_STATUS_TONES } from "@rebp/contracts";

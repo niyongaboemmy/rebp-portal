@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "lh3.googleusercontent.com" }],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "radix-ui"],
+    optimizePackageImports: ["radix-ui"],
   },
   async headers() {
     return [
