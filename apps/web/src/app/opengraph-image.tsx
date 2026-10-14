@@ -16,7 +16,7 @@ export default function OpengraphImage() {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 72,
-        background: `radial-gradient(circle at 90% 0%, #00594f 0%, transparent 55%), radial-gradient(circle at 0% 100%, #1d3d5c 0%, transparent 55%), ${BRAND.ink}`,
+        background: `radial-gradient(circle at 90% 0%, ${BRAND.royal} 0%, transparent 55%), radial-gradient(circle at 0% 100%, #2a0a6b 0%, transparent 55%), ${BRAND.navy}`,
         color: "#f1f4f6",
         fontFamily: "sans-serif",
       }}
@@ -34,7 +34,7 @@ export default function OpengraphImage() {
         </span>
       </div>
       <div style={{ display: "flex", height: 10, borderRadius: 5, overflow: "hidden" }}>
-        <div style={{ flex: 3, background: BRAND.emerald }} />
+        <div style={{ flex: 3, background: "#ffffff" }} />
         <div style={{ flex: 1, background: "#0068ad" }} />
         <div style={{ flex: 1, background: BRAND.sun }} />
       </div>

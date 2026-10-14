@@ -51,7 +51,7 @@ export function StatTile({
     </>
   );
   const classes = cn(
-    "flex flex-col justify-between gap-4 rounded-2xl border bg-card p-4 raised sm:p-5",
+    "spotlight flex flex-col justify-between gap-4 rounded-2xl border bg-card p-4 raised sm:p-5",
     href &&
       "transition-[transform,border-color] duration-(--dur-2) hover:border-primary/40 active:scale-[0.98]",
     className,

@@ -8,7 +8,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90",
+        default: "bg-primary btn-gloss text-primary-foreground hover:bg-primary/90",
         /** Secondary emphasis: brand-tinted fill (ADR-009 hierarchy). */
         tonal: "bg-primary-soft text-primary-soft-foreground hover:bg-primary-soft/75",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
@@ -21,12 +21,13 @@ export const buttonVariants = cva(
       size: {
         // Mobile-first: 44 px touch targets (UX-001), slightly denser from `sm` up.
         default: "h-11 px-4 sm:h-10",
-        sm: "h-9 rounded-md px-3 text-xs",
+        // 44 px on phones (UX-001, WCAG 2.5.8), compact from `sm` up.
+        sm: "h-11 rounded-xl px-4 text-sm sm:h-9 sm:rounded-lg sm:px-3 sm:text-xs",
         lg: "h-12 rounded-2xl px-6 text-base",
         /** Floating action button: the single hero action on a mobile screen. */
         fab: "h-14 rounded-2xl px-5 text-base shadow-3",
         icon: "size-11 sm:size-10",
-        "icon-sm": "size-9",
+        "icon-sm": "size-11 sm:size-9",
       },
     },
     defaultVariants: { variant: "default", size: "default" },

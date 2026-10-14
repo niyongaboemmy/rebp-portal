@@ -1,5 +1,14 @@
 {
-  "brand": { "tagline": "Impushya z'abakomisiyoneri b'imitungo itimukanwa" },
+  "meta": {
+    "title": "REBP Portal",
+    "description": "Iyandikishe, habwa uruhushya kandi ugenzure abakomisiyoneri n'ibigo by'ubukomisiyoneri bw'imitungo itimukanwa.",
+    "homeTitle": "Impushya z'ubukomisiyoneri bw'imitungo itimukanwa n'igitabo rusange"
+  },
+  "brand": {
+    "name": "REBP Portal",
+    "tagline": "Impushya z'abakomisiyoneri b'imitungo itimukanwa",
+    "body": "Urugaga rw'Abakora Umwuga w'Ubukomisiyoneri bw'Imitungo Itimukanwa"
+  },
   "common": {
     "skipToContent": "Jya ku bikubiyemo",
     "loading": "Biratunganywa…",
@@ -11,12 +20,24 @@
     "confirm": "Emeza",
     "copy": "Koporora",
     "copied": "Byakoporowe",
+    "download": "Kuramo",
+    "remove": "Kuraho",
+    "or": "cyangwa",
+    "optional": "Si ngombwa",
+    "required": "Ni ngombwa",
+    "enabled": "Birakora",
+    "notSet": "Ntibirashyirwaho",
     "verified": "Byemejwe",
     "unverified": "Ntibiremezwa",
     "comingSoon": "Biraza vuba",
     "openMenu": "Fungura urutonde",
     "closeMenu": "Funga urutonde",
-    "pilotBanner": "Igerageza — amakuru y'icyitegererezo gusa. Amafaranga n'inyandiko z'amategeko ntibiremezwa."
+    "showPassword": "Erekana ijambobanga",
+    "hidePassword": "Hisha ijambobanga",
+    "pilotBanner": "Igerageza — amakuru y'icyitegererezo gusa. Amafaranga n'inyandiko z'amategeko ntibiremezwa.",
+    "unapprovedTranslation": "Ubu busemuzi ni umushinga utegereje kwemezwa n'Urugaga.",
+    "dismiss": "Funga",
+    "notice": "Itangazo"
   },
   "nav": {
     "home": "Ahabanza",
@@ -29,35 +50,1111 @@
     "dashboard": "Imbonerahamwe",
     "applications": "Ubusabe",
     "licenses": "Impushya zanjye",
+    "confirmations": "Ibyemezo",
+    "firm": "Ibikorwa by'ikigo",
     "security": "Umutekano",
+    "backoffice": "Ibiro by'ubuyobozi",
+    "overview": "Incamake",
+    "queue": "Imirimo itegereje",
+    "decisions": "Ibyemezo byafashwe",
+    "registerAdmin": "Gucunga igitabo",
+    "finance": "Imari",
+    "configuration": "Igenamiterere",
+    "audit": "Amateka y'ibikorwa",
+    "reports": "Raporo",
     "signOut": "Sohoka",
-    "account": "Konti"
+    "account": "Konti",
+    "portal": "Konti yanjye",
+    "sectionApplicant": "Usaba",
+    "sectionAccount": "Konti",
+    "sectionStaff": "Urwego rugenzura",
+    "breadcrumb": "Inzira y'urupapuro",
+    "mainNavigation": "Urutonde nyamukuru",
+    "myAccess": "Uburenganzira bwanjye",
+    "access": "Gucunga uburenganzira",
+    "more": "Ibindi",
+    "tabBar": "Ibyingenzi"
   },
-  "language": { "label": "Ururimi", "draft": "umushinga" },
+  "theme": {
+    "toggle": "Hindura isura",
+    "light": "Urumuri",
+    "dark": "Umwijima",
+    "system": "Nk'igikoresho"
+  },
+  "language": {
+    "label": "Ururimi",
+    "draft": "umushinga"
+  },
   "landing": {
     "eyebrow": "Urubuga rwemewe rw'impushya",
     "title": "Irembo ryizewe ry'impushya z'ubukomisiyoneri bw'imitungo",
+    "subtitle": "Saba, ukurikirane ubusabe bwawe igihe cyose kandi uhabwe uruhushya rw'ikoranabuhanga rushobora kugenzurwa — kuri telefoni yawe, mu rurimi rwawe.",
     "primaryCta": "Tangira ubusabe",
     "secondaryCta": "Ese nujuje ibisabwa?",
-    "verifyButton": "Shakisha"
+    "verifyTitle": "Genzura umukomisiyoneri",
+    "verifySubtitle": "Genzura uruhushya urwo ari rwo rwose ukoresheje izina cyangwa nimero mu masegonda make.",
+    "verifyPlaceholder": "Izina, nimero y'uruhushya cyangwa y'iyandikwa",
+    "verifyButton": "Shakisha",
+    "categoriesTitle": "Ibyiciro umunani, urugendo rumwe ruyobowe",
+    "categoriesSubtitle": "Urubuga rukwereka gusa ibikureba.",
+    "stepsTitle": "Uko bikora",
+    "steps": {
+      "account": {
+        "title": "Fungura konti yawe",
+        "body": "Emeza imeyili na telefoni yawe, kandi ufungure igenzura ry'intambwe ebyiri."
+      },
+      "apply": {
+        "title": "Uzuza ifishi iyobowe",
+        "body": "Subiza gusa ibibazo bijyanye n'icyiciro cyawe. Tubika uko ugenda wuzuza."
+      },
+      "pay": {
+        "title": "Shyiraho umukono, wishyure kandi wohereze",
+        "body": "Ishyura kuri interineti kandi ukurikirane buri ntambwe y'isuzuma."
+      },
+      "license": {
+        "title": "Habwa uruhushya rw'ikoranabuhanga",
+        "body": "Kuramo icyemezo gifite kode ya QR umuntu wese ashobora kugenzura."
+      }
+    },
+    "trustTitle": "Byubakiwe kwizerwa",
+    "trust": {
+      "secure": "Igenzura ry'intambwe ebyiri n'amakuru arinzwe (encrypted)",
+      "transparent": "Aho ubusabe bugeze n'igihe biteganyijwe",
+      "accessible": "Bikora kuri telefoni iyo ari yo yose, mu Cyongereza, Ikinyarwanda n'Igifaransa"
+    },
+    "scene": {
+      "verified": "Byemejwe mu masegonda 2",
+      "time": "Nonaha",
+      "languages": "English · Ikinyarwanda · Français"
+    },
+    "journey": {
+      "pause": "Hagarika",
+      "play": "Komeza"
+    }
+  },
+  "categories": {
+    "title": "Ibyiciro by'umwuga",
+    "subtitle": "Gereranya ibyo buri cyiciro cyemerewe gukora n'ibyo gisabwa.",
+    "tiers": {
+      "entry": "Intangiriro",
+      "agent": "Agent",
+      "broker": "Broker",
+      "firm": "Ikigo"
+    },
+    "items": {
+      "RERA": {
+        "name": "Uhuza abakiriya mu mitungo itimukanwa (Referral Agent)",
+        "summary": "Yohereza abakiriya ku bakomisiyoneri bafite uruhushya. Guhuza gusa (Ingingo ya 10)."
+      },
+      "FSLA": {
+        "name": "Ukora ubucuruzi n'ubukode ku murima (Field Sales and Leasing Agent)",
+        "summary": "Umukomisiyoneri utangira, ukora agenzurwa."
+      },
+      "REA": {
+        "name": "Agent w'imitungo itimukanwa (Real Estate Agent)",
+        "summary": "Asabwa nibura imyaka 3 ari FSLA cyangwa ikindi cyemewe gihwanye na cyo."
+      },
+      "BROKER": {
+        "name": "Broker w'imitungo itimukanwa (Real Estate Broker)",
+        "summary": "Asabwa nibura imyaka 3 ari Real Estate Agent ufite uruhushya."
+      },
+      "ASSOCIATE_BROKER": {
+        "name": "Broker ufatanya (Associate Broker)",
+        "summary": "Broker ufite uruhushya ukorana n'ikigo ayobowe na Principal Broker."
+      },
+      "MANAGING_BROKER": {
+        "name": "Broker ucunga (Managing Broker)",
+        "summary": "Broker ufite uruhushya ucunga ibiro cyangwa ishami ry'ikigo."
+      },
+      "PRINCIPAL_BROKER": {
+        "name": "Broker mukuru (Principal Broker)",
+        "summary": "Ashinzwe kugenzura ikigo, amafaranga y'abakiriya, inyandiko n'iyubahirizwa ry'amategeko."
+      },
+      "REBF": {
+        "name": "Ikigo cy'ubukomisiyoneri bw'imitungo itimukanwa",
+        "summary": "Ikigo gifite ubuzimagatozi cyemerewe gukora ubukomisiyoneri, kiyobowe na Principal Broker."
+      }
+    },
+    "faqTitle": "Ibibazo bikunze kubazwa",
+    "faq": {
+      "which": {
+        "q": "Ni ikihe cyiciro nkwiye gusaba?",
+        "a": "Biterwa n'imyaka yawe, amashuri, uburambe n'uruhushya waba usanganywe. Isuzuma ry'ibisabwa rigusabira icyiciro mu gihe cy'umunota umwe."
+      },
+      "upgrade": {
+        "q": "Nazamuka nte nkajya mu cyiciro cyisumbuyeho?",
+        "a": "Kuzamuka akenshi bisaba imyaka itatu y'uburambe bwanditse mu cyiciro kiri munsi, hiyongereyeho amahugurwa n'ikizamini by'icyiciro gishya. Uburambe bwawe burakomeza kubarwa."
+      },
+      "firm": {
+        "q": "Ese ikigo gishobora guhabwa uruhushya?",
+        "a": "Yego. Ikigo cy'ubukomisiyoneri bw'imitungo itimukanwa cyiyandikisha nk'ikigo gifite ubuzimagatozi kandi kigomba kugaragaza Principal Broker ufite uruhushya."
+      }
+    }
+  },
+  "placeholders": {
+    "registerTitle": "Igitabo rusange",
+    "registerBody": "Shakisha abakomisiyoneri n'ibigo bifite uruhushya. Igitabo kizafungurwa impushya za mbere nizimara gutangwa.",
+    "eligibilityTitle": "Ese nujuje ibisabwa?",
+    "eligibilityBody": "Subiza ibibazo bike umenye icyiciro gikwiye n'inyandiko ugomba gutegura. Isuzuma ry'ibanze riracyategurwa.",
+    "applicationsTitle": "Ubusabe",
+    "applicationsBody": "Imishinga y'ubusabe n'ubusabe bwoherejwe bizagaragara hano.",
+    "applicationsCta": "Tangira ubusabe bushya",
+    "licensesTitle": "Impushya zanjye",
+    "licensesBody": "Impushya zawe, ibyemezo na kode za QR bizagaragara hano nibimara gutangwa.",
+    "confirmationsTitle": "Ibyemezo",
+    "confirmationsBody": "Ubusabe bwo kugenzura no gukorana bukugenewe buzagaragara hano.",
+    "firmTitle": "Ibikorwa by'ikigo",
+    "firmBody": "Cunga urutonde rw'abakozi b'ikigo cyawe, amashami n'ivugurura ry'impushya.",
+    "backofficeBody": "Iki gice giteganyijwe mu cyiciro gikurikira cy'igerageza.",
+    "plannedFor": "Biteganyijwe: {milestone}"
   },
   "auth": {
+    "panelTitle": "Impushya mu buryo bworoshye, butekanye kandi bubonerana.",
+    "panelPoints": {
+      "one": "Bika ubusabe bwawe ubukomereze ku gikoresho icyo ari cyo cyose",
+      "two": "Menya neza ibibura n'impamvu",
+      "three": "Rinda konti yawe ukoresheje igenzura ry'intambwe ebyiri"
+    },
     "continueWithGoogle": "Komeza ukoresheje Google",
+    "googleUnavailable": "Kwinjira ukoresheje Google ntibishyizweho aha.",
     "signIn": {
       "title": "Murakaza neza",
+      "subtitle": "Injira kugira ngo ukomeze ubusabe bwawe.",
       "email": "Imeyili",
       "password": "Ijambobanga",
       "forgot": "Wibagiwe ijambobanga?",
       "submit": "Injira",
+      "noAccount": "Uri mushya kuri uru rubuga?",
       "createAccount": "Fungura konti"
     },
     "signUp": {
       "title": "Fungura konti yawe",
+      "subtitle": "Konti imwe y'ubusabe bwawe bwose n'impushya zawe.",
+      "accountType": "Ndiyandikisha nka",
+      "individual": "Umuntu ku giti cye",
+      "individualHint": "Agent, broker cyangwa uhuza abakiriya",
+      "organisation": "Ikigo",
+      "organisationHint": "Ikigo cy'ubukomisiyoneri bw'imitungo itimukanwa",
       "fullName": "Amazina yombi",
+      "fullNameOrg": "Amazina yawe yombi (uhagarariye ikigo)",
       "email": "Imeyili",
       "phone": "Nimero ya telefoni",
+      "phoneHint": "Tuzakoherereza kode kuri SMS kugira ngo tuyemeze. Urugero: 078 812 3456",
       "password": "Ijambobanga",
-      "submit": "Fungura konti"
+      "passwordHint": "Nibura inyuguti 12. Interuro ngufi yoroshye kwibuka.",
+      "confirmPassword": "Emeza ijambobanga",
+      "acceptPrivacy": "Nasomye <link>itangazo ryerekeye ubuzima bwite</link> kandi numva uko amakuru yanjye akoreshwa.",
+      "submit": "Fungura konti",
+      "haveAccount": "Usanzwe ufite konti?",
+      "signIn": "Injira"
+    },
+    "strength": {
+      "label": "Ubukomere bw'ijambobanga",
+      "0": "Ni rigufi cyane",
+      "1": "Ntirikomeye",
+      "2": "Rirahagije",
+      "3": "Rirakomeye",
+      "4": "Rirakomeye cyane"
+    },
+    "twoStep": {
+      "title": "Igenzura ry'intambwe ebyiri",
+      "subtitle": {
+        "TOTP": "Andika kode y'imibare 6 iri muri porogaramu yawe ya authenticator.",
+        "SMS": "Twohereje kode y'imibare 6 kuri {destination}.",
+        "EMAIL": "Twohereje kode y'imibare 6 kuri {destination}."
+      },
+      "code": "Kode yo kwemeza",
+      "submit": "Emeza",
+      "resend": "Ongera wohereze kode",
+      "resendIn": "Ongera wohereze mu masegonda {seconds}",
+      "resent": "Kode nshya iri mu nzira.",
+      "tryAnother": "Gerageza ubundi buryo",
+      "useRecovery": "Koresha kode yo kugarura konti",
+      "useCode": "Koresha kode yo kwemeza",
+      "recoveryCode": "Kode yo kugarura konti",
+      "recoveryHint": "Buri kode yo kugarura konti ikoreshwa rimwe gusa. Imiterere: XXXXX-XXXXX",
+      "methods": {
+        "TOTP": "Porogaramu ya authenticator",
+        "SMS": "Ubutumwa bugufi (SMS)",
+        "EMAIL": "Imeyili"
+      },
+      "expired": "Iki gikorwa cyo kwinjira cyarangiye. Ongera winjire.",
+      "backToSignIn": "Subira aho winjirira"
+    },
+    "verify": {
+      "title": "Emeza aho tukubona",
+      "subtitle": "Tugomba kwemeza imeyili na telefoni yawe mbere y'uko usaba (bituma konti yawe itekana).",
+      "emailTitle": "Imeyili",
+      "phoneTitle": "Nimero ya telefoni",
+      "sentTo": "Kode yoherejwe kuri {destination}",
+      "codeLabel": "Kode y'imibare 6",
+      "submit": "Emeza",
+      "resend": "Ongera wohereze kode",
+      "resendIn": "Ongera wohereze mu masegonda {seconds}",
+      "done": "Byemejwe",
+      "allDone": "Byose birarangiye! Turakujyana ku mbonerahamwe yawe…",
+      "addPhone": "Ongeraho nimero ya telefoni yawe",
+      "addPhoneSubmit": "Ohereza kode",
+      "resent": "Kode nshya iri mu nzira.",
+      "progress": "{done} kuri {total} byemejwe"
+    },
+    "forgot": {
+      "title": "Hindura ijambobanga ryawe",
+      "subtitle": "Andika imeyili ya konti yawe tukoherereze kode yo guhindura ijambobanga.",
+      "submit": "Ohereza kode",
+      "sent": "Niba hari konti ikoresha {email}, kode yo guhindura ijambobanga iri mu nzira.",
+      "back": "Subira aho winjirira"
+    },
+    "reset": {
+      "title": "Hitamo ijambobanga rishya",
+      "subtitle": "Andika kode twakoherereje kuri imeyili n'ijambobanga rishya.",
+      "code": "Kode yo guhindura",
+      "password": "Ijambobanga rishya",
+      "confirmPassword": "Emeza ijambobanga rishya",
+      "submit": "Hindura ijambobanga",
+      "success": "Ijambobanga ryahinduwe. Injira ukoresheje ijambobanga rishya.",
+      "resend": "Ongera wohereze kode",
+      "resendIn": "Ongera wohereze mu masegonda {seconds}",
+      "resent": "Kode nshya iri mu nzira.",
+      "differentEmail": "Koresha indi imeyili"
+    },
+    "oauthErrors": {
+      "googleDisabled": "Kwinjira ukoresheje Google ntibishoboka ubu.",
+      "oauthStateMismatch": "Igihe cyo kwinjira cyarangiye. Ongera ugerageze.",
+      "oauthFailed": "Ntitwashoboye kurangiza kwinjira ukoresheje Google. Ongera ugerageze.",
+      "googleEmailUnverified": "Imeyili yawe ya Google ntiremezwa.",
+      "googleAccountExists": "Hari konti isanzwe ikoresha iyi imeyili. Injira ukoresheje ijambobanga ryawe, hanyuma uhuze Google mu Igenamiterere ry'umutekano.",
+      "googleLinkedElsewhere": "Iyi konti ya Google ihujwe n'indi konti y'uru rubuga.",
+      "googleAlreadyLinked": "Hari konti ya Google isanzwe ihujwe.",
+      "reauthRequired": "Banza wemeze ijambobanga ryawe, hanyuma wongere ugerageze."
+    },
+    "checklist": {
+      "length": "Inyuguti {min} cyangwa zirenga",
+      "match": "Amagambobanga arahuye",
+      "met": "Byakozwe",
+      "notMet": "Ntibirakorwa"
     }
+  },
+  "dashboard": {
+    "greeting": "Muraho, {name}",
+    "subtitle": "Dore aho ibintu bigeze.",
+    "cards": {
+      "applications": "Ubusabe buri gukorwaho",
+      "licenses": "Impushya zifite agaciro",
+      "actions": "Ibikorwa bisabwa",
+      "none": "Nta na kimwe"
+    },
+    "startTitle": "Witeguye gusaba?",
+    "startBody": "Ubusabe buyobowe buzafungurwa mu cyiciro gikurikira. Hagati aho, rinda konti yawe.",
+    "securityTitle": "Rinda konti yawe",
+    "securityBody": "Fungura igenzura ry'intambwe ebyiri kugira ngo ari wowe wenyine ushobora kwinjira.",
+    "securityCta": "Shyiraho igenzura ry'intambwe ebyiri",
+    "securityOn": "Igenzura ry'intambwe ebyiri rirakora.",
+    "roles": "Inshingano zawe",
+    "startShort": "Intambwe eshanu kuva ku mushinga kugeza ku ruhushya.",
+    "journey": "Urugendo rw'ubusabe",
+    "setupTitle": "Rangiza gutunganya konti",
+    "setupDone": "Konti irinzwe",
+    "setupBody": "Igenzura ritatu ryihuse rituma konti yawe itekana.",
+    "setupProgress": "Intambwe {done} kuri {total} zarangiye",
+    "setup": {
+      "email": "Imeyili yemejwe",
+      "phone": "Telefoni yemejwe",
+      "twoStep": "Igenzura ry'intambwe ebyiri"
+    },
+    "noLicence": "Nta ruhushya urabona",
+    "activity": "Ibikorwa biheruka",
+    "noActivity": "Nta kirabaho."
+  },
+  "security": {
+    "title": "Umutekano",
+    "subtitle": "Genzura uko winjira kandi urinde konti yawe.",
+    "requiredBanner": "Inshingano zawe zisaba igenzura ry'intambwe ebyiri. Shyiraho nibura uburyo bumwe kugira ngo ukomeze.",
+    "linked": "Konti ya Google yahujwe.",
+    "contact": {
+      "title": "Aho tukubona",
+      "description": "Bikoreshwa mu kohereza kode zo kwinjira n'amatangazo y'ingenzi.",
+      "email": "Imeyili",
+      "phone": "Telefoni",
+      "changePhone": "Hindura",
+      "newPhone": "Nimero nshya ya telefoni",
+      "phoneChanged": "Nimero yahinduwe. Yemeze ukoresheje kode twohereje.",
+      "verifyNow": "Emeza nonaha"
+    },
+    "methods": {
+      "title": "Uburyo bwo kwinjira",
+      "description": "Uburyo ushobora gukoresha winjira kuri uru rubuga.",
+      "password": "Ijambobanga",
+      "passwordSet": "Ryahinduwe bwa nyuma {date}",
+      "passwordNotSet": "Nta jambobanga rihari — winjira ukoresheje Google.",
+      "changePassword": "Hindura ijambobanga",
+      "setPassword": "Shyiraho ijambobanga",
+      "currentPassword": "Ijambobanga usanganywe",
+      "newPassword": "Ijambobanga rishya",
+      "confirmPassword": "Emeza ijambobanga rishya",
+      "passwordUpdated": "Ijambobanga ryahinduwe. Izindi nzira zinjiriwemo zasohowe.",
+      "google": "Google",
+      "googleLinked": "Ihujwe na {email}",
+      "googleNotLinked": "Ntihujwe",
+      "linkGoogle": "Huza Google",
+      "unlinkGoogle": "Tandukanya",
+      "googleUnlinked": "Konti ya Google yatandukanyijwe."
+    },
+    "mfa": {
+      "title": "Igenzura ry'intambwe ebyiri",
+      "description": "Saba kode nyuma y'ijambobanga. Hitamo uburyo bukunogeye.",
+      "statusOn": "Birakora",
+      "statusOff": "Ntibikora",
+      "preferred": "Ubwo nkunda",
+      "makePreferred": "Bugire ubwo ukunda",
+      "setUp": "Shyiraho",
+      "remove": "Kuraho",
+      "removed": "Uburyo bwakuweho.",
+      "enabled": "Uburyo bw'intambwe ebyiri bwongeweho.",
+      "preferredChanged": "Uburyo ukunda bwahinduwe.",
+      "methods": {
+        "TOTP": {
+          "name": "Porogaramu ya authenticator",
+          "description": "Kode ziva muri Google Authenticator, Microsoft Authenticator, 1Password n'izindi porogaramu nk'izo. Ikora nta interineti."
+        },
+        "SMS": {
+          "name": "Ubutumwa bugufi (SMS)",
+          "description": "Kode yoherezwa kuri SMS kuri nimero ya telefoni yawe yemejwe."
+        },
+        "EMAIL": {
+          "name": "Imeyili",
+          "description": "Kode yoherezwa kuri imeyili yawe yemejwe."
+        }
+      },
+      "totpSetup": {
+        "title": "Shyiraho porogaramu ya authenticator",
+        "step1": "Skaninga iyi kode ya QR ukoresheje porogaramu yawe ya authenticator.",
+        "manual": "Ntushoboye gusikana? Andika uru rufunguzo n'intoki:",
+        "step2": "Andika kode y'imibare 6 porogaramu ikwereka.",
+        "qrAlt": "Kode ya QR ya porogaramu yawe ya authenticator"
+      },
+      "otpSetup": {
+        "title": "Shyiraho {method}",
+        "intro": "Tuzohereza kode kuri {destination} kugira ngo tumenye ko ikugeraho.",
+        "send": "Ohereza kode",
+        "sent": "Kode yoherejwe. Yandike hasi.",
+        "phoneRequired": "Banza wemeze nimero ya telefoni yawe."
+      }
+    },
+    "recovery": {
+      "title": "Kode zo kugarura konti",
+      "description": "Koresha kode yo kugarura konti niba udashobora gukoresha ubundi buryo.",
+      "remaining": "{count, plural, =0 {Nta kode isigaye} one {Hasigaye kode #} other {Hasigaye kode #}}",
+      "regenerate": "Kora kode nshya",
+      "dialogTitle": "Bika kode zawe zo kugarura konti",
+      "dialogBody": "Zibike ahantu hatekanye. Buri kode ikoreshwa rimwe. Ntuzongera kuzibona.",
+      "saved": "Nabitse kode zanjye",
+      "fileHeader": "Kode zo kugarura konti ya REBP Portal"
+    },
+    "sessions": {
+      "title": "Aho winjiriye",
+      "description": "Ibikoresho byinjiriwemo kuri konti yawe ubu.",
+      "current": "Iki gikoresho",
+      "lastActive": "Yakoreshejwe bwa nyuma {time}",
+      "signedInWith": "hakoreshejwe {method}",
+      "revoke": "Sohora",
+      "revokeOthers": "Sohora ahandi hose",
+      "revoked": "Igikoresho cyasohowe.",
+      "revokedOthers": "{count, plural, =0 {Nta handi winjiriye} one {Hasohowe igikoresho #} other {Hasohowe ibikoresho #}}",
+      "unknownDevice": "Igikoresho kitazwi",
+      "showAll": "Erekana byose ({count})"
+    },
+    "reauth": {
+      "title": "Emeza ko ari wowe",
+      "description": "Ku bw'umutekano wawe, andika ijambobanga ryawe kugira ngo ukomeze.",
+      "password": "Ijambobanga",
+      "submit": "Emeza",
+      "googleHint": "Konti yawe nta jambobanga ifite. Sohoka wongere winjire ukoresheje Google kugira ngo ukore iyi mpinduka."
+    },
+    "protection": {
+      "score": "Uburinzi {done} kuri {total} burakora",
+      "body": "Kanda ku kitarakorwa kugira ngo ugikemure.",
+      "done": "Byakozwe",
+      "fix": "Kemura",
+      "level": {
+        "strong": "Irinzwe neza",
+        "fair": "Hasigaye bike",
+        "weak": "Iri mu kaga"
+      },
+      "checks": {
+        "email": "Imeyili yemejwe",
+        "phone": "Telefoni yemejwe",
+        "twoStep": "Igenzura ry'intambwe ebyiri",
+        "recovery": "Kode zo kugarura konti ziriteguye"
+      }
+    }
+  },
+  "audit": {
+    "title": "Amateka y'ibikorwa",
+    "subtitle": "Inyandiko zidahindurwa, zihujwe na hash, z'ibikorwa by'umutekano n'impinduka zose.",
+    "chainOk": "Uruhererekane rwemejwe — ibikorwa {count} ntibyahinduwe.",
+    "chainBroken": "Uruhererekane rwacitse ku gikorwa #{id}. Bikurikiranwe ako kanya.",
+    "columns": {
+      "time": "Igihe",
+      "action": "Igikorwa",
+      "actor": "Uwagikoze",
+      "entity": "Icyakorewe",
+      "ip": "IP",
+      "hash": "Hash"
+    },
+    "empty": "Nta gikorwa kirandikwa.",
+    "subtitleShort": "Buri mpinduka y'umutekano n'iy'imiterere, idashobora guhindurwa rwihishwa.",
+    "chainIntact": "Uruhererekane ni ntamakemwa",
+    "chainBrokenTitle": "Uruhererekane rwacitse",
+    "hashChained": "Uruhererekane rwa hash SHA-256",
+    "today": "Uyu munsi",
+    "yesterday": "Ejo hashize",
+    "filter": "Shungura ibikorwa",
+    "all": "Byose",
+    "system": "Sisitemu",
+    "older": "Ibikorwa bya kera",
+    "newest": "Ibishya",
+    "categories": {
+      "signin": "Kwinjira",
+      "account": "Konti",
+      "twoStep": "Intambwe ebyiri",
+      "access": "Uburenganzira"
+    }
+  },
+  "privacy": {
+    "title": "Itangazo ryerekeye ubuzima bwite",
+    "draft": "Inyandiko y'agateganyo itegereje kwemezwa n'Ushinzwe Amategeko n'Iyubahirizwa ryayo mu Rugaga.",
+    "body": "Dukusanya amakuru bwite akenewe mu kwandika no guha impushya abakomisiyoneri n'ibigo by'ubukomisiyoneri bw'imitungo itimukanwa, no kubungabunga igitabo rusange. Dukusanya buri kintu gusa iyo icyiciro cyawe cyangwa ubwoko bw'ubusabe bwawe bubisaba. Amakuru yawe arinzwe (encrypted), agerwaho n'abakozi bayakeneye mu kazi gusa, kandi buri gihe amakuru y'ibanga arebwe birandikwa. Amakuru agaragara mu mategeko agenga igitabo ni yo yonyine atangazwa. Ushobora gusaba kopi y'amakuru yawe igihe icyo ari cyo cyose.",
+    "metaDescription": "Uko urubuga rukusanya, rurinda kandi rutangaza amakuru bwite.",
+    "highlightsLabel": "Ibyo twiyemeje",
+    "fullNotice": "Itangazo ryuzuye",
+    "highlights": {
+      "minimal": "Ibyo icyiciro cyawe gikeneye gusa",
+      "encrypted": "Amakuru yawe arinzwe (encrypted)",
+      "access": "Agerwaho n'abayakeneye gusa, buri kurebwa kwandikwa",
+      "published": "Amakuru y'igitabo ni yo yonyine atangazwa",
+      "rights": "Saba kopi y'amakuru yawe igihe icyo ari cyo cyose"
+    }
+  },
+  "forbidden": {
+    "title": "Nta burenganzira ufite bwo kugera kuri uru rupapuro",
+    "body": "Inshingano za konti yawe ntizirimo iki gice. Niba ubona ko ari amakosa, vugana n'umuyobozi wawe.",
+    "cta": "Jya ku mbonerahamwe"
+  },
+  "notFound": {
+    "title": "Urupapuro ntirubonetse",
+    "body": "Urupapuro ushaka ntirubaho cyangwa rwimuwe.",
+    "cta": "Jya ahabanza"
+  },
+  "errorPage": {
+    "title": "Habaye ikibazo",
+    "body": "Habaye ikosa ritunguranye. Ongera ugerageze.",
+    "retry": "Ongera ugerageze"
+  },
+  "outbox": {
+    "title": "Ubutumwa bwoherejwe (iterambere)",
+    "subtitle": "Imeyili na SMS byanditswe n'uburyo bw'igerageza. Ntibiboneka ku rubuga nyirizina.",
+    "empty": "Nta butumwa burahari.",
+    "channel": "Inzira",
+    "to": "Kuri",
+    "template": "Icyitegererezo",
+    "sent": "Byoherejwe"
+  },
+  "roles": {
+    "APPLICANT": "Usaba",
+    "SUPERVISOR": "Umugenzuzi",
+    "PRINCIPAL_BROKER": "Principal Broker",
+    "FIRM_ADMIN": "Umuyobozi w'ikigo",
+    "REVIEWING_OFFICER": "Ushinzwe gusuzuma",
+    "APPROVING_AUTHORITY": "Urwego rwemeza",
+    "REGISTRAR": "Umwanditsi",
+    "FINANCE_OFFICER": "Ushinzwe imari",
+    "SYSTEM_ADMIN": "Umuyobozi wa sisitemu",
+    "AUDITOR": "Umugenzuzi w'imikorere / DPO"
+  },
+  "validation": {
+    "required": "Iki gice kigomba kuzuzwa.",
+    "emailInvalid": "Andika imeyili nyayo, nka name@example.com.",
+    "phoneInvalid": "Andika nimero ya telefoni ifite kode y'igihugu, nka +250 788 123 456, cyangwa nimero yo mu gihugu nka 078 812 3456.",
+    "passwordTooShort": "Koresha nibura inyuguti 12. Gerageza interuro ngufi.",
+    "passwordTooLong": "Koresha inyuguti 128 cyangwa munsi yazo.",
+    "passwordContainsPersonalInfo": "Ntushyire izina ryawe cyangwa imeyili yawe mu ijambobanga.",
+    "passwordBreached": "Iri jambobanga ryagaragaye mu makuru yibwe. Hitamo irindi.",
+    "passwordsMismatch": "Amagambobanga ntahuye.",
+    "otpInvalid": "Andika kode y'imibare 6.",
+    "recoveryCodeInvalid": "Kode zo kugarura konti zigizwe n'inyuguti n'imibare 10, nka ABCDE-23456.",
+    "nameTooShort": "Andika amazina yawe yombi.",
+    "nameTooLong": "Koresha inyuguti 120 cyangwa munsi yazo.",
+    "privacyRequired": "Emeza ko wasomye itangazo ryerekeye ubuzima bwite.",
+    "rolesRequired": "Hitamo nibura inshingano imwe."
+  },
+  "errors": {
+    "unexpected": "Habaye ikibazo. Ongera ugerageze.",
+    "validation": "Kosora ibice byagaragajwe.",
+    "unauthenticated": "Igihe cyawe cyarangiye. Ongera winjire.",
+    "invalidCredentials": "Imeyili cyangwa ijambobanga si byo.",
+    "invalidPassword": "Ijambobanga si ryo.",
+    "accountLocked": "Wagerageje inshuro nyinshi binanirana. Ongera ugerageze mu minota {minutes}, cyangwa uhindure ijambobanga.",
+    "rateLimited": "Wagerageje inshuro nyinshi. Tegereza amasegonda {seconds} wongere ugerageze.",
+    "duplicateAccount": "Hari konti isanzwe ifite aya makuru.",
+    "emailTaken": "Hari konti isanzwe ikoresha iyi imeyili. Injira cyangwa uhindure ijambobanga.",
+    "phoneTaken": "Indi konti isanzwe ikoresha iyi nimero ya telefoni.",
+    "codeInvalid": "Iyo kode si yo. Yigenzure wongere ugerageze.",
+    "codeExpired": "Iyo kode yarengeje igihe. Saba indi nshya.",
+    "tooManyAttempts": "Kode zitari zo zabaye nyinshi. Ongera utangire.",
+    "resendCooldown": "Tegereza amasegonda {seconds} mbere yo gusaba indi kode.",
+    "alreadyVerified": "Byari bisanzwe byemejwe.",
+    "phoneMissing": "Banza wongereho nimero ya telefoni.",
+    "phoneNotVerified": "Banza wemeze nimero ya telefoni yawe.",
+    "challengeExpired": "Iki gikorwa cyo kwinjira cyarangiye. Ongera winjire.",
+    "methodNotEnabled": "Ubwo buryo ntibushyizweho.",
+    "methodAlreadyEnabled": "Ubwo buryo busanzwe bushyizweho.",
+    "enrolmentExpired": "Igihe cyo gushyiraho cyarangiye. Ongera utangire.",
+    "mfaRequiredForRole": "Inshingano zawe zisaba nibura uburyo bumwe bw'intambwe ebyiri.",
+    "reauthRequired": "Emeza ijambobanga ryawe kugira ngo ukomeze.",
+    "reauthWithGoogle": "Ongera winjire ukoresheje Google kugira ngo wemeze ko ari wowe.",
+    "disableSmsFirst": "Banza ukureho igenzura rikoresha SMS mbere yo guhindura nimero yawe.",
+    "cannotRevokeCurrent": "Koresha Sohoka kugira ngo urangize iki gikorwa.",
+    "cannotUnlinkOnlyMethod": "Shyiraho ijambobanga mbere yo gutandukanya Google, bitabaye ibyo ntuzashobora kwinjira.",
+    "googleNotLinked": "Nta konti ya Google ihujwe.",
+    "googleAccountExists": "Hari konti isanzwe ikoresha iyi imeyili. Injira ukoresheje ijambobanga ryawe, hanyuma uhuze Google mu Igenamiterere ry'umutekano.",
+    "googleEmailUnverified": "Imeyili yawe ya Google ntiremezwa.",
+    "googleLinkedElsewhere": "Iyi konti ya Google ihujwe n'indi konti y'uru rubuga.",
+    "googleAlreadyLinked": "Hari konti ya Google isanzwe ihujwe.",
+    "accountDisabled": "Iyi konti yahagaritswe. Vugana n'Urugaga niba ubona ko ari amakosa.",
+    "forbidden": "Nta burenganzira ufite bwo gukora ibyo.",
+    "mfaRequiredForAction": "Fungura igenzura ry'intambwe ebyiri mbere yo gucunga uburenganzira.",
+    "cannotEditOwnAccess": "Ntushobora guhindura uburenganzira bwawe bwite. Saba undi muyobozi.",
+    "userNotFound": "Iyo konti ntikibaho.",
+    "staffRoleOnOrganisation": "Inshingano z'abakozi ntizishobora guhabwa konti z'ibigo.",
+    "lastAdmin": "Hagomba gusigara nibura umuyobozi wa sisitemu umwe ukora.",
+    "matrixInvalid": "Izi mpinduka zinyuranyije n'itegeko ry'uburenganzira. Suzuma ibice byagaragajwe."
+  },
+  "notifications": {
+    "emailVerify": {
+      "subject": "Kode yawe yo kwemeza kuri REBP Portal: {code}",
+      "body": "Muraho {name},\n\nKode yawe yo kwemeza imeyili ni {code}. Izarangira mu minota 10.\n\nNiba atari wowe wafunguye konti, ushobora kwirengagiza iyi imeyili."
+    },
+    "phoneVerify": {
+      "subject": "Kwemeza REBP",
+      "body": "REBP Portal: kode yawe yo kwemeza telefoni ni {code}. Izarangira mu minota 10."
+    },
+    "mfaLoginCode": {
+      "subject": "Kode yawe yo kwinjira kuri REBP Portal: {code}",
+      "body": "REBP Portal: kode yawe yo kwinjira ni {code}. Ntuyihe undi muntu. Niba atari wowe, hindura ijambobanga ryawe."
+    },
+    "mfaEnrolCode": {
+      "subject": "Emeza igenzura ry'intambwe ebyiri: {code}",
+      "body": "REBP Portal: kode yawe yo gufungura igenzura ry'intambwe ebyiri ni {code}."
+    },
+    "passwordReset": {
+      "subject": "Hindura ijambobanga ryawe rya REBP Portal",
+      "body": "Muraho {name},\n\nKode yawe yo guhindura ijambobanga ni {code}. Izarangira mu minota 10.\n\nNiba atari wowe wasabye guhindura ijambobanga, ushobora kwirengagiza iyi imeyili — ijambobanga ryawe ntirihinduka."
+    },
+    "passwordChanged": {
+      "subject": "Ijambobanga ryawe rya REBP Portal ryahinduwe",
+      "body": "Muraho {name},\n\nIjambobanga rya konti yawe ya REBP Portal rimaze guhindurwa. Niba atari wowe, hindura ijambobanga ryawe ako kanya kandi uvugane n'ubufasha."
+    },
+    "mfaChanged": {
+      "subject": "Igenamiterere ry'igenzura ry'intambwe ebyiri ryahinduwe",
+      "body": "Muraho {name},\n\nIgenamiterere ry'igenzura ry'intambwe ebyiri kuri konti yawe ya REBP Portal ryahinduwe. Niba atari wowe, vugana n'ubufasha ako kanya."
+    },
+    "contactChanged": {
+      "subject": "Nimero yawe ya telefoni yahinduwe",
+      "body": "Muraho {name},\n\nNimero ya telefoni iri kuri konti yawe ya REBP Portal yahinduwe. Niba atari wowe, vugana n'ubufasha ako kanya."
+    },
+    "accessChanged": {
+      "subject": "Uburenganzira bwawe kuri REBP Portal bwahinduwe",
+      "body": "Muraho {name},\n\nUmuyobozi yahinduye inshingano kuri konti yawe ya REBP Portal. Injira urebe ibyo ushobora gukora ubu (Igenamiterere → Uburenganzira bwanjye). Niba utari ubyiteze, vugana n'Urugaga."
+    }
+  },
+  "footer": {
+    "rights": "© {year} Urugaga rw'Abakora Umwuga w'Ubukomisiyoneri bw'Imitungo Itimukanwa",
+    "privacy": "Ubuzima bwite",
+    "accessibility": "Uburyo bworohereza bose",
+    "contact": "Twandikire",
+    "navLabel": "Hasi ku rupapuro"
+  },
+  "devMode": {
+    "codeLabel": "Uburyo bw'iterambere · kode y'igerageza",
+    "useCode": "Koresha kode",
+    "banner": "Uburyo bw'iterambere: nta imeyili cyangwa SMS byoherezwa — kode zo kwemeza zigaragara kuri ecran.",
+    "chip": "Uburyo bw'iterambere"
+  },
+  "roleInfo": {
+    "APPLICANT": "Asaba, avugurura kandi akurikirana impushya.",
+    "SUPERVISOR": "Yemeza ko agenzura abandi bakomisiyoneri.",
+    "PRINCIPAL_BROKER": "Ayobora ikigo: urutonde rw'abakozi, abakorana na cyo n'inyandiko z'ikigo.",
+    "FIRM_ADMIN": "Acunga abakozi n'inyandiko by'ikigo.",
+    "REVIEWING_OFFICER": "Asuzuma ubusabe kandi akagenzura ibimenyetso (Igice L).",
+    "APPROVING_AUTHORITY": "Afata icyemezo ku busabe no ku kwamburwa impushya (Igice M).",
+    "REGISTRAR": "Abungabunga igitabo rusange cyemewe.",
+    "FINANCE_OFFICER": "Acunga amafaranga y'iyandikisha, ubwishyu n'isubizwa ry'amafaranga.",
+    "SYSTEM_ADMIN": "Atunganya urubuga kandi agacunga uburenganzira.",
+    "AUDITOR": "Agenzura mu bwigenge inyandiko n'uburenganzira."
+  },
+  "capabilityGroups": {
+    "applications": "Ubusabe n'ibigo",
+    "review": "Isuzuma n'ibyemezo",
+    "register": "Igitabo rusange",
+    "payments": "Ubwishyu",
+    "administration": "Ubuyobozi",
+    "oversight": "Igenzura"
+  },
+  "capabilities": {
+    "application_edit": {
+      "label": "Gukora no guhindura ubusabe",
+      "description": "Gutangira, kuzuza no kohereza ubusabe (abakozi: gufasha abasaba kuzuza)."
+    },
+    "application_view": {
+      "label": "Kureba ubusabe",
+      "description": "Kureba ibisobanuro by'ubusabe biri mu bubasha bwabo."
+    },
+    "confirmation_decide": {
+      "label": "Kwemeza igenzura",
+      "description": "Kwemera cyangwa kwanga ubusabe bwo kugenzura no gukorana."
+    },
+    "confirmation_override": {
+      "label": "Gusimbura ibyemezo",
+      "description": "Kwandika icyemezo mu izina ry'undi, hatanzwe impamvu."
+    },
+    "review_perform": {
+      "label": "Gusuzuma ubusabe",
+      "description": "Gukora isuzuma ry'ubutegetsi ryo mu Gice L."
+    },
+    "review_view": {
+      "label": "Kureba amasuzuma",
+      "description": "Gusoma amasuzuma yarangiye yo mu Gice L."
+    },
+    "decision_make": {
+      "label": "Gufata ibyemezo ku busabe",
+      "description": "Kwandika icyemezo cyo gutanga uruhushya cyo mu Gice M."
+    },
+    "decision_view": {
+      "label": "Kureba ibyemezo",
+      "description": "Gusoma ibyemezo n'amabaruwa byo mu Gice M."
+    },
+    "register_administer": {
+      "label": "Gucunga igitabo",
+      "description": "Guhagarika, gukuraho ihagarikwa no gukosora ibyanditswe mu gitabo."
+    },
+    "register_revoke": {
+      "label": "Kwambura impushya",
+      "description": "Kwemeza ko uruhushya rwamburwa."
+    },
+    "payments_pay": {
+      "label": "Kwishyura amafaranga",
+      "description": "Kwishyura kuri interineti amafaranga y'ubusabe n'ay'uruhushya."
+    },
+    "payments_manage": {
+      "label": "Gucunga ubwishyu",
+      "description": "Guhuza konti, gusubiza no gusonera amafaranga."
+    },
+    "payments_view": {
+      "label": "Kureba ubwishyu",
+      "description": "Kureba aho ubwishyu bugeze n'inyemezabwishyu."
+    },
+    "config_edit": {
+      "label": "Gutanga igitekerezo cy'igenamiterere",
+      "description": "Gutegura impinduka ku mafaranga, amategeko n'ibyitegererezo."
+    },
+    "config_approve": {
+      "label": "Kwemeza igenamiterere",
+      "description": "Kwemeza impinduka z'igenamiterere (ugenzura)."
+    },
+    "users_manage": {
+      "label": "Gucunga abantu",
+      "description": "Gutanga no gukuraho inshingano, guhagarika konti."
+    },
+    "roles_manage": {
+      "label": "Gucunga uburenganzira",
+      "description": "Guhindura ibyo buri nshingano yemerewe gukora."
+    },
+    "access_view": {
+      "label": "Kureba uburenganzira",
+      "description": "Kureba ufite inshingano n'uburenganzira runaka."
+    },
+    "firmRoles_manage": {
+      "label": "Gucunga inshingano z'ikigo",
+      "description": "Gucunga urutonde rw'abakozi b'ikigo n'inshingano zabo."
+    },
+    "audit_view": {
+      "label": "Kureba amateka y'ibikorwa",
+      "description": "Gusoma amateka y'ibikorwa adashobora guhindurwa rwihishwa."
+    },
+    "audit_export": {
+      "label": "Kohereza hanze amateka y'ibikorwa",
+      "description": "Kohereza hanze inyandiko z'amateka y'ibikorwa zo gukora iperereza."
+    },
+    "reports_view": {
+      "label": "Kureba raporo",
+      "description": "Imbonerahamwe na raporo biri mu bubasha bwabo."
+    },
+    "backoffice_access": {
+      "label": "Kwinjira mu biro by'ubuyobozi",
+      "description": "Gukoresha urubuga rw'abakozi b'urwego rugenzura."
+    }
+  },
+  "access": {
+    "title": "Gucunga uburenganzira",
+    "subtitle": "Ushobora gukora iki ku rubuga — abantu, inshingano n'uburenganzira.",
+    "tabs": {
+      "people": "Abantu",
+      "roles": "Inshingano n'uburenganzira"
+    },
+    "readOnly": "Kureba gusa: inshingano zawe zigufasha kureba uburenganzira ariko ntizikwemerera kubuhindura.",
+    "people": {
+      "search": "Shakisha ukoresheje izina cyangwa imeyili",
+      "allRoles": "Inshingano zose",
+      "statusLabel": "Imiterere",
+      "roleLabel": "Inshingano",
+      "status": {
+        "all": "Bose",
+        "active": "Bakora",
+        "disabled": "Bahagaritswe",
+        "noMfa": "Nta ntambwe ebyiri"
+      },
+      "count": "{count, plural, =0 {Nta muntu} one {Umuntu #} other {Abantu #}}",
+      "empty": "Nta muntu uhuye n'ibi byashunguwe.",
+      "clear": "Siba ibyashunguwe",
+      "lastSignIn": "Yinjiye bwa nyuma {date}",
+      "neverSignedIn": "Ntiyigeze yinjira",
+      "you": "Wowe",
+      "disabled": "Yahagaritswe",
+      "noMfa": "Nta ntambwe ebyiri",
+      "mfaOn": "Intambwe ebyiri zirakora",
+      "manage": "Cunga",
+      "view": "Reba",
+      "unverified": "Ntiyemejwe",
+      "page": "Urupapuro {page} kuri {count}",
+      "prev": "Ibibanza",
+      "next": "Ibikurikira",
+      "organisation": "Konti y'ikigo"
+    },
+    "manage": {
+      "title": "Cunga uburenganzira",
+      "rolesTitle": "Inshingano",
+      "rolesHint": "Kanda ku nshingano kugira ngo uyongere cyangwa uyikureho.",
+      "preview": "Ibyo ashobora gukora",
+      "gained": "{count} bishya",
+      "lost": "{count} byakuweho",
+      "save": "Bika inshingano",
+      "saved": "Inshingano za {name} zahinduwe.",
+      "undo": "Siba impinduka",
+      "selfNote": "Ntushobora guhindura uburenganzira bwawe bwite. Saba undi muyobozi.",
+      "statusTitle": "Imiterere ya konti",
+      "statusActive": "Irakora — ashobora kwinjira.",
+      "disable": "Hagarika konti",
+      "enable": "Ongera ufungure konti",
+      "disableReason": "Impamvu (si ngombwa)",
+      "disabledToast": "{name} yahagaritswe kandi yasohowe ahantu hose.",
+      "enabledToast": "{name} ashobora kongera kwinjira.",
+      "disabledSince": "Yahagaritswe {date}",
+      "warnings": {
+        "sodCombined": "Uyu muntu ashobora gusuzuma no gufata icyemezo ku busabe. Sisitemu iracyamubuza gufata icyemezo ku dosiye yasuzumye (BR-091).",
+        "mfaRequired": "Izi nshingano zisaba igenzura ry'intambwe ebyiri. Azasabwa kurishyiraho ubutaha ubwo azinjira.",
+        "staffOnOrganisation": "Inshingano z'abakozi ntizishobora guhabwa konti z'ibigo."
+      }
+    },
+    "matrix": {
+      "title": "Imbonerahamwe y'uburenganzira",
+      "subtitle": "Ibisanzwe biva ku Mugereka D wa SRS. Buri mpinduka igenzurwa hakurikijwe amategeko y'uburenganzira kandi ikandikwa.",
+      "search": "Shungura uburenganzira",
+      "changes": "{count, plural, one {Impinduka # itarabikwa} other {Impinduka # zitarabikwa}}",
+      "review": "Suzuma kandi ubike",
+      "discard": "Reka",
+      "resetDefaults": "Subiza ku bisanzwe",
+      "resetTitle": "Gusubiza uburenganzira bwose ku bisanzwe?",
+      "resetBody": "Buri nshingano isubira ku bisanzwe byo ku Mugereka D wa SRS. Bihita bikurikizwa.",
+      "saved": "{count, plural, one {Uburenganzira # bwahinduwe} other {Uburenganzira # bwahinduwe}}",
+      "resetDone": "Uburenganzira bwasubijwe ku bisanzwe.",
+      "modified": "Byahinduwe bivuye ku bisanzwe",
+      "locked": {
+        "required": "Buhora bukora — kubukuraho byabuza abayobozi kwinjira.",
+        "staffOnly": "Ni iby'abakozi gusa — izi nshingano ntizisaba igenzura ry'intambwe ebyiri."
+      },
+      "reviewTitle": "Suzuma impinduka",
+      "reviewBody": "Impinduka zihita zigera ku bantu bose bafite izo nshingano.",
+      "grant": "Tanga",
+      "revoke": "Ambura",
+      "chooseRole": "Inshingano",
+      "members": "{count, plural, =0 {Nta banyamuryango} one {Umunyamuryango #} other {Abanyamuryango #}}",
+      "permissionCount": "{count, plural, one {Uburenganzira #} other {Uburenganzira #}}",
+      "cellLabel": "{capability} kuri {role}",
+      "violations": {
+        "sod": "{role} ntishobora gusuzuma no gufata icyemezo ku busabe icyarimwe.",
+        "makerChecker": "{role} ntishobora gutanga igitekerezo no kwemeza igenamiterere icyarimwe.",
+        "required": "{role} igomba kugumana “{capability}”.",
+        "staffOnly": "“{capability}” ni iby'abakozi gusa kandi ntibishobora guhabwa {role}."
+      },
+      "legend": {
+        "granted": "Byatanzwe",
+        "denied": "Ntibyatanzwe",
+        "modified": "Byahinduwe",
+        "locked": "Bifunze"
+      },
+      "staffRole": "Abakozi",
+      "noMatches": "Nta burenganzira buhuye na “{query}”."
+    }
+  },
+  "myAccess": {
+    "title": "Uburenganzira bwanjye",
+    "subtitle": "Inshingano zawe n'ibyo zikwemerera gukora ku rubuga.",
+    "rolesTitle": "Inshingano zawe",
+    "canTitle": "Ibyo ushobora gukora",
+    "cannotTitle": "Ibitari mu nshingano zawe",
+    "count": "Uburenganzira {count} kuri {total}",
+    "mfa": "Inshingano zawe zisaba igenzura ry'intambwe ebyiri.",
+    "requestNote": "Ukeneye uburenganzira burenzeho? Saba umuyobozi wa sisitemu — buri mpinduka yandikwa mu mateka y'ibikorwa."
+  },
+  "ladder": {
+    "title": "Urwego rw'umwuga",
+    "marker": {
+      "current": "Wowe",
+      "recommended": "Gikunogeye",
+      "next": "Igikurikira"
+    },
+    "prepare": "Inyandiko zo gutegura",
+    "check": "Genzura niba nujuje ibisabwa",
+    "req": {
+      "education": "Amashuri",
+      "experienceShort": "Imyaka {years}",
+      "exam": "Ikizamini",
+      "licenceShort": "Uruhushya",
+      "supervised": "Agenzurwa",
+      "adult": "Afite imyaka 18 cyangwa irenga",
+      "training": "Icyemezo cy'amahugurwa yemewe",
+      "examFull": "Ikizamini cyo guhabwa uruhushya",
+      "experience": "Imyaka {years} yanditse ari {category}",
+      "licence": "Afite uruhushya rwa {category} rufite agaciro",
+      "supervisedFull": "Akorera ku mugenzuzi uzwi",
+      "firm": "Ikigo cyanditswe gifite Principal Broker",
+      "territory": "Agace k'ibikorwa gateganyijwe"
+    },
+    "education": {
+      "NONE": "Nta mashuri ntarengwa asabwa",
+      "A2": "Impamyabumenyi ya A2 cyangwa ihwanye na yo",
+      "A1_OR_HIGHER": "A1, A0 cyangwa impamyabumenyi y'icyiciro cya kabiri cya kaminuza bijyanye",
+      "REAL_ESTATE_DEGREE": "Impamyabumenyi mu by'imitungo itimukanwa, igenagaciro cyangwa imicungire y'imitungo"
+    }
+  },
+  "status": {
+    "application": {
+      "DRAFT": "Umushinga",
+      "PENDING_PAYMENT": "Bitegereje kwishyurwa",
+      "PENDING_CONFIRMATIONS": "Bitegereje kwemezwa",
+      "SUBMITTED": "Byoherejwe",
+      "UNDER_REVIEW": "Biri gusuzumwa",
+      "ACTION_REQUIRED": "Hari icyo usabwa",
+      "FURTHER_ASSESSMENT": "Isuzuma ryimbitse",
+      "PENDING_DECISION": "Bitegereje icyemezo",
+      "APPROVED": "Byemewe",
+      "APPROVED_WITH_CONDITIONS": "Byemewe bifite ibisabwa",
+      "DEFERRED": "Byasubitswe",
+      "REJECTED": "Byanzwe",
+      "LICENSE_ISSUED": "Uruhushya rwatanzwe",
+      "WITHDRAWN": "Byakuweho",
+      "EXPIRED_DRAFT": "Umushinga warengeje igihe"
+    },
+    "licence": {
+      "ACTIVE": "Rufite agaciro",
+      "EXPIRED": "Rwarangiye",
+      "LAPSED": "Rwataye agaciro",
+      "SUSPENDED": "Rwahagaritswe",
+      "REVOKED": "Rwambuwe",
+      "SURRENDERED": "Rwasubijwe",
+      "SUPERSEDED": "Rwasimbuwe"
+    },
+    "confirmation": {
+      "PENDING": "Bitegerejwe",
+      "CONFIRMED": "Byemejwe",
+      "DECLINED": "Byanzwe",
+      "EXPIRED": "Byarengeje igihe",
+      "CANCELLED": "Byahagaritswe"
+    }
+  },
+  "journey": {
+    "label": "Icyiciro: {stage}",
+    "stages": {
+      "draft": "Umushinga",
+      "payment": "Ubwishyu",
+      "confirmation": "Kwemeza",
+      "review": "Isuzuma",
+      "decision": "Icyemezo"
+    }
+  },
+  "eligibility": {
+    "documents": {
+      "nationalId": "Indangamuntu cyangwa pasiporo",
+      "photo": "Ifoto ngufi (passport)",
+      "education": "Impamyabumenyi",
+      "referralArrangement": "Amasezerano yo guhuza abakiriya",
+      "entryTraining": "Icyemezo cy'amahugurwa y'ibanze",
+      "supervisorConfirmation": "Icyemezo cy'umugenzuzi",
+      "professionalTraining": "Icyemezo cy'amahugurwa y'umwuga",
+      "reaExam": "Amanota y'ikizamini cya REA",
+      "experience": "Gihamya y'uburambe",
+      "advancedTraining": "Amahugurwa ya Broker yisumbuye",
+      "brokerExam": "Amanota y'ikizamini cya Broker",
+      "brokerLicence": "Uruhushya rwa Broker",
+      "firmAffiliation": "Ibaruwa yemeza gukorana n'ikigo",
+      "branchDetails": "Amakuru y'ishami",
+      "indemnityInsurance": "Ubwishingizi bw'uburyozwe",
+      "companyRegistration": "Icyemezo cy'iyandikwa ry'ikigo (RDB)",
+      "directorsList": "Abayobozi n'abanyamigabane",
+      "principalBroker": "Ishyirwaho rya Principal Broker",
+      "officeAddress": "Aderesi y'icyicaro cyanditswe"
+    },
+    "title": "Ese nujuje ibisabwa?",
+    "eyebrow": "Isuzuma ry'ibisabwa · umunota 1",
+    "metaDescription": "Subiza ibibazo bike umenye icyiciro cy'uruhushya rw'imitungo itimukanwa gikwiye n'inyandiko ugomba gutegura.",
+    "back": "Ikibazo kibanza",
+    "progress": "Ikibazo {step} kuri {total}",
+    "seeResult": "Reba igisubizo",
+    "fewer": "Umwaka umwe munsi",
+    "more": "Umwaka umwe hejuru",
+    "yearsUnit": "{count, plural, one {umwaka} other {imyaka}}",
+    "disclaimer": "Iri suzuma ni icyerekezo gusa. Ubusabe bwawe buzasuzumwa hakurikijwe amategeko yose igihe usaba.",
+    "shareText": "Nshobora gusaba nka {category}.",
+    "q": {
+      "who": "Ni nde usaba?",
+      "age": "Ese ufite imyaka 18 cyangwa irenga?",
+      "education": "Amashuri yawe yo hejuru?",
+      "licence": "Ese ubu ufite uruhushya?",
+      "years": "Imyaka umaze ukora nka {category}?"
+    },
+    "a": {
+      "individual": "Jyewe, ku giti cyanjye",
+      "firm": "Ikigo (cy'ubukomisiyoneri)",
+      "yes": "Yego",
+      "no": "Oya",
+      "noLicence": "Nta ruhushya mfite"
+    },
+    "educationLevels": {
+      "NONE": "Munsi ya A2",
+      "A2": "Impamyabumenyi ya A2",
+      "A1_OR_HIGHER": "A1, A0 cyangwa icyiciro cya kabiri cya kaminuza",
+      "REAL_ESTATE_DEGREE": "Impamyabumenyi mu mitungo itimukanwa cyangwa igenagaciro"
+    },
+    "result": {
+      "youCanApply": "Ushobora gusaba nka",
+      "notYet": "Ntiwujuje ibisabwa ubu",
+      "noneTitle": "Reka tugushakire inzira",
+      "towards": "Ugana kuri {category}",
+      "yearsOf": "Imyaka {years} kuri {required}",
+      "eligibleFor": "Ibyiciro wemerewe",
+      "prepare": "Inyandiko zo gutegura",
+      "start": "Fungura konti yanjye",
+      "share": "Sangiza",
+      "restart": "Ongera utangire",
+      "ladder": "Aho uhagaze"
+    }
+  },
+  "palette": {
+    "open": "Shakisha n'amabwiriza",
+    "placeholder": "Shakisha cyangwa ujye kuri…",
+    "results": "Ibisubizo",
+    "empty": "Nta kibonetse.",
+    "searchRegister": "Shakisha “{query}” mu gitabo",
+    "checkLicence": "Genzura uruhushya {query}",
+    "groups": {
+      "search": "Gushakisha",
+      "go": "Jya kuri",
+      "prefs": "Ibyo ukunda"
+    }
+  },
+  "licence": {
+    "expires": "Rurangira",
+    "sample": "Icyitegererezo"
+  },
+  "verify": {
+    "label": "Shakisha mu gitabo rusange",
+    "placeholder": "Izina cyangwa nimero y'uruhushya",
+    "submit": "Shakisha",
+    "scan": "Sikana kode ya QR y'uruhushya",
+    "scanTitle": "Sikana kode ya QR",
+    "scanBody": "Erekeza kamera yawe kuri kode iri ku cyemezo cy'uruhushya.",
+    "scanError": "Ntitwashoboye gufungura kamera. Andika nimero y'uruhushya aho."
+  },
+  "register": {
+    "title": "Igitabo rusange",
+    "subtitle": "Genzura ko umukomisiyoneri cyangwa ikigo gifite uruhushya.",
+    "metaDescription": "Shakisha abakomisiyoneri b'imitungo itimukanwa n'ibigo by'ubukomisiyoneri bifite uruhushya ukoresheje izina, nimero y'uruhushya cyangwa icyiciro.",
+    "filterCategory": "Shungura ukurikije icyiciro",
+    "filterStatus": "Shungura ukurikije imiterere",
+    "all": "Byose",
+    "emptyTitle": "Nta byanditswemo biraboneka",
+    "noResults": "Nta gihuye na “{query}”"
+  },
+  "check": {
+    "title": "Genzura uruhushya",
+    "subtitle": "Andika nimero y'uruhushya cyangwa usikane kode ya QR iri ku cyemezo.",
+    "metaDescription": "Menya mu masegonda make niba uruhushya rw'imitungo itimukanwa rufite agaciro.",
+    "resultTitle": "Uruhushya {number}",
+    "notFound": "Nta ruhushya rubonetse",
+    "notFoundBody": "Genzura nimero wongere ugerageze. Umukomisiyoneri udafite uruhushya rufite agaciro ntiyemerewe gutanga serivisi z'ubukomisiyoneri.",
+    "checkedAt": "Byagenzuwe {time}"
+  },
+  "backoffice": {
+    "kpis": "Imibare y'ingenzi",
+    "accounts": "Konti",
+    "newThisWeek": "+{count} muri iki cyumweru",
+    "sessions": "Abinjiye ubu",
+    "sessionsHint": "Binjiye muri aka kanya",
+    "twoStep": "Intambwe ebyiri zirakora",
+    "twoStepHint": "Konti {count} zirinzwe",
+    "events": "Ibikorwa byanditswe",
+    "eventsUnit": "ibikorwa",
+    "last14": "Iminsi 14 ishize",
+    "activityTitle": "Ibikorwa",
+    "byRole": "Abantu ukurikije inshingano",
+    "consoles": "Ibice by'ubuyobozi"
+  },
+  "offline": {
+    "title": "Nta interineti ufite",
+    "body": "Genzura umuyoboro wawe. Ibyo wabitse byose birinzwe kandi uzabisanga nugaruka."
+  },
+  "design": {
+    "title": "Uburyo bw'imiterere",
+    "colours": "Amabara",
+    "buttons": "Utubuto",
+    "status": "Amabara y'imiterere",
+    "data": "Ibishushanyo by'imibare"
+  },
+  "auditActions": {
+    "auth_signin": "Yinjiye",
+    "auth_signout": "Yasohotse",
+    "auth_signin_failed": "Kwinjira byanze",
+    "auth_mfa_challenged": "Yasabwe kode y'intambwe ebyiri",
+    "auth_mfa_failed": "Kode y'intambwe ebyiri itari yo",
+    "auth_locked": "Konti yafunzwe nyuma yo kugerageza binanirana",
+    "auth_reauth_failed": "Kongera kwemeza umwirondoro byanze",
+    "auth_session_revoked": "Igikoresho cyasohowe",
+    "auth_sessions_revoked": "Yasohowe ahantu hose",
+    "account_created": "Konti yafunguwe",
+    "account_email_verified": "Imeyili yemejwe",
+    "account_phone_verified": "Telefoni yemejwe",
+    "account_phone_changed": "Nimero ya telefoni yahinduwe",
+    "auth_password_changed": "Ijambobanga ryahinduwe",
+    "auth_password_set": "Ijambobanga ryashyizweho",
+    "auth_password_reset": "Ijambobanga ryasubiwemo",
+    "auth_password_reset_requested": "Hasabwe guhindura ijambobanga",
+    "auth_google_linked": "Kwinjira na Google byahujwe",
+    "auth_google_unlinked": "Kwinjira na Google byakuweho",
+    "mfa_enabled": "Igenzura ry'intambwe ebyiri ryafunguwe",
+    "mfa_disabled": "Igenzura ry'intambwe ebyiri ryafunzwe",
+    "mfa_preferred_changed": "Uburyo bw'intambwe ebyiri bukunzwe bwahinduwe",
+    "mfa_recovery_codes_regenerated": "Kode nshya zo kugarura konti",
+    "access_roles_changed": "Inshingano zahinduwe",
+    "access_permissions_changed": "Uburenganzira bwahinduwe",
+    "access_permissions_reset": "Uburenganzira bwasubijwe ku bisanzwe",
+    "access_account_disabled": "Konti yahagaritswe",
+    "access_account_enabled": "Konti yongeye gufungurwa"
+  },
+  "time": {
+    "justNow": "Ubu nyine",
+    "minutes": "Hashize iminota {count}",
+    "hours": "Hashize amasaha {count}",
+    "days": "Hashize {count, plural, one {umunsi #} other {iminsi #}}"
   }
 }

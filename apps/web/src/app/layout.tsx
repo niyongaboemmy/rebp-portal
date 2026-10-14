@@ -24,8 +24,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   // Matches --background in globals.css (ADR-009).
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fbf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0c0f13" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f8fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0f17" },
   ],
 };
 

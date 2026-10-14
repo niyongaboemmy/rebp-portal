@@ -8,7 +8,7 @@
 | [005](ADR-005-adapters.md)              | Adapter pattern for external systems, mocks in the pilot              | Accepted           |
 | [007](ADR-007-audit-trail.md)           | Append-only, hash-chained audit trail                                 | Accepted           |
 | [008](ADR-008-frontend-foundation.md)   | Design system, typography, i18n and responsiveness                    | Accepted (amended) |
-| [009](ADR-009-visual-language.md)       | Visual language: palette, Ink dark theme, motion, data graphics       | Proposed           |
+| [009](ADR-009-visual-language.md)       | Visual language: navy palette (v2), Ink dark theme, motion, graphics  | Proposed           |
 | [010](ADR-010-public-locale-routing.md) | Locale-prefixed URLs and hreflang for public pages                    | Proposed           |
 
 ADR-003 (state machines) and ADR-006 (register projection) are written when those modules start (D2–D4).

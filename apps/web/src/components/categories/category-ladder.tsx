@@ -97,7 +97,7 @@ export function CategoryLadder({
                       onClick={() => setOpen(code)}
                       aria-haspopup="dialog"
                       className={cn(
-                        "group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left raised transition-[transform,border-color] duration-(--dur-2) ease-standard outline-none hover:-translate-y-0.5 hover:border-primary/40 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.98]",
+                        "group spotlight flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left raised transition-[transform,border-color] duration-(--dur-2) ease-standard outline-none hover:-translate-y-0.5 hover:border-primary/40 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.98]",
                         marker?.kind === "current" && "border-primary ring-2 ring-primary/25",
                         marker?.kind === "recommended" && "border-success ring-2 ring-success/25",
                       )}

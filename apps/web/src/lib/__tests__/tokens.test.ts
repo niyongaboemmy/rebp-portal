@@ -93,3 +93,23 @@ describe("dark theme background", () => {
     expect(l).toBeLessThan(0.2);
   });
 });
+
+describe("brand (ADR-009 v2)", () => {
+  it("uses the client's navy #010080 as the light primary", () => {
+    expect(resolveToken(light, "primary")).toBe("oklch(0.272 0.188 264.4)");
+    expect(resolveToken(light, "brand")).toBe(resolveToken(light, "primary"));
+  });
+
+  it("keeps white text ≥ 7:1 on every stop of the brand surface", () => {
+    const start = css.indexOf("@utility bg-brand {");
+    const body = css.slice(start, css.indexOf("\n}", start));
+    const stops = [...body.matchAll(/oklch\(([\d.]+) ([\d.]+) ([\d.]+)/g)].map(
+      (m) => `oklch(${m[1]} ${m[2]} ${m[3]})`,
+    );
+    const white = "oklch(0.99 0.005 265)";
+    expect(stops.length).toBeGreaterThanOrEqual(3);
+    for (const stop of stops.filter((s) => s !== white)) {
+      expect(contrastRatio(white, stop), stop).toBeGreaterThanOrEqual(7);
+    }
+  });
+});

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  */
 export function chipClassName(selected: boolean, className?: string) {
   return cn(
-    "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium whitespace-nowrap transition-[background-color,color,border-color,transform] duration-(--dur-2) outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.96] [&_svg]:size-4",
+    "inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium whitespace-nowrap transition-[background-color,color,border-color,transform] duration-(--dur-2) outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.96] sm:h-9 [&_svg]:size-4",
     selected
       ? "border-transparent bg-foreground text-background"
       : "bg-card text-muted-foreground hover:border-input hover:text-foreground",

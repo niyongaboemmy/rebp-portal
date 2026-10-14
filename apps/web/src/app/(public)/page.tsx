@@ -1,31 +1,20 @@
-import {
-  ArrowRight,
-  BadgeCheck,
-  CreditCard,
-  FileText,
-  Languages,
-  Lock,
-  Timer,
-  UserPlus,
-} from "lucide-react";
+import { ArrowRight, BadgeCheck, Check, Languages, Lock, ScanLine, Timer } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { CATEGORY_INFO } from "@rebp/contracts";
 import { CategoryLadder } from "@/components/categories/category-ladder";
+import { ProgressRing } from "@/components/data/progress-ring";
+import { JourneyDiagram } from "@/components/landing/journey-diagram";
 import { LicenceCard } from "@/components/licence/licence-card";
+import { HeroScene } from "@/components/motion/hero-scene";
+import { parallaxStyle } from "@/components/motion/parallax";
+import { SketchUnderline } from "@/components/motion/sketch-underline";
 import { Reveal } from "@/components/motion/reveal";
 import { VerifySearch } from "@/components/register/verify-search";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import { publicPageMetadata, siteUrl } from "@/server/seo";
-
-const STEPS = [
-  { key: "account", icon: UserPlus },
-  { key: "apply", icon: FileText },
-  { key: "pay", icon: CreditCard },
-  { key: "license", icon: BadgeCheck },
-] as const;
 
 const TRUST = [
   { key: "secure", icon: Lock },
@@ -85,6 +74,7 @@ export default async function LandingPage() {
             >
               {t("landing.title")}
             </h1>
+            <SketchUnderline className="-mt-3" />
             <p
               className="max-w-xl animate-rise text-lg text-muted-foreground"
               style={{ animationDelay: "120ms" }}
@@ -106,52 +96,77 @@ export default async function LandingPage() {
             </div>
           </div>
 
-          <div
-            className="relative mx-auto w-full max-w-md animate-pop lg:max-w-none"
-            style={{ animationDelay: "200ms" }}
-          >
+          {/* Layered hero scene: the licence and three floating status chips, with pointer parallax. */}
+          <HeroScene className="mx-auto w-full max-w-md animate-pop px-4 py-8 [animation-delay:200ms] lg:max-w-none">
             <div
               aria-hidden
-              className="absolute -inset-6 -z-10 rounded-[3rem] bg-primary/10 blur-3xl"
+              className="absolute inset-4 -z-10 rounded-[3rem] bg-primary/15 blur-3xl"
             />
-            <LicenceCard
-              holder="Aline Uwase"
-              categoryName={t(`categories.items.FSLA.name`)}
-              section={CATEGORY_INFO.FSLA.section}
-              licenceNo="RL-2026-000123"
-              statusLabel={t("status.licence.ACTIVE")}
-              expiryLabel={t("licence.expires")}
-              expiry={format.dateTime(new Date("2027-10-14"), { dateStyle: "medium" })}
-              verifyUrl={`${base}/check/SAMPLE`}
-              sampleLabel={t("licence.sample")}
-            />
-          </div>
+            <div style={parallaxStyle(8)}>
+              <LicenceCard
+                holder="Aline Uwase"
+                categoryName={t(`categories.items.FSLA.name`)}
+                section={CATEGORY_INFO.FSLA.section}
+                licenceNo="RL-2026-000123"
+                statusLabel={t("status.licence.ACTIVE")}
+                expiryLabel={t("licence.expires")}
+                expiry={format.dateTime(new Date("2027-10-14"), { dateStyle: "medium" })}
+                verifyUrl={`${base}/check/SAMPLE`}
+                sampleLabel={t("licence.sample")}
+                scanBeam
+              />
+            </div>
+            <div
+              aria-hidden
+              className="absolute -top-1 left-0 sm:-left-4"
+              style={parallaxStyle(-14)}
+            >
+              <span className="flex animate-float items-center gap-2 rounded-2xl border bg-card/90 px-3 py-2 text-sm font-semibold shadow-3 backdrop-blur">
+                <span className="inline-flex size-7 items-center justify-center rounded-lg bg-success-soft text-success">
+                  <ScanLine className="size-4" />
+                </span>
+                {t("landing.scene.verified")}
+              </span>
+            </div>
+            <div
+              aria-hidden
+              className="absolute right-0 -bottom-9 sm:-right-4 sm:-bottom-2"
+              style={parallaxStyle(-20)}
+            >
+              <span className="flex animate-float items-center gap-3 rounded-2xl border bg-card/90 px-3 py-2 shadow-3 backdrop-blur [animation-delay:-2s]">
+                <ProgressRing value={1} total={1} tone="good" className="size-9" thickness={4}>
+                  <Check className="size-4 text-success" strokeWidth={3} />
+                </ProgressRing>
+                <span className="flex flex-col leading-tight">
+                  <span className="text-sm font-semibold">
+                    {t("status.application.LICENSE_ISSUED")}
+                  </span>
+                  <span className="text-xs text-muted-foreground">{t("landing.scene.time")}</span>
+                </span>
+              </span>
+            </div>
+            <div
+              aria-hidden
+              className="absolute -bottom-6 left-6 hidden sm:block"
+              style={parallaxStyle(-10)}
+            >
+              <span className="flex animate-float items-center gap-2 rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold shadow-3 backdrop-blur [animation-delay:-4s]">
+                <span className="size-2 animate-pulse rounded-full bg-sun" />
+                {t("landing.scene.languages")}
+              </span>
+            </div>
+          </HeroScene>
         </div>
       </section>
 
-      {/* How it works: four icons joined by a line that draws in. Titles only. */}
+      {/* How it works: an interactive, auto-playing diagram of the four steps. */}
       <section className="border-y bg-card" aria-labelledby="steps-title">
-        <div className="container-page flex flex-col gap-8 py-14">
-          <h2 id="steps-title">{t("landing.stepsTitle")}</h2>
-          <ol className="relative grid gap-6 sm:grid-cols-4">
-            <span
-              aria-hidden
-              className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-0.5 origin-left animate-[meter-in_1.2s_var(--ease-enter)_both] bg-gradient-to-r from-primary via-sky to-sun sm:block"
-            />
-            {STEPS.map(({ key, icon: Icon }, index) => (
-              <Reveal key={key} stagger={index}>
-                <li className="relative flex items-center gap-4 sm:flex-col sm:text-center">
-                  <span className="relative inline-flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft">
-                    <Icon className="size-5" aria-hidden />
-                    <span className="absolute -top-1.5 -right-1.5 inline-flex size-5 items-center justify-center rounded-full bg-sun text-[0.65rem] font-bold num text-sun-foreground">
-                      {index + 1}
-                    </span>
-                  </span>
-                  <span className="text-base font-semibold">{t(`landing.steps.${key}.title`)}</span>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
+        <div className="container-page flex flex-col gap-8 py-14 sm:py-20">
+          <div className="flex flex-col gap-2">
+            <h2 id="steps-title">{t("landing.stepsTitle")}</h2>
+            <SketchUnderline className="h-2.5 w-32 sm:h-3 sm:w-40" />
+          </div>
+          <JourneyDiagram />
         </div>
       </section>
 
@@ -168,7 +183,7 @@ export default async function LandingPage() {
         <ul className="grid gap-3 sm:grid-cols-3">
           {TRUST.map(({ key, icon: Icon }, index) => (
             <Reveal key={key} stagger={index}>
-              <li className="flex items-center gap-3 rounded-2xl bg-surface-2 p-4 text-sm font-medium">
+              <li className="spotlight flex items-center gap-3 rounded-2xl bg-surface-2 p-4 text-sm font-medium">
                 <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-card text-primary raised">
                   <Icon className="size-5" aria-hidden />
                 </span>

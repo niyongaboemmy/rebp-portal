@@ -185,7 +185,7 @@ export function TwoStepForm({
       />
       <Field label={t("code")} error={code.form.formState.errors.code?.message}>
         <FieldControl>
-          <OtpInput autoFocus {...code.form.register("code")} />
+          <OtpInput autoFocus webOtp={method === "SMS"} {...code.form.register("code")} />
         </FieldControl>
       </Field>
       <Button type="submit" size="lg" loading={code.pending}>

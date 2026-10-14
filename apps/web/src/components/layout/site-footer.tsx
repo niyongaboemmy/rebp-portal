@@ -41,6 +41,8 @@ export async function SiteFooter() {
             <Link
               key={code}
               href={localisedPath(code, "/") as Route}
+              // A language link is a choice, never something to fetch ahead of a click.
+              prefetch={false}
               hrefLang={code}
               lang={code}
               aria-current={code === locale ? "true" : undefined}

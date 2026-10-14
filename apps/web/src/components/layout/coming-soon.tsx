@@ -21,6 +21,7 @@ export async function ComingSoon({
     <EmptyState
       icon={icon}
       art={art}
+      headingLevel={1}
       title={title}
       description={description}
       action={

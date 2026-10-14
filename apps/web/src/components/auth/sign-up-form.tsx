@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldControl } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { PasswordInput, PasswordStrength } from "@/components/ui/password-input";
+import { PasswordChecklist, PasswordInput, PasswordStrength } from "@/components/ui/password-input";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useErrorMessage } from "@/hooks/use-error-message";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ export function SignUpForm() {
   const { errors } = form.formState;
   const accountType = form.watch("accountType");
   const password = form.watch("password");
+  const confirmPassword = form.watch("confirmPassword");
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
@@ -104,9 +105,25 @@ export function SignUpForm() {
           </FieldControl>
         </Field>
         <Field label={t("phone")} error={errors.phone?.message} description={t("phoneHint")}>
-          <FieldControl>
-            <Input type="tel" autoComplete="tel" inputMode="tel" {...form.register("phone")} />
-          </FieldControl>
+          {/* W-02: Rwanda cue; local (078…) and international (+250…) formats both work. */}
+          <div className="relative">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 rounded-md bg-muted px-1.5 py-0.5 text-xs font-bold text-muted-foreground"
+            >
+              RW
+            </span>
+            <FieldControl>
+              <Input
+                type="tel"
+                autoComplete="tel"
+                inputMode="tel"
+                placeholder="078 123 4567"
+                className="pl-12"
+                {...form.register("phone")}
+              />
+            </FieldControl>
+          </div>
         </Field>
       </div>
       <Field label={t("password")} error={errors.password?.message} description={t("passwordHint")}>
@@ -120,6 +137,7 @@ export function SignUpForm() {
           <PasswordInput autoComplete="new-password" {...form.register("confirmPassword")} />
         </FieldControl>
       </Field>
+      <PasswordChecklist password={password} confirm={confirmPassword} />
 
       <div className="flex flex-col gap-2">
         <div className="flex items-start gap-3">

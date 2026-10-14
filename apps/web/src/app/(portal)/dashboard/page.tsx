@@ -3,15 +3,10 @@ import {
   Check,
   FilePlus2,
   History,
-  KeyRound,
-  LogIn,
-  LogOut,
   Mail,
   ShieldCheck,
   Smartphone,
-  UserPlus,
   Wallet,
-  type LucideIcon,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,7 +14,10 @@ import type { Route } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { JOURNEY_STAGES } from "@rebp/contracts";
 import { ProgressRing } from "@/components/data/progress-ring";
+import { TONE_SOFT_BG, TONE_TEXT } from "@/components/data/tones";
 import { Button } from "@/components/ui/button";
+import { AUDIT_ACTIONS, UNKNOWN_ACTION, actionLabelKey } from "@/config/audit-actions";
+import { relativeLabel } from "@/lib/relative-time";
 import { requireUser } from "@/server/auth/guards";
 import { db } from "@/server/db";
 import { cn } from "@/lib/utils";
@@ -28,18 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("nav"))("dashboard") };
 }
 
-/** Audit actions shown in the applicant's own activity feed (FR-AUD-005), with their icons. */
-const ACTIVITY_ICONS: Record<string, LucideIcon> = {
-  "account.created": UserPlus,
-  "account.phone_changed": Smartphone,
-  "auth.signin": LogIn,
-  "auth.signout": LogOut,
-  "auth.password_reset": KeyRound,
-  "mfa.enabled": ShieldCheck,
-  "mfa.disabled": ShieldCheck,
-  "mfa.recovery_codes_regenerated": KeyRound,
-  "auth.sessions_revoked": LogOut,
-};
+/** The applicant's own security-relevant events (FR-AUD-005); staff-only access changes excluded. */
+const FEED_ACTIONS = Object.keys(AUDIT_ACTIONS).filter(
+  (action) => !action.startsWith("access.") && action !== "auth.mfa_challenged",
+);
 
 /**
  * FR-PORTAL-001/004: the applicant's home. Everything is a graphic with one line of text:
@@ -48,11 +38,12 @@ const ACTIVITY_ICONS: Record<string, LucideIcon> = {
  */
 export default async function DashboardPage() {
   const { user } = await requireUser();
-  const [t, format, activity] = await Promise.all([
+  const [t, tTime, format, activity] = await Promise.all([
     getTranslations(),
+    getTranslations("time"),
     getFormatter(),
     db.auditEvent.findMany({
-      where: { actorId: user.id, action: { in: Object.keys(ACTIVITY_ICONS) } },
+      where: { actorId: user.id, action: { in: FEED_ACTIONS } },
       orderBy: { id: "desc" },
       take: 5,
       select: { id: true, action: true, occurredAt: true },
@@ -91,7 +82,7 @@ export default async function DashboardPage() {
         {/* Start: the journey every application follows, as five nodes. */}
         <section
           aria-labelledby="start-title"
-          className="relative isolate flex flex-col gap-6 overflow-hidden rounded-3xl p-5 bg-brand sm:p-7"
+          className="relative isolate flex flex-col gap-6 overflow-hidden rounded-3xl bg-brand p-5 sm:p-7"
         >
           <div
             aria-hidden
@@ -133,11 +124,7 @@ export default async function DashboardPage() {
             ))}
           </ol>
           <div className="flex flex-col gap-2 xs:flex-row">
-            <Button
-              asChild
-              size="lg"
-              className="bg-white text-[oklch(0.36_0.08_160)] hover:bg-white/90"
-            >
+            <Button asChild size="lg" className="bg-white text-brand hover:bg-white/90">
               <Link href="/applications">
                 {t("placeholders.applicationsCta")} <ArrowRight />
               </Link>
@@ -234,8 +221,9 @@ export default async function DashboardPage() {
           ) : (
             <ol className="flex flex-col">
               {activity.map((event, index) => {
-                const Icon = ACTIVITY_ICONS[event.action] ?? History;
-                const key = event.action.replace(".", "_");
+                const meta = AUDIT_ACTIONS[event.action] ?? UNKNOWN_ACTION;
+                const Icon = meta.icon;
+                const labelKey = actionLabelKey(event.action);
                 return (
                   <li key={String(event.id)} className="relative flex gap-3 pb-4 last:pb-0">
                     {index < activity.length - 1 && (
@@ -244,20 +232,26 @@ export default async function DashboardPage() {
                         className="absolute top-9 bottom-1 left-[1.0625rem] w-px bg-border"
                       />
                     )}
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-soft-foreground">
+                    <span
+                      className={cn(
+                        "inline-flex size-9 shrink-0 items-center justify-center rounded-full",
+                        TONE_SOFT_BG[meta.tone],
+                        TONE_TEXT[meta.tone],
+                      )}
+                    >
                       <Icon className="size-4" aria-hidden />
                     </span>
                     <div className="flex min-w-0 flex-col pt-1">
                       <span className="text-sm font-medium">
-                        {t.has(`activity.${key}`)
-                          ? t(`activity.${key}` as "activity.auth_signin")
-                          : event.action}
+                        {t.has(labelKey) ? t(labelKey as "auditActions.auth_signin") : event.action}
                       </span>
                       <time
                         dateTime={event.occurredAt.toISOString()}
                         className="text-xs text-muted-foreground"
                       >
-                        {format.relativeTime(event.occurredAt, now)}
+                        {relativeLabel(event.occurredAt, now, tTime, (d) =>
+                          format.dateTime(d, { dateStyle: "medium" }),
+                        )}
                       </time>
                     </div>
                   </li>

@@ -15,7 +15,7 @@ export async function PilotBanner() {
   const dev = isDevMode();
   if (dismissed && !dev) return null;
   return (
-    <div className="bg-accent text-accent-foreground">
+    <aside aria-label={t("common.notice")} className="bg-accent text-accent-foreground">
       <div className="container-page flex items-center gap-2 py-1">
         <p className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-x-4 gap-y-0.5 py-0.5 text-center text-xs font-medium">
           {!dismissed && (
@@ -36,6 +36,6 @@ export async function PilotBanner() {
         </p>
         {!dismissed && <DismissBanner label={t("common.dismiss")} />}
       </div>
-    </div>
+    </aside>
   );
 }

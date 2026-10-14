@@ -36,7 +36,8 @@
     "hidePassword": "Hide password",
     "pilotBanner": "Pilot release — sample data only. Fees and legal texts are placeholders pending approval.",
     "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body.",
-    "dismiss": "Dismiss"
+    "dismiss": "Dismiss",
+    "notice": "Notice"
   },
   "nav": {
     "home": "Home",
@@ -120,6 +121,15 @@
       "secure": "Two-step verification and encrypted records",
       "transparent": "Live status and expected timelines",
       "accessible": "Works on any phone, in English, Kinyarwanda and French"
+    },
+    "scene": {
+      "verified": "Verified in 2 seconds",
+      "time": "Just now",
+      "languages": "English · Ikinyarwanda · Français"
+    },
+    "journey": {
+      "pause": "Pause",
+      "play": "Play"
     }
   },
   "categories": {
@@ -285,7 +295,8 @@
       "allDone": "All set! Taking you to your dashboard…",
       "addPhone": "Add your mobile number",
       "addPhoneSubmit": "Send code",
-      "resent": "A new code is on its way."
+      "resent": "A new code is on its way.",
+      "progress": "{done} of {total} verified"
     },
     "forgot": {
       "title": "Reset your password",
@@ -316,6 +327,12 @@
       "googleLinkedElsewhere": "This Google account is linked to another portal account.",
       "googleAlreadyLinked": "A Google account is already linked.",
       "reauthRequired": "Please confirm your password first, then try again."
+    },
+    "checklist": {
+      "length": "{min}+ characters",
+      "match": "Passwords match",
+      "met": "Done",
+      "notMet": "Not yet"
     }
   },
   "dashboard": {
@@ -444,7 +461,8 @@
       "revokeOthers": "Sign out all other sessions",
       "revoked": "Session signed out.",
       "revokedOthers": "{count, plural, =0 {No other sessions} one {Signed out # session} other {Signed out # sessions}}",
-      "unknownDevice": "Unknown device"
+      "unknownDevice": "Unknown device",
+      "showAll": "Show all {count}"
     },
     "reauth": {
       "title": "Confirm it's you",
@@ -452,6 +470,23 @@
       "password": "Password",
       "submit": "Confirm",
       "googleHint": "Your account has no password. Sign out and sign in with Google again to make this change."
+    },
+    "protection": {
+      "score": "{done} of {total} protections on",
+      "body": "Tap an open item to fix it.",
+      "done": "Done",
+      "fix": "Fix",
+      "level": {
+        "strong": "Well protected",
+        "fair": "Almost there",
+        "weak": "At risk"
+      },
+      "checks": {
+        "email": "Email verified",
+        "phone": "Phone verified",
+        "twoStep": "Two-step verification",
+        "recovery": "Recovery codes ready"
+      }
     }
   },
   "audit": {
@@ -467,12 +502,39 @@
       "ip": "IP",
       "hash": "Hash"
     },
-    "empty": "No events recorded yet."
+    "empty": "No events recorded yet.",
+    "subtitleShort": "Every security and state change, tamper-evident.",
+    "chainIntact": "Chain intact",
+    "chainBrokenTitle": "Chain broken",
+    "hashChained": "SHA-256 hash chain",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "filter": "Filter events",
+    "all": "All",
+    "system": "System",
+    "older": "Older events",
+    "newest": "Newest",
+    "categories": {
+      "signin": "Sign-in",
+      "account": "Account",
+      "twoStep": "Two-step",
+      "access": "Access"
+    }
   },
   "privacy": {
     "title": "Privacy notice",
     "draft": "Draft text pending approval by the Professional Body's Legal & Compliance Officer.",
-    "body": "We collect the personal data needed to register and license real estate brokerage practitioners and firms, and to maintain the public register. We collect each item only when your category or application type requires it. Your data is encrypted, access is limited to staff with a need to know, and every access to sensitive records is logged. Only the fields listed in the register rules are ever published. You can request a copy of your data at any time."
+    "body": "We collect the personal data needed to register and license real estate brokerage practitioners and firms, and to maintain the public register. We collect each item only when your category or application type requires it. Your data is encrypted, access is limited to staff with a need to know, and every access to sensitive records is logged. Only the fields listed in the register rules are ever published. You can request a copy of your data at any time.",
+    "metaDescription": "How the portal collects, protects and publishes personal data.",
+    "highlightsLabel": "Our commitments",
+    "fullNotice": "Full notice",
+    "highlights": {
+      "minimal": "Only what your category needs",
+      "encrypted": "Your data is encrypted",
+      "access": "Need-to-know access, every view logged",
+      "published": "Only register fields are public",
+      "rights": "Ask for a copy of your data anytime"
+    }
   },
   "forbidden": {
     "title": "You don't have access to this page",
@@ -1033,17 +1095,6 @@
     "notFoundBody": "Check the number and try again. A practitioner without a valid licence must not offer brokerage services.",
     "checkedAt": "Checked {time}"
   },
-  "activity": {
-    "account_created": "Account created",
-    "account_phone_changed": "Phone number changed",
-    "auth_signin": "Signed in",
-    "auth_signout": "Signed out",
-    "auth_password_reset": "Password reset",
-    "mfa_enabled": "Two-step verification turned on",
-    "mfa_disabled": "Two-step verification turned off",
-    "mfa_recovery_codes_regenerated": "New recovery codes",
-    "auth_sessions_revoked": "Signed out everywhere"
-  },
   "backoffice": {
     "kpis": "Key figures",
     "accounts": "Accounts",
@@ -1069,5 +1120,41 @@
     "buttons": "Buttons",
     "status": "Status tones",
     "data": "Data graphics"
+  },
+  "auditActions": {
+    "auth_signin": "Signed in",
+    "auth_signout": "Signed out",
+    "auth_signin_failed": "Sign-in failed",
+    "auth_mfa_challenged": "Asked for a two-step code",
+    "auth_mfa_failed": "Wrong two-step code",
+    "auth_locked": "Account locked after failed attempts",
+    "auth_reauth_failed": "Identity re-check failed",
+    "auth_session_revoked": "Signed out a device",
+    "auth_sessions_revoked": "Signed out everywhere",
+    "account_created": "Account created",
+    "account_email_verified": "Email verified",
+    "account_phone_verified": "Phone verified",
+    "account_phone_changed": "Phone number changed",
+    "auth_password_changed": "Password changed",
+    "auth_password_set": "Password set",
+    "auth_password_reset": "Password reset",
+    "auth_password_reset_requested": "Password reset requested",
+    "auth_google_linked": "Google sign-in linked",
+    "auth_google_unlinked": "Google sign-in removed",
+    "mfa_enabled": "Two-step verification turned on",
+    "mfa_disabled": "Two-step verification turned off",
+    "mfa_preferred_changed": "Preferred two-step method changed",
+    "mfa_recovery_codes_regenerated": "New recovery codes",
+    "access_roles_changed": "Roles changed",
+    "access_permissions_changed": "Permissions changed",
+    "access_permissions_reset": "Permissions reset to default",
+    "access_account_disabled": "Account disabled",
+    "access_account_enabled": "Account re-enabled"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutes": "{count} min ago",
+    "hours": "{count} h ago",
+    "days": "{count, plural, one {# day} other {# days}} ago"
   }
 }

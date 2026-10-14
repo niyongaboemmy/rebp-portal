@@ -16,6 +16,16 @@ import {
 const PROTECTED_PREFIXES = ["/dashboard", "/applications", "/settings", "/backoffice", "/verify"];
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
+/** Router or browser prefetches (Next.js header, Fetch `Sec-Purpose`, legacy `Purpose`). */
+export function isPrefetch(request: NextRequest): boolean {
+  const h = request.headers;
+  return (
+    h.has("next-router-prefetch") ||
+    /prefetch/i.test(h.get("sec-purpose") ?? "") ||
+    /prefetch/i.test(h.get("purpose") ?? "")
+  );
+}
+
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const headers = new Headers(request.headers);
@@ -32,8 +42,11 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = path;
     const response = NextResponse.rewrite(url, { request: { headers } });
-    // An explicit language URL is a language choice: remember it (UX-003).
-    response.cookies.set(LOCALE_COOKIE, locale, { path: "/", maxAge: ONE_YEAR, sameSite: "lax" });
+    // Visiting a language URL is a language choice: remember it (UX-003). A prefetch is not a
+    // visit — Next prefetches links as they scroll into view, which must never switch language.
+    if (!isPrefetch(request)) {
+      response.cookies.set(LOCALE_COOKIE, locale, { path: "/", maxAge: ONE_YEAR, sameSite: "lax" });
+    }
     return response;
   }
 

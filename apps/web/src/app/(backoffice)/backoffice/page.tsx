@@ -159,7 +159,7 @@ export default async function BackofficeOverview() {
               <li key={slug} className="animate-rise" style={{ animationDelay: `${index * 40}ms` }}>
                 <Link
                   href={`/backoffice/${slug}`}
-                  className="group flex h-full flex-col gap-3 rounded-2xl border bg-card p-4 raised transition-[border-color,transform] duration-(--dur-2) hover:border-primary/40 active:scale-[0.98]"
+                  className="group spotlight flex h-full flex-col gap-3 rounded-2xl border bg-card p-4 raised transition-[border-color,transform] duration-(--dur-2) hover:border-primary/40 active:scale-[0.98]"
                 >
                   <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground transition-transform duration-(--dur-3) ease-spring group-hover:scale-110">
                     <Icon className="size-5" aria-hidden />

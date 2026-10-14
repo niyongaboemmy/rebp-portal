@@ -110,6 +110,8 @@ Keep these, because they are good:
 
 ### 4.1 Primary colour: "Imena Emerald", derived from Rwanda's flag green
 
+> **Superseded (v2, 2026-10-14):** the primary is now the client's navy `#010080`. See [ADR-009 amendment](adr/ADR-009-visual-language.md#amendment-v2-2026-10-14--navy-primary) and [UI_GAP_ANALYSIS_V2](UI_GAP_ANALYSIS_V2.md). The token tables below describe v1.
+
 **Recommendation:** a deep **emerald green** as the primary colour, with the other two flag colours as supporting roles. **Sky** (a darkened flag blue) is for information and links, and **Sun** (flag yellow) is for highlights and celebration.
 
 Why emerald:

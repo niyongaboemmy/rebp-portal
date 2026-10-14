@@ -22,7 +22,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
   const [t, format] = await Promise.all([getTranslations(), getFormatter()]);
   return (
     <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      <aside className="relative isolate hidden overflow-hidden p-10 bg-brand lg:flex lg:flex-col lg:justify-between">
+      <aside className="relative isolate hidden overflow-hidden bg-brand p-10 lg:flex lg:flex-col lg:justify-between">
         <div aria-hidden className="absolute inset-0 -z-10 bg-imigongo text-white opacity-[0.06]" />
         <Logo className="relative [&_span]:text-white" />
         <div className="relative flex max-w-md flex-col gap-8">

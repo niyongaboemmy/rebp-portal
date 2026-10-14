@@ -1,21 +1,33 @@
-import { ShieldAlert } from "lucide-react";
+import { KeyRound, LayoutDashboard, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorArt } from "@/components/ui/error-art";
 
 export default async function ForbiddenPage() {
-  const t = await getTranslations("forbidden");
+  const t = await getTranslations();
   return (
     <div className="container-page py-14">
       <EmptyState
         icon={ShieldAlert}
-        title={t("title")}
-        description={t("body")}
+        art={<ErrorArt code="403" />}
+        headingLevel={1}
+        title={t("forbidden.title")}
+        description={t("forbidden.body")}
         action={
-          <Button asChild>
-            <Link href="/dashboard">{t("cta")}</Link>
-          </Button>
+          <div className="flex flex-col gap-2 xs:flex-row">
+            <Button asChild>
+              <Link href="/dashboard">
+                <LayoutDashboard /> {t("forbidden.cta")}
+              </Link>
+            </Button>
+            <Button asChild variant="tonal">
+              <Link href="/settings/access">
+                <KeyRound /> {t("nav.myAccess")}
+              </Link>
+            </Button>
+          </div>
         }
       />
     </div>

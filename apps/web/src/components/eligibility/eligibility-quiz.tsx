@@ -207,7 +207,7 @@ function Option({
     <button
       type="button"
       onClick={onClick}
-      className="group flex min-h-16 w-full items-center gap-4 rounded-2xl border bg-card p-4 text-left text-base font-semibold raised transition-[transform,border-color,background-color] duration-(--dur-2) outline-none hover:border-primary/50 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.98] active:bg-primary-soft"
+      className="group spotlight flex min-h-16 w-full items-center gap-4 rounded-2xl border bg-card p-4 text-left text-base font-semibold raised transition-[transform,border-color,background-color] duration-(--dur-2) outline-none hover:border-primary/50 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.98] active:bg-primary-soft"
     >
       <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground transition-transform duration-(--dur-3) ease-spring group-hover:scale-110">
         <Icon className="size-5" aria-hidden />
@@ -299,7 +299,7 @@ function Result({ answers, onRestart }: { answers: PrecheckAnswers; onRestart: (
         <span
           className={cn(
             "inline-flex size-16 animate-pop items-center justify-center rounded-2xl",
-            recommended ? "bg-white/95 text-[oklch(0.4_0.1_160)]" : "bg-warning-soft text-warning",
+            recommended ? "bg-white/95 text-brand" : "bg-warning-soft text-warning",
           )}
         >
           <BadgeCheck className="size-8" aria-hidden />

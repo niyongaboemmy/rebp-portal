@@ -8,6 +8,8 @@ interface EmptyStateProps {
   action?: React.ReactNode;
   /** Optional illustration that replaces the icon medallion. */
   art?: React.ReactNode;
+  /** 1 when the empty state is the whole page (it then carries the page's <h1>). */
+  headingLevel?: 1 | 2;
   className?: string;
 }
 
@@ -21,8 +23,10 @@ export function EmptyState({
   description,
   action,
   art,
+  headingLevel = 2,
   className,
 }: EmptyStateProps) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <div
       className={cn(
@@ -45,7 +49,7 @@ export function EmptyState({
         </span>
       )}
       <div className="relative flex max-w-md flex-col gap-1.5">
-        <h2 className="text-xl">{title}</h2>
+        <Heading className="text-xl sm:text-2xl">{title}</Heading>
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
       {action && <div className="relative">{action}</div>}

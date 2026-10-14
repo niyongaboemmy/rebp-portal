@@ -50,7 +50,7 @@ export function ColumnChart({
               <span
                 className={cn(
                   "w-full max-w-6 origin-bottom animate-[bar-in_var(--dur-5)_var(--ease-enter)_both] rounded-t-[4px] transition-colors",
-                  active === i ? "bg-primary" : "bg-primary/55",
+                  active === i ? "bg-primary" : "bg-primary/80",
                   c.value === 0 && "bg-border",
                 )}
                 style={{

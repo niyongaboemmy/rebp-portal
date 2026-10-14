@@ -49,7 +49,7 @@ export function ContactCard({ email, phone }: ContactCardProps) {
     },
   ];
   return (
-    <Card>
+    <Card id="contact" className="scroll-mt-20">
       <CardHeader>
         <CardTitle>{t("security.contact.title")}</CardTitle>
         <CardDescription>{t("security.contact.description")}</CardDescription>

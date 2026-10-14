@@ -1,9 +1,9 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { estimatePasswordStrength } from "@rebp/contracts";
+import { estimatePasswordStrength, PASSWORD_MIN_LENGTH } from "@rebp/contracts";
 import { cn } from "@/lib/utils";
 import { Input } from "./input";
 
@@ -64,5 +64,55 @@ export function PasswordStrength({ password }: { password: string }) {
         {t(String(score) as "0")}
       </span>
     </div>
+  );
+}
+
+/**
+ * W-01: live password rules. Each rule ticks as it's met (spring check), so users see progress
+ * while typing rather than an error after submitting. The server still enforces the policy.
+ */
+export function PasswordChecklist({
+  password,
+  confirm,
+  minLength = PASSWORD_MIN_LENGTH,
+}: {
+  password: string;
+  confirm: string;
+  minLength?: number;
+}) {
+  const t = useTranslations("auth.checklist");
+  if (!password) return null;
+  const rules = [
+    { key: "length", ok: password.length >= minLength, label: t("length", { min: minLength }) },
+    { key: "match", ok: confirm.length > 0 && confirm === password, label: t("match") },
+  ];
+  return (
+    <ul className="flex flex-wrap gap-x-4 gap-y-1.5" aria-live="polite">
+      {rules.map((rule) => (
+        <li
+          key={rule.key}
+          className={cn(
+            "inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-(--dur-2)",
+            rule.ok ? "text-success" : "text-muted-foreground",
+          )}
+        >
+          <span
+            className={cn(
+              "inline-flex size-4 items-center justify-center rounded-full border transition-all duration-(--dur-3) ease-spring",
+              rule.ok
+                ? "scale-100 border-transparent bg-success text-card"
+                : "scale-90 border-input",
+            )}
+            aria-hidden
+          >
+            {rule.ok && <Check className="size-3" strokeWidth={3.5} />}
+          </span>
+          <span>
+            <span className="sr-only">{rule.ok ? t("met") : t("notMet")}: </span>
+            {rule.label}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }

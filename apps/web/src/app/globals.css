@@ -9,8 +9,9 @@
  * Every documented foreground/background pair is asserted ≥ 4.5:1 (text) or ≥ 3:1 (UI
  * boundaries) by src/lib/__tests__/tokens.test.ts (UX-002, WCAG 1.4.3 / 1.4.11).
  *
- * Palette: "Imena Emerald" primary (from the flag green), Sky for information (a darkened
- * flag blue), Sun for highlights (flag yellow). Neutrals are cool (hue ≈ 250).
+ * Palette (ADR-009, amended v2): the client's navy #010080 as primary — periwinkle of the same
+ * hue in dark mode — Sky for information, Sun for highlights, green reserved for "success".
+ * Neutrals are cool (hue ≈ 265).
  */
 :root {
   color-scheme: light;
@@ -18,19 +19,21 @@
   --header-h: 4rem;
   --bottom-nav-h: 0rem;
 
-  --background: oklch(0.985 0.004 160);
-  --foreground: oklch(0.21 0.02 250);
+  --background: oklch(0.985 0.004 265);
+  --foreground: oklch(0.2 0.03 265);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
-  --surface-2: oklch(0.97 0.006 250);
-  --surface-3: oklch(0.945 0.008 250);
+  --surface-2: oklch(0.97 0.007 265);
+  --surface-3: oklch(0.945 0.01 265);
 
-  --primary: oklch(0.47 0.11 160);
-  --primary-foreground: oklch(0.99 0.005 160);
-  --primary-soft: oklch(0.95 0.035 160);
-  --primary-soft-foreground: oklch(0.36 0.08 160);
+  /* Brand: the client's navy #010080. Text on primary ≥ 15:1. */
+  --brand: oklch(0.272 0.188 264.4);
+  --primary: oklch(0.272 0.188 264.4);
+  --primary-foreground: oklch(0.99 0.005 265);
+  --primary-soft: oklch(0.95 0.03 270);
+  --primary-soft-foreground: oklch(0.33 0.17 265);
   --secondary: var(--primary-soft);
   --secondary-foreground: var(--primary-soft-foreground);
 
@@ -40,10 +43,10 @@
   --accent: oklch(0.95 0.06 92);
   --accent-foreground: oklch(0.34 0.07 70);
   /* Sky: information and data links. */
-  --sky: oklch(0.5 0.14 245);
+  --sky: oklch(0.52 0.13 235);
 
-  --muted: oklch(0.965 0.006 250);
-  --muted-foreground: oklch(0.48 0.018 250);
+  --muted: oklch(0.965 0.007 265);
+  --muted-foreground: oklch(0.48 0.02 265);
 
   --destructive: oklch(0.54 0.2 27);
   --destructive-foreground: oklch(0.99 0 0);
@@ -55,14 +58,14 @@
   --info-soft: oklch(0.955 0.025 245);
   --danger-soft: oklch(0.955 0.03 25);
 
-  --border: oklch(0.91 0.008 250);
+  --border: oklch(0.91 0.01 265);
   /* Form-control boundary: ≥ 3:1 against cards and the page (WCAG 1.4.11). */
-  --input: oklch(0.62 0.015 250);
-  --ring: oklch(0.55 0.13 160);
+  --input: oklch(0.62 0.02 265);
+  --ring: oklch(0.5 0.2 266);
 
-  --sidebar: oklch(0.975 0.008 160);
+  --sidebar: oklch(0.975 0.006 265);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.935 0.03 160);
+  --sidebar-accent: oklch(0.94 0.028 270);
 
   /* Categorical chart slots: the validated dataviz reference order (ADR-009). */
   --chart-1: #2a78d6;
@@ -97,19 +100,19 @@
 /* Dark: "Ink" — near-black with a faint cool tint, never #000. Elevation = lighter surface. */
 .dark {
   color-scheme: dark;
-  --background: oklch(0.165 0.01 258);
+  --background: oklch(0.165 0.014 268);
   --foreground: oklch(0.965 0.004 250);
-  --card: oklch(0.198 0.012 258);
+  --card: oklch(0.198 0.016 268);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.232 0.014 258);
+  --popover: oklch(0.232 0.018 268);
   --popover-foreground: var(--foreground);
-  --surface-2: oklch(0.232 0.014 258);
-  --surface-3: oklch(0.265 0.015 258);
+  --surface-2: oklch(0.232 0.018 268);
+  --surface-3: oklch(0.265 0.02 268);
 
-  --primary: oklch(0.78 0.14 160);
-  --primary-foreground: oklch(0.18 0.04 160);
-  --primary-soft: oklch(0.27 0.05 162);
-  --primary-soft-foreground: oklch(0.88 0.09 160);
+  --primary: oklch(0.75 0.13 270);
+  --primary-foreground: oklch(0.2 0.09 266);
+  --primary-soft: oklch(0.29 0.075 268);
+  --primary-soft-foreground: oklch(0.88 0.06 270);
 
   --sun: oklch(0.86 0.15 92);
   --sun-foreground: oklch(0.25 0.05 70);
@@ -117,8 +120,8 @@
   --accent-foreground: oklch(0.92 0.08 92);
   --sky: oklch(0.74 0.12 235);
 
-  --muted: oklch(0.232 0.014 258);
-  --muted-foreground: oklch(0.72 0.015 250);
+  --muted: oklch(0.232 0.018 268);
+  --muted-foreground: oklch(0.72 0.02 265);
 
   --destructive: oklch(0.7 0.17 25);
   --destructive-foreground: oklch(0.17 0.02 25);
@@ -129,13 +132,13 @@
   --info-soft: oklch(0.26 0.045 245);
   --danger-soft: oklch(0.27 0.055 25);
 
-  --border: oklch(0.3 0.014 258);
-  --input: oklch(0.52 0.016 258);
-  --ring: oklch(0.72 0.13 160);
+  --border: oklch(0.3 0.018 268);
+  --input: oklch(0.52 0.02 268);
+  --ring: oklch(0.72 0.14 270);
 
-  --sidebar: oklch(0.185 0.011 258);
+  --sidebar: oklch(0.185 0.015 268);
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.265 0.03 165);
+  --sidebar-accent: oklch(0.27 0.05 268);
 
   --chart-1: #3987e5;
   --chart-2: #d95926;
@@ -166,6 +169,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
+  --color-brand: var(--brand);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
@@ -226,6 +230,8 @@
   --animate-pop: pop var(--dur-4) var(--ease-spring) both;
   --animate-pulse-ring: pulse-ring 2s var(--ease-standard) infinite;
   --animate-draw: draw var(--dur-5) var(--ease-enter) both;
+  --animate-float: float 6s var(--ease-standard) infinite;
+  --animate-scan-beam: scan-beam 2.4s var(--ease-standard) infinite;
 }
 
 @layer base {
@@ -291,6 +297,13 @@
   }
 }
 
+/* Smooth in-page anchor scrolling, only for people who haven't asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Phones with the bottom tab bar: keep focused fields clear of it (WCAG 2.4.11). */
 @media (width < 48rem) {
   html:has([data-bottom-nav]) {
@@ -314,6 +327,42 @@
 @utility tap-target {
   min-height: 2.75rem;
   min-width: 2.75rem;
+}
+
+/* 44 px tap area for standalone text links without changing the visual layout (UX-001). */
+@utility hit-area {
+  display: inline-block;
+  padding-block: 0.75rem;
+  margin-block: -0.75rem;
+}
+
+/*
+ * Cursor spotlight (Linear/Vercel style): a soft brand glow follows the pointer across a card.
+ * <Spotlight /> sets --spot-x/--spot-y; touch devices and reduced motion never see it.
+ */
+@utility spotlight {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--dur-3) var(--ease-standard);
+    background: radial-gradient(
+      22rem circle at var(--spot-x, 50%) var(--spot-y, 50%),
+      color-mix(in oklch, var(--primary) 10%, transparent),
+      transparent 60%
+    );
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover::before {
+      opacity: 1;
+    }
+  }
 }
 
 /* Tabular figures for every number that is compared or counted. */
@@ -385,14 +434,23 @@
   mask-composite: intersect;
 }
 
-/* Brand surface for hero cards (licence card, auth panel). */
+/* Brand surface (hero cards, licence, auth panel): navy lit by royal blue. Every stop stays
+ * dark enough that white text keeps ≥ 7:1. */
 @utility bg-brand {
   background:
-    radial-gradient(120% 80% at 100% 0%, oklch(0.5 0.12 175 / 0.95), transparent 60%),
-    /* Every stop stays ≤ L 0.5 so white text keeps ≥ 5.2:1. */
-      radial-gradient(90% 70% at 0% 100%, oklch(0.4 0.1 220 / 0.85), transparent 60%),
-    oklch(0.4 0.1 160);
-  color: oklch(0.99 0.005 160);
+    radial-gradient(120% 90% at 100% 0%, oklch(0.42 0.2 262 / 0.9), transparent 60%),
+    radial-gradient(90% 80% at 0% 100%, oklch(0.24 0.14 285 / 0.9), transparent 60%),
+    oklch(0.272 0.188 264.4);
+  color: oklch(0.99 0.005 265);
+}
+
+/* Lit primary fill: a soft top highlight and coloured shadow (premium CTA, ADR-009 v2). */
+@utility btn-gloss {
+  background-image: linear-gradient(to bottom, oklch(1 0 0 / 0.14), oklch(1 0 0 / 0) 55%);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.2),
+    0 1px 2px oklch(0.2 0.05 265 / 0.2),
+    0 8px 20px -8px color-mix(in oklch, var(--primary) 60%, transparent);
 }
 
 /* ——— Motion ——— */
@@ -435,6 +493,40 @@
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes scan-beam {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(var(--beam-travel, 56px));
+    opacity: 0;
+  }
+}
+
+@keyframes step-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 
@@ -530,7 +622,9 @@
   [data-reveal="hidden"] {
     transform: none;
   }
-  .animate-pulse-ring {
+  .animate-pulse-ring,
+  .animate-float,
+  .animate-scan-beam {
     animation: none !important;
   }
   ::view-transition-new(.page) {

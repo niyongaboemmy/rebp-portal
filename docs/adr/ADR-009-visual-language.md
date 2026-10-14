@@ -24,3 +24,17 @@
   `transform`, `opacity` and SVG stroke offsets animate. Route transitions use React `<ViewTransition>` from each
   route group's `template.tsx`; header, rail and tab bar are pinned. Reduced motion keeps short fades and removes
   movement, count-ups and pulses. No animation library is added.
+
+## Amendment v2 (2026-10-14) — navy primary
+
+- **Primary becomes the client's navy `#010080`** (`oklch(0.272 0.188 264.4)`, white text ≥ 15:1), replacing
+  Emerald. Reason: the client's brand, and green had doubled as the "success" status hue, so brand and state
+  were indistinguishable (gap B-01). Green is now reserved for success.
+- **Dark mode** uses a periwinkle of the same hue, `oklch(0.75 0.13 270)`, with dark text; navy on near-black
+  would be invisible. `--brand` keeps the true navy in both themes for white chips on brand surfaces.
+- **Neutrals and background** move to hue 265 (cool, blue-tinted); the dark "Ink" surfaces keep their lightness
+  steps at hue 268.
+- **Brand surface** (`bg-brand`): navy lit by royal blue `oklch(0.42 0.2 262)` and indigo
+  `oklch(0.24 0.14 285)`; a test asserts white text ≥ 7:1 on every stop.
+- **Primary buttons** get `btn-gloss`: a soft top highlight and a navy-tinted shadow.
+- Icons, Open Graph card, PWA icons, manifest and `theme-color` are re-coloured to match.
