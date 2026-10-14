@@ -38,18 +38,35 @@ for (const width of [800, 1024, 1280, 1600]) {
         client: el.clientWidth,
       }));
     expect(header.scroll).toBeLessThanOrEqual(header.client);
+    const account = (await page.getByRole("button", { name: "Sign in" }).boundingBox())!;
+    expect(account.x + account.width).toBeLessThanOrEqual(width);
   });
 }
 
 test("links fold into More when space is short", async ({ page }) => {
-  await page.setViewportSize({ width: 900, height: 760 });
+  await page.setViewportSize({ width: 780, height: 760 });
   await page.goto("/");
   const nav = page.getByRole("navigation", { name: "Main navigation" }).first();
   await expect(nav).toHaveAttribute("data-measured", "true");
-  await expect(nav.getByRole("link", { name: "Categories" })).toBeHidden();
+  await expect(nav.getByRole("link", { name: "Eligibility" })).toHaveCount(0);
   await nav.getByRole("button", { name: "More" }).click();
-  await page.getByRole("menuitem", { name: "Categories" }).click();
-  await expect(page).toHaveURL(/\/categories$/);
+  await page.getByRole("menuitem", { name: "Eligibility" }).click();
+  await expect(page).toHaveURL(/\/eligibility$/);
+});
+
+test("desktop nav is centred with one-word labels and no icons", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Main navigation" }).first();
+  await expect(nav).toHaveAttribute("data-measured", "true");
+  await expect(nav.getByRole("link")).toHaveCount(5);
+  // Only the decorative underline stroke (aria-hidden) may be an svg; no icons.
+  await expect(nav.locator("a svg:not([aria-hidden])")).toHaveCount(0);
+  for (const text of await nav.getByRole("link").allTextContents()) {
+    expect(text.trim()).not.toContain(" ");
+  }
+  const box = (await nav.boundingBox())!;
+  expect(Math.abs(box.x + box.width / 2 - 720)).toBeLessThan(24);
 });
 
 test("one account button offers sign in and create account", async ({ page }) => {
@@ -64,6 +81,8 @@ test("language menu switches locale and search is icon-only", async ({ page }) =
   await page.goto("/");
   await expect(page.getByRole("button", { name: "Search and commands" })).toHaveText("");
   await page.getByRole("button", { name: "Language" }).click();
+  await expect(page.getByRole("menuitemradio")).toHaveCount(3);
+  await expect(page.getByRole("menuitemradio").locator("svg").first()).toBeVisible();
   await page.getByRole("menuitemradio", { name: /Français/ }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await page.getByRole("button", { name: "Langue" }).click();

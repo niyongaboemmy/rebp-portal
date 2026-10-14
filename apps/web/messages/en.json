@@ -41,7 +41,7 @@
   },
   "nav": {
     "home": "Home",
-    "register": "Public register",
+    "register": "Practitioner directory",
     "verify": "Verify a licence",
     "eligibility": "Am I eligible?",
     "categories": "Categories",
@@ -75,7 +75,14 @@
     "more": "More",
     "tabBar": "Primary",
     "signInHint": "Pick up where you left off",
-    "signUpHint": "New here? It takes two minutes"
+    "signUpHint": "New here? It takes two minutes",
+    "short": {
+      "home": "Home",
+      "register": "Directory",
+      "verify": "Verify",
+      "categories": "Categories",
+      "eligibility": "Eligibility"
+    }
   },
   "theme": {
     "toggle": "Change theme",
@@ -91,8 +98,7 @@
     "eyebrow": "Official licensing portal",
     "title": "Real estate licensing, made simple",
     "subtitle": "Apply, track and verify — all in one place.",
-    "primaryCta": "Start your application",
-    "secondaryCta": "Am I eligible?",
+    "primaryCta": "Apply Now",
     "verifyTitle": "Verify a practitioner",
     "verifySubtitle": "Check any licence by name or number in seconds.",
     "verifyPlaceholder": "Name, licence or registration number",
@@ -126,12 +132,48 @@
     },
     "scene": {
       "verified": "Verified in 2 seconds",
-      "time": "Just now",
-      "languages": "English · Ikinyarwanda · Français"
+      "time": "Just now"
     },
     "journey": {
-      "pause": "Pause",
-      "play": "Play"
+      "chips": {
+        "account": "Two-step on",
+        "apply": "Saved as you go",
+        "pay": "Paid with MoMo",
+        "license": "QR verified"
+      },
+      "cta": {
+        "account": "Create account",
+        "apply": "Start your application",
+        "pay": "Track and pay",
+        "license": "View my licences"
+      }
+    },
+    "titleLead": "Real estate licensing,",
+    "titleAccent": "made simple",
+    "guide": {
+      "label": "Your path to a licence",
+      "eligibility": "Eligibility",
+      "apply": "Apply",
+      "licence": "E-licence"
+    },
+    "map": {
+      "eligible": "Am I eligible?",
+      "requirements": "Requirements",
+      "close": "Close"
+    },
+    "trustItems": {
+      "secure": {
+        "title": "Secure by design",
+        "body": "Two-step sign-in and encrypted records"
+      },
+      "live": {
+        "title": "Always up to date",
+        "body": "Live status and expected timelines"
+      },
+      "languages": {
+        "title": "Your phone, your language",
+        "body": "English, Kinyarwanda and French"
+      }
     }
   },
   "categories": {
@@ -191,6 +233,16 @@
         "q": "Can a company be licensed?",
         "a": "Yes. A Real Estate Brokerage Firm registers as a legal entity and must name a licensed Principal Broker."
       }
+    },
+    "short": {
+      "RERA": "Referral",
+      "FSLA": "Field agent",
+      "REA": "Agent",
+      "BROKER": "Broker",
+      "ASSOCIATE_BROKER": "Associate",
+      "MANAGING_BROKER": "Managing",
+      "PRINCIPAL_BROKER": "Principal",
+      "REBF": "Firm"
     }
   },
   "placeholders": {
@@ -675,7 +727,26 @@
     "privacy": "Privacy",
     "accessibility": "Accessibility",
     "contact": "Contact",
-    "navLabel": "Footer"
+    "navLabel": "Footer",
+    "cta": {
+      "title": "Ready to get licensed?",
+      "body": "Apply in minutes, track every step live and receive a verifiable e-licence."
+    },
+    "columns": {
+      "services": "Services",
+      "help": "Help"
+    },
+    "links": {
+      "apply": "Apply for a licence"
+    },
+    "secure": "Encrypted & two-step",
+    "madeIn": "Made in Rwanda",
+    "top": "Back to top",
+    "social": {
+      "title": "Follow us",
+      "body": "News, guidance and licensing updates.",
+      "follow": "Follow us on {network}"
+    }
   },
   "devMode": {
     "codeLabel": "Dev mode · simulated code",

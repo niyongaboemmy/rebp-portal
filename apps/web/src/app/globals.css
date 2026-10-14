@@ -256,10 +256,31 @@
   --animate-pulse-ring: pulse-ring 2s var(--ease-standard) infinite;
   --animate-draw: draw var(--dur-5) var(--ease-enter) both;
   --animate-float: float 6s var(--ease-standard) infinite;
-  --animate-card-in: card-in 1.2s var(--ease-enter) both;
+  --animate-card-deal: card-deal 9s var(--ease-standard) both;
+  --animate-deal-glow: deal-glow 9s var(--ease-standard) both;
+  --animate-notify-loop: notify-loop 9s var(--ease-standard) both;
   --animate-card-drift: card-drift 10s ease-in-out infinite;
   --animate-card-sheen: card-sheen 8s var(--ease-standard) infinite;
   --animate-card-ground: card-ground 10s ease-in-out infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite;
+  --animate-grid-flow: grid-flow 5s linear infinite;
+  --animate-orbit: orbit 10s linear infinite;
+  --animate-verify-pulse: verify-pulse 4.8s var(--ease-enter) infinite;
+  --animate-holo: holo 10s linear infinite;
+  --animate-word-in: word-in var(--dur-5) var(--ease-enter) both;
+  --animate-guide-fill: guide-fill 600ms var(--ease-enter) both;
+  --animate-guide-dot: guide-dot 600ms var(--ease-spring);
+  --animate-search-beam: search-beam 7s linear infinite;
+  --animate-ticker: ticker 6s var(--ease-standard) infinite;
+  --animate-screen-push: screen-push 650ms var(--ease-enter) both;
+  --animate-banner-drop: banner-drop 3.2s var(--ease-spring) both;
+  --animate-chip-in: chip-in 600ms var(--ease-spring) both;
+  --animate-arrow-nudge: arrow-nudge 2.2s var(--ease-standard) infinite;
+  --animate-edge-flow: edge-flow 1.2s linear infinite;
+  --animate-lock-click: lock-click 3.2s var(--ease-spring) infinite;
+  --animate-lang-cycle: lang-cycle 6s var(--ease-standard) infinite;
+  --animate-station-select: station-select 2.6s var(--ease-standard) infinite;
+  --animate-popover-in: popover-in 380ms var(--ease-spring) both;
   --animate-scan-beam: scan-beam 2.4s var(--ease-standard) infinite;
 }
 
@@ -578,14 +599,71 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
 }
 
 /* Hero licence (landing): flips in, then drifts in 3D like a card held in the hand. */
-@keyframes card-in {
-  from {
+/*
+ * Hero deck, one 9 s round per card (staggered by delay). The deal style sets --deal-from and
+ * --deal-out (ten styles, HeroDeck); landing is shared: overshoot, settle, rest (to 80%),
+ * deal out (80–88%), stay out.
+ */
+@keyframes card-deal {
+  0% {
     opacity: 0;
-    transform: rotateY(-34deg) rotateX(16deg) translate3d(0, 48px, 0) scale(0.9);
+    transform: var(--deal-from);
   }
-  to {
+  6.5% {
+    opacity: 1;
+    transform: perspective(900px) translate3d(0, 2.5%, 0) rotate(1.2deg) scale(1.01);
+  }
+  9% {
+    transform: perspective(900px) translate3d(0, -0.8%, 0) rotate(-0.4deg);
+  }
+  11%,
+  80% {
     opacity: 1;
     transform: none;
+  }
+  88%,
+  100% {
+    opacity: 0;
+    transform: var(--deal-out);
+  }
+}
+
+/* Soft glow under the deck when the licence lands, fading before the deal-out. */
+@keyframes deal-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  6% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  20%,
+  65% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  75%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Hero notifications, on the stack's 9 s loop: slide in, rest, slip away before the deal-out. */
+@keyframes notify-loop {
+  0% {
+    opacity: 0;
+    transform: translate3d(16px, 8px, 0) scale(0.94);
+  }
+  5%,
+  60% {
+    opacity: 1;
+    transform: none;
+  }
+  66%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) scale(0.97);
   }
 }
 
@@ -621,6 +699,116 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   50% {
     transform: scale(0.84);
     opacity: 0.32;
+  }
+}
+
+/* Hero stage: slow light pools, a floor flowing towards the viewer, orbit comets, a ping. */
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(9%, -7%, 0) scale(1.14);
+  }
+  66% {
+    transform: translate3d(-7%, 6%, 0) scale(0.92);
+  }
+}
+
+@keyframes grid-flow {
+  to {
+    background-position:
+      0 44px,
+      0 44px;
+  }
+}
+
+@keyframes orbit {
+  to {
+    stroke-dashoffset: calc(var(--orbit-length, 900px) * -1);
+  }
+}
+
+@keyframes verify-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* Hero headline: each word resolves out of a soft blur. */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.25em);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* Hero guide: each connector fills towards the next step, once. */
+@keyframes guide-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Hero guide: a step's number pulses in primary as the line reaches it. */
+@keyframes guide-dot {
+  50% {
+    transform: scale(1.18);
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+/* Hero search: a short light beam circles the border (an animatable conic angle). */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes search-beam {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+/* Verify button: sample queries roll up one at a time (three rows, the last repeats the first). */
+@keyframes ticker {
+  0%,
+  40% {
+    transform: translateY(0);
+  }
+  50%,
+  90% {
+    transform: translateY(-33.333%);
+  }
+  100% {
+    transform: translateY(-66.666%);
+  }
+}
+
+/* Hologram seal on the hero licence: the foil's colours turn slowly. */
+@keyframes holo {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -690,6 +878,153 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   }
   to {
     transform: translateX(220%) rotate(12deg);
+  }
+}
+
+/* Landing phone: the step's screen slides in like an iOS navigation push. */
+@keyframes screen-push {
+  from {
+    opacity: 0;
+    transform: translateX(35%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Landing phone: a notification drops from the island, rests, then tucks back up. */
+@keyframes banner-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-140%) scale(0.9);
+  }
+  14%,
+  78% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-140%) scale(0.9);
+  }
+}
+
+/* Trust banner: the lock drops shut with a small bounce every few seconds. */
+@keyframes lock-click {
+  0%,
+  55%,
+  100% {
+    transform: none;
+  }
+  65% {
+    transform: translateY(-3px) rotate(-6deg);
+  }
+  75% {
+    transform: translateY(1px) scale(1.06);
+  }
+  85% {
+    transform: none;
+  }
+}
+
+/* Trust banner: EN, RW, FR roll past (four rows, the last repeats the first). */
+@keyframes lang-cycle {
+  0%,
+  26% {
+    transform: translateY(0);
+  }
+  33%,
+  59% {
+    transform: translateY(-25%);
+  }
+  66%,
+  92% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(-75%);
+  }
+}
+
+/* Category map: the lit path flows towards the active station. */
+@keyframes edge-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+/* Category map: the selected station bounces in, then keeps a gentle heartbeat. */
+@keyframes station-select {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  12% {
+    transform: translateY(-6px) scale(1.04);
+  }
+  24% {
+    transform: translateY(0) scale(0.98);
+  }
+  34% {
+    transform: translateY(-2px) scale(1.01);
+  }
+  44% {
+    transform: none;
+  }
+}
+
+/* Category map: the popover springs open from its station. */
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(6px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Arrow chips: a small forward nudge every couple of seconds. */
+@keyframes arrow-nudge {
+  0%,
+  60%,
+  100% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  85% {
+    transform: translateX(-1px);
+  }
+}
+
+/* Landing stage: a glass chip lands beside the phone. */
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Landing phone: the two-step switch turns on. */
+@keyframes toggle-track {
+  to {
+    background-color: var(--success);
+  }
+}
+
+@keyframes toggle-knob {
+  to {
+    transform: translateX(1rem);
   }
 }
 
@@ -785,6 +1120,21 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   .animate-card-drift,
   .animate-card-sheen,
   .animate-card-ground,
+  .animate-aurora,
+  .animate-grid-flow,
+  .animate-orbit,
+  .animate-verify-pulse,
+  .animate-holo,
+  .animate-search-beam,
+  .animate-ticker,
+  .animate-arrow-nudge,
+  .animate-edge-flow,
+  .animate-lock-click,
+  .animate-lang-cycle,
+  .animate-station-select,
+  .animate-card-deal,
+  .animate-deal-glow,
+  .animate-notify-loop,
   [data-phone-live] {
     animation: none !important;
   }
@@ -801,7 +1151,8 @@ html[data-input="pointer"] [data-app-header] :is(:focus, :focus-visible) {
   .bg-imigongo,
   .bg-imigongo-fade,
   .bg-imigongo-fade-up,
-  .bg-ambient {
+  .bg-ambient,
+  .hero-stage {
     display: none;
   }
 }

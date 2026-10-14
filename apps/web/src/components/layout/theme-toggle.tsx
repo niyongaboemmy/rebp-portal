@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuIcon,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
@@ -44,7 +45,10 @@ export function ThemeToggle({ className }: { className?: string }) {
         <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
           {THEME_OPTIONS.map(({ value, icon: Icon }) => (
             <DropdownMenuRadioItem key={value} value={value}>
-              <Icon /> {t(value)}
+              <DropdownMenuIcon>
+                <Icon />
+              </DropdownMenuIcon>
+              {t(value)}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

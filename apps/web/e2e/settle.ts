@@ -2,7 +2,9 @@ import type { Page } from "@playwright/test";
 
 /**
  * Waits for finite entrance animations to finish so audits see the settled UI. Infinite ones
- * (live-status pulses, skeleton shimmer) are ignored, or this would never resolve. Autoplaying
+ * (live-status pulses, skeleton shimmer) are ignored, or this would never resolve; so are
+ * perpetual loops that restart finite animations (anything inside [data-loop]: hero deck,
+ * guides, the phone scene, the category tour). Autoplaying
  * content is paused first with its own visible control, as a user would (WCAG 2.2.2).
  */
 export async function settle(page: Page) {
@@ -14,7 +16,10 @@ export async function settle(page: Page) {
     document
       .getAnimations()
       .every(
-        (a) => a.playState !== "running" || a.effect?.getComputedTiming().iterations === Infinity,
+        (a) =>
+          a.playState !== "running" ||
+          a.effect?.getComputedTiming().iterations === Infinity ||
+          !!((a.effect as KeyframeEffect | null)?.target as Element | null)?.closest("[data-loop]"),
       ),
   );
 }

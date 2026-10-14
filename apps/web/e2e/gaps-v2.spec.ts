@@ -113,27 +113,27 @@ for (const path of ["/privacy", "/forbidden", "/no-such-page"]) {
   });
 }
 
-test("journey diagram is a keyboard tablist that never autoplays under reduced motion", async ({
-  page,
-}) => {
+test("how it works follows scroll and links each step into the portal", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const tabs = page.getByRole("tablist", { name: "How it works" }).getByRole("tab");
-  await expect(tabs).toHaveCount(4);
-  await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
-
-  await tabs.first().focus();
-  await page.keyboard.press("ArrowDown");
-  await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
-  await expect(tabs.nth(1)).toBeFocused();
-  await page.keyboard.press("End");
-  await expect(tabs.nth(3)).toHaveAttribute("aria-selected", "true");
-  await expect(page.getByRole("tabpanel")).toHaveAttribute(
-    "aria-labelledby",
-    (await tabs.nth(3).getAttribute("id"))!,
+  const steps = page.getByRole("list", { name: "How it works" }).getByRole("listitem");
+  await expect(steps).toHaveCount(4);
+  await expect(steps.first()).toHaveAttribute("aria-current", "step");
+  await expect(steps.first().getByRole("link", { name: "Create account" })).toHaveAttribute(
+    "href",
+    "/sign-up",
   );
 
+  // Scrolling the last step to mid-screen makes it active and switches the phone.
+  await steps.nth(3).evaluate((el) => {
+    const box = el.getBoundingClientRect();
+    window.scrollTo(0, window.scrollY + box.top + box.height / 2 - window.innerHeight / 2);
+  });
+  await expect(steps.nth(3)).toHaveAttribute("aria-current", "step");
+  await expect(page.locator("[data-step]")).toHaveAttribute("data-step", "license");
+
+  // Nothing plays on its own: the selection stays put without scrolling.
   await page.mouse.move(0, 0);
-  await page.waitForTimeout(5500); // longer than one autoplay step
-  await expect(tabs.nth(3)).toHaveAttribute("aria-selected", "true");
+  await page.waitForTimeout(3000);
+  await expect(steps.nth(3)).toHaveAttribute("aria-current", "step");
 });

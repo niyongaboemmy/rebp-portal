@@ -11,19 +11,21 @@ import { ThemeSwitch } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
 /**
- * Public header: logo · priority+ links (overflow in "⋯") · icon search · language menu ·
- * theme switch · one account button. Transparent over the landing hero, frosted with a soft
+ * Public header, three columns: logo · centred one-word links (overflow in "⋯") · icon search,
+ * flag language menu, theme switch and one account button. Transparent over the landing hero, frosted with a soft
  * shadow on scroll. Below md the links move into the drawer.
  */
 export async function SiteHeader() {
   const [, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
   return (
     <HeaderShell>
-      <div className="container-page flex h-16 items-center gap-2 lg:gap-4">
-        <Logo className="hidden shrink-0 sm:max-md:inline-flex lg:inline-flex" />
-        <Logo className="shrink-0 sm:max-md:hidden lg:hidden" showText={false} />
+      <div className="container-page grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+        <div className="col-start-1 flex items-center justify-self-start">
+          <Logo className="hidden sm:max-md:inline-flex lg:inline-flex" />
+          <Logo className="sm:max-md:hidden lg:hidden" showText={false} />
+        </div>
         <HeaderNav />
-        <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+        <div className="col-start-3 flex items-center gap-0.5 justify-self-end sm:gap-1">
           <CommandPalette area="public" compact />
           <LanguageSwitcher className="rounded-full" />
           <ThemeSwitch />

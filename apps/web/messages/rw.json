@@ -41,7 +41,7 @@
   },
   "nav": {
     "home": "Ahabanza",
-    "register": "Igitabo rusange",
+    "register": "Urutonde rw'abemerewe",
     "verify": "Genzura uruhushya",
     "eligibility": "Ese nujuje ibisabwa?",
     "categories": "Ibyiciro",
@@ -75,7 +75,14 @@
     "more": "Ibindi",
     "tabBar": "Ibyingenzi",
     "signInHint": "Komeza aho wari ugeze",
-    "signUpHint": "Uri mushya? Bifata iminota ibiri"
+    "signUpHint": "Uri mushya? Bifata iminota ibiri",
+    "short": {
+      "home": "Ahabanza",
+      "register": "Urutonde",
+      "verify": "Genzura",
+      "categories": "Ibyiciro",
+      "eligibility": "Ibisabwa"
+    }
   },
   "theme": {
     "toggle": "Hindura isura",
@@ -91,8 +98,7 @@
     "eyebrow": "Urubuga rwemewe rw'impushya",
     "title": "Impushya z'ubukomisiyoneri, byoroshye",
     "subtitle": "Saba, ukurikirane kandi ugenzure — byose ahantu hamwe.",
-    "primaryCta": "Tangira ubusabe",
-    "secondaryCta": "Ese nujuje ibisabwa?",
+    "primaryCta": "Saba ubu",
     "verifyTitle": "Genzura umukomisiyoneri",
     "verifySubtitle": "Genzura uruhushya urwo ari rwo rwose ukoresheje izina cyangwa nimero mu masegonda make.",
     "verifyPlaceholder": "Izina, nimero y'uruhushya cyangwa y'iyandikwa",
@@ -126,12 +132,48 @@
     },
     "scene": {
       "verified": "Byemejwe mu masegonda 2",
-      "time": "Nonaha",
-      "languages": "English · Ikinyarwanda · Français"
+      "time": "Nonaha"
     },
     "journey": {
-      "pause": "Hagarika",
-      "play": "Komeza"
+      "chips": {
+        "account": "Intambwe ebyiri zirakora",
+        "apply": "Bibikwa uko ugenda",
+        "pay": "Byishyuwe na MoMo",
+        "license": "QR yemejwe"
+      },
+      "cta": {
+        "account": "Fungura konti",
+        "apply": "Tangira ubusabe",
+        "pay": "Kurikirana wishyure",
+        "license": "Reba impushya zanjye"
+      }
+    },
+    "titleLead": "Impushya z'ubukomisiyoneri,",
+    "titleAccent": "byoroshye",
+    "guide": {
+      "label": "Inzira igana ku ruhushya",
+      "eligibility": "Ibisabwa",
+      "apply": "Saba",
+      "licence": "Uruhushya"
+    },
+    "map": {
+      "eligible": "Ese nujuje ibisabwa?",
+      "requirements": "Ibisabwa",
+      "close": "Funga"
+    },
+    "trustItems": {
+      "secure": {
+        "title": "Birinzwe neza",
+        "body": "Kwinjira mu ntambwe ebyiri n'amakuru arinzwe"
+      },
+      "live": {
+        "title": "Amakuru agezweho",
+        "body": "Aho bigeze n'igihe biteganyijwe"
+      },
+      "languages": {
+        "title": "Telefoni yawe, ururimi rwawe",
+        "body": "Icyongereza, Ikinyarwanda n'Igifaransa"
+      }
     }
   },
   "categories": {
@@ -191,6 +233,16 @@
         "q": "Ese ikigo gishobora guhabwa uruhushya?",
         "a": "Yego. Ikigo cy'ubukomisiyoneri bw'imitungo itimukanwa cyiyandikisha nk'ikigo gifite ubuzimagatozi kandi kigomba kugaragaza Principal Broker ufite uruhushya."
       }
+    },
+    "short": {
+      "RERA": "Uhuza",
+      "FSLA": "Umukozi wo hanze",
+      "REA": "Umukomisiyoneri",
+      "BROKER": "Burokeri",
+      "ASSOCIATE_BROKER": "Wungirije",
+      "MANAGING_BROKER": "Uyobora",
+      "PRINCIPAL_BROKER": "Mukuru",
+      "REBF": "Ikigo"
     }
   },
   "placeholders": {
@@ -675,7 +727,26 @@
     "privacy": "Ubuzima bwite",
     "accessibility": "Uburyo bworohereza bose",
     "contact": "Twandikire",
-    "navLabel": "Hasi ku rupapuro"
+    "navLabel": "Hasi ku rupapuro",
+    "cta": {
+      "title": "Witeguye kubona uruhushya?",
+      "body": "Saba mu minota mike, ukurikirane buri ntambwe, uhabwe uruhushya rw'ikoranabuhanga rushobora kugenzurwa."
+    },
+    "columns": {
+      "services": "Serivisi",
+      "help": "Ubufasha"
+    },
+    "links": {
+      "apply": "Saba uruhushya"
+    },
+    "secure": "Birinzwe, intambwe ebyiri",
+    "madeIn": "Byakorewe mu Rwanda",
+    "top": "Subira hejuru",
+    "social": {
+      "title": "Dukurikire",
+      "body": "Amakuru, inama n'ibishya ku mpushya.",
+      "follow": "Dukurikire kuri {network}"
+    }
   },
   "devMode": {
     "codeLabel": "Uburyo bw'iterambere · kode y'igerageza",

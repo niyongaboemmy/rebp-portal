@@ -1,13 +1,13 @@
 "use client";
 
 import { ChevronDown, LogIn, UserPlus, UserRound } from "@/components/icons";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuRow,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -27,29 +27,22 @@ export function AuthMenu() {
           <ChevronDown className="size-3.5 opacity-80" aria-hidden />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 p-1.5">
-        <DropdownMenuItem asChild className="items-start gap-3 rounded-xl p-2.5">
-          <Link href="/sign-in">
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground">
-              <LogIn className="size-[1.1rem]" aria-hidden />
-            </span>
-            <span className="flex flex-col gap-0.5">
-              <span className="font-semibold">{t("signIn")}</span>
-              <span className="text-xs text-muted-foreground">{t("signInHint")}</span>
-            </span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="items-start gap-3 rounded-xl p-2.5">
-          <Link href="/sign-up">
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-sun/25 text-sun-foreground">
-              <UserPlus className="size-[1.1rem]" aria-hidden />
-            </span>
-            <span className="flex flex-col gap-0.5">
-              <span className="font-semibold">{t("signUp")}</span>
-              <span className="text-xs text-muted-foreground">{t("signUpHint")}</span>
-            </span>
-          </Link>
-        </DropdownMenuItem>
+      <DropdownMenuContent align="end" className="w-[19rem]">
+        <DropdownMenuRow
+          href="/sign-in"
+          icon={<LogIn />}
+          title={t("signIn")}
+          description={t("signInHint")}
+        />
+        <DropdownMenuSeparator />
+        <DropdownMenuRow
+          href="/sign-up"
+          icon={<UserPlus />}
+          title={t("signUp")}
+          description={t("signUpHint")}
+          tone="featured"
+          badge
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

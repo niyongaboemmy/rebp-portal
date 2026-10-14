@@ -41,7 +41,7 @@
   },
   "nav": {
     "home": "Accueil",
-    "register": "Registre public",
+    "register": "Annuaire des praticiens",
     "verify": "Vérifier une licence",
     "eligibility": "Suis-je éligible ?",
     "categories": "Catégories",
@@ -75,7 +75,14 @@
     "more": "Plus",
     "tabBar": "Principal",
     "signInHint": "Reprenez là où vous vous êtes arrêté",
-    "signUpHint": "Nouveau ? Cela prend deux minutes"
+    "signUpHint": "Nouveau ? Cela prend deux minutes",
+    "short": {
+      "home": "Accueil",
+      "register": "Annuaire",
+      "verify": "Vérifier",
+      "categories": "Catégories",
+      "eligibility": "Éligibilité"
+    }
   },
   "theme": {
     "toggle": "Changer de thème",
@@ -91,8 +98,7 @@
     "eyebrow": "Portail officiel des licences",
     "title": "Licences immobilières, en toute simplicité",
     "subtitle": "Postulez, suivez et vérifiez — au même endroit.",
-    "primaryCta": "Commencer ma demande",
-    "secondaryCta": "Suis-je éligible ?",
+    "primaryCta": "Postuler",
     "verifyTitle": "Vérifier un praticien",
     "verifySubtitle": "Vérifiez n'importe quelle licence par nom ou numéro en quelques secondes.",
     "verifyPlaceholder": "Nom, numéro de licence ou d'enregistrement",
@@ -126,12 +132,48 @@
     },
     "scene": {
       "verified": "Vérifié en 2 secondes",
-      "time": "À l'instant",
-      "languages": "English · Ikinyarwanda · Français"
+      "time": "À l'instant"
     },
     "journey": {
-      "pause": "Pause",
-      "play": "Lecture"
+      "chips": {
+        "account": "Double vérification activée",
+        "apply": "Enregistré au fil de l'eau",
+        "pay": "Payé par MoMo",
+        "license": "QR vérifié"
+      },
+      "cta": {
+        "account": "Créer un compte",
+        "apply": "Commencer ma demande",
+        "pay": "Suivre et payer",
+        "license": "Voir mes licences"
+      }
+    },
+    "titleLead": "Licences immobilières,",
+    "titleAccent": "en toute simplicité",
+    "guide": {
+      "label": "Votre parcours vers une licence",
+      "eligibility": "Éligibilité",
+      "apply": "Demande",
+      "licence": "E-licence"
+    },
+    "map": {
+      "eligible": "Suis-je éligible ?",
+      "requirements": "Conditions",
+      "close": "Fermer"
+    },
+    "trustItems": {
+      "secure": {
+        "title": "Sécurisé par conception",
+        "body": "Connexion en deux étapes et dossiers chiffrés"
+      },
+      "live": {
+        "title": "Toujours à jour",
+        "body": "Suivi en direct et délais prévus"
+      },
+      "languages": {
+        "title": "Votre téléphone, votre langue",
+        "body": "Anglais, kinyarwanda et français"
+      }
     }
   },
   "categories": {
@@ -191,6 +233,16 @@
         "q": "Une société peut-elle obtenir une licence ?",
         "a": "Oui. Un cabinet de courtage immobilier s'enregistre en tant que personne morale et doit désigner un courtier principal agréé."
       }
+    },
+    "short": {
+      "RERA": "Apporteur",
+      "FSLA": "Agent terrain",
+      "REA": "Agent",
+      "BROKER": "Courtier",
+      "ASSOCIATE_BROKER": "Associé",
+      "MANAGING_BROKER": "Gérant",
+      "PRINCIPAL_BROKER": "Principal",
+      "REBF": "Cabinet"
     }
   },
   "placeholders": {
@@ -675,7 +727,26 @@
     "privacy": "Confidentialité",
     "accessibility": "Accessibilité",
     "contact": "Contact",
-    "navLabel": "Pied de page"
+    "navLabel": "Pied de page",
+    "cta": {
+      "title": "Prêt à obtenir votre licence ?",
+      "body": "Postulez en quelques minutes, suivez chaque étape en direct et recevez une e-licence vérifiable."
+    },
+    "columns": {
+      "services": "Services",
+      "help": "Aide"
+    },
+    "links": {
+      "apply": "Demander une licence"
+    },
+    "secure": "Chiffré et en deux étapes",
+    "madeIn": "Conçu au Rwanda",
+    "top": "Haut de page",
+    "social": {
+      "title": "Suivez-nous",
+      "body": "Actualités, conseils et nouvelles des licences.",
+      "follow": "Suivez-nous sur {network}"
+    }
   },
   "devMode": {
     "codeLabel": "Mode dev · code simulé",
