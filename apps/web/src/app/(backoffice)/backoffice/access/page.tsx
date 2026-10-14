@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, KeySquare, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, KeySquare, Users } from "@/components/icons";
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";

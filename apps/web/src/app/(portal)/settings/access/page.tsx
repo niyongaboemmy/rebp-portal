@@ -1,4 +1,4 @@
-import { Check, Info, Minus, ShieldCheck } from "lucide-react";
+import { Check, Info, Minus, ShieldCheck } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { CAPABILITIES, CAPABILITY_GROUPS, CAPABILITY_META, requiresMfa } from "@rebp/contracts";

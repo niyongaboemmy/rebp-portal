@@ -32,9 +32,7 @@ export function LinkTabs({
           aria-current={tab.active ? "page" : undefined}
           className={cn(
             "inline-flex tap-target flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all sm:flex-none [&_svg]:size-4",
-            tab.active
-              ? "bg-card text-foreground shadow-soft"
-              : "text-muted-foreground hover:text-foreground",
+            tab.active ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground",
           )}
         >
           {tab.icon}

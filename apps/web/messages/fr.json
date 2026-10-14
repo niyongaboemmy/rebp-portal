@@ -1,5 +1,14 @@
 {
-  "brand": { "tagline": "Licences de courtage immobilier" },
+  "meta": {
+    "title": "REBP Portal",
+    "description": "Enregistrer, obtenir une licence et vérifier les praticiens et cabinets de courtage immobilier.",
+    "homeTitle": "Licences de courtage immobilier et registre public"
+  },
+  "brand": {
+    "name": "REBP Portal",
+    "tagline": "Licences de courtage immobilier",
+    "body": "Ordre professionnel des praticiens du courtage immobilier"
+  },
   "common": {
     "skipToContent": "Aller au contenu principal",
     "loading": "Chargement…",
@@ -15,6 +24,9 @@
     "remove": "Supprimer",
     "or": "ou",
     "optional": "Facultatif",
+    "required": "Obligatoire",
+    "enabled": "Activé",
+    "notSet": "Non défini",
     "verified": "Vérifié",
     "unverified": "Non vérifié",
     "comingSoon": "Bientôt disponible",
@@ -22,11 +34,14 @@
     "closeMenu": "Fermer le menu",
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe",
-    "pilotBanner": "Version pilote — données d'exemple uniquement. Les frais et textes juridiques sont provisoires."
+    "pilotBanner": "Version pilote — données d'exemple uniquement. Les frais et textes juridiques sont provisoires, en attente d'approbation.",
+    "unapprovedTranslation": "Cette traduction est un brouillon en attente d'approbation par l'Ordre professionnel.",
+    "dismiss": "Ignorer",
+    "notice": "Avis"
   },
   "nav": {
     "home": "Accueil",
-    "register": "Registre public",
+    "register": "Annuaire des praticiens",
     "verify": "Vérifier une licence",
     "eligibility": "Suis-je éligible ?",
     "categories": "Catégories",
@@ -39,8 +54,35 @@
     "firm": "Espace cabinet",
     "security": "Sécurité",
     "backoffice": "Back-office",
+    "overview": "Vue d'ensemble",
+    "queue": "File de travail",
+    "decisions": "Décisions",
+    "registerAdmin": "Gestion du registre",
+    "finance": "Finances",
+    "configuration": "Configuration",
+    "audit": "Journal d'audit",
+    "reports": "Rapports",
     "signOut": "Se déconnecter",
-    "account": "Compte"
+    "account": "Compte",
+    "portal": "Mon portail",
+    "sectionApplicant": "Demandeur",
+    "sectionAccount": "Compte",
+    "sectionStaff": "Régulateur",
+    "breadcrumb": "Fil d'Ariane",
+    "mainNavigation": "Navigation principale",
+    "myAccess": "Mes accès",
+    "access": "Contrôle d'accès",
+    "more": "Plus",
+    "tabBar": "Principal",
+    "signInHint": "Reprenez là où vous vous êtes arrêté",
+    "signUpHint": "Nouveau ? Cela prend deux minutes",
+    "short": {
+      "home": "Accueil",
+      "register": "Annuaire",
+      "verify": "Vérifier",
+      "categories": "Catégories",
+      "eligibility": "Éligibilité"
+    }
   },
   "theme": {
     "toggle": "Changer de thème",
@@ -48,18 +90,187 @@
     "dark": "Sombre",
     "system": "Système"
   },
-  "language": { "label": "Langue", "draft": "brouillon" },
+  "language": {
+    "label": "Langue",
+    "draft": "brouillon"
+  },
   "landing": {
     "eyebrow": "Portail officiel des licences",
-    "title": "Votre porte d'entrée de confiance vers les licences immobilières",
-    "subtitle": "Déposez votre demande, suivez-la en temps réel et obtenez une licence électronique vérifiable — depuis votre téléphone, dans votre langue.",
-    "primaryCta": "Commencer ma demande",
-    "secondaryCta": "Suis-je éligible ?",
+    "title": "Licences immobilières, en toute simplicité",
+    "subtitle": "Postulez, suivez et vérifiez — au même endroit.",
+    "primaryCta": "Postuler",
     "verifyTitle": "Vérifier un praticien",
-    "verifyButton": "Rechercher"
+    "verifySubtitle": "Vérifiez n'importe quelle licence par nom ou numéro en quelques secondes.",
+    "verifyPlaceholder": "Nom, numéro de licence ou d'enregistrement",
+    "verifyButton": "Rechercher",
+    "categoriesTitle": "Huit catégories, un parcours guidé",
+    "categoriesSubtitle": "Le portail n'affiche que ce qui vous concerne.",
+    "stepsTitle": "Comment ça marche",
+    "steps": {
+      "account": {
+        "title": "Créez votre compte",
+        "body": "Vérifiez votre e-mail et votre téléphone, puis activez la vérification en deux étapes."
+      },
+      "apply": {
+        "title": "Remplissez le formulaire guidé",
+        "body": "Répondez uniquement aux questions de votre catégorie. Vos réponses sont enregistrées au fur et à mesure."
+      },
+      "pay": {
+        "title": "Signez, payez et soumettez",
+        "body": "Payez en ligne et suivez chaque étape de l'examen."
+      },
+      "license": {
+        "title": "Obtenez votre licence électronique",
+        "body": "Téléchargez un certificat avec un code QR vérifiable par tous."
+      }
+    },
+    "trustTitle": "Conçu pour la confiance",
+    "trust": {
+      "secure": "Vérification en deux étapes et dossiers chiffrés",
+      "transparent": "Statut en direct et délais prévus",
+      "accessible": "Fonctionne sur tout téléphone, en anglais, en kinyarwanda et en français"
+    },
+    "scene": {
+      "verified": "Vérifié en 2 secondes",
+      "time": "À l'instant"
+    },
+    "journey": {
+      "chips": {
+        "account": "Double vérification activée",
+        "apply": "Enregistré au fil de l'eau",
+        "pay": "Payé par MoMo",
+        "license": "QR vérifié"
+      },
+      "cta": {
+        "account": "Créer un compte",
+        "apply": "Commencer ma demande",
+        "pay": "Suivre et payer",
+        "license": "Voir mes licences"
+      }
+    },
+    "titleLead": "Licences immobilières,",
+    "titleAccent": "en toute simplicité",
+    "guide": {
+      "label": "Votre parcours vers une licence",
+      "eligibility": "Éligibilité",
+      "apply": "Demande",
+      "licence": "E-licence"
+    },
+    "map": {
+      "eligible": "Suis-je éligible ?",
+      "requirements": "Conditions",
+      "close": "Fermer"
+    },
+    "trustItems": {
+      "secure": {
+        "title": "Sécurisé par conception",
+        "body": "Connexion en deux étapes et dossiers chiffrés"
+      },
+      "live": {
+        "title": "Toujours à jour",
+        "body": "Suivi en direct et délais prévus"
+      },
+      "languages": {
+        "title": "Votre téléphone, votre langue",
+        "body": "Anglais, kinyarwanda et français"
+      }
+    }
+  },
+  "categories": {
+    "title": "Catégories professionnelles",
+    "subtitle": "Comparez ce que chaque catégorie peut faire et ce qu'elle exige.",
+    "tiers": {
+      "entry": "Débutant",
+      "agent": "Agent",
+      "broker": "Courtier",
+      "firm": "Cabinet"
+    },
+    "items": {
+      "RERA": {
+        "name": "Agent de recommandation immobilière",
+        "summary": "Oriente des clients vers des praticiens agréés. Recommandation uniquement (article 10)."
+      },
+      "FSLA": {
+        "name": "Agent de vente et de location sur le terrain",
+        "summary": "Praticien de terrain débutant travaillant sous supervision."
+      },
+      "REA": {
+        "name": "Agent immobilier",
+        "summary": "Exige au moins 3 ans en tant que FSLA ou un équivalent reconnu."
+      },
+      "BROKER": {
+        "name": "Courtier immobilier",
+        "summary": "Exige au moins 3 ans en tant qu'agent immobilier agréé."
+      },
+      "ASSOCIATE_BROKER": {
+        "name": "Courtier associé",
+        "summary": "Courtier agréé affilié à un cabinet sous l'autorité d'un courtier principal."
+      },
+      "MANAGING_BROKER": {
+        "name": "Courtier gérant",
+        "summary": "Courtier agréé qui dirige un bureau ou une succursale d'un cabinet."
+      },
+      "PRINCIPAL_BROKER": {
+        "name": "Courtier principal",
+        "summary": "Responsable de la supervision, des fonds clients, des dossiers et de la conformité d'un cabinet."
+      },
+      "REBF": {
+        "name": "Cabinet de courtage immobilier",
+        "summary": "Personne morale autorisée à exercer le courtage, dirigée par un courtier principal."
+      }
+    },
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "which": {
+        "q": "Pour quelle catégorie dois-je postuler ?",
+        "a": "Cela dépend de votre âge, de votre formation, de votre expérience et de toute licence déjà détenue. Le test d'éligibilité vous recommande une catégorie en une minute environ."
+      },
+      "upgrade": {
+        "q": "Comment passer à une catégorie supérieure ?",
+        "a": "La plupart des promotions exigent trois ans de pratique documentée dans la catégorie inférieure, ainsi que la formation et l'examen de la nouvelle catégorie. Votre expérience est conservée."
+      },
+      "firm": {
+        "q": "Une société peut-elle obtenir une licence ?",
+        "a": "Oui. Un cabinet de courtage immobilier s'enregistre en tant que personne morale et doit désigner un courtier principal agréé."
+      }
+    },
+    "short": {
+      "RERA": "Apporteur",
+      "FSLA": "Agent terrain",
+      "REA": "Agent",
+      "BROKER": "Courtier",
+      "ASSOCIATE_BROKER": "Associé",
+      "MANAGING_BROKER": "Gérant",
+      "PRINCIPAL_BROKER": "Principal",
+      "REBF": "Cabinet"
+    }
+  },
+  "placeholders": {
+    "registerTitle": "Registre public",
+    "registerBody": "Recherchez les praticiens et cabinets agréés. Le registre ouvrira dès la délivrance des premières licences.",
+    "eligibilityTitle": "Suis-je éligible ?",
+    "eligibilityBody": "Répondez à quelques questions pour trouver la bonne catégorie et les documents à préparer. Le pré-test est en cours de développement.",
+    "applicationsTitle": "Demandes",
+    "applicationsBody": "Vos brouillons et demandes soumises apparaîtront ici.",
+    "applicationsCta": "Nouvelle demande",
+    "licensesTitle": "Portefeuille de licences",
+    "licensesBody": "Vos licences, certificats et codes QR apparaîtront ici une fois délivrés.",
+    "confirmationsTitle": "Confirmations",
+    "confirmationsBody": "Les demandes de supervision et d'affiliation qui vous sont adressées apparaîtront ici.",
+    "firmTitle": "Espace cabinet",
+    "firmBody": "Gérez l'effectif, les succursales et les renouvellements de votre cabinet.",
+    "backofficeBody": "Cette console est prévue pour une phase ultérieure du pilote.",
+    "plannedFor": "Prévu : {milestone}"
   },
   "auth": {
+    "panelTitle": "Des licences simples, sécurisées et transparentes.",
+    "panelPoints": {
+      "one": "Enregistrez et reprenez votre demande depuis n'importe quel appareil",
+      "two": "Sachez exactement ce qui manque et pourquoi",
+      "three": "Protégez votre compte avec la vérification en deux étapes"
+    },
     "continueWithGoogle": "Continuer avec Google",
+    "googleUnavailable": "La connexion Google n'est pas configurée dans cet environnement.",
     "signIn": {
       "title": "Bon retour",
       "subtitle": "Connectez-vous pour poursuivre votre demande.",
@@ -72,18 +283,951 @@
     },
     "signUp": {
       "title": "Créer votre compte",
+      "subtitle": "Un seul compte pour toutes vos demandes et licences.",
+      "accountType": "Je m'inscris en tant que",
+      "individual": "Particulier",
+      "individualHint": "Agent, courtier ou agent de recommandation",
+      "organisation": "Cabinet",
+      "organisationHint": "Cabinet de courtage immobilier",
       "fullName": "Nom complet",
+      "fullNameOrg": "Votre nom complet (représentant autorisé)",
       "email": "Adresse e-mail",
       "phone": "Numéro de mobile",
+      "phoneHint": "Nous vous enverrons un code par SMS pour le vérifier. Exemple : 078 812 3456",
       "password": "Mot de passe",
+      "passwordHint": "Au moins 12 caractères. Une courte phrase est facile à retenir.",
       "confirmPassword": "Confirmer le mot de passe",
-      "submit": "Créer le compte"
+      "acceptPrivacy": "J'ai lu l'<link>avis de confidentialité</link> et je comprends comment mes données sont utilisées.",
+      "submit": "Créer le compte",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "strength": {
+      "0": "Trop court",
+      "1": "Faible",
+      "2": "Moyen",
+      "3": "Fort",
+      "4": "Très fort",
+      "label": "Robustesse du mot de passe"
     },
     "twoStep": {
       "title": "Vérification en deux étapes",
+      "subtitle": {
+        "TOTP": "Saisissez le code à 6 chiffres de votre application d'authentification.",
+        "SMS": "Nous avons envoyé un code à 6 chiffres à {destination}.",
+        "EMAIL": "Nous avons envoyé un code à 6 chiffres à {destination}."
+      },
       "code": "Code de vérification",
       "submit": "Vérifier",
-      "resend": "Renvoyer le code"
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer dans {seconds} s",
+      "resent": "Un nouveau code est en route.",
+      "tryAnother": "Essayer une autre méthode",
+      "useRecovery": "Utiliser un code de récupération",
+      "useCode": "Utiliser un code de vérification",
+      "recoveryCode": "Code de récupération",
+      "recoveryHint": "Chaque code de récupération ne fonctionne qu'une fois. Format : XXXXX-XXXXX",
+      "methods": {
+        "TOTP": "Application d'authentification",
+        "SMS": "SMS",
+        "EMAIL": "E-mail"
+      },
+      "expired": "Cette tentative de connexion a expiré. Veuillez vous reconnecter.",
+      "backToSignIn": "Retour à la connexion"
+    },
+    "verify": {
+      "title": "Vérifiez vos coordonnées",
+      "subtitle": "Nous devons confirmer votre e-mail et votre téléphone avant que vous puissiez postuler (cela protège votre compte).",
+      "emailTitle": "Adresse e-mail",
+      "phoneTitle": "Numéro de mobile",
+      "sentTo": "Code envoyé à {destination}",
+      "codeLabel": "Code à 6 chiffres",
+      "submit": "Vérifier",
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer dans {seconds} s",
+      "done": "Vérifié",
+      "allDone": "C'est fait ! Redirection vers votre tableau de bord…",
+      "addPhone": "Ajoutez votre numéro de mobile",
+      "addPhoneSubmit": "Envoyer le code",
+      "resent": "Un nouveau code est en route.",
+      "progress": "{done} sur {total} vérifiés"
+    },
+    "forgot": {
+      "title": "Réinitialiser votre mot de passe",
+      "subtitle": "Saisissez l'e-mail de votre compte et nous vous enverrons un code de réinitialisation.",
+      "submit": "Envoyer le code",
+      "sent": "Si un compte existe pour {email}, un code de réinitialisation est en route.",
+      "back": "Retour à la connexion"
+    },
+    "reset": {
+      "title": "Choisissez un nouveau mot de passe",
+      "subtitle": "Saisissez le code reçu par e-mail et votre nouveau mot de passe.",
+      "code": "Code de réinitialisation",
+      "password": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "submit": "Réinitialiser",
+      "success": "Mot de passe mis à jour. Connectez-vous avec votre nouveau mot de passe.",
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer dans {seconds} s",
+      "resent": "Un nouveau code est en route.",
+      "differentEmail": "Utiliser une autre adresse e-mail"
+    },
+    "oauthErrors": {
+      "googleDisabled": "La connexion Google n'est pas disponible pour le moment.",
+      "oauthStateMismatch": "La demande de connexion a expiré. Veuillez réessayer.",
+      "oauthFailed": "Impossible de finaliser la connexion Google. Veuillez réessayer.",
+      "googleEmailUnverified": "Votre adresse e-mail Google n'est pas vérifiée.",
+      "googleAccountExists": "Un compte existe déjà avec cet e-mail. Connectez-vous avec votre mot de passe, puis liez Google depuis les paramètres de sécurité.",
+      "googleLinkedElsewhere": "Ce compte Google est lié à un autre compte du portail.",
+      "googleAlreadyLinked": "Un compte Google est déjà lié.",
+      "reauthRequired": "Veuillez d'abord confirmer votre mot de passe, puis réessayer."
+    },
+    "checklist": {
+      "length": "{min} caractères minimum",
+      "match": "Les mots de passe correspondent",
+      "met": "OK",
+      "notMet": "Pas encore"
     }
+  },
+  "dashboard": {
+    "greeting": "Bonjour, {name}",
+    "subtitle": "Voici où vous en êtes.",
+    "cards": {
+      "applications": "Demandes en cours",
+      "licenses": "Licences actives",
+      "actions": "Actions requises",
+      "none": "Aucune pour l'instant"
+    },
+    "startTitle": "Prêt à postuler ?",
+    "startBody": "La demande guidée ouvrira avec la prochaine étape de livraison. En attendant, sécurisez votre compte.",
+    "securityTitle": "Protégez votre compte",
+    "securityBody": "Activez la vérification en deux étapes pour être le seul à pouvoir vous connecter.",
+    "securityCta": "Configurer la vérification en deux étapes",
+    "securityOn": "La vérification en deux étapes est activée.",
+    "roles": "Vos rôles",
+    "startShort": "Cinq étapes, du brouillon à la licence.",
+    "journey": "Parcours de la demande",
+    "setupTitle": "Finalisez la configuration",
+    "setupDone": "Compte sécurisé",
+    "setupBody": "Trois vérifications rapides pour protéger votre compte.",
+    "setupProgress": "{done} sur {total} étapes de configuration terminées",
+    "setup": {
+      "email": "E-mail vérifié",
+      "phone": "Téléphone vérifié",
+      "twoStep": "Vérification en deux étapes"
+    },
+    "noLicence": "Aucune licence pour l'instant",
+    "activity": "Activité récente",
+    "noActivity": "Rien pour l'instant."
+  },
+  "security": {
+    "title": "Sécurité",
+    "subtitle": "Gérez votre façon de vous connecter et protégez votre compte.",
+    "requiredBanner": "Votre rôle exige la vérification en deux étapes. Configurez au moins une méthode pour continuer.",
+    "linked": "Compte Google lié.",
+    "contact": {
+      "title": "Coordonnées",
+      "description": "Utilisées pour les codes de connexion et les avis importants.",
+      "email": "E-mail",
+      "phone": "Mobile",
+      "changePhone": "Modifier",
+      "newPhone": "Nouveau numéro de mobile",
+      "phoneChanged": "Numéro mis à jour. Vérifiez-le avec le code envoyé.",
+      "verifyNow": "Vérifier maintenant"
+    },
+    "methods": {
+      "title": "Méthodes de connexion",
+      "description": "Les moyens de vous connecter au portail.",
+      "password": "Mot de passe",
+      "passwordSet": "Modifié le {date}",
+      "passwordNotSet": "Aucun mot de passe défini — vous vous connectez avec Google.",
+      "changePassword": "Modifier le mot de passe",
+      "setPassword": "Définir un mot de passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "passwordUpdated": "Mot de passe mis à jour. Les autres sessions ont été déconnectées.",
+      "google": "Google",
+      "googleLinked": "Lié à {email}",
+      "googleNotLinked": "Non lié",
+      "linkGoogle": "Lier Google",
+      "unlinkGoogle": "Dissocier",
+      "googleUnlinked": "Compte Google dissocié."
+    },
+    "mfa": {
+      "title": "Vérification en deux étapes",
+      "description": "Demander un code après votre mot de passe. Choisissez les méthodes qui vous conviennent.",
+      "statusOn": "Activée",
+      "statusOff": "Désactivée",
+      "preferred": "Préférée",
+      "makePreferred": "Définir comme préférée",
+      "setUp": "Configurer",
+      "remove": "Supprimer",
+      "removed": "Méthode supprimée.",
+      "enabled": "Méthode de vérification ajoutée.",
+      "preferredChanged": "Méthode préférée mise à jour.",
+      "methods": {
+        "TOTP": {
+          "name": "Application d'authentification",
+          "description": "Codes de Google Authenticator, Microsoft Authenticator, 1Password et applications similaires. Fonctionne hors ligne."
+        },
+        "SMS": {
+          "name": "SMS",
+          "description": "Un code par SMS sur votre numéro de mobile vérifié."
+        },
+        "EMAIL": {
+          "name": "E-mail",
+          "description": "Un code envoyé à votre adresse e-mail vérifiée."
+        }
+      },
+      "totpSetup": {
+        "title": "Configurer votre application d'authentification",
+        "step1": "Scannez ce code QR avec votre application d'authentification.",
+        "manual": "Impossible de scanner ? Saisissez cette clé manuellement :",
+        "step2": "Saisissez le code à 6 chiffres affiché par l'application.",
+        "qrAlt": "Code QR pour votre application d'authentification"
+      },
+      "otpSetup": {
+        "title": "Configurer : {method}",
+        "intro": "Nous enverrons un code à {destination} pour vérifier qu'il vous parvient.",
+        "send": "Envoyer le code",
+        "sent": "Code envoyé. Saisissez-le ci-dessous.",
+        "phoneRequired": "Vérifiez d'abord votre numéro de mobile."
+      }
+    },
+    "recovery": {
+      "title": "Codes de récupération",
+      "description": "Utilisez un code de récupération si vous perdez l'accès à vos autres méthodes.",
+      "remaining": "{count, plural, =0 {Aucun code restant} one {# code restant} other {# codes restants}}",
+      "regenerate": "Générer de nouveaux codes",
+      "dialogTitle": "Enregistrez vos codes de récupération",
+      "dialogBody": "Conservez-les en lieu sûr. Chaque code ne fonctionne qu'une fois. Vous ne les reverrez plus.",
+      "saved": "J'ai enregistré mes codes",
+      "fileHeader": "Codes de récupération REBP Portal"
+    },
+    "sessions": {
+      "title": "Sessions actives",
+      "description": "Appareils actuellement connectés à votre compte.",
+      "current": "Cet appareil",
+      "lastActive": "Dernière activité {time}",
+      "signedInWith": "via {method}",
+      "revoke": "Déconnecter",
+      "revokeOthers": "Déconnecter toutes les autres sessions",
+      "revoked": "Session déconnectée.",
+      "revokedOthers": "{count, plural, =0 {Aucune autre session} one {# session déconnectée} other {# sessions déconnectées}}",
+      "unknownDevice": "Appareil inconnu",
+      "showAll": "Tout afficher ({count})"
+    },
+    "reauth": {
+      "title": "Confirmez votre identité",
+      "description": "Pour votre sécurité, saisissez votre mot de passe pour continuer.",
+      "password": "Mot de passe",
+      "submit": "Confirmer",
+      "googleHint": "Votre compte n'a pas de mot de passe. Déconnectez-vous puis reconnectez-vous avec Google pour effectuer cette modification."
+    },
+    "protection": {
+      "score": "{done} protections actives sur {total}",
+      "body": "Touchez un élément ouvert pour le corriger.",
+      "done": "Fait",
+      "fix": "Corriger",
+      "level": {
+        "strong": "Bien protégé",
+        "fair": "Presque terminé",
+        "weak": "À risque"
+      },
+      "checks": {
+        "email": "E-mail vérifié",
+        "phone": "Téléphone vérifié",
+        "twoStep": "Vérification en deux étapes",
+        "recovery": "Codes de récupération prêts"
+      }
+    }
+  },
+  "audit": {
+    "title": "Journal d'audit",
+    "subtitle": "Registre en ajout seul, chaîné par hachage, des actions de sécurité et de changement d'état.",
+    "chainOk": "Chaîne vérifiée — {count} événements intacts.",
+    "chainBroken": "Chaîne rompue à l'événement n° {id}. Enquêtez immédiatement.",
+    "columns": {
+      "time": "Heure",
+      "action": "Action",
+      "actor": "Acteur",
+      "entity": "Entité",
+      "ip": "IP",
+      "hash": "Empreinte"
+    },
+    "empty": "Aucun événement enregistré pour l'instant.",
+    "subtitleShort": "Chaque changement de sécurité et d'état, infalsifiable.",
+    "chainIntact": "Chaîne intacte",
+    "chainBrokenTitle": "Chaîne rompue",
+    "hashChained": "Chaîne de hachage SHA-256",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "filter": "Filtrer les événements",
+    "all": "Tous",
+    "system": "Système",
+    "older": "Événements plus anciens",
+    "newest": "Plus récents",
+    "categories": {
+      "signin": "Connexion",
+      "account": "Compte",
+      "twoStep": "Deux étapes",
+      "access": "Accès"
+    }
+  },
+  "privacy": {
+    "title": "Avis de confidentialité",
+    "draft": "Texte provisoire en attente d'approbation par le responsable juridique et conformité de l'Ordre professionnel.",
+    "body": "Nous collectons les données personnelles nécessaires pour enregistrer les praticiens et cabinets de courtage immobilier, leur délivrer une licence et tenir le registre public. Nous ne collectons chaque élément que lorsque votre catégorie ou votre type de demande l'exige. Vos données sont chiffrées, l'accès est limité au personnel qui en a besoin et chaque accès aux dossiers sensibles est journalisé. Seuls les champs prévus par les règles du registre sont publiés. Vous pouvez demander une copie de vos données à tout moment.",
+    "metaDescription": "Comment le portail collecte, protège et publie les données personnelles.",
+    "highlightsLabel": "Nos engagements",
+    "fullNotice": "Avis complet",
+    "highlights": {
+      "minimal": "Uniquement ce que votre catégorie exige",
+      "encrypted": "Vos données sont chiffrées",
+      "access": "Accès limité au strict nécessaire, chaque consultation journalisée",
+      "published": "Seuls les champs du registre sont publics",
+      "rights": "Demandez une copie de vos données à tout moment"
+    }
+  },
+  "forbidden": {
+    "title": "Vous n'avez pas accès à cette page",
+    "body": "Les rôles de votre compte n'incluent pas cet espace. Si vous pensez qu'il s'agit d'une erreur, contactez votre administrateur.",
+    "cta": "Aller au tableau de bord"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "cta": "Retour à l'accueil"
+  },
+  "errorPage": {
+    "title": "Une erreur s'est produite",
+    "body": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "retry": "Réessayer"
+  },
+  "outbox": {
+    "title": "Boîte d'envoi de développement",
+    "subtitle": "E-mails et SMS enregistrés par les adaptateurs simulés. Indisponible en production.",
+    "empty": "Aucun message pour l'instant.",
+    "channel": "Canal",
+    "to": "Destinataire",
+    "template": "Modèle",
+    "sent": "Envoyé"
+  },
+  "roles": {
+    "APPLICANT": "Demandeur",
+    "SUPERVISOR": "Superviseur",
+    "PRINCIPAL_BROKER": "Courtier principal",
+    "FIRM_ADMIN": "Administrateur de cabinet",
+    "REVIEWING_OFFICER": "Agent d'instruction",
+    "APPROVING_AUTHORITY": "Autorité d'approbation",
+    "REGISTRAR": "Greffier",
+    "FINANCE_OFFICER": "Responsable financier",
+    "SYSTEM_ADMIN": "Administrateur système",
+    "AUDITOR": "Auditeur / DPD"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "emailInvalid": "Saisissez une adresse e-mail valide, par exemple nom@exemple.com.",
+    "phoneInvalid": "Saisissez un numéro de mobile avec l'indicatif, par exemple +250 788 123 456, ou un numéro local comme 078 812 3456.",
+    "passwordTooShort": "Utilisez au moins 12 caractères. Essayez une courte phrase.",
+    "passwordTooLong": "Utilisez 128 caractères maximum.",
+    "passwordContainsPersonalInfo": "N'incluez pas votre nom ou votre e-mail dans votre mot de passe.",
+    "passwordBreached": "Ce mot de passe est apparu dans une fuite de données. Choisissez-en un autre.",
+    "passwordsMismatch": "Les mots de passe ne correspondent pas.",
+    "otpInvalid": "Saisissez le code à 6 chiffres.",
+    "recoveryCodeInvalid": "Les codes de récupération comportent 10 lettres et chiffres, par exemple ABCDE-23456.",
+    "nameTooShort": "Saisissez votre nom complet.",
+    "nameTooLong": "Utilisez 120 caractères maximum.",
+    "privacyRequired": "Veuillez confirmer que vous avez lu l'avis de confidentialité.",
+    "rolesRequired": "Choisissez au moins un rôle."
+  },
+  "errors": {
+    "unexpected": "Une erreur s'est produite. Veuillez réessayer.",
+    "validation": "Veuillez corriger les champs signalés.",
+    "unauthenticated": "Votre session a expiré. Veuillez vous reconnecter.",
+    "invalidCredentials": "L'e-mail ou le mot de passe est incorrect.",
+    "invalidPassword": "Le mot de passe est incorrect.",
+    "accountLocked": "Trop de tentatives échouées. Réessayez dans {minutes} minutes ou réinitialisez votre mot de passe.",
+    "rateLimited": "Trop de tentatives. Veuillez patienter {seconds} secondes et réessayer.",
+    "duplicateAccount": "Un compte avec ces informations existe déjà.",
+    "emailTaken": "Un compte utilise déjà cet e-mail. Connectez-vous ou réinitialisez votre mot de passe.",
+    "phoneTaken": "Un autre compte utilise déjà ce numéro de mobile.",
+    "codeInvalid": "Ce code est incorrect. Vérifiez-le et réessayez.",
+    "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+    "tooManyAttempts": "Trop de codes incorrects. Veuillez recommencer.",
+    "resendCooldown": "Veuillez patienter {seconds} secondes avant de demander un nouveau code.",
+    "alreadyVerified": "Déjà vérifié.",
+    "phoneMissing": "Ajoutez d'abord un numéro de mobile.",
+    "phoneNotVerified": "Vérifiez d'abord votre numéro de mobile.",
+    "challengeExpired": "Cette tentative de connexion a expiré. Veuillez vous reconnecter.",
+    "methodNotEnabled": "Cette méthode n'est pas configurée.",
+    "methodAlreadyEnabled": "Cette méthode est déjà configurée.",
+    "enrolmentExpired": "La configuration a expiré. Veuillez recommencer.",
+    "mfaRequiredForRole": "Votre rôle exige au moins une méthode de vérification en deux étapes.",
+    "reauthRequired": "Veuillez confirmer votre mot de passe pour continuer.",
+    "reauthWithGoogle": "Reconnectez-vous avec Google pour confirmer votre identité.",
+    "disableSmsFirst": "Supprimez la vérification par SMS avant de changer de numéro.",
+    "cannotRevokeCurrent": "Utilisez « Se déconnecter » pour fermer cette session.",
+    "cannotUnlinkOnlyMethod": "Définissez un mot de passe avant de dissocier Google, sinon vous ne pourrez plus vous connecter.",
+    "googleNotLinked": "Aucun compte Google n'est lié.",
+    "googleAccountExists": "Un compte existe déjà avec cet e-mail. Connectez-vous avec votre mot de passe, puis liez Google depuis les paramètres de sécurité.",
+    "googleEmailUnverified": "Votre adresse e-mail Google n'est pas vérifiée.",
+    "googleLinkedElsewhere": "Ce compte Google est lié à un autre compte du portail.",
+    "googleAlreadyLinked": "Un compte Google est déjà lié.",
+    "accountDisabled": "Ce compte a été désactivé. Contactez l'Ordre professionnel si vous pensez qu'il s'agit d'une erreur.",
+    "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+    "mfaRequiredForAction": "Activez la vérification en deux étapes avant de gérer les accès.",
+    "cannotEditOwnAccess": "Vous ne pouvez pas modifier vos propres accès. Demandez à un autre administrateur.",
+    "userNotFound": "Ce compte n'existe plus.",
+    "staffRoleOnOrganisation": "Les rôles du personnel ne peuvent pas être attribués aux comptes de cabinet.",
+    "lastAdmin": "Au moins un administrateur système actif doit être conservé.",
+    "matrixInvalid": "Ces modifications enfreignent une règle d'accès. Vérifiez les cellules signalées."
+  },
+  "notifications": {
+    "emailVerify": {
+      "subject": "Votre code de vérification REBP Portal : {code}",
+      "body": "Bonjour {name},\n\nVotre code de vérification d'e-mail est {code}. Il expire dans 10 minutes.\n\nSi vous n'avez pas créé de compte, vous pouvez ignorer cet e-mail."
+    },
+    "phoneVerify": {
+      "subject": "Vérification REBP",
+      "body": "REBP Portal : votre code de vérification du téléphone est {code}. Il expire dans 10 minutes."
+    },
+    "mfaLoginCode": {
+      "subject": "Votre code de connexion REBP Portal : {code}",
+      "body": "REBP Portal : votre code de connexion est {code}. Ne le partagez jamais. Si ce n'était pas vous, changez votre mot de passe."
+    },
+    "mfaEnrolCode": {
+      "subject": "Confirmer la vérification en deux étapes : {code}",
+      "body": "REBP Portal : votre code pour activer la vérification en deux étapes est {code}."
+    },
+    "passwordReset": {
+      "subject": "Réinitialisez votre mot de passe REBP Portal",
+      "body": "Bonjour {name},\n\nVotre code de réinitialisation du mot de passe est {code}. Il expire dans 10 minutes.\n\nSi vous n'avez pas demandé de réinitialisation, vous pouvez ignorer cet e-mail — votre mot de passe reste inchangé."
+    },
+    "passwordChanged": {
+      "subject": "Votre mot de passe REBP Portal a été modifié",
+      "body": "Bonjour {name},\n\nLe mot de passe de votre compte REBP Portal vient d'être modifié. Si ce n'était pas vous, réinitialisez immédiatement votre mot de passe et contactez l'assistance."
+    },
+    "mfaChanged": {
+      "subject": "Paramètres de vérification en deux étapes modifiés",
+      "body": "Bonjour {name},\n\nLes paramètres de vérification en deux étapes de votre compte REBP Portal ont été modifiés. Si ce n'était pas vous, contactez immédiatement l'assistance."
+    },
+    "contactChanged": {
+      "subject": "Votre numéro de mobile a été modifié",
+      "body": "Bonjour {name},\n\nLe numéro de mobile de votre compte REBP Portal a été modifié. Si ce n'était pas vous, contactez immédiatement l'assistance."
+    },
+    "accessChanged": {
+      "subject": "Vos accès REBP Portal ont changé",
+      "body": "Bonjour {name},\n\nUn administrateur a modifié les rôles de votre compte REBP Portal. Connectez-vous pour voir ce que vous pouvez faire désormais (Paramètres → Mes accès). Si vous ne vous y attendiez pas, contactez l'Ordre professionnel."
+    }
+  },
+  "footer": {
+    "rights": "© {year} Ordre professionnel des praticiens du courtage immobilier",
+    "privacy": "Confidentialité",
+    "accessibility": "Accessibilité",
+    "contact": "Contact",
+    "navLabel": "Pied de page",
+    "cta": {
+      "title": "Prêt à obtenir votre licence ?",
+      "body": "Postulez en quelques minutes, suivez chaque étape en direct et recevez une e-licence vérifiable."
+    },
+    "columns": {
+      "services": "Services",
+      "help": "Aide"
+    },
+    "links": {
+      "apply": "Demander une licence"
+    },
+    "secure": "Chiffré et en deux étapes",
+    "madeIn": "Conçu au Rwanda",
+    "top": "Haut de page",
+    "social": {
+      "title": "Suivez-nous",
+      "body": "Actualités, conseils et nouvelles des licences.",
+      "follow": "Suivez-nous sur {network}"
+    }
+  },
+  "devMode": {
+    "codeLabel": "Mode dev · code simulé",
+    "useCode": "Utiliser le code",
+    "banner": "Mode dev : aucun e-mail ni SMS n'est envoyé — les codes de vérification s'affichent à l'écran.",
+    "chip": "Mode dev"
+  },
+  "roleInfo": {
+    "APPLICANT": "Demande, renouvelle et suit des licences.",
+    "SUPERVISOR": "Confirme la supervision d'autres praticiens.",
+    "PRINCIPAL_BROKER": "Dirige un cabinet : effectif, affiliations et déclarations du cabinet.",
+    "FIRM_ADMIN": "Gère le personnel et les déclarations d'un cabinet.",
+    "REVIEWING_OFFICER": "Instruit les demandes et vérifie les justificatifs (section L).",
+    "APPROVING_AUTHORITY": "Statue sur les demandes et les révocations (section M).",
+    "REGISTRAR": "Tient le registre public officiel.",
+    "FINANCE_OFFICER": "Gère les frais, paiements et remboursements.",
+    "SYSTEM_ADMIN": "Configure le portail et gère les accès.",
+    "AUDITOR": "Contrôle indépendant des dossiers et des accès."
+  },
+  "capabilityGroups": {
+    "applications": "Demandes et cabinets",
+    "review": "Instruction et décisions",
+    "register": "Registre public",
+    "payments": "Paiements",
+    "administration": "Administration",
+    "oversight": "Contrôle"
+  },
+  "capabilities": {
+    "application_edit": {
+      "label": "Créer et modifier des demandes",
+      "description": "Commencer, remplir et soumettre des demandes (personnel : dépôt assisté)."
+    },
+    "application_view": {
+      "label": "Consulter les demandes",
+      "description": "Voir le détail des demandes dans leur périmètre."
+    },
+    "confirmation_decide": {
+      "label": "Confirmer la supervision",
+      "description": "Accepter ou refuser les demandes de supervision et d'affiliation."
+    },
+    "confirmation_override": {
+      "label": "Forcer les confirmations",
+      "description": "Enregistrer une confirmation au nom d'une autre personne, avec un motif."
+    },
+    "review_perform": {
+      "label": "Instruire les demandes",
+      "description": "Effectuer l'examen administratif de la section L."
+    },
+    "review_view": {
+      "label": "Voir les instructions",
+      "description": "Lire les examens terminés de la section L."
+    },
+    "decision_make": {
+      "label": "Statuer sur les demandes",
+      "description": "Enregistrer la décision de licence de la section M."
+    },
+    "decision_view": {
+      "label": "Voir les décisions",
+      "description": "Lire les décisions et courriers de la section M."
+    },
+    "register_administer": {
+      "label": "Administrer le registre",
+      "description": "Suspendre, rétablir et corriger les inscriptions au registre."
+    },
+    "register_revoke": {
+      "label": "Révoquer des licences",
+      "description": "Approuver la révocation d'une licence."
+    },
+    "payments_pay": {
+      "label": "Payer les frais",
+      "description": "Payer en ligne les frais de demande et de licence."
+    },
+    "payments_manage": {
+      "label": "Gérer les paiements",
+      "description": "Rapprocher, rembourser et exonérer des frais."
+    },
+    "payments_view": {
+      "label": "Consulter les paiements",
+      "description": "Voir l'état des paiements et les reçus."
+    },
+    "config_edit": {
+      "label": "Proposer une configuration",
+      "description": "Préparer des modifications des frais, règles et modèles."
+    },
+    "config_approve": {
+      "label": "Approuver la configuration",
+      "description": "Approuver les modifications de configuration (validateur)."
+    },
+    "users_manage": {
+      "label": "Gérer les personnes",
+      "description": "Attribuer et retirer des rôles, désactiver des comptes."
+    },
+    "roles_manage": {
+      "label": "Gérer les autorisations",
+      "description": "Modifier ce que chaque rôle est autorisé à faire."
+    },
+    "access_view": {
+      "label": "Consulter les accès",
+      "description": "Voir qui possède quels rôles et autorisations."
+    },
+    "firmRoles_manage": {
+      "label": "Gérer les rôles du cabinet",
+      "description": "Gérer l'effectif et les rôles d'un cabinet."
+    },
+    "audit_view": {
+      "label": "Consulter le journal d'audit",
+      "description": "Lire le journal d'audit infalsifiable."
+    },
+    "audit_export": {
+      "label": "Exporter le journal d'audit",
+      "description": "Exporter les enregistrements d'audit pour enquête."
+    },
+    "reports_view": {
+      "label": "Consulter les rapports",
+      "description": "Tableaux de bord et rapports dans leur périmètre."
+    },
+    "backoffice_access": {
+      "label": "Ouvrir le back-office",
+      "description": "Utiliser la console du personnel du régulateur."
+    }
+  },
+  "access": {
+    "title": "Contrôle d'accès",
+    "subtitle": "Qui peut faire quoi dans le portail — personnes, rôles et autorisations.",
+    "tabs": {
+      "people": "Personnes",
+      "roles": "Rôles et autorisations"
+    },
+    "readOnly": "Lecture seule : votre rôle permet de consulter les accès, mais pas de les modifier.",
+    "people": {
+      "search": "Rechercher par nom ou e-mail",
+      "allRoles": "Tous les rôles",
+      "statusLabel": "Statut",
+      "roleLabel": "Rôle",
+      "status": {
+        "all": "Tout le monde",
+        "active": "Actifs",
+        "disabled": "Désactivés",
+        "noMfa": "Sans deux étapes"
+      },
+      "count": "{count, plural, =0 {Aucune personne} one {# personne} other {# personnes}}",
+      "empty": "Personne ne correspond à ces filtres.",
+      "clear": "Effacer les filtres",
+      "lastSignIn": "Dernière connexion {date}",
+      "neverSignedIn": "Jamais connecté",
+      "you": "Vous",
+      "disabled": "Désactivé",
+      "noMfa": "Sans deux étapes",
+      "mfaOn": "Deux étapes activée",
+      "manage": "Gérer",
+      "view": "Voir",
+      "unverified": "Non vérifié",
+      "page": "Page {page} sur {count}",
+      "prev": "Précédent",
+      "next": "Suivant",
+      "organisation": "Compte de cabinet"
+    },
+    "manage": {
+      "title": "Gérer les accès",
+      "rolesTitle": "Rôles",
+      "rolesHint": "Touchez un rôle pour l'ajouter ou le retirer.",
+      "preview": "Ce que cette personne peut faire",
+      "gained": "{count} nouvelle(s)",
+      "lost": "{count} retirée(s)",
+      "save": "Enregistrer les rôles",
+      "saved": "Rôles mis à jour pour {name}.",
+      "undo": "Annuler les modifications",
+      "selfNote": "Vous ne pouvez pas modifier vos propres accès. Demandez à un autre administrateur.",
+      "statusTitle": "Statut du compte",
+      "statusActive": "Actif — peut se connecter.",
+      "disable": "Désactiver le compte",
+      "enable": "Réactiver le compte",
+      "disableReason": "Motif (facultatif)",
+      "disabledToast": "{name} a été désactivé et déconnecté partout.",
+      "enabledToast": "{name} peut de nouveau se connecter.",
+      "disabledSince": "Désactivé le {date}",
+      "warnings": {
+        "sodCombined": "Cette personne pourrait à la fois instruire et statuer sur des demandes. Le système l'empêche toutefois de statuer sur un dossier qu'elle a instruit (BR-091).",
+        "mfaRequired": "Ces rôles exigent la vérification en deux étapes. Elle devra la configurer à sa prochaine connexion.",
+        "staffOnOrganisation": "Les rôles du personnel ne peuvent pas être attribués aux comptes de cabinet."
+      }
+    },
+    "matrix": {
+      "title": "Matrice des autorisations",
+      "subtitle": "Les valeurs par défaut proviennent de l'annexe D du SRS. Chaque modification est contrôlée par les règles d'accès et auditée.",
+      "search": "Filtrer les autorisations",
+      "changes": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
+      "review": "Vérifier et enregistrer",
+      "discard": "Abandonner",
+      "resetDefaults": "Rétablir les valeurs par défaut",
+      "resetTitle": "Réinitialiser toutes les autorisations ?",
+      "resetBody": "Chaque rôle revient aux valeurs par défaut de l'annexe D du SRS. Cela prend effet immédiatement.",
+      "saved": "{count, plural, one {# autorisation mise à jour} other {# autorisations mises à jour}}",
+      "resetDone": "Autorisations rétablies par défaut.",
+      "modified": "Modifié par rapport à la valeur par défaut",
+      "locked": {
+        "required": "Toujours activé — le retirer bloquerait l'accès des administrateurs.",
+        "staffOnly": "Réservé au personnel — ce rôle n'exige pas la vérification en deux étapes."
+      },
+      "reviewTitle": "Vérifier les modifications",
+      "reviewBody": "Les modifications s'appliquent immédiatement à toutes les personnes ayant ce rôle.",
+      "grant": "Accorder",
+      "revoke": "Retirer",
+      "chooseRole": "Rôle",
+      "members": "{count, plural, =0 {Aucun membre} one {# membre} other {# membres}}",
+      "permissionCount": "{count, plural, one {# autorisation} other {# autorisations}}",
+      "cellLabel": "{capability} pour {role}",
+      "violations": {
+        "sod": "{role} ne peut pas à la fois instruire et statuer sur des demandes.",
+        "makerChecker": "{role} ne peut pas à la fois proposer et approuver la configuration.",
+        "required": "{role} doit conserver « {capability} ».",
+        "staffOnly": "« {capability} » est réservé au personnel et ne peut pas être attribué à {role}."
+      },
+      "legend": {
+        "granted": "Accordé",
+        "denied": "Non accordé",
+        "modified": "Modifié",
+        "locked": "Verrouillé"
+      },
+      "staffRole": "Personnel",
+      "noMatches": "Aucune autorisation ne correspond à « {query} »."
+    }
+  },
+  "myAccess": {
+    "title": "Mes accès",
+    "subtitle": "Vos rôles et ce qu'ils vous permettent de faire dans le portail.",
+    "rolesTitle": "Vos rôles",
+    "canTitle": "Ce que vous pouvez faire",
+    "cannotTitle": "Hors de vos rôles",
+    "count": "{count} autorisations sur {total}",
+    "mfa": "Vos rôles exigent la vérification en deux étapes.",
+    "requestNote": "Besoin de plus d'accès ? Demandez à un administrateur système — chaque modification est consignée dans le journal d'audit."
+  },
+  "ladder": {
+    "title": "L'échelle de carrière",
+    "marker": {
+      "current": "Vous",
+      "recommended": "Recommandé",
+      "next": "Suivant"
+    },
+    "prepare": "Documents à préparer",
+    "check": "Vérifier mon éligibilité",
+    "req": {
+      "education": "Formation",
+      "experienceShort": "{years} ans",
+      "exam": "Examen",
+      "licenceShort": "Licence",
+      "supervised": "Supervisé",
+      "adult": "18 ans ou plus",
+      "training": "Certificat de formation agréée",
+      "examFull": "Examen de licence",
+      "experience": "{years} ans documentés en tant que {category}",
+      "licence": "Titulaire d'une licence {category} valide",
+      "supervisedFull": "Travaille sous un superviseur désigné",
+      "firm": "Une société enregistrée avec un courtier principal",
+      "territory": "Un territoire d'activité proposé"
+    },
+    "education": {
+      "NONE": "Aucune qualification minimale",
+      "A2": "Certificat A2 ou équivalent",
+      "A1_OR_HIGHER": "A1, A0 ou licence universitaire pertinents",
+      "REAL_ESTATE_DEGREE": "Diplôme en immobilier, évaluation ou gestion immobilière"
+    }
+  },
+  "status": {
+    "application": {
+      "DRAFT": "Brouillon",
+      "PENDING_PAYMENT": "En attente de paiement",
+      "PENDING_CONFIRMATIONS": "En attente de confirmation",
+      "SUBMITTED": "Soumise",
+      "UNDER_REVIEW": "En cours d'examen",
+      "ACTION_REQUIRED": "Action requise",
+      "FURTHER_ASSESSMENT": "Évaluation complémentaire",
+      "PENDING_DECISION": "En attente de décision",
+      "APPROVED": "Approuvée",
+      "APPROVED_WITH_CONDITIONS": "Approuvée sous conditions",
+      "DEFERRED": "Ajournée",
+      "REJECTED": "Rejetée",
+      "LICENSE_ISSUED": "Licence délivrée",
+      "WITHDRAWN": "Retirée",
+      "EXPIRED_DRAFT": "Brouillon expiré"
+    },
+    "licence": {
+      "ACTIVE": "Valide",
+      "EXPIRED": "Expirée",
+      "LAPSED": "Caduque",
+      "SUSPENDED": "Suspendue",
+      "REVOKED": "Révoquée",
+      "SURRENDERED": "Restituée",
+      "SUPERSEDED": "Remplacée"
+    },
+    "confirmation": {
+      "PENDING": "En attente",
+      "CONFIRMED": "Confirmée",
+      "DECLINED": "Refusée",
+      "EXPIRED": "Expirée",
+      "CANCELLED": "Annulée"
+    }
+  },
+  "journey": {
+    "label": "Étape : {stage}",
+    "stages": {
+      "draft": "Brouillon",
+      "payment": "Paiement",
+      "confirmation": "Confirmation",
+      "review": "Examen",
+      "decision": "Décision"
+    }
+  },
+  "eligibility": {
+    "documents": {
+      "nationalId": "Carte d'identité nationale ou passeport",
+      "photo": "Photo d'identité",
+      "education": "Certificat d'études",
+      "referralArrangement": "Accord de recommandation",
+      "entryTraining": "Certificat de formation initiale",
+      "supervisorConfirmation": "Confirmation du superviseur",
+      "professionalTraining": "Certificat de formation professionnelle",
+      "reaExam": "Résultat de l'examen REA",
+      "experience": "Justificatif d'expérience",
+      "advancedTraining": "Formation avancée de courtier",
+      "brokerExam": "Résultat de l'examen de courtier",
+      "brokerLicence": "Licence de courtier",
+      "firmAffiliation": "Lettre d'affiliation au cabinet",
+      "branchDetails": "Informations sur la succursale",
+      "indemnityInsurance": "Assurance responsabilité civile professionnelle",
+      "companyRegistration": "Immatriculation de la société (RDB)",
+      "directorsList": "Administrateurs et actionnaires",
+      "principalBroker": "Désignation du courtier principal",
+      "officeAddress": "Adresse du siège social"
+    },
+    "title": "Suis-je éligible ?",
+    "eyebrow": "Test d'éligibilité · 1 minute",
+    "metaDescription": "Répondez à quelques questions pour trouver la bonne catégorie de licence immobilière et les documents à préparer.",
+    "back": "Question précédente",
+    "progress": "Question {step} sur {total}",
+    "seeResult": "Voir mon résultat",
+    "fewer": "Un an de moins",
+    "more": "Un an de plus",
+    "yearsUnit": "{count, plural, one {an} other {ans}}",
+    "disclaimer": "Ce test est indicatif. Votre demande sera évaluée selon l'ensemble des règles lors du dépôt.",
+    "shareText": "Je peux postuler en tant que {category}.",
+    "q": {
+      "who": "Qui dépose la demande ?",
+      "age": "Avez-vous 18 ans ou plus ?",
+      "education": "Votre plus haut diplôme ?",
+      "licence": "Détenez-vous une licence actuellement ?",
+      "years": "Années d'exercice en tant que {category} ?"
+    },
+    "a": {
+      "individual": "Moi, à titre individuel",
+      "firm": "Une société (cabinet de courtage)",
+      "yes": "Oui",
+      "no": "Pas encore",
+      "noLicence": "Aucune licence pour l'instant"
+    },
+    "educationLevels": {
+      "NONE": "Inférieur à A2",
+      "A2": "Certificat A2",
+      "A1_OR_HIGHER": "A1, A0 ou licence universitaire",
+      "REAL_ESTATE_DEGREE": "Diplôme en immobilier ou évaluation"
+    },
+    "result": {
+      "youCanApply": "Vous pouvez postuler en tant que",
+      "notYet": "Pas encore éligible",
+      "noneTitle": "Trouvons votre parcours",
+      "towards": "Vers {category}",
+      "yearsOf": "{years} ans sur {required}",
+      "eligibleFor": "Catégories accessibles",
+      "prepare": "Documents à préparer",
+      "start": "Créer mon compte",
+      "share": "Partager",
+      "restart": "Recommencer",
+      "ladder": "Où vous en êtes"
+    }
+  },
+  "palette": {
+    "open": "Recherche et commandes",
+    "placeholder": "Rechercher ou aller à…",
+    "results": "Résultats",
+    "empty": "Aucun résultat.",
+    "searchRegister": "Rechercher « {query} » dans le registre",
+    "checkLicence": "Vérifier la licence {query}",
+    "groups": {
+      "search": "Rechercher",
+      "go": "Aller à",
+      "prefs": "Préférences"
+    }
+  },
+  "licence": {
+    "expires": "Expire le",
+    "sample": "Exemple"
+  },
+  "verify": {
+    "label": "Rechercher dans le registre public",
+    "placeholder": "Nom ou numéro de licence",
+    "submit": "Rechercher",
+    "scan": "Scanner le code QR d'une licence",
+    "scanTitle": "Scannez le code QR",
+    "scanBody": "Pointez votre caméra vers le code figurant sur le certificat de licence.",
+    "scanError": "Impossible d'accéder à la caméra. Saisissez plutôt le numéro de licence."
+  },
+  "register": {
+    "title": "Registre public",
+    "subtitle": "Vérifiez qu'un praticien ou un cabinet est agréé.",
+    "metaDescription": "Recherchez les praticiens immobiliers et cabinets de courtage agréés par nom, numéro de licence ou catégorie.",
+    "filterCategory": "Filtrer par catégorie",
+    "filterStatus": "Filtrer par statut",
+    "all": "Tous",
+    "emptyTitle": "Aucune inscription pour l'instant",
+    "noResults": "Aucun résultat pour « {query} »"
+  },
+  "check": {
+    "title": "Vérifier une licence",
+    "subtitle": "Saisissez le numéro de licence ou scannez le code QR figurant sur le certificat.",
+    "metaDescription": "Vérifiez en quelques secondes si une licence immobilière est valide.",
+    "resultTitle": "Licence {number}",
+    "notFound": "Aucune licence trouvée",
+    "notFoundBody": "Vérifiez le numéro et réessayez. Un praticien sans licence valide ne doit pas proposer de services de courtage.",
+    "checkedAt": "Vérifié {time}"
+  },
+  "backoffice": {
+    "kpis": "Chiffres clés",
+    "accounts": "Comptes",
+    "newThisWeek": "+{count} cette semaine",
+    "sessions": "Sessions actives",
+    "sessionsHint": "Connectés en ce moment",
+    "twoStep": "Deux étapes activée",
+    "twoStepHint": "{count} comptes protégés",
+    "events": "Événements d'audit",
+    "eventsUnit": "événements",
+    "last14": "14 derniers jours",
+    "activityTitle": "Activité",
+    "byRole": "Personnes par rôle",
+    "consoles": "Consoles"
+  },
+  "offline": {
+    "title": "Vous êtes hors ligne",
+    "body": "Vérifiez votre connexion. Tout ce que vous avez enregistré est en sécurité et vous attendra à votre retour."
+  },
+  "design": {
+    "title": "Système de design",
+    "colours": "Jetons de couleur",
+    "buttons": "Boutons",
+    "status": "Tons de statut",
+    "data": "Graphiques de données"
+  },
+  "auditActions": {
+    "auth_signin": "Connexion",
+    "auth_signout": "Déconnexion",
+    "auth_signin_failed": "Échec de connexion",
+    "auth_mfa_challenged": "Code de vérification demandé",
+    "auth_mfa_failed": "Code de vérification erroné",
+    "auth_locked": "Compte verrouillé après des tentatives échouées",
+    "auth_reauth_failed": "Échec de la reconfirmation d'identité",
+    "auth_session_revoked": "Appareil déconnecté",
+    "auth_sessions_revoked": "Déconnexion de toutes les sessions",
+    "account_created": "Compte créé",
+    "account_email_verified": "E-mail vérifié",
+    "account_phone_verified": "Téléphone vérifié",
+    "account_phone_changed": "Numéro de téléphone modifié",
+    "auth_password_changed": "Mot de passe modifié",
+    "auth_password_set": "Mot de passe défini",
+    "auth_password_reset": "Mot de passe réinitialisé",
+    "auth_password_reset_requested": "Réinitialisation du mot de passe demandée",
+    "auth_google_linked": "Connexion Google liée",
+    "auth_google_unlinked": "Connexion Google supprimée",
+    "mfa_enabled": "Vérification en deux étapes activée",
+    "mfa_disabled": "Vérification en deux étapes désactivée",
+    "mfa_preferred_changed": "Méthode de vérification préférée modifiée",
+    "mfa_recovery_codes_regenerated": "Nouveaux codes de récupération",
+    "access_roles_changed": "Rôles modifiés",
+    "access_permissions_changed": "Autorisations modifiées",
+    "access_permissions_reset": "Autorisations réinitialisées par défaut",
+    "access_account_disabled": "Compte désactivé",
+    "access_account_enabled": "Compte réactivé"
+  },
+  "time": {
+    "justNow": "À l'instant",
+    "minutes": "Il y a {count} min",
+    "hours": "Il y a {count} h",
+    "days": "Il y a {count, plural, one {# jour} other {# jours}}"
   }
 }

@@ -11,3 +11,5 @@
 - **Loading:** route-level `loading.tsx` skeletons, Suspense streaming (sessions list), `next/dynamic` for setup dialogs.
 - **i18n:** next-intl without locale routing (cookie + Accept-Language); EN complete; RW/FR drafts flagged "unapproved".
 - **Accessibility:** axe in E2E for key pages in light and dark themes; reduced-motion support; skip link; labelled fields with ARIA wiring.
+
+_Amended by [ADR-009](ADR-009-visual-language.md) (palette, single type family, motion) and [ADR-010](ADR-010-public-locale-routing.md) (locale-prefixed public URLs)._

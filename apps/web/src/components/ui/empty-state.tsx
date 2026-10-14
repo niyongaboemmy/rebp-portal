@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
@@ -6,26 +6,50 @@ interface EmptyStateProps {
   title: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
+  /** Optional illustration that replaces the icon medallion. */
+  art?: React.ReactNode;
+  /** 1 when the empty state is the whole page (it then carries the page's <h1>). */
+  headingLevel?: 1 | 2;
   className?: string;
 }
 
-/** UX-009: friendly empty states instead of blank screens. */
-export function EmptyState({ icon: Icon, title, description, action, className }: EmptyStateProps) {
+/**
+ * UX-009: friendly empty states instead of blank screens — one picture, one line, one action.
+ * The icon sits on a soft halo with the Imigongo motif behind it (decorative).
+ */
+export function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  art,
+  headingLevel = 2,
+  className,
+}: EmptyStateProps) {
+  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-4 rounded-2xl border border-dashed bg-card px-6 py-12 text-center",
+        "relative flex flex-col items-center gap-5 overflow-hidden rounded-3xl bg-card px-6 py-12 text-center",
         className,
       )}
     >
-      <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
-        <Icon className="size-7" aria-hidden />
-      </span>
-      <div className="flex max-w-md flex-col gap-1.5">
-        <h2 className="text-xl">{title}</h2>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-imigongo-fade text-link opacity-[0.05]"
+      />
+      {art ?? (
+        <span className="relative inline-flex size-20 animate-pop items-center justify-center">
+          <span aria-hidden className="absolute inset-0 rounded-[1.75rem] bg-primary-soft" />
+          <span aria-hidden className="absolute -inset-3 rounded-[2.25rem] bg-primary-soft/40" />
+          <Icon className="relative size-9 text-link" aria-hidden />
+        </span>
+      )}
+      <div className="relative flex max-w-md flex-col gap-1.5">
+        <Heading className="text-xl sm:text-2xl">{title}</Heading>
         {description && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
-      {action}
+      {action && <div className="relative">{action}</div>}
     </div>
   );
 }

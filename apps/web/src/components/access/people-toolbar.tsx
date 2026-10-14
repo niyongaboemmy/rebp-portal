@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Search, X } from "lucide-react";
+import { Loader2, Search, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { ROLES, USER_STATUS_FILTERS } from "@rebp/contracts";
@@ -81,9 +81,9 @@ export function PeopleToolbar() {
               aria-pressed={active}
               onClick={() => set({ status: value === "all" ? null : value })}
               className={cn(
-                "h-9 rounded-full border px-3.5 text-sm font-medium transition-all active:scale-95",
+                "h-11 rounded-full border px-3.5 text-sm font-medium transition-all active:scale-95 sm:h-9",
                 active
-                  ? "border-primary bg-primary text-primary-foreground shadow-soft"
+                  ? "border-primary bg-primary text-primary-foreground"
                   : "bg-card hover:bg-muted",
               )}
             >

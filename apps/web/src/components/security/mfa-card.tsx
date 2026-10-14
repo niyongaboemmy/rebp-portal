@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyRound, Mail, MessageSquare, Smartphone, Star } from "lucide-react";
+import { KeyRound, Mail, MessageSquare, Smartphone, Star } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -156,7 +156,7 @@ export function MfaCard({
                     {t(`mfa.methods.${method}.description`)}
                   </p>
                   {blocked && !isOn && (
-                    <p className="text-xs font-medium text-warning-strong">
+                    <p className="text-warning-strong text-xs font-medium">
                       {t("mfa.otpSetup.phoneRequired")}
                     </p>
                   )}
@@ -189,7 +189,12 @@ export function MfaCard({
                     </Button>
                   </>
                 ) : (
-                  <Button size="sm" disabled={busy || blocked} onClick={() => startSetup(method)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={busy || blocked}
+                    onClick={() => startSetup(method)}
+                  >
                     {t("mfa.setUp")}
                   </Button>
                 )}

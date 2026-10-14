@@ -1,9 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { settle } from "./settle";
 
 for (const path of ["/", "/sign-in", "/sign-up", "/categories", "/forgot-password"]) {
   test(`no serious accessibility violations on ${path} (UX-002)`, async ({ page }) => {
     await page.goto(path);
+    await settle(page);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
       .analyze();
@@ -20,6 +22,7 @@ test("dark theme also passes contrast checks", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/sign-in");
   await expect(page.locator("html")).toHaveClass(/dark/);
+  await settle(page);
   const results = await new AxeBuilder({ page }).withRules(["color-contrast"]).analyze();
   expect(results.violations.flatMap((v) => v.nodes.map((n) => n.target.join(" ")))).toEqual([]);
 });

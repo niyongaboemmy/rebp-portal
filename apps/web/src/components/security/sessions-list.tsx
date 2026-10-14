@@ -1,9 +1,9 @@
 "use client";
 
-import { Laptop, LogOut } from "lucide-react";
+import { ChevronDown, Laptop, LogOut } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,19 @@ export interface SessionRow {
   current: boolean;
 }
 
+/** Sessions shown before "Show all": the current device plus the most recent others. */
+const COLLAPSED = 4;
+
 export function SessionsList({ sessions }: { sessions: SessionRow[] }) {
   const t = useTranslations("security.sessions");
   const router = useRouter();
   const errorMessage = useErrorMessage();
   const [busy, startTransition] = useTransition();
+  const [expanded, setExpanded] = useState(false);
+  // Current device first, so it is never hidden behind "Show all".
+  const ordered = [...sessions.filter((s) => s.current), ...sessions.filter((s) => !s.current)];
+  const visible = expanded ? ordered : ordered.slice(0, COLLAPSED);
+  const hidden = ordered.length - visible.length;
 
   const revoke = (id: string) =>
     startTransition(async () => {
@@ -44,7 +52,7 @@ export function SessionsList({ sessions }: { sessions: SessionRow[] }) {
   return (
     <div className="flex flex-col gap-4">
       <ul className="flex flex-col divide-y rounded-xl border">
-        {sessions.map((s) => (
+        {visible.map((s) => (
           <li key={s.id} className="flex flex-wrap items-center gap-3 p-4">
             <Laptop className="size-5 shrink-0 text-muted-foreground" aria-hidden />
             <div className="flex min-w-0 flex-1 flex-col">
@@ -66,6 +74,11 @@ export function SessionsList({ sessions }: { sessions: SessionRow[] }) {
           </li>
         ))}
       </ul>
+      {hidden > 0 && (
+        <Button variant="ghost" className="self-start" onClick={() => setExpanded(true)}>
+          <ChevronDown /> {t("showAll", { count: ordered.length })}
+        </Button>
+      )}
       {sessions.length > 1 && (
         <Button variant="outline" className="self-start" disabled={busy} onClick={revokeOthers}>
           <LogOut /> {t("revokeOthers")}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Lock, RotateCcw, Search, Sparkles } from "lucide-react";
+import { Check, Lock, RotateCcw, Search, Sparkles } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";

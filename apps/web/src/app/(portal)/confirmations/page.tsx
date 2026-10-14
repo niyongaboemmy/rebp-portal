@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react";
+import { Inbox } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/layout/coming-soon";
@@ -12,11 +12,6 @@ export default async function ConfirmationsPage() {
   await requireCapability("confirmation.decide");
   const t = await getTranslations("placeholders");
   return (
-    <ComingSoon
-      icon={Inbox}
-      title={t("confirmationsTitle")}
-      description={t("confirmationsBody")}
-      milestone="D3 — WP-2.4"
-    />
+    <ComingSoon icon={Inbox} title={t("confirmationsTitle")} description={t("confirmationsBody")} />
   );
 }

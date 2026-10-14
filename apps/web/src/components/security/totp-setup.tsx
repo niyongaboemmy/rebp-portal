@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy } from "lucide-react";
+import { Copy } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { otpSchema } from "@rebp/contracts";
 import { z } from "zod";

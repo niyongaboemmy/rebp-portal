@@ -21,7 +21,6 @@ export default async function BackofficeSectionPage({
       icon={config.icon}
       title={t(`nav.${config.label}`)}
       description={t("placeholders.backofficeBody")}
-      milestone={config.milestone}
     />
   );
 }

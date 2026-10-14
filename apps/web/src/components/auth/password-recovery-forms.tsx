@@ -124,7 +124,7 @@ export function ResetPasswordForm({
         {t("submit")}
       </Button>
       <p className="text-center text-sm text-muted-foreground">
-        <Link href="/forgot-password" className="font-semibold text-primary hover:underline">
+        <Link href="/forgot-password" className="hit-area font-semibold text-link hover:underline">
           {t("differentEmail")}
         </Link>
       </p>

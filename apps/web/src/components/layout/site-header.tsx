@@ -1,39 +1,42 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { getCurrentSession } from "@/server/auth/current";
+import { AuthMenu } from "./auth-menu";
+import { CommandPalette } from "./command-palette";
+import { HeaderNav } from "./header-nav";
+import { HeaderShell } from "./header-shell";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileNav } from "./mobile-nav";
-import { PublicNav } from "./public-nav";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeSwitch } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
+/**
+ * Public header, three columns: logo · centred one-word links (overflow in "⋯") · icon search,
+ * flag language menu, theme switch and one account button. Transparent over the landing hero, frosted with a soft
+ * shadow on scroll. Below md the links move into the drawer.
+ */
 export async function SiteHeader() {
-  const [t, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
+  const [, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
-      <div className="container-page flex h-16 items-center gap-2">
-        <MobileNav area="public" />
-        <Logo className="mr-4" />
-        <PublicNav />
-        <div className="ml-auto flex items-center gap-1">
-          <LanguageSwitcher />
-          <ThemeToggle />
+    <HeaderShell>
+      <div className="container-page grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+        <div className="col-start-1 flex items-center justify-self-start">
+          <Logo className="hidden sm:max-md:inline-flex lg:inline-flex" />
+          <Logo className="sm:max-md:hidden lg:hidden" showText={false} />
+        </div>
+        <HeaderNav />
+        <div className="col-start-3 flex items-center gap-0.5 justify-self-end sm:gap-1">
+          <CommandPalette area="public" compact />
+          <LanguageSwitcher className="rounded-full" />
+          <ThemeSwitch />
           {current ? (
             <UserMenu name={current.user.fullName} email={current.user.email} />
           ) : (
-            <>
-              <Button asChild variant="ghost" className="hidden sm:inline-flex">
-                <Link href="/sign-in">{t("signIn")}</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/sign-up">{t("signUp")}</Link>
-              </Button>
-            </>
+            <AuthMenu />
           )}
+          <MobileNav area="public" />
         </div>
       </div>
-    </header>
+    </HeaderShell>
   );
 }

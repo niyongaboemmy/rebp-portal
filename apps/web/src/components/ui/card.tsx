@@ -5,7 +5,7 @@ export function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "flex flex-col gap-5 rounded-2xl border bg-card p-5 text-card-foreground shadow-soft sm:p-6",
+        "flex flex-col gap-5 rounded-2xl border bg-card p-5 text-card-foreground raised sm:p-6",
         className,
       )}
       {...props}
@@ -19,9 +19,14 @@ export function CardHeader({ className, ...props }: React.ComponentProps<"div">)
   );
 }
 
-export function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
+/** Card heading. Defaults to <h2> (cards sit directly under the page <h1>); pass `as` to nest. */
+export function CardTitle({
+  className,
+  as: Heading = "h2",
+  ...props
+}: React.ComponentProps<"h2"> & { as?: "h2" | "h3" | "h4" }) {
   return (
-    <h3
+    <Heading
       data-slot="card-title"
       className={cn("text-lg leading-tight font-semibold", className)}
       {...props}

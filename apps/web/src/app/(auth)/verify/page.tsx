@@ -1,4 +1,4 @@
-import { MailCheck } from "lucide-react";
+import { MailCheck } from "@/components/icons";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AuthCard } from "@/components/auth/auth-card";

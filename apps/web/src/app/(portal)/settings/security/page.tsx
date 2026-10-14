@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { requiresMfa } from "@rebp/contracts";
 import { ContactCard } from "@/components/security/contact-card";
 import { MfaCard } from "@/components/security/mfa-card";
+import { ProtectionSummary } from "@/components/security/protection-summary";
 import { SessionsList } from "@/components/security/sessions-list";
 import { SignInMethodsCard } from "@/components/security/sign-in-methods-card";
 import { StepUpProvider } from "@/components/security/step-up";
@@ -56,6 +57,13 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
           {tAuth.has(error) ? tAuth(error as "oauthFailed") : tAuth("oauthFailed")}
         </Alert>
       )}
+
+      <ProtectionSummary
+        emailVerified={Boolean(user.emailVerifiedAt)}
+        phoneVerified={Boolean(user.phoneVerifiedAt)}
+        twoStepOn={user.mfaMethods.length > 0}
+        recoveryRemaining={recoveryRemaining}
+      />
 
       <MfaCard
         enabled={user.mfaMethods}

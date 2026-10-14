@@ -1,34 +1,35 @@
-import type { LucideIcon } from "lucide-react";
+import { Sparkles, type LucideIcon } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 
-/** Placeholder for areas scheduled later in the delivery plan. */
+/** Placeholder for areas that open later: one picture, one line, one action — no dev jargon. */
 export async function ComingSoon({
   icon,
   title,
   description,
-  milestone,
   action,
+  art,
 }: {
   icon: LucideIcon;
   title: string;
   description: string;
-  milestone?: string;
   action?: React.ReactNode;
+  art?: React.ReactNode;
 }) {
-  const t = await getTranslations();
+  const t = await getTranslations("common");
   return (
     <EmptyState
       icon={icon}
+      art={art}
+      headingLevel={1}
       title={title}
       description={description}
       action={
         <div className="flex flex-col items-center gap-3">
           {action}
-          <Badge variant="accent">
-            {milestone ? t("placeholders.plannedFor", { milestone }) : t("common.comingSoon")}
-          </Badge>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-ember-soft px-3 py-1 text-xs font-semibold text-ember-text">
+            <Sparkles className="size-3.5" aria-hidden /> {t("comingSoon")}
+          </span>
         </div>
       }
     />

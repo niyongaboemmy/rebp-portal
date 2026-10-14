@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "@/components/icons";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AuthCard } from "@/components/auth/auth-card";

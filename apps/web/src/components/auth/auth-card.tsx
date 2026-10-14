@@ -8,10 +8,10 @@ interface AuthCardProps {
 
 export function AuthCard({ title, description, icon, children, footer }: AuthCardProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex animate-rise flex-col gap-6">
       <div className="flex flex-col gap-2">
         {icon && (
-          <span className="mb-2 inline-flex size-12 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground [&_svg]:size-6">
+          <span className="mb-2 inline-flex size-14 animate-pop items-center justify-center rounded-2xl bg-primary-soft text-primary-soft-foreground [&_svg]:size-7">
             {icon}
           </span>
         )}

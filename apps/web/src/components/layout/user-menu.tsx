@@ -1,14 +1,12 @@
 "use client";
 
-import { LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { LayoutDashboard, LogOut, ShieldCheck } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
+  DropdownMenuRow,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -25,30 +23,25 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
         <Avatar name={name} />
         <span className="hidden max-w-36 truncate text-sm font-semibold sm:block">{name}</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span className="truncate text-sm text-foreground">{name}</span>
-          <span className="truncate font-normal">{email}</span>
-        </DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-72">
+        {/* Identity card: who is signed in, on a soft brand wash. */}
+        <div className="mb-1 flex items-center gap-3 rounded-xl bg-primary-soft/60 p-3 dark:bg-primary/[0.12]">
+          <Avatar name={name} />
+          <div className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate text-sm font-semibold">{name}</span>
+            <span className="truncate text-xs text-muted-foreground">{email}</span>
+          </div>
+        </div>
+        <DropdownMenuRow href="/dashboard" icon={<LayoutDashboard />} title={t("dashboard")} />
+        <DropdownMenuRow href="/settings/security" icon={<ShieldCheck />} title={t("security")} />
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard">
-            <LayoutDashboard /> {t("dashboard")}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings/security">
-            <ShieldCheck /> {t("security")}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <form action={signOutAction}>
-          <DropdownMenuItem asChild>
-            <button type="submit" className="w-full">
-              <LogOut /> {t("signOut")}
-            </button>
-          </DropdownMenuItem>
-        </form>
+        <DropdownMenuRow
+          icon={<LogOut />}
+          title={t("signOut")}
+          tone="danger"
+          trailing={null}
+          onSelect={() => void signOutAction()}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Download } from "lucide-react";
+import { Copy, Download } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {

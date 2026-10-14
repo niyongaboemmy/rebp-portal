@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Mail, Smartphone } from "lucide-react";
+import { CheckCircle2, Mail, Smartphone } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
@@ -13,6 +13,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldControl } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { OtpInput } from "@/components/ui/otp-input";
+import { ProgressRing } from "@/components/data/progress-ring";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useCountdown } from "@/hooks/use-countdown";
 import { useErrorMessage } from "@/hooks/use-error-message";
@@ -53,8 +54,22 @@ export function VerifyContacts({ email, phone: initialPhone }: VerifyContactsPro
     }
   };
 
+  const done = Number(verified.EMAIL) + Number(verified.PHONE);
   return (
     <div className="flex flex-col gap-4">
+      {/* W-03: overall progress across both contacts. */}
+      <div className="flex items-center gap-3 rounded-2xl bg-surface-2 p-3" aria-live="polite">
+        <ProgressRing
+          value={done}
+          total={2}
+          tone={done === 2 ? "good" : undefined}
+          className="size-11"
+          label={t("progress", { done, total: 2 })}
+        >
+          <span className="text-xs font-bold num">{done}/2</span>
+        </ProgressRing>
+        <span className="text-sm font-medium">{t("progress", { done, total: 2 })}</span>
+      </div>
       <ContactCard
         channel="EMAIL"
         icon={Mail}
@@ -156,7 +171,7 @@ function ContactCard({
           />
           <Field label={t("codeLabel")} error={form.formState.errors.code?.message}>
             <FieldControl>
-              <OtpInput {...form.register("code")} />
+              <OtpInput webOtp={channel === "PHONE"} {...form.register("code")} />
             </FieldControl>
           </Field>
           <div className="flex flex-wrap items-center gap-2">

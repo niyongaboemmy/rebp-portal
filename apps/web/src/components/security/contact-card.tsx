@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, Smartphone } from "lucide-react";
+import { Mail, Smartphone } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -49,7 +49,7 @@ export function ContactCard({ email, phone }: ContactCardProps) {
     },
   ];
   return (
-    <Card>
+    <Card id="contact" className="scroll-mt-20">
       <CardHeader>
         <CardTitle>{t("security.contact.title")}</CardTitle>
         <CardDescription>{t("security.contact.description")}</CardDescription>

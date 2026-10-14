@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, ShieldAlert, ShieldCheck, UserX } from "lucide-react";
+import { ChevronRight, ShieldAlert, ShieldCheck, UserX } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -41,7 +41,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                 type="button"
                 onClick={() => setSelectedId(user.id)}
                 data-testid={`person-${user.email}`}
-                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-all outline-none hover:border-primary/40 hover:shadow-soft focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.995] sm:gap-4 sm:p-4"
+                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-all outline-none hover:bg-primary/[0.05] hover:bg-surface-2 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.995] sm:gap-4 sm:p-4"
               >
                 <div className="relative">
                   <Avatar name={user.fullName} className="size-11" />
@@ -73,7 +73,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                       <ShieldCheck className="size-3.5" aria-hidden /> {t("mfaOn")}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 font-semibold text-warning-strong">
+                    <span className="text-warning-strong inline-flex items-center gap-1 font-semibold">
                       <ShieldAlert className="size-3.5" aria-hidden /> {t("noMfa")}
                     </span>
                   )}
@@ -83,7 +83,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                       : t("neverSignedIn")}
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors group-hover:text-primary">
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors group-hover:text-link">
                   <span className="hidden sm:inline">
                     {canManage && !isSelf ? t("manage") : t("view")}
                   </span>

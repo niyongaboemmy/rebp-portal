@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { Providers } from "@/components/providers/providers";
-import { bricolage, figtree, jetbrainsMono } from "./fonts";
+import { figtree, jetbrainsMono } from "./fonts";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,15 +12,20 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: t("title"),
     metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
     formatDetection: { telephone: false },
+    openGraph: { siteName: t("title"), type: "website" },
+    appleWebApp: { capable: true, title: t("title"), statusBarStyle: "default" },
   };
 }
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // Safe areas for the bottom navigation on notched phones (env(safe-area-inset-*)).
+  viewportFit: "cover",
+  // Matches --background in globals.css (ADR-009).
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7fbf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#141a24" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0e15" },
   ],
 };
 
@@ -33,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${figtree.variable} ${bricolage.variable} ${jetbrainsMono.variable}`}
+      className={`${figtree.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-dvh">
         <a

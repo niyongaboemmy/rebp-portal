@@ -1,4 +1,4 @@
-import { FlaskConical } from "lucide-react";
+import { FlaskConical } from "@/components/icons";
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 

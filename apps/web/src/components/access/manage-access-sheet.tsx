@@ -1,6 +1,15 @@
 "use client";
 
-import { AlertTriangle, Check, Lock, Minus, Plus, Power, RotateCcw, UserX } from "lucide-react";
+import {
+  AlertTriangle,
+  Check,
+  Lock,
+  Minus,
+  Plus,
+  Power,
+  RotateCcw,
+  UserX,
+} from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
@@ -152,9 +161,7 @@ export default function ManageAccessSheet({
                     className={cn(
                       "group relative flex items-start gap-3 rounded-2xl border-2 p-3 text-left transition-all duration-200 outline-none",
                       "focus-visible:ring-[3px] focus-visible:ring-ring/40 enabled:active:scale-[0.98] disabled:cursor-not-allowed",
-                      on
-                        ? "role-ring bg-card"
-                        : "border-transparent bg-card/60 hover:border-border",
+                      on ? "role-ring" : "border-transparent bg-card/60 hover:border-border",
                       !editable && !on && "opacity-50",
                       blocked && "opacity-40",
                     )}
@@ -223,11 +230,9 @@ export default function ManageAccessSheet({
                     key={cap}
                     data-state={isGained ? "gained" : isLost ? "lost" : "kept"}
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-all",
-                      isGained &&
-                        "animate-in border-success/40 bg-success-soft text-success zoom-in-90",
-                      isLost &&
-                        "border-destructive/30 bg-danger-soft text-destructive line-through",
+                      "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all",
+                      isGained && "animate-in bg-success-soft text-success zoom-in-90",
+                      isLost && "bg-danger-soft text-destructive line-through",
                       !isGained && !isLost && "bg-card",
                     )}
                   >
@@ -297,7 +302,7 @@ export default function ManageAccessSheet({
             )}
           >
             {warnings.includes("sodCombined") && (
-              <AlertTriangle className="size-5 shrink-0 text-warning-strong" aria-hidden />
+              <AlertTriangle className="text-warning-strong size-5 shrink-0" aria-hidden />
             )}
             <Button
               variant="ghost"

@@ -1,6 +1,6 @@
 "use client";
 
-import { FlaskConical, Wand2 } from "lucide-react";
+import { FlaskConical, Wand2 } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,7 +24,7 @@ export function DevCode({ code, onUse, className }: DevCodeProps) {
       data-testid="dev-code"
       aria-live="polite"
       className={cn(
-        "flex animate-in flex-wrap items-center gap-3 rounded-xl border border-dashed border-warning/50 bg-warning-soft px-3.5 py-2.5 fade-in slide-in-from-top-1",
+        "flex animate-in flex-wrap items-center gap-3 rounded-xl bg-warning-soft px-3.5 py-2.5 fade-in slide-in-from-top-1",
         className,
       )}
     >
