@@ -1,19 +1,19 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, SkeletonPageHeader, SkeletonStat } from "@/components/ui/skeleton";
 
-/** UX-009: skeleton while a portal page streams in. */
-export default function PortalLoading() {
+/** Back office overview: header, four stat tiles, then the work queues. */
+export default function BackofficeLoading() {
   return (
-    <div className="flex flex-col gap-8" aria-busy>
-      <div className="flex flex-col gap-3">
-        <Skeleton className="h-10 w-2/3 max-w-md" />
-        <Skeleton className="h-5 w-1/2 max-w-sm" />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-3">
-        {[0, 1, 2].map((i) => (
-          <Skeleton key={i} className="h-28" />
+    <div className="flex flex-col gap-6" aria-busy data-route-loading>
+      <SkeletonPageHeader />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <SkeletonStat key={i} />
         ))}
       </div>
-      <Skeleton className="h-64" />
+      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+        <Skeleton className="h-80 rounded-3xl" />
+        <Skeleton className="h-80 rounded-3xl" />
+      </div>
     </div>
   );
 }

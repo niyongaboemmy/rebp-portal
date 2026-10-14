@@ -36,10 +36,10 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
       >
         <div aria-hidden className="absolute inset-0 -z-10 bg-imigongo opacity-[0.06]" />
         <div className="container-page flex flex-col items-center gap-3 py-12 text-center sm:py-16">
-          <span className="inline-flex size-20 animate-pop items-center justify-center rounded-full border bg-card">
+          <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.6rem] bg-card shadow-[0_14px_30px_-14px_oklch(0.4_0.15_25/0.45)] dark:bg-white/[0.06]">
             <SearchX className="size-10" aria-hidden />
           </span>
-          <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] font-extrabold tracking-tight uppercase">
+          <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.03em]">
             {t("notFound")}
           </h1>
           <p className="font-mono text-lg font-semibold num text-foreground">{value}</p>
@@ -48,7 +48,7 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
           </p>
         </div>
       </section>
-      <div className="container-page flex max-w-xl flex-col gap-4 py-10">
+      <div className="container-page flex max-w-xl animate-rise flex-col gap-4 py-12 sm:py-16">
         <p className="text-center text-sm text-muted-foreground">{t("notFoundBody")}</p>
         <VerifySearch />
       </div>

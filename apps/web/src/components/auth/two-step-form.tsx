@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyRound, MessageSquare, Mail, Smartphone } from "@/components/icons";
+import { KeyRound, MessageSquare, Mail, Smartphone, ArrowRight } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
@@ -164,8 +164,8 @@ export function TwoStepForm({
             />
           </FieldControl>
         </Field>
-        <Button type="submit" size="lg" loading={recovery.pending}>
-          {t("submit")}
+        <Button type="submit" size="lg" className="rounded-full" loading={recovery.pending}>
+          {t("submit")} <ArrowRight />
         </Button>
         <Button type="button" variant="ghost" onClick={() => setMode("code")}>
           {t("useCode")}
@@ -188,8 +188,8 @@ export function TwoStepForm({
           <OtpInput autoFocus webOtp={method === "SMS"} {...code.form.register("code")} />
         </FieldControl>
       </Field>
-      <Button type="submit" size="lg" loading={code.pending}>
-        {t("submit")}
+      <Button type="submit" size="lg" className="rounded-full" loading={code.pending}>
+        {t("submit")} <ArrowRight />
       </Button>
       <div className="flex flex-wrap items-center justify-between gap-2">
         {method !== "TOTP" ? (

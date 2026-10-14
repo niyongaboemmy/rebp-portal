@@ -17,14 +17,20 @@ export async function GoogleButton({ enabled, next }: { enabled: boolean; next?:
   const t = await getTranslations("auth");
   if (!enabled) {
     return (
-      <Button variant="outline" className="w-full" disabled title={t("googleUnavailable")}>
+      <Button
+        variant="outline"
+        size="lg"
+        className="w-full rounded-full"
+        disabled
+        title={t("googleUnavailable")}
+      >
         <GoogleMark /> {t("continueWithGoogle")}
       </Button>
     );
   }
   const query = new URLSearchParams({ intent: "signin", ...(next ? { next } : {}) });
   return (
-    <Button asChild variant="outline" className="w-full">
+    <Button asChild variant="outline" size="lg" className="w-full rounded-full">
       <a href={`/api/auth/google?${query.toString()}`}>
         <GoogleMark /> {t("continueWithGoogle")}
       </a>
@@ -35,10 +41,12 @@ export async function GoogleButton({ enabled, next }: { enabled: boolean; next?:
 export async function OrDivider() {
   const t = await getTranslations("common");
   return (
-    <div className="flex items-center gap-3 text-xs font-semibold text-muted-foreground uppercase">
-      <span className="h-px flex-1 bg-border" />
-      {t("or")}
-      <span className="h-px flex-1 bg-border" />
+    <div className="flex items-center gap-3 text-[0.7rem] font-bold tracking-widest text-muted-foreground uppercase">
+      <span className="h-px flex-1 bg-linear-to-r from-transparent to-foreground/15" />
+      <span className="rounded-full bg-foreground/[0.04] px-2.5 py-0.5 dark:bg-white/[0.05]">
+        {t("or")}
+      </span>
+      <span className="h-px flex-1 bg-linear-to-l from-transparent to-foreground/15" />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight, Mail } from "@/components/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -24,6 +25,7 @@ export function ForgotPasswordForm() {
     schema: forgotPasswordSchema,
     defaultValues: { email: "" },
     action: forgotPasswordAction,
+    successMessage: t("toast.codeSent"),
     onSuccess: ({ email }) =>
       router.push(`/reset-password?email=${encodeURIComponent(email)}&sent=1`),
   });
@@ -36,12 +38,13 @@ export function ForgotPasswordForm() {
             autoComplete="email"
             inputMode="email"
             autoFocus
+            leading={<Mail />}
             {...form.register("email")}
           />
         </FieldControl>
       </Field>
-      <Button type="submit" size="lg" loading={pending}>
-        {t("forgot.submit")}
+      <Button type="submit" size="lg" className="rounded-full" loading={pending}>
+        {t("forgot.submit")} <ArrowRight />
       </Button>
       <Button asChild variant="ghost">
         <Link href="/sign-in">{t("forgot.back")}</Link>
@@ -120,8 +123,8 @@ export function ResetPasswordForm({
           <PasswordInput autoComplete="new-password" {...form.register("confirmPassword")} />
         </FieldControl>
       </Field>
-      <Button type="submit" size="lg" loading={pending}>
-        {t("submit")}
+      <Button type="submit" size="lg" className="rounded-full" loading={pending}>
+        {t("submit")} <ArrowRight />
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         <Link href="/forgot-password" className="hit-area font-semibold text-link hover:underline">

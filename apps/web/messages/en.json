@@ -37,7 +37,8 @@
     "pilotBanner": "Pilot release — sample data only. Fees and legal texts are placeholders pending approval.",
     "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body.",
     "dismiss": "Dismiss",
-    "notice": "Notice"
+    "notice": "Notice",
+    "capsLock": "Caps Lock is on"
   },
   "nav": {
     "home": "Home",
@@ -243,7 +244,8 @@
       "MANAGING_BROKER": "Managing",
       "PRINCIPAL_BROKER": "Principal",
       "REBF": "Firm"
-    }
+    },
+    "eyebrow": "Eight categories"
   },
   "placeholders": {
     "registerTitle": "Public register",
@@ -387,6 +389,11 @@
       "match": "Passwords match",
       "met": "Done",
       "notMet": "Not yet"
+    },
+    "toast": {
+      "signedIn": "Welcome back!",
+      "created": "Account created. Let's verify your contacts.",
+      "codeSent": "Code sent. Check your email."
     }
   },
   "dashboard": {
@@ -640,7 +647,8 @@
     "nameTooShort": "Enter your full name.",
     "nameTooLong": "Use 120 characters or fewer.",
     "privacyRequired": "Please confirm you have read the privacy notice.",
-    "rolesRequired": "Choose at least one role."
+    "rolesRequired": "Choose at least one role.",
+    "fixFields": "{count, plural, one {Please check the highlighted field} other {Please check the # highlighted fields}}"
   },
   "errors": {
     "unexpected": "Something went wrong. Please try again.",
@@ -1157,7 +1165,8 @@
     "filterStatus": "Filter by status",
     "all": "All",
     "emptyTitle": "No entries yet",
-    "noResults": "No match for “{query}”"
+    "noResults": "No match for “{query}”",
+    "eyebrow": "Public register"
   },
   "check": {
     "title": "Verify a licence",

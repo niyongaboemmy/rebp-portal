@@ -63,13 +63,16 @@ test("eligibility check shows experience progress towards the next category", as
   await expect(meter).toHaveAttribute("aria-valuetext", "2 of 3 years");
 });
 
-test("category ladder opens the requirements for a rung", async ({ page }) => {
+test("category map opens a station's details and its full requirements", async ({ page }) => {
   await page.goto("/categories");
   await page
-    .getByRole("button", { name: /Real Estate Broker/ })
-    .first()
+    .getByRole("button", { name: "Real Estate Broker", exact: true })
+    .filter({ visible: true })
     .click();
-  const dialog = page.getByRole("dialog");
+  const details = page.locator("[data-map-details]").filter({ visible: true });
+  await expect(details.getByRole("heading", { name: "Real Estate Broker" })).toBeVisible();
+  await details.getByRole("button", { name: "Requirements" }).click();
+  const dialog = page.getByRole("dialog").filter({ hasText: "Documents to prepare" });
   await expect(dialog.getByRole("heading", { name: "Real Estate Broker" })).toBeVisible();
   await expect(dialog.getByText("3 years documented as REA")).toBeVisible();
 });

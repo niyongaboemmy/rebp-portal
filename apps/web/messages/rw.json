@@ -37,7 +37,8 @@
     "pilotBanner": "Igerageza — amakuru y'icyitegererezo gusa. Amafaranga n'inyandiko z'amategeko ntibiremezwa.",
     "unapprovedTranslation": "Ubu busemuzi ni umushinga utegereje kwemezwa n'Urugaga.",
     "dismiss": "Funga",
-    "notice": "Itangazo"
+    "notice": "Itangazo",
+    "capsLock": "Caps Lock irakora"
   },
   "nav": {
     "home": "Ahabanza",
@@ -243,7 +244,8 @@
       "MANAGING_BROKER": "Uyobora",
       "PRINCIPAL_BROKER": "Mukuru",
       "REBF": "Ikigo"
-    }
+    },
+    "eyebrow": "Ibyiciro umunani"
   },
   "placeholders": {
     "registerTitle": "Igitabo rusange",
@@ -387,6 +389,11 @@
       "match": "Amagambobanga arahuye",
       "met": "Byakozwe",
       "notMet": "Ntibirakorwa"
+    },
+    "toast": {
+      "signedIn": "Murakaza neza!",
+      "created": "Konti yafunguwe. Reka twemeze aho tuguhamagara.",
+      "codeSent": "Kode yoherejwe. Reba imeyili yawe."
     }
   },
   "dashboard": {
@@ -640,7 +647,8 @@
     "nameTooShort": "Andika amazina yawe yombi.",
     "nameTooLong": "Koresha inyuguti 120 cyangwa munsi yazo.",
     "privacyRequired": "Emeza ko wasomye itangazo ryerekeye ubuzima bwite.",
-    "rolesRequired": "Hitamo nibura inshingano imwe."
+    "rolesRequired": "Hitamo nibura inshingano imwe.",
+    "fixFields": "{count, plural, one {Reba neza umwanya werekanywe} other {Reba neza imyanya # yerekanywe}}"
   },
   "errors": {
     "unexpected": "Habaye ikibazo. Ongera ugerageze.",
@@ -1157,7 +1165,8 @@
     "filterStatus": "Shungura ukurikije imiterere",
     "all": "Byose",
     "emptyTitle": "Nta byanditswemo biraboneka",
-    "noResults": "Nta gihuye na “{query}”"
+    "noResults": "Nta gihuye na “{query}”",
+    "eyebrow": "Igitabo rusange"
   },
   "check": {
     "title": "Genzura uruhushya",

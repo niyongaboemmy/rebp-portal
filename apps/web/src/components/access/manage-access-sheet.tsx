@@ -1,5 +1,7 @@
 "use client";
 
+import { inputClass } from "@/components/ui/input";
+
 import {
   AlertTriangle,
   Check,
@@ -279,7 +281,7 @@ export default function ManageAccessSheet({
                     maxLength={300}
                     onChange={(e) => setReason(e.target.value)}
                     placeholder={t("access.manage.disableReason")}
-                    className="h-11 flex-1 rounded-lg border border-input bg-card px-3 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 sm:h-10"
+                    className={cn(inputClass, "flex-1")}
                   />
                   <Button variant="destructive" disabled={saving} onClick={() => setStatus(true)}>
                     <UserX /> {t("access.manage.disable")}

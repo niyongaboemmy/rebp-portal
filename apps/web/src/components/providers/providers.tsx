@@ -3,7 +3,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NextIntlClientProvider, type AbstractIntlMessages } from "next-intl";
 import { ThemeProvider } from "next-themes";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { RouteProgress } from "@/components/layout/route-progress";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Interactions } from "@/components/motion/interactions";
@@ -31,6 +32,9 @@ export function Providers({ children, locale, messages }: ProvidersProps) {
         <QueryClientProvider client={queryClient}>
           <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
           <Toaster />
+          <Suspense fallback={null}>
+            <RouteProgress />
+          </Suspense>
           <ServiceWorker />
           <ThemeMeta />
           <Interactions />

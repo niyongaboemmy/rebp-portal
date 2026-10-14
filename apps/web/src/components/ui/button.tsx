@@ -10,10 +10,11 @@ import { cn } from "@/lib/utils";
  *
  * Hierarchy: `default` = the one main action per view · `outline` = secondary actions and equal
  * alternatives (Cancel, Change, Share, Sign in) · `tonal` = supportive actions inside cards ·
- * `ghost` = tertiary and icon actions · `link` = inline navigation.
+ * `ghost` = tertiary and icon actions · `link` = inline navigation. All buttons are pills;
+ * fields are not (see Input).
  */
 export const buttonVariants = cva(
-  "relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-xl text-sm font-semibold whitespace-nowrap transition-[background-color,border-color,color,transform] duration-(--dur-3) ease-spring outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.97] active:duration-(--dur-1) active:ease-out disabled:pointer-events-none disabled:opacity-55 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>svg:last-child:not(:first-child)]:transition-transform [&>svg:last-child:not(:first-child)]:duration-(--dur-3) hover:[&>svg:last-child:not(:first-child)]:translate-x-0.5",
+  "relative isolate inline-flex shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full text-sm font-semibold whitespace-nowrap transition-[background-color,border-color,color,transform] duration-(--dur-3) ease-spring outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.97] active:duration-(--dur-1) active:ease-out disabled:pointer-events-none disabled:opacity-55 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>svg:last-child:not(:first-child)]:transition-transform [&>svg:last-child:not(:first-child)]:duration-(--dur-3) hover:[&>svg:last-child:not(:first-child)]:translate-x-0.5",
   {
     variants: {
       variant: {
@@ -33,10 +34,10 @@ export const buttonVariants = cva(
         // Mobile-first: 44 px touch targets (UX-001), slightly denser from `sm` up.
         default: "h-11 px-4 sm:h-10",
         // 44 px on phones (UX-001, WCAG 2.5.8), compact from `sm` up.
-        sm: "h-11 rounded-xl px-4 text-sm sm:h-9 sm:rounded-lg sm:px-3 sm:text-xs",
-        lg: "h-12 rounded-2xl px-6 text-base",
+        sm: "h-11 px-4 text-sm sm:h-9 sm:px-3.5 sm:text-xs",
+        lg: "h-12 px-6 text-base",
         /** Floating action button: the single hero action on a mobile screen. */
-        fab: "h-14 rounded-2xl px-5 text-base",
+        fab: "h-14 px-6 text-base",
         icon: "size-11 sm:size-10",
         "icon-sm": "size-11 sm:size-9",
       },
