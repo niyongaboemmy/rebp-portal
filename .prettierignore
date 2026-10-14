@@ -1,0 +1,10 @@
+pnpm-lock.yaml
+.next
+node_modules
+coverage
+playwright-report
+test-results
+apps/web/src/generated
+docs/SRS.md
+docs/IMPLEMENTATION_PLAN.md
+.refact

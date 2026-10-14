@@ -2,8 +2,16 @@ node_modules/
 .next/
 dist/
 coverage/
+.turbo/
 .env
 .env.*
 !.env.example
 .DS_Store
 *.log
+*.tsbuildinfo
+next-env.d.ts
+playwright-report/
+test-results/
+blob-report/
+apps/web/src/generated/
+.refact/

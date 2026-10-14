@@ -1,0 +1,215 @@
+// REBP Portal — data model.
+// This revision covers identity, sessions, MFA, OAuth, notifications and the audit trail
+// (SRS FR-ACC-001…010, FR-AUD-001…003, ADR-007). Domain entities from SRS §12.1 follow in WP-0.6.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccountType {
+  INDIVIDUAL
+  ORGANISATION
+}
+
+enum Role {
+  APPLICANT
+  SUPERVISOR
+  PRINCIPAL_BROKER
+  FIRM_ADMIN
+  REVIEWING_OFFICER
+  APPROVING_AUTHORITY
+  REGISTRAR
+  FINANCE_OFFICER
+  SYSTEM_ADMIN
+  AUDITOR
+}
+
+enum MfaMethod {
+  TOTP
+  SMS
+  EMAIL
+}
+
+enum VerificationPurpose {
+  EMAIL_VERIFY
+  PHONE_VERIFY
+  PASSWORD_RESET
+  MFA_LOGIN
+  MFA_ENROL
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+}
+
+model User {
+  id                   String      @id @default(uuid()) @db.Uuid
+  email                String      @unique
+  emailVerifiedAt      DateTime?
+  phone                String?     @unique
+  phoneVerifiedAt      DateTime?
+  /// argon2id hash; null for accounts created through Google that never set a password.
+  passwordHash         String?
+  passwordChangedAt    DateTime?
+  accountType          AccountType @default(INDIVIDUAL)
+  fullName             String
+  locale               String      @default("en")
+  roles                Role[]      @default([APPLICANT])
+  /// Preferred second factor; null when two-step verification is off.
+  mfaPreferred         MfaMethod?
+  mfaMethods           MfaMethod[] @default([])
+  /// AES-256-GCM encrypted TOTP secret (SEC-003).
+  totpSecretEnc        String?
+  /// Secret awaiting confirmation during authenticator enrolment.
+  totpPendingSecretEnc String?
+  /// Last accepted TOTP time-step; codes at or before it are rejected (replay protection).
+  totpLastCounter      Int?
+  failedLoginCount     Int         @default(0)
+  lockedUntil          DateTime?
+  lastSignInAt         DateTime?
+  /// Set when an administrator disables the account (SEC-011 leaver process). Blocks sign-in.
+  disabledAt           DateTime?
+  disabledReason       String?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  sessions          Session[]
+  oauthAccounts     OAuthAccount[]
+  recoveryCodes     RecoveryCode[]
+  verificationCodes VerificationCode[]
+  loginChallenges   LoginChallenge[]
+}
+
+/// Server-side session. The id is the SHA-256 of the cookie token, so a DB leak does not leak sessions.
+model Session {
+  id              String    @id
+  userId          String    @db.Uuid
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  /// Last time the user authenticated with a credential (used for step-up checks).
+  authenticatedAt DateTime  @default(now())
+  lastActiveAt    DateTime  @default(now())
+  expiresAt       DateTime
+  ipAddress       String?
+  userAgent       String?
+  /// "password" | "google" — how the session was established.
+  method          String
+  mfaVerified     Boolean   @default(false)
+  revokedAt       DateTime?
+
+  @@index([userId])
+}
+
+model OAuthAccount {
+  id                String   @id @default(uuid()) @db.Uuid
+  provider          String
+  providerAccountId String
+  email             String?
+  userId            String   @db.Uuid
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@unique([userId, provider])
+}
+
+model RecoveryCode {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash  String
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+/// One-time codes sent by email or SMS. Only the hash is stored.
+model VerificationCode {
+  id         String              @id @default(uuid()) @db.Uuid
+  userId     String?             @db.Uuid
+  user       User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose    VerificationPurpose
+  /// Email address or E.164 phone the code was sent to.
+  target     String
+  /// Extra binding, e.g. the MFA method being enrolled.
+  context    String?
+  codeHash   String
+  attempts   Int                 @default(0)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime            @default(now())
+
+  @@index([userId, purpose])
+  @@index([target, purpose])
+}
+
+/// Pending second-factor step after a valid first factor. The id is the SHA-256 of the cookie token.
+model LoginChallenge {
+  id         String    @id
+  userId     String    @db.Uuid
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  method     String
+  activeMfa  MfaMethod
+  attempts   Int       @default(0)
+  ipAddress  String?
+  userAgent  String?
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+}
+
+/// Outbound message log (FR-NOT-003 delivery tracking). Bodies are kept only outside production.
+model NotificationLog {
+  id        String              @id @default(uuid()) @db.Uuid
+  channel   NotificationChannel
+  recipient String
+  template  String
+  subject   String?
+  body      String?
+  provider  String
+  status    String
+  /// One-time code, kept only in APP_ENV=dev so the UI can show it while no mail/SMS gateway exists.
+  devCode   String?
+  createdAt DateTime            @default(now())
+
+  @@index([recipient, createdAt])
+}
+
+/// Append-only, hash-chained audit trail (FR-AUD-001…003, ADR-007).
+model AuditEvent {
+  id         BigInt   @id @default(autoincrement())
+  occurredAt DateTime @default(now())
+  actorId    String?  @db.Uuid
+  action     String
+  entityType String
+  entityId   String?
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json     @default("{}")
+  prevHash   String
+  hash       String   @unique
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+}
+
+/// Administrator overrides of the default permission matrix (packages/contracts DEFAULT_PERMISSIONS).
+/// Only cells that differ from the default are stored; deleting a row restores the default.
+model RolePermission {
+  role        Role
+  capability  String
+  granted     Boolean
+  updatedById String?  @db.Uuid
+  updatedAt   DateTime @updatedAt
+
+  @@id([role, capability])
+}

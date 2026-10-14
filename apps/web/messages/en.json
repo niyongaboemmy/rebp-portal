@@ -1,0 +1,814 @@
+{
+  "meta": {
+    "title": "REBP Portal",
+    "description": "Register, get licensed and verify Real Estate Brokerage Practitioners and Firms."
+  },
+  "brand": {
+    "name": "REBP Portal",
+    "tagline": "Real estate brokerage licensing",
+    "body": "Professional Body for Real Estate Brokerage Practitioners"
+  },
+  "common": {
+    "skipToContent": "Skip to main content",
+    "loading": "Loading…",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "save": "Save",
+    "confirm": "Confirm",
+    "copy": "Copy",
+    "copied": "Copied",
+    "download": "Download",
+    "remove": "Remove",
+    "or": "or",
+    "optional": "Optional",
+    "required": "Required",
+    "enabled": "Enabled",
+    "notSet": "Not set",
+    "verified": "Verified",
+    "unverified": "Not verified",
+    "comingSoon": "Coming soon",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "pilotBanner": "Pilot release — sample data only. Fees and legal texts are placeholders pending approval.",
+    "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body."
+  },
+  "nav": {
+    "home": "Home",
+    "register": "Public register",
+    "verify": "Verify a licence",
+    "eligibility": "Am I eligible?",
+    "categories": "Categories",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "dashboard": "Dashboard",
+    "applications": "Applications",
+    "licenses": "Licence wallet",
+    "confirmations": "Confirmations",
+    "firm": "Firm workspace",
+    "security": "Security",
+    "backoffice": "Back office",
+    "overview": "Overview",
+    "queue": "Work queue",
+    "decisions": "Decisions",
+    "registerAdmin": "Register admin",
+    "finance": "Finance",
+    "configuration": "Configuration",
+    "audit": "Audit trail",
+    "reports": "Reports",
+    "signOut": "Sign out",
+    "account": "Account",
+    "portal": "My portal",
+    "sectionApplicant": "Applicant",
+    "sectionAccount": "Account",
+    "sectionStaff": "Regulator",
+    "breadcrumb": "Breadcrumb",
+    "mainNavigation": "Main navigation",
+    "myAccess": "My access",
+    "access": "Access control"
+  },
+  "theme": {
+    "toggle": "Change theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "label": "Language",
+    "draft": "draft"
+  },
+  "landing": {
+    "eyebrow": "Official licensing portal",
+    "title": "Your trusted front door to real estate licensing",
+    "subtitle": "Apply, track your application in real time and get a verifiable electronic licence — from your phone, in your language.",
+    "primaryCta": "Start your application",
+    "secondaryCta": "Am I eligible?",
+    "verifyTitle": "Verify a practitioner",
+    "verifySubtitle": "Check any licence by name or number in seconds.",
+    "verifyPlaceholder": "Name, licence or registration number",
+    "verifyButton": "Search",
+    "categoriesTitle": "Eight categories, one guided journey",
+    "categoriesSubtitle": "The portal shows only what applies to you.",
+    "stepsTitle": "How it works",
+    "steps": {
+      "account": {
+        "title": "Create your account",
+        "body": "Verify your email and phone, and turn on two-step verification."
+      },
+      "apply": {
+        "title": "Complete the guided form",
+        "body": "Answer only the questions for your category. We save as you go."
+      },
+      "pay": {
+        "title": "Sign, pay and submit",
+        "body": "Pay online and track every step of the review."
+      },
+      "license": {
+        "title": "Get your e-licence",
+        "body": "Download a certificate with a QR code anyone can verify."
+      }
+    },
+    "trustTitle": "Built for trust",
+    "trust": {
+      "secure": "Two-step verification and encrypted records",
+      "transparent": "Live status and expected timelines",
+      "accessible": "Works on any phone, in English, Kinyarwanda and French"
+    }
+  },
+  "categories": {
+    "title": "Professional categories",
+    "subtitle": "Compare what each category may do and what it needs.",
+    "tiers": {
+      "entry": "Entry",
+      "agent": "Agent",
+      "broker": "Broker",
+      "firm": "Firm"
+    },
+    "items": {
+      "RERA": {
+        "name": "Real Estate Referral Agent",
+        "summary": "Refers clients to licensed practitioners. Referral-only (Article 10)."
+      },
+      "FSLA": {
+        "name": "Field Sales and Leasing Agent",
+        "summary": "Entry-level field practitioner working under supervision."
+      },
+      "REA": {
+        "name": "Real Estate Agent",
+        "summary": "Requires at least 3 years as an FSLA or a recognised equivalent."
+      },
+      "BROKER": {
+        "name": "Real Estate Broker",
+        "summary": "Requires at least 3 years as a licensed Real Estate Agent."
+      },
+      "ASSOCIATE_BROKER": {
+        "name": "Associate Broker",
+        "summary": "A licensed Broker affiliated with a firm under a Principal Broker."
+      },
+      "MANAGING_BROKER": {
+        "name": "Managing Broker",
+        "summary": "A licensed Broker who manages an office or branch of a firm."
+      },
+      "PRINCIPAL_BROKER": {
+        "name": "Principal Broker",
+        "summary": "Responsible for a firm's supervision, client funds, records and compliance."
+      },
+      "REBF": {
+        "name": "Real Estate Brokerage Firm",
+        "summary": "A legal entity licensed to carry on brokerage, led by a Principal Broker."
+      }
+    }
+  },
+  "placeholders": {
+    "registerTitle": "Public register",
+    "registerBody": "Search licensed practitioners and firms. The register opens once the first licences are issued.",
+    "eligibilityTitle": "Am I eligible?",
+    "eligibilityBody": "Answer a few questions to find the right category and the documents to prepare. The pre-check is being built.",
+    "applicationsTitle": "Applications",
+    "applicationsBody": "Your drafts and submitted applications will appear here.",
+    "applicationsCta": "Start a new application",
+    "licensesTitle": "Licence wallet",
+    "licensesBody": "Your licences, certificates and QR codes will appear here once issued.",
+    "confirmationsTitle": "Confirmations",
+    "confirmationsBody": "Supervision and affiliation requests addressed to you will appear here.",
+    "firmTitle": "Firm workspace",
+    "firmBody": "Manage your firm's roster, branches and renewals.",
+    "backofficeBody": "This console is scheduled for a later delivery day of the pilot.",
+    "plannedFor": "Planned: {milestone}"
+  },
+  "auth": {
+    "panelTitle": "Licensing made simple, secure and transparent.",
+    "panelPoints": {
+      "one": "Save and resume your application from any device",
+      "two": "Know exactly what is missing and why",
+      "three": "Protect your account with two-step verification"
+    },
+    "continueWithGoogle": "Continue with Google",
+    "googleUnavailable": "Google sign-in is not configured in this environment.",
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your application.",
+      "email": "Email address",
+      "password": "Password",
+      "forgot": "Forgot password?",
+      "submit": "Sign in",
+      "noAccount": "New to the portal?",
+      "createAccount": "Create an account"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "One account for all your applications and licences.",
+      "accountType": "I am registering as",
+      "individual": "An individual",
+      "individualHint": "Agent, broker or referral agent",
+      "organisation": "A firm",
+      "organisationHint": "Real Estate Brokerage Firm",
+      "fullName": "Full name",
+      "fullNameOrg": "Your full name (authorised representative)",
+      "email": "Email address",
+      "phone": "Mobile number",
+      "phoneHint": "We'll text a code to verify it. Example: 078 812 3456",
+      "password": "Password",
+      "passwordHint": "At least 12 characters. A short sentence is easy to remember.",
+      "confirmPassword": "Confirm password",
+      "acceptPrivacy": "I have read the <link>privacy notice</link> and understand how my data is used.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "strength": {
+      "label": "Password strength",
+      "0": "Too short",
+      "1": "Weak",
+      "2": "Fair",
+      "3": "Strong",
+      "4": "Very strong"
+    },
+    "twoStep": {
+      "title": "Two-step verification",
+      "subtitle": {
+        "TOTP": "Enter the 6-digit code from your authenticator app.",
+        "SMS": "We sent a 6-digit code to {destination}.",
+        "EMAIL": "We sent a 6-digit code to {destination}."
+      },
+      "code": "Verification code",
+      "submit": "Verify",
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds}s",
+      "resent": "A new code is on its way.",
+      "tryAnother": "Try another way",
+      "useRecovery": "Use a recovery code",
+      "useCode": "Use a verification code",
+      "recoveryCode": "Recovery code",
+      "recoveryHint": "Each recovery code works once. Format: XXXXX-XXXXX",
+      "methods": {
+        "TOTP": "Authenticator app",
+        "SMS": "Text message",
+        "EMAIL": "Email"
+      },
+      "expired": "This sign-in attempt has expired. Please sign in again.",
+      "backToSignIn": "Back to sign in"
+    },
+    "verify": {
+      "title": "Verify your contact details",
+      "subtitle": "We need to confirm your email and phone before you can apply (this keeps your account safe).",
+      "emailTitle": "Email address",
+      "phoneTitle": "Mobile number",
+      "sentTo": "Code sent to {destination}",
+      "codeLabel": "6-digit code",
+      "submit": "Verify",
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds}s",
+      "done": "Verified",
+      "allDone": "All set! Taking you to your dashboard…",
+      "addPhone": "Add your mobile number",
+      "addPhoneSubmit": "Send code",
+      "resent": "A new code is on its way."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your account email and we'll send you a reset code.",
+      "submit": "Send reset code",
+      "sent": "If an account exists for {email}, a reset code is on its way.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "Enter the code we emailed you and your new password.",
+      "code": "Reset code",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Reset password",
+      "success": "Password updated. Please sign in with your new password.",
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds}s",
+      "resent": "A new code is on its way.",
+      "differentEmail": "Use a different email"
+    },
+    "oauthErrors": {
+      "googleDisabled": "Google sign-in is not available right now.",
+      "oauthStateMismatch": "The sign-in request expired. Please try again.",
+      "oauthFailed": "We couldn't complete Google sign-in. Please try again.",
+      "googleEmailUnverified": "Your Google email is not verified.",
+      "googleAccountExists": "An account with this email already exists. Sign in with your password, then link Google from Security settings.",
+      "googleLinkedElsewhere": "This Google account is linked to another portal account.",
+      "googleAlreadyLinked": "A Google account is already linked.",
+      "reauthRequired": "Please confirm your password first, then try again."
+    }
+  },
+  "dashboard": {
+    "greeting": "Hello, {name}",
+    "subtitle": "Here's where things stand.",
+    "cards": {
+      "applications": "Applications in progress",
+      "licenses": "Active licences",
+      "actions": "Required actions",
+      "none": "None yet"
+    },
+    "startTitle": "Ready to apply?",
+    "startBody": "The guided application opens with the next delivery milestone. Meanwhile, secure your account.",
+    "securityTitle": "Protect your account",
+    "securityBody": "Turn on two-step verification so only you can sign in.",
+    "securityCta": "Set up two-step verification",
+    "securityOn": "Two-step verification is on.",
+    "roles": "Your roles"
+  },
+  "security": {
+    "title": "Security",
+    "subtitle": "Manage how you sign in and keep your account safe.",
+    "requiredBanner": "Your role requires two-step verification. Set up at least one method to continue.",
+    "linked": "Google account linked.",
+    "contact": {
+      "title": "Contact details",
+      "description": "Used for sign-in codes and important notices.",
+      "email": "Email",
+      "phone": "Mobile",
+      "changePhone": "Change",
+      "newPhone": "New mobile number",
+      "phoneChanged": "Number updated. Verify it with the code we sent.",
+      "verifyNow": "Verify now"
+    },
+    "methods": {
+      "title": "Sign-in methods",
+      "description": "Ways you can sign in to the portal.",
+      "password": "Password",
+      "passwordSet": "Last changed {date}",
+      "passwordNotSet": "No password set — you sign in with Google.",
+      "changePassword": "Change password",
+      "setPassword": "Set a password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "passwordUpdated": "Password updated. Other sessions were signed out.",
+      "google": "Google",
+      "googleLinked": "Linked to {email}",
+      "googleNotLinked": "Not linked",
+      "linkGoogle": "Link Google",
+      "unlinkGoogle": "Unlink",
+      "googleUnlinked": "Google account unlinked."
+    },
+    "mfa": {
+      "title": "Two-step verification",
+      "description": "Ask for a code after your password. Choose the methods that suit you.",
+      "statusOn": "On",
+      "statusOff": "Off",
+      "preferred": "Preferred",
+      "makePreferred": "Make preferred",
+      "setUp": "Set up",
+      "remove": "Remove",
+      "removed": "Method removed.",
+      "enabled": "Two-step method added.",
+      "preferredChanged": "Preferred method updated.",
+      "methods": {
+        "TOTP": {
+          "name": "Authenticator app",
+          "description": "Codes from Google Authenticator, Microsoft Authenticator, 1Password and similar apps. Works offline."
+        },
+        "SMS": {
+          "name": "Text message",
+          "description": "A code by SMS to your verified mobile number."
+        },
+        "EMAIL": {
+          "name": "Email",
+          "description": "A code sent to your verified email address."
+        }
+      },
+      "totpSetup": {
+        "title": "Set up your authenticator app",
+        "step1": "Scan this QR code with your authenticator app.",
+        "manual": "Can't scan? Enter this key manually:",
+        "step2": "Enter the 6-digit code the app shows.",
+        "qrAlt": "QR code for your authenticator app"
+      },
+      "otpSetup": {
+        "title": "Set up {method}",
+        "intro": "We'll send a code to {destination} to make sure it reaches you.",
+        "send": "Send code",
+        "sent": "Code sent. Enter it below.",
+        "phoneRequired": "Verify your mobile number first."
+      }
+    },
+    "recovery": {
+      "title": "Recovery codes",
+      "description": "Use a recovery code if you lose access to your other methods.",
+      "remaining": "{count, plural, =0 {No codes left} one {# code left} other {# codes left}}",
+      "regenerate": "Generate new codes",
+      "dialogTitle": "Save your recovery codes",
+      "dialogBody": "Store these somewhere safe. Each code works once. You won't see them again.",
+      "saved": "I have saved my codes",
+      "fileHeader": "REBP Portal recovery codes"
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "description": "Devices currently signed in to your account.",
+      "current": "This device",
+      "lastActive": "Last active {time}",
+      "signedInWith": "via {method}",
+      "revoke": "Sign out",
+      "revokeOthers": "Sign out all other sessions",
+      "revoked": "Session signed out.",
+      "revokedOthers": "{count, plural, =0 {No other sessions} one {Signed out # session} other {Signed out # sessions}}",
+      "unknownDevice": "Unknown device"
+    },
+    "reauth": {
+      "title": "Confirm it's you",
+      "description": "For your security, enter your password to continue.",
+      "password": "Password",
+      "submit": "Confirm",
+      "googleHint": "Your account has no password. Sign out and sign in with Google again to make this change."
+    }
+  },
+  "audit": {
+    "title": "Audit trail",
+    "subtitle": "Append-only, hash-chained record of security and state-changing actions.",
+    "chainOk": "Chain verified — {count} events intact.",
+    "chainBroken": "Chain broken at event #{id}. Investigate immediately.",
+    "columns": {
+      "time": "Time",
+      "action": "Action",
+      "actor": "Actor",
+      "entity": "Entity",
+      "ip": "IP",
+      "hash": "Hash"
+    },
+    "empty": "No events recorded yet."
+  },
+  "privacy": {
+    "title": "Privacy notice",
+    "draft": "Draft text pending approval by the Professional Body's Legal & Compliance Officer.",
+    "body": "We collect the personal data needed to register and license real estate brokerage practitioners and firms, and to maintain the public register. We collect each item only when your category or application type requires it. Your data is encrypted, access is limited to staff with a need to know, and every access to sensitive records is logged. Only the fields listed in the register rules are ever published. You can request a copy of your data at any time."
+  },
+  "forbidden": {
+    "title": "You don't have access to this page",
+    "body": "Your account's roles don't include this area. If you think this is a mistake, contact your administrator.",
+    "cta": "Go to dashboard"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "cta": "Go home"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again.",
+    "retry": "Try again"
+  },
+  "outbox": {
+    "title": "Development outbox",
+    "subtitle": "Emails and SMS logged by the mock adapters. Not available in production.",
+    "empty": "No messages yet.",
+    "channel": "Channel",
+    "to": "To",
+    "template": "Template",
+    "sent": "Sent"
+  },
+  "roles": {
+    "APPLICANT": "Applicant",
+    "SUPERVISOR": "Supervisor",
+    "PRINCIPAL_BROKER": "Principal Broker",
+    "FIRM_ADMIN": "Firm administrator",
+    "REVIEWING_OFFICER": "Reviewing Officer",
+    "APPROVING_AUTHORITY": "Approving Authority",
+    "REGISTRAR": "Registrar",
+    "FINANCE_OFFICER": "Finance Officer",
+    "SYSTEM_ADMIN": "System administrator",
+    "AUDITOR": "Auditor / DPO"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "emailInvalid": "Enter a valid email address, like name@example.com.",
+    "phoneInvalid": "Enter a mobile number with country code, like +250 788 123 456, or a local number like 078 812 3456.",
+    "passwordTooShort": "Use at least 12 characters. Try a short sentence.",
+    "passwordTooLong": "Use 128 characters or fewer.",
+    "passwordContainsPersonalInfo": "Don't include your name or email in your password.",
+    "passwordBreached": "This password has appeared in a data breach. Choose a different one.",
+    "passwordsMismatch": "The passwords don't match.",
+    "otpInvalid": "Enter the 6-digit code.",
+    "recoveryCodeInvalid": "Recovery codes have 10 letters and numbers, like ABCDE-23456.",
+    "nameTooShort": "Enter your full name.",
+    "nameTooLong": "Use 120 characters or fewer.",
+    "privacyRequired": "Please confirm you have read the privacy notice.",
+    "rolesRequired": "Choose at least one role."
+  },
+  "errors": {
+    "unexpected": "Something went wrong. Please try again.",
+    "validation": "Please fix the highlighted fields.",
+    "unauthenticated": "Your session has ended. Please sign in again.",
+    "invalidCredentials": "The email or password is incorrect.",
+    "invalidPassword": "The password is incorrect.",
+    "accountLocked": "Too many failed attempts. Try again in {minutes} minutes, or reset your password.",
+    "rateLimited": "Too many attempts. Please wait {seconds} seconds and try again.",
+    "duplicateAccount": "An account with these details already exists.",
+    "emailTaken": "An account already uses this email. Sign in or reset your password instead.",
+    "phoneTaken": "Another account already uses this mobile number.",
+    "codeInvalid": "That code isn't right. Check it and try again.",
+    "codeExpired": "That code has expired. Request a new one.",
+    "tooManyAttempts": "Too many incorrect codes. Please start again.",
+    "resendCooldown": "Please wait {seconds} seconds before requesting another code.",
+    "alreadyVerified": "Already verified.",
+    "phoneMissing": "Add a mobile number first.",
+    "phoneNotVerified": "Verify your mobile number first.",
+    "challengeExpired": "This sign-in attempt has expired. Please sign in again.",
+    "methodNotEnabled": "That method isn't set up.",
+    "methodAlreadyEnabled": "That method is already set up.",
+    "enrolmentExpired": "Setup expired. Please start again.",
+    "mfaRequiredForRole": "Your role requires at least one two-step method.",
+    "reauthRequired": "Please confirm your password to continue.",
+    "reauthWithGoogle": "Sign in with Google again to confirm it's you.",
+    "disableSmsFirst": "Remove text-message verification before changing your number.",
+    "cannotRevokeCurrent": "Use Sign out to end this session.",
+    "cannotUnlinkOnlyMethod": "Set a password before unlinking Google, or you won't be able to sign in.",
+    "googleNotLinked": "No Google account is linked.",
+    "googleAccountExists": "An account with this email already exists. Sign in with your password, then link Google from Security settings.",
+    "googleEmailUnverified": "Your Google email is not verified.",
+    "googleLinkedElsewhere": "This Google account is linked to another portal account.",
+    "googleAlreadyLinked": "A Google account is already linked.",
+    "accountDisabled": "This account has been disabled. Contact the Professional Body if you think this is a mistake.",
+    "forbidden": "You don't have permission to do that.",
+    "mfaRequiredForAction": "Turn on two-step verification before managing access.",
+    "cannotEditOwnAccess": "You can't change your own access. Ask another administrator.",
+    "userNotFound": "That account no longer exists.",
+    "staffRoleOnOrganisation": "Staff roles can't be given to firm accounts.",
+    "lastAdmin": "At least one active system administrator must remain.",
+    "matrixInvalid": "These changes break an access rule. Review the highlighted cells."
+  },
+  "notifications": {
+    "emailVerify": {
+      "subject": "Your REBP Portal verification code: {code}",
+      "body": "Hello {name},\n\nYour email verification code is {code}. It expires in 10 minutes.\n\nIf you did not create an account, you can ignore this email."
+    },
+    "phoneVerify": {
+      "subject": "REBP verification",
+      "body": "REBP Portal: your phone verification code is {code}. It expires in 10 minutes."
+    },
+    "mfaLoginCode": {
+      "subject": "Your REBP Portal sign-in code: {code}",
+      "body": "REBP Portal: your sign-in code is {code}. Never share it. If this wasn't you, change your password."
+    },
+    "mfaEnrolCode": {
+      "subject": "Confirm two-step verification: {code}",
+      "body": "REBP Portal: your code to turn on two-step verification is {code}."
+    },
+    "passwordReset": {
+      "subject": "Reset your REBP Portal password",
+      "body": "Hello {name},\n\nYour password reset code is {code}. It expires in 10 minutes.\n\nIf you didn't ask to reset your password, you can ignore this email — your password stays the same."
+    },
+    "passwordChanged": {
+      "subject": "Your REBP Portal password was changed",
+      "body": "Hello {name},\n\nThe password for your REBP Portal account was just changed. If this wasn't you, reset your password immediately and contact support."
+    },
+    "mfaChanged": {
+      "subject": "Two-step verification settings changed",
+      "body": "Hello {name},\n\nThe two-step verification settings on your REBP Portal account were changed. If this wasn't you, contact support immediately."
+    },
+    "contactChanged": {
+      "subject": "Your mobile number was changed",
+      "body": "Hello {name},\n\nThe mobile number on your REBP Portal account was changed. If this wasn't you, contact support immediately."
+    },
+    "accessChanged": {
+      "subject": "Your REBP Portal access changed",
+      "body": "Hello {name},\n\nAn administrator changed the roles on your REBP Portal account. Sign in to see what you can do now (Settings → My access). If you didn't expect this, contact the Professional Body."
+    }
+  },
+  "footer": {
+    "rights": "© {year} Professional Body for Real Estate Brokerage Practitioners",
+    "privacy": "Privacy",
+    "accessibility": "Accessibility",
+    "contact": "Contact"
+  },
+  "devMode": {
+    "codeLabel": "Dev mode · simulated code",
+    "useCode": "Use code",
+    "banner": "Dev mode: no email or SMS is sent — verification codes appear on screen.",
+    "chip": "Dev mode"
+  },
+  "roleInfo": {
+    "APPLICANT": "Applies for, renews and tracks licences.",
+    "SUPERVISOR": "Confirms supervision of other practitioners.",
+    "PRINCIPAL_BROKER": "Leads a firm: roster, affiliations and firm filings.",
+    "FIRM_ADMIN": "Manages a firm's people and filings.",
+    "REVIEWING_OFFICER": "Reviews applications and verifies evidence (Section L).",
+    "APPROVING_AUTHORITY": "Decides applications and revocations (Section M).",
+    "REGISTRAR": "Maintains the official public register.",
+    "FINANCE_OFFICER": "Manages fees, payments and refunds.",
+    "SYSTEM_ADMIN": "Configures the portal and manages access.",
+    "AUDITOR": "Independent oversight of records and access."
+  },
+  "capabilityGroups": {
+    "applications": "Applications & firms",
+    "review": "Review & decisions",
+    "register": "Public register",
+    "payments": "Payments",
+    "administration": "Administration",
+    "oversight": "Oversight"
+  },
+  "capabilities": {
+    "application_edit": {
+      "label": "Create and edit applications",
+      "description": "Start, fill in and submit applications (staff: assisted filing)."
+    },
+    "application_view": {
+      "label": "View applications",
+      "description": "See application details within their scope."
+    },
+    "confirmation_decide": {
+      "label": "Confirm supervision",
+      "description": "Accept or decline supervision and affiliation requests."
+    },
+    "confirmation_override": {
+      "label": "Override confirmations",
+      "description": "Record a confirmation on someone's behalf, with a reason."
+    },
+    "review_perform": {
+      "label": "Review applications",
+      "description": "Carry out the Section L administrative review."
+    },
+    "review_view": {
+      "label": "See reviews",
+      "description": "Read completed Section L reviews."
+    },
+    "decision_make": {
+      "label": "Decide applications",
+      "description": "Record the Section M licensing decision."
+    },
+    "decision_view": {
+      "label": "See decisions",
+      "description": "Read Section M decisions and letters."
+    },
+    "register_administer": {
+      "label": "Administer the register",
+      "description": "Suspend, lift and correct register entries."
+    },
+    "register_revoke": {
+      "label": "Revoke licences",
+      "description": "Approve the revocation of a licence."
+    },
+    "payments_pay": {
+      "label": "Pay fees",
+      "description": "Pay application and licence fees online."
+    },
+    "payments_manage": {
+      "label": "Manage payments",
+      "description": "Reconcile, refund and waive fees."
+    },
+    "payments_view": {
+      "label": "View payments",
+      "description": "See payment status and receipts."
+    },
+    "config_edit": {
+      "label": "Propose configuration",
+      "description": "Draft changes to fees, rules and templates."
+    },
+    "config_approve": {
+      "label": "Approve configuration",
+      "description": "Approve configuration changes (checker)."
+    },
+    "users_manage": {
+      "label": "Manage people",
+      "description": "Give and remove roles, disable accounts."
+    },
+    "roles_manage": {
+      "label": "Manage permissions",
+      "description": "Change what each role is allowed to do."
+    },
+    "access_view": {
+      "label": "View access",
+      "description": "See who has which roles and permissions."
+    },
+    "firmRoles_manage": {
+      "label": "Manage firm roles",
+      "description": "Manage a firm's roster and roles."
+    },
+    "audit_view": {
+      "label": "View audit trail",
+      "description": "Read the tamper-evident audit trail."
+    },
+    "audit_export": {
+      "label": "Export audit trail",
+      "description": "Export audit records for investigation."
+    },
+    "reports_view": {
+      "label": "View reports",
+      "description": "Dashboards and reports within their scope."
+    },
+    "backoffice_access": {
+      "label": "Open the back office",
+      "description": "Use the regulator's staff console."
+    }
+  },
+  "access": {
+    "title": "Access control",
+    "subtitle": "Who can do what in the portal — people, roles and permissions.",
+    "tabs": {
+      "people": "People",
+      "roles": "Roles & permissions"
+    },
+    "readOnly": "Read-only: your role can view access but not change it.",
+    "people": {
+      "search": "Search by name or email",
+      "allRoles": "All roles",
+      "statusLabel": "Status",
+      "roleLabel": "Role",
+      "status": {
+        "all": "Everyone",
+        "active": "Active",
+        "disabled": "Disabled",
+        "noMfa": "No two-step"
+      },
+      "count": "{count, plural, =0 {No people} one {# person} other {# people}}",
+      "empty": "No one matches these filters.",
+      "clear": "Clear filters",
+      "lastSignIn": "Last sign-in {date}",
+      "neverSignedIn": "Never signed in",
+      "you": "You",
+      "disabled": "Disabled",
+      "noMfa": "No two-step",
+      "mfaOn": "Two-step on",
+      "manage": "Manage",
+      "view": "View",
+      "unverified": "Unverified",
+      "page": "Page {page} of {count}",
+      "prev": "Previous",
+      "next": "Next",
+      "organisation": "Firm account"
+    },
+    "manage": {
+      "title": "Manage access",
+      "rolesTitle": "Roles",
+      "rolesHint": "Tap a role to add or remove it.",
+      "preview": "What they can do",
+      "gained": "{count} new",
+      "lost": "{count} removed",
+      "save": "Save roles",
+      "saved": "Roles updated for {name}.",
+      "undo": "Undo changes",
+      "selfNote": "You can't change your own access. Ask another administrator.",
+      "statusTitle": "Account status",
+      "statusActive": "Active — can sign in.",
+      "disable": "Disable account",
+      "enable": "Re-enable account",
+      "disableReason": "Reason (optional)",
+      "disabledToast": "{name} has been disabled and signed out everywhere.",
+      "enabledToast": "{name} can sign in again.",
+      "disabledSince": "Disabled {date}",
+      "warnings": {
+        "sodCombined": "This person could both review and decide applications. The system still stops them deciding a file they reviewed (BR-091).",
+        "mfaRequired": "These roles require two-step verification. They'll be asked to set it up at their next sign-in.",
+        "staffOnOrganisation": "Staff roles can't be given to firm accounts."
+      }
+    },
+    "matrix": {
+      "title": "Permission matrix",
+      "subtitle": "Defaults come from SRS Appendix D. Every change is checked against the access rules and audited.",
+      "search": "Filter permissions",
+      "changes": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+      "review": "Review & save",
+      "discard": "Discard",
+      "resetDefaults": "Reset to defaults",
+      "resetTitle": "Reset all permissions?",
+      "resetBody": "Every role goes back to the SRS Appendix D defaults. This takes effect immediately.",
+      "saved": "{count, plural, one {# permission updated} other {# permissions updated}}",
+      "resetDone": "Permissions restored to defaults.",
+      "modified": "Changed from default",
+      "locked": {
+        "required": "Always on — removing it would lock administrators out.",
+        "staffOnly": "Staff-only — this role doesn't require two-step verification."
+      },
+      "reviewTitle": "Review changes",
+      "reviewBody": "Changes apply immediately to everyone with the role.",
+      "grant": "Grant",
+      "revoke": "Revoke",
+      "chooseRole": "Role",
+      "members": "{count, plural, =0 {No members} one {# member} other {# members}}",
+      "permissionCount": "{count, plural, one {# permission} other {# permissions}}",
+      "cellLabel": "{capability} for {role}",
+      "violations": {
+        "sod": "{role} can't both review and decide applications.",
+        "makerChecker": "{role} can't both propose and approve configuration.",
+        "required": "{role} must keep “{capability}”.",
+        "staffOnly": "“{capability}” is staff-only and can't be given to {role}."
+      },
+      "legend": {
+        "granted": "Granted",
+        "denied": "Not granted",
+        "modified": "Changed",
+        "locked": "Locked"
+      },
+      "staffRole": "Staff",
+      "noMatches": "No permissions match “{query}”."
+    }
+  },
+  "myAccess": {
+    "title": "My access",
+    "subtitle": "Your roles and what they let you do in the portal.",
+    "rolesTitle": "Your roles",
+    "canTitle": "What you can do",
+    "cannotTitle": "Not part of your roles",
+    "count": "{count} of {total} permissions",
+    "mfa": "Your roles require two-step verification.",
+    "requestNote": "Need more access? Ask a system administrator — every change is recorded in the audit trail."
+  }
+}

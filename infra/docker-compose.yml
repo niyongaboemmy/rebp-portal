@@ -1,0 +1,31 @@
+# Local services for the REBP Portal (WP-0.3). Usage: docker compose -f infra/docker-compose.yml up -d
+# The app itself runs with `pnpm dev`. Without Docker, any local Postgres 16+ works (see README).
+name: rebp
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rebp_dev
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  # Captures outgoing email. Set SMTP_HOST=localhost, SMTP_PORT=1025; UI at http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:v1.21
+    ports: ["1025:1025", "8025:8025"]
+
+volumes:
+  pgdata:

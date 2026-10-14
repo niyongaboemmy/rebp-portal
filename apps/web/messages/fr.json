@@ -1,0 +1,89 @@
+{
+  "brand": { "tagline": "Licences de courtage immobilier" },
+  "common": {
+    "skipToContent": "Aller au contenu principal",
+    "loading": "Chargement…",
+    "continue": "Continuer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "back": "Retour",
+    "save": "Enregistrer",
+    "confirm": "Confirmer",
+    "copy": "Copier",
+    "copied": "Copié",
+    "download": "Télécharger",
+    "remove": "Supprimer",
+    "or": "ou",
+    "optional": "Facultatif",
+    "verified": "Vérifié",
+    "unverified": "Non vérifié",
+    "comingSoon": "Bientôt disponible",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "pilotBanner": "Version pilote — données d'exemple uniquement. Les frais et textes juridiques sont provisoires."
+  },
+  "nav": {
+    "home": "Accueil",
+    "register": "Registre public",
+    "verify": "Vérifier une licence",
+    "eligibility": "Suis-je éligible ?",
+    "categories": "Catégories",
+    "signIn": "Se connecter",
+    "signUp": "Créer un compte",
+    "dashboard": "Tableau de bord",
+    "applications": "Demandes",
+    "licenses": "Portefeuille de licences",
+    "confirmations": "Confirmations",
+    "firm": "Espace cabinet",
+    "security": "Sécurité",
+    "backoffice": "Back-office",
+    "signOut": "Se déconnecter",
+    "account": "Compte"
+  },
+  "theme": {
+    "toggle": "Changer de thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": { "label": "Langue", "draft": "brouillon" },
+  "landing": {
+    "eyebrow": "Portail officiel des licences",
+    "title": "Votre porte d'entrée de confiance vers les licences immobilières",
+    "subtitle": "Déposez votre demande, suivez-la en temps réel et obtenez une licence électronique vérifiable — depuis votre téléphone, dans votre langue.",
+    "primaryCta": "Commencer ma demande",
+    "secondaryCta": "Suis-je éligible ?",
+    "verifyTitle": "Vérifier un praticien",
+    "verifyButton": "Rechercher"
+  },
+  "auth": {
+    "continueWithGoogle": "Continuer avec Google",
+    "signIn": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous pour poursuivre votre demande.",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "forgot": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Nouveau sur le portail ?",
+      "createAccount": "Créer un compte"
+    },
+    "signUp": {
+      "title": "Créer votre compte",
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "phone": "Numéro de mobile",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "Créer le compte"
+    },
+    "twoStep": {
+      "title": "Vérification en deux étapes",
+      "code": "Code de vérification",
+      "submit": "Vérifier",
+      "resend": "Renvoyer le code"
+    }
+  }
+}
