@@ -5,6 +5,7 @@ Online registration, licensing and public register system for Real Estate Broker
 ## Documentation
 
 - [Software Requirements Specification](docs/SRS.md)
+- [Implementation Plan (5-day pilot)](docs/IMPLEMENTATION_PLAN.md)
 
 ## Status
 
