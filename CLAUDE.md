@@ -12,7 +12,7 @@ apps/web/                Next.js 16 (App Router) — UI and server (server actio
   src/components/layout/ Shells, navigation, header/footer, theme + language switchers
   src/config/            Navigation (role-filtered)
   src/hooks/             useActionForm, useErrorMessage, useCountdown, useMediaQuery…
-  src/server/            Server-only domain code: auth/, audit/, notifications/, db, env, action wrapper
+  src/server/            Server-only domain code: auth/, access/, audit/, notifications/, db, env, action wrapper
   src/server/actions/    "use server" entry points — thin: validate, rate-limit, call the domain, map errors
   messages/              i18n catalogues (en complete; rw/fr drafts)
   prisma/                Schema, migrations, seed
@@ -42,6 +42,13 @@ pnpm db:seed             # demo users for every role
   `requireCapability()`. `proxy.ts` is only an optimistic cookie check.
 - **Never pass functions or icon components from a Server Component to a Client Component.** Client
   components that need nav config import it themselves.
+- **Authorise by capability, not role name.** Pages: `requireCapability()`. Server actions: `authorizeAction()`
+  (re-checks capability, MFA and optional step-up — actions are public endpoints). Navigation filters by effective
+  capabilities, so matrix edits take effect everywhere. Access rules live in `@rebp/contracts` (`validateMatrix`).
+- **Dev mode (`APP_ENV=dev`)**: codes are simulated and shown via `<DevCode>`; read them with `devCodeFor()`. Never return
+  a code to the browser any other way.
+- **Forms validate on submit, then on change** (`useActionForm`). Don't reintroduce blur validation on short forms: it
+  shifts the layout under the pointer. Hide transient UI with `invisible`, not only `opacity-0`.
 - **Audit every state change** with `recordAudit()`; mask PII with `maskEmail` / `maskPhone`.
 - Server-only modules import `"server-only"`; never import `src/server/**` from client code except `actions/`.
 

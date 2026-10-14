@@ -32,6 +32,7 @@ import {
   regenerateRecoveryCodesAction,
   setPreferredMfaAction,
 } from "@/server/actions/security";
+import { DevCode } from "@/components/auth/dev-code";
 import { useStepUp } from "./step-up";
 
 // Code-split: enrolment UIs only load when the user starts a setup.
@@ -155,7 +156,7 @@ export function MfaCard({
                     {t(`mfa.methods.${method}.description`)}
                   </p>
                   {blocked && !isOn && (
-                    <p className="text-xs font-medium text-warning">
+                    <p className="text-xs font-medium text-warning-strong">
                       {t("mfa.otpSetup.phoneRequired")}
                     </p>
                   )}
@@ -259,6 +260,7 @@ function OtpEnrolment({
   const stepUp = useStepUp();
   const errorMessage = useErrorMessage();
   const [sent, setSent] = useState(false);
+  const [devCode, setDevCode] = useState<string | null>(null);
   const [sending, startSend] = useTransition();
   const { form, submit, pending } = useActionForm({
     schema: z.object({ code: otpSchema }),
@@ -273,6 +275,7 @@ function OtpEnrolment({
       const result = await stepUp(() => beginOtpEnrolmentAction(method));
       if (!result.ok) return void toast.error(errorMessage(result.error, result.meta));
       setSent(true);
+      setDevCode(result.data.devCode);
       toast.success(t("otpSetup.sent"));
     });
 
@@ -288,6 +291,10 @@ function OtpEnrolment({
         </Button>
       ) : (
         <form onSubmit={submit} noValidate className="flex flex-col gap-3">
+          <DevCode
+            code={devCode}
+            onUse={(value) => form.setValue("code", value, { shouldValidate: true })}
+          />
           <Field label={methodName} error={form.formState.errors.code?.message}>
             <FieldControl>
               <OtpInput autoFocus {...form.register("code")} />

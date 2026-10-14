@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldControl } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { OtpInput } from "@/components/ui/otp-input";
+import { DevCode } from "./dev-code";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useCountdown } from "@/hooks/use-countdown";
 import { useErrorMessage } from "@/hooks/use-error-message";
@@ -30,6 +31,8 @@ interface TwoStepFormProps {
   method: MfaMethod;
   methods: MfaMethod[];
   destination: string | null;
+  /** APP_ENV=dev only. */
+  devCode?: string | null;
   next?: string;
 }
 
@@ -39,13 +42,16 @@ const recoveryForm = z.object({ code: recoveryCodeSchema });
 export function TwoStepForm({
   method: initialMethod,
   methods,
-  destination,
+  destination: initialDestination,
+  devCode: initialDevCode = null,
   next,
 }: TwoStepFormProps) {
   const t = useTranslations("auth.twoStep");
   const router = useRouter();
   const errorMessage = useErrorMessage();
   const [method, setMethod] = useState(initialMethod);
+  const [destination, setDestination] = useState(initialDestination);
+  const [devCode, setDevCode] = useState(initialDevCode);
   const [mode, setMode] = useState<"code" | "recovery" | "choose">("code");
   const [switching, startSwitch] = useTransition();
   const cooldown = useCountdown(method === "TOTP" ? 0 : 30);
@@ -84,7 +90,9 @@ export function TwoStepForm({
         toast.error(errorMessage(result.error, result.meta));
         return;
       }
-      setMethod(selected);
+      setMethod(result.data.method);
+      setDestination(result.data.destination);
+      setDevCode(result.data.devCode);
       setMode("code");
       code.form.reset();
       cooldown.start(selected === "TOTP" ? 0 : 30);
@@ -95,6 +103,7 @@ export function TwoStepForm({
       const result = await resendTwoStepCodeAction();
       if (result.ok) {
         toast.success(t("resent"));
+        setDevCode(result.data.devCode);
         cooldown.start(30);
       } else {
         toast.error(errorMessage(result.error, result.meta));
@@ -170,6 +179,10 @@ export function TwoStepForm({
       <p className="text-muted-foreground" aria-live="polite">
         {t(`subtitle.${method}`, { destination: destination ?? "" })}
       </p>
+      <DevCode
+        code={method === "TOTP" ? null : devCode}
+        onUse={(value) => code.form.setValue("code", value, { shouldValidate: true })}
+      />
       <Field label={t("code")} error={code.form.formState.errors.code?.message}>
         <FieldControl>
           <OtpInput autoFocus {...code.form.register("code")} />

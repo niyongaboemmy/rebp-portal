@@ -45,7 +45,7 @@ jobs:
           SMS_PROVIDER=mock
           AUTH_BREACHED_PASSWORD_CHECK=false
           RATE_LIMIT_SCALE=100
-          NOTIFICATION_STORE_BODIES=true
+          APP_ENV=dev
           EOT
           cp .env.test .env
 

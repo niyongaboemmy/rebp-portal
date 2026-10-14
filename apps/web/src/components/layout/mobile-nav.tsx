@@ -3,7 +3,7 @@
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import type { Role } from "@rebp/contracts";
+import type { Capability } from "@rebp/contracts";
 import { PUBLIC_NAV } from "@/config/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
@@ -17,7 +17,8 @@ import {
 import { AppNav } from "./app-nav";
 import { NavLink } from "./nav-link";
 
-type MobileNavProps = { area: "public" } | { area: "portal" | "backoffice"; roles: Role[] };
+type MobileNavProps =
+  { area: "public" } | { area: "portal" | "backoffice"; capabilities: Capability[] };
 
 /** Drawer navigation for viewports below `lg`. Closes on navigation. */
 export function MobileNav(props: MobileNavProps) {
@@ -45,7 +46,7 @@ export function MobileNav(props: MobileNavProps) {
             ))}
           </nav>
         ) : (
-          <AppNav area={props.area} roles={props.roles} onNavigate={close} />
+          <AppNav area={props.area} capabilities={props.capabilities} onNavigate={close} />
         )}
       </SheetContent>
     </Sheet>

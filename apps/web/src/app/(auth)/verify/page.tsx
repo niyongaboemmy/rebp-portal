@@ -6,7 +6,7 @@ import { VerifyContacts } from "@/components/auth/verify-contacts";
 import { maskEmailForDisplay, maskPhoneForDisplay } from "@/lib/utils";
 import { isFullyVerified } from "@/server/auth/account";
 import { requireUser } from "@/server/auth/guards";
-import { isProduction } from "@/server/env";
+import { devCodeFor } from "@/server/notifications";
 
 /** FR-ACC-001: both email and phone must be verified before application functions. */
 export default async function VerifyPage() {
@@ -20,13 +20,17 @@ export default async function VerifyPage() {
         email={{
           display: maskEmailForDisplay(user.email),
           verified: Boolean(user.emailVerifiedAt),
+          devCode: user.emailVerifiedAt ? null : await devCodeFor(user.email, "emailVerify"),
         }}
         phone={
           user.phone
-            ? { display: maskPhoneForDisplay(user.phone), verified: Boolean(user.phoneVerifiedAt) }
+            ? {
+                display: maskPhoneForDisplay(user.phone),
+                verified: Boolean(user.phoneVerifiedAt),
+                devCode: user.phoneVerifiedAt ? null : await devCodeFor(user.phone, "phoneVerify"),
+              }
             : null
         }
-        showDevHint={!isProduction()}
       />
     </AuthCard>
   );

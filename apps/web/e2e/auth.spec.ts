@@ -17,13 +17,20 @@ async function signUp(page: Page, email: string, phone: string) {
 }
 
 async function verifyContacts(page: Page, email: string, phone: string) {
+  // Dev mode shows the simulated code on screen; "Use code" fills it in.
   const emailCard = page.getByTestId("verify-email");
-  await emailCard.getByLabel("6-digit code").fill(await latestCode(email, "emailVerify"));
+  await emailCard.getByRole("button", { name: "Use code" }).click();
+  await expect(emailCard.getByLabel("6-digit code")).toHaveValue(
+    await latestCode(email, "emailVerify"),
+  );
   await emailCard.getByRole("button", { name: "Verify" }).click();
   await expect(emailCard.getByText("Verified")).toBeVisible();
 
   const phoneCard = page.getByTestId("verify-phone");
-  await phoneCard.getByLabel("6-digit code").fill(await latestCode(phone, "phoneVerify"));
+  await phoneCard.getByRole("button", { name: "Use code" }).click();
+  await expect(phoneCard.getByLabel("6-digit code")).toHaveValue(
+    await latestCode(phone, "phoneVerify"),
+  );
   await phoneCard.getByRole("button", { name: "Verify" }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 }
@@ -98,17 +105,18 @@ test("text-message two-step as the preferred method", async ({ page }) => {
   await page.goto("/settings/security");
   await page.getByTestId("mfa-sms").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "Send code" }).click();
-  await page
-    .getByRole("dialog")
-    .getByLabel("Text message")
-    .fill(await latestCode(phone, "mfaEnrolCode"));
+  await page.getByRole("dialog").getByRole("button", { name: "Use code" }).click();
+  await expect(page.getByRole("dialog").getByLabel("Text message")).toHaveValue(
+    await latestCode(phone, "mfaEnrolCode"),
+  );
   await page.getByRole("dialog").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "I have saved my codes" }).click();
 
   await signOut(page);
   await signIn(page, email);
   await expect(page.getByText(/We sent a 6-digit code to \+250/)).toBeVisible();
-  await page.getByLabel("Verification code").fill(await latestCode(phone, "mfaLoginCode"));
+  await expect(page.getByTestId("dev-code")).toContainText(await latestCode(phone, "mfaLoginCode"));
+  await page.getByRole("button", { name: "Use code" }).click();
   await page.getByRole("button", { name: "Verify" }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 });
@@ -129,7 +137,8 @@ test("password reset through an emailed code", async ({ page }) => {
   await page.getByLabel("Email address").fill(email);
   await page.getByRole("button", { name: "Send reset code" }).click();
   await expect(page).toHaveURL(/\/reset-password/);
-  await page.getByLabel("Reset code").fill(await latestCode(email, "passwordReset"));
+  await page.getByRole("button", { name: "Use code" }).click();
+  await expect(page.getByLabel("Reset code")).toHaveValue(await latestCode(email, "passwordReset"));
   await page.getByLabel("New password", { exact: true }).fill("a-brand-new-passphrase");
   await page.getByLabel("Confirm new password").fill("a-brand-new-passphrase");
   await page.getByRole("button", { name: "Reset password" }).click();
@@ -166,10 +175,7 @@ test("staff must set up two-step before using the back office", async ({ page })
 
   await page.getByTestId("mfa-email").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "Send code" }).click();
-  await page
-    .getByRole("dialog")
-    .getByLabel("Email")
-    .fill(await latestCode("officer@demo.rebp.rw", "mfaEnrolCode"));
+  await page.getByRole("dialog").getByRole("button", { name: "Use code" }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "I have saved my codes" }).click();
 

@@ -21,10 +21,11 @@ const schema = z.object({
   SMTP_FROM: z.string().default("REBP Portal <no-reply@rebp.local>"),
   SMS_PROVIDER: z.enum(["mock"]).default("mock"),
   /**
-   * Keep message bodies (which contain one-time codes) in NotificationLog. Defaults to on outside
-   * production and off in production; enable only for automated test environments.
+   * Deployment type. `dev` simulates the mail/SMS gateway: one-time codes are shown in the
+   * interface and kept in the notification log. Defaults to `dev` outside a production build.
+   * A production build may opt in (e.g. a pilot without a mail server); a warning banner is shown.
    */
-  NOTIFICATION_STORE_BODIES: z.enum(["true", "false"]).optional(),
+  APP_ENV: z.enum(["dev", "staging", "production"]).optional(),
   /** Multiplies every rate-limit budget; raise only for automated test environments. */
   RATE_LIMIT_SCALE: z.coerce.number().positive().default(1),
   AUTH_BREACHED_PASSWORD_CHECK: z
@@ -48,10 +49,25 @@ export function env(): Env {
     throw new Error(`Invalid environment configuration:\n${details}`);
   }
   cached = parsed.data;
+  if (cached.NODE_ENV === "production" && cached.APP_ENV === "dev") {
+    console.warn(
+      "[env] APP_ENV=dev on a production build: one-time codes are shown on screen. Never use with real users.",
+    );
+  }
   return cached;
 }
 
+/** Test hook: forget the parsed environment so changes to process.env are picked up. */
+export function resetEnvCache() {
+  cached = undefined;
+}
+
+/** True for a production *build* (secure cookies, HSTS). Independent of APP_ENV. */
 export const isProduction = () => env().NODE_ENV === "production";
-export const storeNotificationBodies = () =>
-  env().NOTIFICATION_STORE_BODIES ? env().NOTIFICATION_STORE_BODIES === "true" : !isProduction();
+
+export type AppEnv = "dev" | "staging" | "production";
+export const appEnv = (): AppEnv => env().APP_ENV ?? (isProduction() ? "production" : "dev");
+
+/** Dev mode: OTP codes are returned to the UI instead of relying on a real mail/SMS gateway. */
+export const isDevMode = () => appEnv() === "dev";
 export const isGoogleEnabled = () => Boolean(env().GOOGLE_CLIENT_ID && env().GOOGLE_CLIENT_SECRET);

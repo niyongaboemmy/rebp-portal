@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DevModeChip } from "@/components/layout/dev-mode-chip";
+import { isDevMode } from "@/server/env";
 
 /** Split layout: brand panel on large screens, focused single column on phones. */
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -36,13 +38,14 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         <header className="flex h-16 items-center justify-between px-4 sm:px-6">
           <Logo className="lg:invisible" />
           <div className="flex items-center gap-1">
+            {isDevMode() && <DevModeChip />}
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
         </header>
         <main
           id="main"
-          className="flex flex-1 items-start justify-center px-4 pt-4 pb-12 sm:items-center sm:px-6"
+          className="flex flex-1 items-start justify-center px-4 pt-4 pb-12 sm:px-6 sm:pt-[8vh]"
         >
           <div className="w-full max-w-md">{children}</div>
         </main>

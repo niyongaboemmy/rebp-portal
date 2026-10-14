@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { can } from "@rebp/contracts";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { BACKOFFICE_SECTIONS } from "@/config/navigation";
+import { userCapabilities } from "@/server/access/permissions";
 import { requireCapability } from "@/server/auth/guards";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,8 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BackofficeOverview() {
   const { user } = await requireCapability("backoffice.access");
   const t = await getTranslations();
+  const capabilities = await userCapabilities(user);
   const sections = Object.entries(BACKOFFICE_SECTIONS).filter(([, s]) =>
-    can(user.roles, s.capability),
+    capabilities.includes(s.capability),
   );
 
   return (

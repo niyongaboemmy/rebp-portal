@@ -34,6 +34,7 @@
   --success: oklch(0.52 0.13 150);
   --success-soft: oklch(0.96 0.04 150);
   --warning: oklch(0.6 0.13 70);
+  --warning-strong: oklch(0.47 0.11 60);
   --warning-soft: oklch(0.97 0.05 90);
   --info: oklch(0.52 0.13 245);
   --info-soft: oklch(0.96 0.03 245);
@@ -73,6 +74,7 @@
   --success: oklch(0.74 0.14 150);
   --success-soft: oklch(0.28 0.05 150);
   --warning: oklch(0.8 0.13 80);
+  --warning-strong: oklch(0.86 0.12 85);
   --warning-soft: oklch(0.3 0.05 80);
   --info: oklch(0.75 0.11 245);
   --info-soft: oklch(0.28 0.05 245);
@@ -114,6 +116,8 @@
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
+  /* AA text colour on light surfaces and on warning-soft. */
+  --color-warning-strong: var(--warning-strong);
   --color-info: var(--info);
   --color-info-soft: var(--info-soft);
   --color-danger-soft: var(--danger-soft);
@@ -233,4 +237,19 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Role colour identity (access control). Hue comes from --role-hue; tuned for AA contrast in both themes. */
+@utility role-tint {
+  background-color: oklch(0.94 0.05 var(--role-hue, 172));
+  color: oklch(0.37 0.1 var(--role-hue, 172));
+  @variant dark {
+    background-color: oklch(0.31 0.06 var(--role-hue, 172));
+    color: oklch(0.9 0.07 var(--role-hue, 172));
+  }
+}
+
+@utility role-ring {
+  border-color: oklch(0.62 0.13 var(--role-hue, 172));
+  box-shadow: 0 0 0 3px oklch(0.62 0.13 var(--role-hue, 172) / 0.18);
 }

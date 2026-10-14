@@ -175,7 +175,7 @@ describe("password sign-in (FR-ACC-004, SEC-006)", () => {
   });
 
   it(`locks the account after ${MAX_FAILED_LOGINS} failures, even for the right password`, async () => {
-    await verifiedUser();
+    const { user } = await verifiedUser();
     for (let i = 0; i < MAX_FAILED_LOGINS; i++) {
       await expectAppError(
         signInWithPassword({ email: "aline@example.rw", password: "wrong-password-here" }, ctx),
@@ -186,7 +186,9 @@ describe("password sign-in (FR-ACC-004, SEC-006)", () => {
       signInWithPassword({ email: "aline@example.rw", password: PASSWORD }, ctx),
       "accountLocked",
     );
-    expect(await db.auditEvent.count({ where: { action: "auth.locked" } })).toBeGreaterThan(0);
+    expect(await db.auditEvent.count({ where: { action: "auth.locked", entityId: user.id } })).toBe(
+      1,
+    );
   });
 });
 

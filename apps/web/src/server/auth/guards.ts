@@ -1,7 +1,8 @@
 import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { can, requiresMfa, type Capability } from "@rebp/contracts";
+import { requiresMfa, type Capability } from "@rebp/contracts";
+import { userCan } from "../access/permissions";
 import { isFullyVerified } from "./account";
 import { getCurrentSession } from "./current";
 import type { SessionWithUser } from "./session";
@@ -37,7 +38,7 @@ export async function requireCapability(
   options?: GuardOptions,
 ): Promise<SessionWithUser> {
   const current = await requireUser(options);
-  if (!can(current.user.roles, capability)) redirect("/forbidden");
+  if (!(await userCan(current.user, capability))) redirect("/forbidden");
   return current;
 }
 

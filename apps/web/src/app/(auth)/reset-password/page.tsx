@@ -5,6 +5,7 @@ import { emailSchema } from "@rebp/contracts";
 import { AuthCard } from "@/components/auth/auth-card";
 import { ResetPasswordForm } from "@/components/auth/password-recovery-forms";
 import { Alert } from "@/components/ui/alert";
+import { devCodeFor } from "@/server/notifications";
 
 export default async function ResetPasswordPage({ searchParams }: PageProps<"/reset-password">) {
   const params = await searchParams;
@@ -16,7 +17,10 @@ export default async function ResetPasswordPage({ searchParams }: PageProps<"/re
       {params.sent === "1" && (
         <Alert variant="info">{t("forgot.sent", { email: parsed.data })}</Alert>
       )}
-      <ResetPasswordForm email={parsed.data} />
+      <ResetPasswordForm
+        email={parsed.data}
+        devCode={await devCodeFor(parsed.data, "passwordReset")}
+      />
     </AuthCard>
   );
 }

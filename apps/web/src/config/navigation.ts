@@ -15,9 +15,11 @@ import {
   ShieldCheck,
   Wallet,
   Building2,
+  KeyRound,
+  UsersRound,
   type LucideIcon,
 } from "lucide-react";
-import { can, isStaff, type Capability, type Role } from "@rebp/contracts";
+import type { Capability } from "@rebp/contracts";
 
 /** Keys under the "nav" message namespace. */
 export type NavLabelKey =
@@ -40,7 +42,9 @@ export type NavLabelKey =
   | "configuration"
   | "audit"
   | "reports"
-  | "portal";
+  | "portal"
+  | "myAccess"
+  | "access";
 
 export interface NavItem {
   href: Route;
@@ -82,7 +86,10 @@ export const PORTAL_NAV: NavSection[] = [
   },
   {
     label: "sectionAccount",
-    items: [{ href: "/settings/security", label: "security", icon: ShieldCheck }],
+    items: [
+      { href: "/settings/security", label: "security", icon: ShieldCheck },
+      { href: "/settings/access", label: "myAccess", icon: KeyRound },
+    ],
   },
 ];
 
@@ -148,29 +155,41 @@ export const BACKOFFICE_NAV: NavSection[] = [
         icon: s.icon,
         capability: s.capability,
       })),
+      { href: "/backoffice/access", label: "access", icon: UsersRound, capability: "access.view" },
       { href: "/backoffice/audit", label: "audit", icon: ScrollText, capability: "audit.view" },
     ],
   },
   {
     label: "sectionAccount",
-    items: [{ href: "/settings/security", label: "security", icon: ShieldCheck }],
+    items: [
+      { href: "/settings/security", label: "security", icon: ShieldCheck },
+      { href: "/settings/access", label: "myAccess", icon: KeyRound },
+    ],
   },
 ];
 
-/** Removes items the user cannot use, and sections left empty. */
-export function filterNav(sections: NavSection[], roles: readonly Role[]): NavSection[] {
+/** Removes items the user cannot use (by effective capability), and sections left empty. */
+export function filterNav(
+  sections: NavSection[],
+  capabilities: readonly Capability[],
+): NavSection[] {
   return sections
     .map((section) => ({
       ...section,
-      items: section.items.filter((item) => !item.capability || can(roles, item.capability)),
+      items: section.items.filter(
+        (item) => !item.capability || capabilities.includes(item.capability),
+      ),
     }))
     .filter((section) => section.items.length > 0);
 }
 
-export function navForArea(area: "portal" | "backoffice", roles: readonly Role[]): NavSection[] {
-  const sections = filterNav(area === "portal" ? PORTAL_NAV : BACKOFFICE_NAV, roles);
+export function navForArea(
+  area: "portal" | "backoffice",
+  capabilities: readonly Capability[],
+): NavSection[] {
+  const sections = filterNav(area === "portal" ? PORTAL_NAV : BACKOFFICE_NAV, capabilities);
   // Cross-links between the applicant portal and the back office.
-  if (area === "portal" && isStaff(roles)) {
+  if (area === "portal" && capabilities.includes("backoffice.access")) {
     sections.push({
       label: "sectionStaff",
       items: [{ href: "/backoffice", label: "backoffice", icon: ClipboardCheck }],

@@ -1,9 +1,12 @@
 import type { Route } from "next";
 import { describe, expect, it } from "vitest";
+import { applyOverrides, capabilitiesFor, type PermissionMatrix, type Role } from "@rebp/contracts";
 import { isActivePath, navForArea } from "../navigation";
 
-const hrefs = (area: "portal" | "backoffice", roles: Parameters<typeof navForArea>[1]) =>
-  navForArea(area, roles).flatMap((s) => s.items.map((i) => i.href as string));
+const hrefs = (area: "portal" | "backoffice", roles: Role[], matrix?: PermissionMatrix) =>
+  navForArea(area, capabilitiesFor(roles, matrix)).flatMap((s) =>
+    s.items.map((i) => i.href as string),
+  );
 
 describe("role-filtered navigation", () => {
   it("shows applicants only their own areas", () => {
@@ -27,7 +30,22 @@ describe("role-filtered navigation", () => {
     expect(officer).toContain("/backoffice/queue");
     expect(officer).not.toContain("/backoffice/decisions");
     expect(officer).not.toContain("/backoffice/audit");
-    expect(hrefs("backoffice", ["AUDITOR"])).toContain("/backoffice/audit");
+    expect(hrefs("backoffice", ["AUDITOR"])).toEqual(
+      expect.arrayContaining(["/backoffice/audit", "/backoffice/access"]),
+    );
+    expect(hrefs("backoffice", ["REVIEWING_OFFICER"])).not.toContain("/backoffice/access");
+  });
+
+  it("follows matrix overrides, not just role names", () => {
+    const matrix = applyOverrides([
+      { role: "REGISTRAR", capability: "reports.view", granted: false },
+    ]);
+    expect(hrefs("backoffice", ["REGISTRAR"])).toContain("/backoffice/reports");
+    expect(hrefs("backoffice", ["REGISTRAR"], matrix)).not.toContain("/backoffice/reports");
+  });
+
+  it("gives everyone the My access page", () => {
+    expect(hrefs("portal", ["APPLICANT"])).toContain("/settings/access");
   });
 });
 

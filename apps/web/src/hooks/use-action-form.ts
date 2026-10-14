@@ -24,6 +24,12 @@ interface UseActionFormOptions<TSchema extends z.ZodType<FieldValues, FieldValue
   ) => void | Promise<void>;
   /** Return true to mark the error as handled (skips the default toast). */
   onError?: (result: Extract<ActionResult<TData>, { ok: false }>) => boolean | void;
+  /**
+   * When to validate. Default "onSubmit": errors appear after the first submit, then update live
+   * as the user types. Blur validation of empty fields made messages pop in under the pointer and
+   * shift buttons mid-click; long wizard forms can opt into "onTouched".
+   */
+  mode?: "onSubmit" | "onTouched" | "onBlur";
 }
 
 /**
@@ -36,13 +42,15 @@ export function useActionForm<TSchema extends z.ZodType<FieldValues, FieldValues
   action,
   onSuccess,
   onError,
+  mode = "onSubmit",
 }: UseActionFormOptions<TSchema, TData>) {
   const [pending, startTransition] = useTransition();
   const errorMessage = useErrorMessage();
   const form = useForm<z.input<TSchema>, unknown, z.output<TSchema>>({
     resolver: zodResolver(schema as never),
     defaultValues,
-    mode: "onBlur",
+    mode,
+    reValidateMode: "onChange",
   });
 
   const submit = form.handleSubmit(

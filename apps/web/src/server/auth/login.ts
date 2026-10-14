@@ -59,12 +59,18 @@ export async function signInWithPassword(
   return startLogin(user, "password", ctx);
 }
 
+/** SEC-011: disabled accounts cannot sign in by any method. */
+function assertEnabled(user: User) {
+  if (user.disabledAt) throw new AppError("accountDisabled");
+}
+
 /** Second step of every sign-in path: issue a session, or a challenge when two-step is on. */
 export async function startLogin(
   user: User,
   method: "password" | "google",
   ctx: RequestContext,
 ): Promise<LoginOutcome> {
+  assertEnabled(user);
   await db.user.update({
     where: { id: user.id },
     data: { failedLoginCount: 0, lockedUntil: null },
@@ -137,6 +143,7 @@ async function loadChallenge(token: string) {
   if (!challenge || challenge.consumedAt) throw new AppError("challengeExpired");
   if (challenge.expiresAt.getTime() < Date.now()) throw new AppError("challengeExpired");
   if (challenge.attempts >= CHALLENGE_MAX_ATTEMPTS) throw new AppError("tooManyAttempts");
+  assertEnabled(challenge.user);
   return challenge;
 }
 

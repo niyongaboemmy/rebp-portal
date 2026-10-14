@@ -73,6 +73,9 @@ model User {
   failedLoginCount     Int         @default(0)
   lockedUntil          DateTime?
   lastSignInAt         DateTime?
+  /// Set when an administrator disables the account (SEC-011 leaver process). Blocks sign-in.
+  disabledAt           DateTime?
+  disabledReason       String?
   createdAt            DateTime    @default(now())
   updatedAt            DateTime    @updatedAt
 
@@ -174,6 +177,8 @@ model NotificationLog {
   body      String?
   provider  String
   status    String
+  /// One-time code, kept only in APP_ENV=dev so the UI can show it while no mail/SMS gateway exists.
+  devCode   String?
   createdAt DateTime            @default(now())
 
   @@index([recipient, createdAt])
@@ -195,4 +200,16 @@ model AuditEvent {
 
   @@index([entityType, entityId])
   @@index([actorId])
+}
+
+/// Administrator overrides of the default permission matrix (packages/contracts DEFAULT_PERMISSIONS).
+/// Only cells that differ from the default are stored; deleting a row restores the default.
+model RolePermission {
+  role        Role
+  capability  String
+  granted     Boolean
+  updatedById String?  @db.Uuid
+  updatedAt   DateTime @updatedAt
+
+  @@id([role, capability])
 }

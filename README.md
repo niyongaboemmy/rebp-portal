@@ -31,7 +31,23 @@ Users choose how they sign in from **Security settings**:
 - **Google** (OIDC with PKCE). Set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`; redirect URI `${APP_URL}/api/auth/google/callback`. Without them the button is disabled.
 - **Two-step verification** with any mix of **authenticator app**, **SMS** and **email** codes, a preferred method, and recovery codes. Mandatory for staff and Principal Brokers.
 
-Email and phone must be verified after sign-up. In development, codes appear at **http://localhost:3000/dev/outbox** (or in Mailpit when `SMTP_HOST` is set).
+Email and phone must be verified after sign-up.
+
+### Dev mode — simulated email and SMS
+
+Until the mail/SMS gateway is connected, keep `APP_ENV=dev` (the default outside a production build). Every screen
+that asks for a code shows it on screen with a **Use code** button, and all messages are listed at `/dev/outbox`. Set
+`APP_ENV=staging` or `production` once real delivery is configured: codes are then never stored or shown.
+
+## Access control (RBAC)
+
+- **Back office → Access control** (`/backoffice/access`): search and filter people, open a person to toggle roles with a
+  live preview of the permissions gained or lost, and disable/re-enable accounts. The **Roles & permissions** tab is an
+  interactive matrix (role × capability) with draft changes, a review step and reset-to-defaults.
+- Guard-rails are enforced on the server: segregation of duties, maker-checker, no admin lock-out, staff-only powers,
+  no editing your own access, at least one active admin. All changes need step-up re-authentication and are audited.
+- **Settings → My access** (`/settings/access`) shows every user their roles and effective permissions.
+- System administrators manage people and the matrix; auditors have a read-only view. See [ADR-009](docs/adr/ADR-009-access-control.md).
 
 ### Demo accounts (seed)
 
@@ -60,4 +76,4 @@ CI runs the same steps plus a dependency audit (`.github/workflows/ci.yml`).
 ## Status
 
 Foundation (Plan D1: WP-0.2, 0.3, 0.4, 0.7, 0.8, 0.9, 0.10, 0.11) is in place: monorepo, design system, navigation,
-i18n, authentication with MFA and Google, RBAC, audit trail, CI. Application, review and licensing modules follow the plan from D2.
+i18n, authentication with MFA and Google, simulated OTP delivery (dev mode), RBAC with an access-control console, audit trail, CI. Application, review and licensing modules follow the plan from D2.

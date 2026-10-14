@@ -1,14 +1,12 @@
 "use client";
 
 import { CheckCircle2, Mail, Smartphone } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { otpSchema, updatePhoneSchema } from "@rebp/contracts";
 import { z } from "zod";
-import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,25 +16,33 @@ import { OtpInput } from "@/components/ui/otp-input";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useCountdown } from "@/hooks/use-countdown";
 import { useErrorMessage } from "@/hooks/use-error-message";
+import { maskPhoneForDisplay } from "@/lib/utils";
 import { sendVerificationCodeAction, verifyContactAction } from "@/server/actions/auth";
 import { updatePhoneAction } from "@/server/actions/security";
+import { DevCode } from "./dev-code";
 
 type Channel = "EMAIL" | "PHONE";
 
-interface VerifyContactsProps {
-  email: { display: string; verified: boolean };
-  phone: { display: string; verified: boolean } | null;
-  showDevHint: boolean;
+interface ContactInfo {
+  display: string;
+  verified: boolean;
+  /** APP_ENV=dev only. */
+  devCode: string | null;
 }
 
-export function VerifyContacts({ email, phone, showDevHint }: VerifyContactsProps) {
+interface VerifyContactsProps {
+  email: ContactInfo;
+  phone: ContactInfo | null;
+}
+
+export function VerifyContacts({ email, phone: initialPhone }: VerifyContactsProps) {
   const t = useTranslations("auth.verify");
   const router = useRouter();
   const [verified, setVerified] = useState({
     EMAIL: email.verified,
-    PHONE: phone?.verified ?? false,
+    PHONE: initialPhone?.verified ?? false,
   });
-  const [phoneDisplay, setPhoneDisplay] = useState(phone?.display ?? null);
+  const [phone, setPhone] = useState(initialPhone);
 
   const onVerified = (channel: Channel, complete: boolean) => {
     setVerified((v) => ({ ...v, [channel]: true }));
@@ -49,36 +55,30 @@ export function VerifyContacts({ email, phone, showDevHint }: VerifyContactsProp
 
   return (
     <div className="flex flex-col gap-4">
-      {showDevHint && (
-        <Alert variant="info">
-          {t.rich("devHint", {
-            link: (chunks) => (
-              <Link href="/dev/outbox" target="_blank">
-                {chunks}
-              </Link>
-            ),
-          })}
-        </Alert>
-      )}
       <ContactCard
         channel="EMAIL"
         icon={Mail}
         title={t("emailTitle")}
         destination={email.display}
         verified={verified.EMAIL}
+        initialDevCode={email.devCode}
         onVerified={onVerified}
       />
-      {phoneDisplay ? (
+      {phone ? (
         <ContactCard
+          key={phone.display}
           channel="PHONE"
           icon={Smartphone}
           title={t("phoneTitle")}
-          destination={phoneDisplay}
+          destination={phone.display}
           verified={verified.PHONE}
+          initialDevCode={phone.devCode}
           onVerified={onVerified}
         />
       ) : (
-        <AddPhoneCard onAdded={(display) => setPhoneDisplay(display)} />
+        <AddPhoneCard
+          onAdded={(display, devCode) => setPhone({ display, verified: false, devCode })}
+        />
       )}
     </div>
   );
@@ -92,6 +92,7 @@ function ContactCard({
   title,
   destination,
   verified,
+  initialDevCode,
   onVerified,
 }: {
   channel: Channel;
@@ -99,12 +100,14 @@ function ContactCard({
   title: string;
   destination: string;
   verified: boolean;
+  initialDevCode: string | null;
   onVerified: (channel: Channel, complete: boolean) => void;
 }) {
   const t = useTranslations("auth.verify");
   const errorMessage = useErrorMessage();
   const cooldown = useCountdown(30);
   const [sending, startSend] = useTransition();
+  const [devCode, setDevCode] = useState(initialDevCode);
   const { form, submit, pending } = useActionForm({
     schema: codeSchema,
     defaultValues: { code: "" },
@@ -115,8 +118,12 @@ function ContactCard({
   const resend = () =>
     startSend(async () => {
       const result = await sendVerificationCodeAction(channel);
-      if (result.ok) cooldown.start(30);
-      else {
+      if (result.ok) {
+        cooldown.start(30);
+        setDevCode(result.data.devCode);
+        form.reset();
+        toast.success(t("resent"));
+      } else {
         toast.error(errorMessage(result.error, result.meta));
         if (typeof result.meta?.retryAfterSeconds === "number")
           cooldown.start(result.meta.retryAfterSeconds);
@@ -136,13 +143,17 @@ function ContactCard({
           </p>
         </div>
         {verified && (
-          <Badge variant="success">
+          <Badge variant="success" className="animate-in zoom-in-50">
             <CheckCircle2 /> {t("done")}
           </Badge>
         )}
       </CardHeader>
       {!verified && (
         <form onSubmit={submit} noValidate className="flex flex-col gap-3">
+          <DevCode
+            code={devCode}
+            onUse={(value) => form.setValue("code", value, { shouldValidate: true })}
+          />
           <Field label={t("codeLabel")} error={form.formState.errors.code?.message}>
             <FieldControl>
               <OtpInput {...form.register("code")} />
@@ -167,14 +178,14 @@ function ContactCard({
   );
 }
 
-function AddPhoneCard({ onAdded }: { onAdded: (display: string) => void }) {
+function AddPhoneCard({ onAdded }: { onAdded: (display: string, devCode: string | null) => void }) {
   const t = useTranslations("auth.verify");
   const tSignUp = useTranslations("auth.signUp");
   const { form, submit, pending } = useActionForm({
     schema: updatePhoneSchema,
     defaultValues: { phone: "" },
     action: updatePhoneAction,
-    onSuccess: (_data, form): void => onAdded(form.getValues("phone")),
+    onSuccess: ({ phone, devCode }): void => onAdded(maskPhoneForDisplay(phone ?? ""), devCode),
   });
   return (
     <Card className="gap-4">

@@ -66,7 +66,9 @@
     "sectionAccount": "Account",
     "sectionStaff": "Regulator",
     "breadcrumb": "Breadcrumb",
-    "mainNavigation": "Main navigation"
+    "mainNavigation": "Main navigation",
+    "myAccess": "My access",
+    "access": "Access control"
   },
   "theme": {
     "toggle": "Change theme",
@@ -264,7 +266,7 @@
       "allDone": "All set! Taking you to your dashboard…",
       "addPhone": "Add your mobile number",
       "addPhoneSubmit": "Send code",
-      "devHint": "Development: codes are shown in the <link>dev outbox</link>."
+      "resent": "A new code is on its way."
     },
     "forgot": {
       "title": "Reset your password",
@@ -281,8 +283,10 @@
       "confirmPassword": "Confirm new password",
       "submit": "Reset password",
       "success": "Password updated. Please sign in with your new password.",
-      "noCode": "Didn't get a code?",
-      "requestNew": "Request a new one"
+      "resend": "Resend code",
+      "resendIn": "Resend in {seconds}s",
+      "resent": "A new code is on its way.",
+      "differentEmail": "Use a different email"
     },
     "oauthErrors": {
       "googleDisabled": "Google sign-in is not available right now.",
@@ -486,7 +490,8 @@
     "recoveryCodeInvalid": "Recovery codes have 10 letters and numbers, like ABCDE-23456.",
     "nameTooShort": "Enter your full name.",
     "nameTooLong": "Use 120 characters or fewer.",
-    "privacyRequired": "Please confirm you have read the privacy notice."
+    "privacyRequired": "Please confirm you have read the privacy notice.",
+    "rolesRequired": "Choose at least one role."
   },
   "errors": {
     "unexpected": "Something went wrong. Please try again.",
@@ -520,7 +525,15 @@
     "googleAccountExists": "An account with this email already exists. Sign in with your password, then link Google from Security settings.",
     "googleEmailUnverified": "Your Google email is not verified.",
     "googleLinkedElsewhere": "This Google account is linked to another portal account.",
-    "googleAlreadyLinked": "A Google account is already linked."
+    "googleAlreadyLinked": "A Google account is already linked.",
+    "accountDisabled": "This account has been disabled. Contact the Professional Body if you think this is a mistake.",
+    "forbidden": "You don't have permission to do that.",
+    "mfaRequiredForAction": "Turn on two-step verification before managing access.",
+    "cannotEditOwnAccess": "You can't change your own access. Ask another administrator.",
+    "userNotFound": "That account no longer exists.",
+    "staffRoleOnOrganisation": "Staff roles can't be given to firm accounts.",
+    "lastAdmin": "At least one active system administrator must remain.",
+    "matrixInvalid": "These changes break an access rule. Review the highlighted cells."
   },
   "notifications": {
     "emailVerify": {
@@ -554,6 +567,10 @@
     "contactChanged": {
       "subject": "Your mobile number was changed",
       "body": "Hello {name},\n\nThe mobile number on your REBP Portal account was changed. If this wasn't you, contact support immediately."
+    },
+    "accessChanged": {
+      "subject": "Your REBP Portal access changed",
+      "body": "Hello {name},\n\nAn administrator changed the roles on your REBP Portal account. Sign in to see what you can do now (Settings → My access). If you didn't expect this, contact the Professional Body."
     }
   },
   "footer": {
@@ -561,5 +578,237 @@
     "privacy": "Privacy",
     "accessibility": "Accessibility",
     "contact": "Contact"
+  },
+  "devMode": {
+    "codeLabel": "Dev mode · simulated code",
+    "useCode": "Use code",
+    "banner": "Dev mode: no email or SMS is sent — verification codes appear on screen.",
+    "chip": "Dev mode"
+  },
+  "roleInfo": {
+    "APPLICANT": "Applies for, renews and tracks licences.",
+    "SUPERVISOR": "Confirms supervision of other practitioners.",
+    "PRINCIPAL_BROKER": "Leads a firm: roster, affiliations and firm filings.",
+    "FIRM_ADMIN": "Manages a firm's people and filings.",
+    "REVIEWING_OFFICER": "Reviews applications and verifies evidence (Section L).",
+    "APPROVING_AUTHORITY": "Decides applications and revocations (Section M).",
+    "REGISTRAR": "Maintains the official public register.",
+    "FINANCE_OFFICER": "Manages fees, payments and refunds.",
+    "SYSTEM_ADMIN": "Configures the portal and manages access.",
+    "AUDITOR": "Independent oversight of records and access."
+  },
+  "capabilityGroups": {
+    "applications": "Applications & firms",
+    "review": "Review & decisions",
+    "register": "Public register",
+    "payments": "Payments",
+    "administration": "Administration",
+    "oversight": "Oversight"
+  },
+  "capabilities": {
+    "application_edit": {
+      "label": "Create and edit applications",
+      "description": "Start, fill in and submit applications (staff: assisted filing)."
+    },
+    "application_view": {
+      "label": "View applications",
+      "description": "See application details within their scope."
+    },
+    "confirmation_decide": {
+      "label": "Confirm supervision",
+      "description": "Accept or decline supervision and affiliation requests."
+    },
+    "confirmation_override": {
+      "label": "Override confirmations",
+      "description": "Record a confirmation on someone's behalf, with a reason."
+    },
+    "review_perform": {
+      "label": "Review applications",
+      "description": "Carry out the Section L administrative review."
+    },
+    "review_view": {
+      "label": "See reviews",
+      "description": "Read completed Section L reviews."
+    },
+    "decision_make": {
+      "label": "Decide applications",
+      "description": "Record the Section M licensing decision."
+    },
+    "decision_view": {
+      "label": "See decisions",
+      "description": "Read Section M decisions and letters."
+    },
+    "register_administer": {
+      "label": "Administer the register",
+      "description": "Suspend, lift and correct register entries."
+    },
+    "register_revoke": {
+      "label": "Revoke licences",
+      "description": "Approve the revocation of a licence."
+    },
+    "payments_pay": {
+      "label": "Pay fees",
+      "description": "Pay application and licence fees online."
+    },
+    "payments_manage": {
+      "label": "Manage payments",
+      "description": "Reconcile, refund and waive fees."
+    },
+    "payments_view": {
+      "label": "View payments",
+      "description": "See payment status and receipts."
+    },
+    "config_edit": {
+      "label": "Propose configuration",
+      "description": "Draft changes to fees, rules and templates."
+    },
+    "config_approve": {
+      "label": "Approve configuration",
+      "description": "Approve configuration changes (checker)."
+    },
+    "users_manage": {
+      "label": "Manage people",
+      "description": "Give and remove roles, disable accounts."
+    },
+    "roles_manage": {
+      "label": "Manage permissions",
+      "description": "Change what each role is allowed to do."
+    },
+    "access_view": {
+      "label": "View access",
+      "description": "See who has which roles and permissions."
+    },
+    "firmRoles_manage": {
+      "label": "Manage firm roles",
+      "description": "Manage a firm's roster and roles."
+    },
+    "audit_view": {
+      "label": "View audit trail",
+      "description": "Read the tamper-evident audit trail."
+    },
+    "audit_export": {
+      "label": "Export audit trail",
+      "description": "Export audit records for investigation."
+    },
+    "reports_view": {
+      "label": "View reports",
+      "description": "Dashboards and reports within their scope."
+    },
+    "backoffice_access": {
+      "label": "Open the back office",
+      "description": "Use the regulator's staff console."
+    }
+  },
+  "access": {
+    "title": "Access control",
+    "subtitle": "Who can do what in the portal — people, roles and permissions.",
+    "tabs": {
+      "people": "People",
+      "roles": "Roles & permissions"
+    },
+    "readOnly": "Read-only: your role can view access but not change it.",
+    "people": {
+      "search": "Search by name or email",
+      "allRoles": "All roles",
+      "statusLabel": "Status",
+      "roleLabel": "Role",
+      "status": {
+        "all": "Everyone",
+        "active": "Active",
+        "disabled": "Disabled",
+        "noMfa": "No two-step"
+      },
+      "count": "{count, plural, =0 {No people} one {# person} other {# people}}",
+      "empty": "No one matches these filters.",
+      "clear": "Clear filters",
+      "lastSignIn": "Last sign-in {date}",
+      "neverSignedIn": "Never signed in",
+      "you": "You",
+      "disabled": "Disabled",
+      "noMfa": "No two-step",
+      "mfaOn": "Two-step on",
+      "manage": "Manage",
+      "view": "View",
+      "unverified": "Unverified",
+      "page": "Page {page} of {count}",
+      "prev": "Previous",
+      "next": "Next",
+      "organisation": "Firm account"
+    },
+    "manage": {
+      "title": "Manage access",
+      "rolesTitle": "Roles",
+      "rolesHint": "Tap a role to add or remove it.",
+      "preview": "What they can do",
+      "gained": "{count} new",
+      "lost": "{count} removed",
+      "save": "Save roles",
+      "saved": "Roles updated for {name}.",
+      "undo": "Undo changes",
+      "selfNote": "You can't change your own access. Ask another administrator.",
+      "statusTitle": "Account status",
+      "statusActive": "Active — can sign in.",
+      "disable": "Disable account",
+      "enable": "Re-enable account",
+      "disableReason": "Reason (optional)",
+      "disabledToast": "{name} has been disabled and signed out everywhere.",
+      "enabledToast": "{name} can sign in again.",
+      "disabledSince": "Disabled {date}",
+      "warnings": {
+        "sodCombined": "This person could both review and decide applications. The system still stops them deciding a file they reviewed (BR-091).",
+        "mfaRequired": "These roles require two-step verification. They'll be asked to set it up at their next sign-in.",
+        "staffOnOrganisation": "Staff roles can't be given to firm accounts."
+      }
+    },
+    "matrix": {
+      "title": "Permission matrix",
+      "subtitle": "Defaults come from SRS Appendix D. Every change is checked against the access rules and audited.",
+      "search": "Filter permissions",
+      "changes": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
+      "review": "Review & save",
+      "discard": "Discard",
+      "resetDefaults": "Reset to defaults",
+      "resetTitle": "Reset all permissions?",
+      "resetBody": "Every role goes back to the SRS Appendix D defaults. This takes effect immediately.",
+      "saved": "{count, plural, one {# permission updated} other {# permissions updated}}",
+      "resetDone": "Permissions restored to defaults.",
+      "modified": "Changed from default",
+      "locked": {
+        "required": "Always on — removing it would lock administrators out.",
+        "staffOnly": "Staff-only — this role doesn't require two-step verification."
+      },
+      "reviewTitle": "Review changes",
+      "reviewBody": "Changes apply immediately to everyone with the role.",
+      "grant": "Grant",
+      "revoke": "Revoke",
+      "chooseRole": "Role",
+      "members": "{count, plural, =0 {No members} one {# member} other {# members}}",
+      "permissionCount": "{count, plural, one {# permission} other {# permissions}}",
+      "cellLabel": "{capability} for {role}",
+      "violations": {
+        "sod": "{role} can't both review and decide applications.",
+        "makerChecker": "{role} can't both propose and approve configuration.",
+        "required": "{role} must keep “{capability}”.",
+        "staffOnly": "“{capability}” is staff-only and can't be given to {role}."
+      },
+      "legend": {
+        "granted": "Granted",
+        "denied": "Not granted",
+        "modified": "Changed",
+        "locked": "Locked"
+      },
+      "staffRole": "Staff",
+      "noMatches": "No permissions match “{query}”."
+    }
+  },
+  "myAccess": {
+    "title": "My access",
+    "subtitle": "Your roles and what they let you do in the portal.",
+    "rolesTitle": "Your roles",
+    "canTitle": "What you can do",
+    "cannotTitle": "Not part of your roles",
+    "count": "{count} of {total} permissions",
+    "mfa": "Your roles require two-step verification.",
+    "requestNote": "Need more access? Ask a system administrator — every change is recorded in the audit trail."
   }
 }

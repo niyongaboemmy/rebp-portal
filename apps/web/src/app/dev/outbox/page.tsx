@@ -4,13 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { formatDateTime } from "@/lib/utils";
 import { db } from "@/server/db";
-import { isProduction } from "@/server/env";
+import { isDevMode } from "@/server/env";
 
 export const dynamic = "force-dynamic";
 
-/** Development-only mailbox for the email/SMS mock adapters (stands in for Mailpit). */
+/** APP_ENV=dev mailbox for the email/SMS mock adapters (stands in for Mailpit). */
 export default async function OutboxPage() {
-  if (isProduction()) notFound();
+  if (!isDevMode()) notFound();
   const t = await getTranslations("outbox");
   const messages = await db.notificationLog.findMany({ orderBy: { createdAt: "desc" }, take: 50 });
 

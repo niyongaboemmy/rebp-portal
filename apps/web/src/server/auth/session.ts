@@ -46,7 +46,7 @@ export async function createSession(
   return { token, session };
 }
 
-export type SessionInvalidReason = "missing" | "revoked" | "expired" | "idle";
+export type SessionInvalidReason = "missing" | "revoked" | "expired" | "idle" | "disabled";
 
 /** Resolves a cookie token to a live session, enforcing revocation, absolute and idle timeouts. */
 export async function validateSessionToken(
@@ -60,6 +60,7 @@ export async function validateSessionToken(
   if (!found) return { invalid: "missing" };
   const { user, ...session } = found;
   if (session.revokedAt) return { invalid: "revoked" };
+  if (user.disabledAt) return { invalid: "disabled" };
   if (session.expiresAt.getTime() <= now) return { invalid: "expired" };
   if (now - session.lastActiveAt.getTime() > idleTimeoutMinutes(user.roles) * 60_000) {
     await db.session.update({ where: { id: session.id }, data: { revokedAt: new Date(now) } });

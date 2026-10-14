@@ -82,3 +82,14 @@ export function describeUserAgent(ua: string | null | undefined): string | null 
   if (!browser && !os) return null;
   return [browser, os].filter(Boolean).join(" · ");
 }
+
+/** Masks the destination of a one-time code for display, by channel. */
+export function maskDestination(
+  method: "TOTP" | "SMS" | "EMAIL",
+  destination: string | null | undefined,
+): string | null {
+  if (!destination) return null;
+  if (method === "SMS") return maskPhoneForDisplay(destination);
+  if (method === "EMAIL") return maskEmailForDisplay(destination);
+  return null;
+}

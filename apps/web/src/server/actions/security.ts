@@ -27,6 +27,7 @@ import { assertRecentAuth, reauthenticate } from "../auth/step-up";
 import { recordAudit } from "../audit/audit";
 import { db } from "../db";
 import { AppError } from "../errors";
+import { devCodeFor } from "../notifications";
 import { getRequestContext } from "../request-context";
 
 const methodSchema = z.enum(MFA_METHODS);
@@ -70,8 +71,11 @@ export async function beginOtpEnrolmentAction(method: "SMS" | "EMAIL") {
   return runAction(async () => {
     await enforceRateLimit("otpSend", "enrol");
     const { user } = await sessionOrThrow({ stepUp: true });
-    await beginOtpEnrolment(user, z.enum(["SMS", "EMAIL"]).parse(method));
-    return null;
+    const parsed = z.enum(["SMS", "EMAIL"]).parse(method);
+    await beginOtpEnrolment(user, parsed);
+    return {
+      devCode: await devCodeFor(parsed === "SMS" ? user.phone : user.email, "mfaEnrolCode"),
+    };
   });
 }
 
@@ -166,7 +170,7 @@ export async function updatePhoneAction(input: z.input<typeof updatePhoneSchema>
   return runAction(async () => {
     const { phone } = updatePhoneSchema.parse(input);
     const { user } = await sessionOrThrow({ stepUp: true });
-    await updatePhone(user, phone, await getRequestContext());
-    return null;
+    const updated = await updatePhone(user, phone, await getRequestContext());
+    return { phone: updated.phone, devCode: await devCodeFor(updated.phone, "phoneVerify") };
   });
 }

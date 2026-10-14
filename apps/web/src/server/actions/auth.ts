@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import {
   forgotPasswordSchema,
   MFA_METHODS,
+  type MfaMethod,
   verifyContactSchema,
   type SignInInput,
   type SignUpInput,
@@ -18,11 +19,14 @@ import { clearCookie, COOKIE, readCookie, setCookie } from "../auth/cookies";
 import { getCurrentSession } from "../auth/current";
 import { safeNextPath } from "../auth/guards";
 import {
+  describeChallenge,
   resendChallengeCode,
   signInWithPassword,
   switchChallengeMethod,
   verifyChallenge,
 } from "../auth/login";
+import { devCodeFor } from "../notifications";
+import { maskDestination } from "@/lib/utils";
 import { requestPasswordReset, resetPassword } from "../auth/recovery";
 import { revokeSession } from "../auth/session";
 import type { LoginOutcome } from "../auth/types";
@@ -63,6 +67,22 @@ export async function signInAction(input: SignInInput) {
   });
 }
 
+/** What the two-step screen shows for the active method; `devCode` is only set in APP_ENV=dev. */
+export interface ChallengeView {
+  method: MfaMethod;
+  destination: string | null;
+  devCode: string | null;
+}
+
+async function challengeView(token: string): Promise<ChallengeView> {
+  const { method, destination } = await describeChallenge(token);
+  return {
+    method,
+    destination: maskDestination(method, destination),
+    devCode: method === "TOTP" ? null : await devCodeFor(destination, "mfaLoginCode"),
+  };
+}
+
 async function challengeToken() {
   const token = await readCookie(COOKIE.challenge());
   if (!token) throw new AppError("challengeExpired");
@@ -80,16 +100,18 @@ export async function verifyTwoStepAction(input: TwoStepInput, next?: string) {
 export async function switchTwoStepMethodAction(method: string) {
   return runAction(async () => {
     await enforceRateLimit("otpSend");
-    await switchChallengeMethod(await challengeToken(), z.enum(MFA_METHODS).parse(method));
-    return null;
+    const token = await challengeToken();
+    await switchChallengeMethod(token, z.enum(MFA_METHODS).parse(method));
+    return challengeView(token);
   });
 }
 
 export async function resendTwoStepCodeAction() {
   return runAction(async () => {
     await enforceRateLimit("otpSend");
-    await resendChallengeCode(await challengeToken());
-    return null;
+    const token = await challengeToken();
+    await resendChallengeCode(token);
+    return challengeView(token);
   });
 }
 
@@ -103,8 +125,14 @@ export async function sendVerificationCodeAction(channel: "EMAIL" | "PHONE") {
   return runAction(async () => {
     await enforceRateLimit("otpSend", channel);
     const { user } = await sessionOrThrow();
-    await sendContactCode(user, z.enum(["EMAIL", "PHONE"]).parse(channel));
-    return null;
+    const parsed = z.enum(["EMAIL", "PHONE"]).parse(channel);
+    await sendContactCode(user, parsed);
+    return {
+      devCode:
+        parsed === "EMAIL"
+          ? await devCodeFor(user.email, "emailVerify")
+          : await devCodeFor(user.phone, "phoneVerify"),
+    };
   });
 }
 
@@ -123,7 +151,7 @@ export async function forgotPasswordAction(input: z.input<typeof forgotPasswordS
     await enforceRateLimit("passwordReset");
     const { email } = forgotPasswordSchema.parse(input);
     await requestPasswordReset(email, await getRequestContext());
-    return { email };
+    return { email, devCode: await devCodeFor(email, "passwordReset") };
   });
 }
 
