@@ -3,9 +3,10 @@
 #
 #   APP_ROOT=$HOME/apps/rireb bash $HOME/apps/rireb/releases/<id>/deploy/activate.sh <id>
 #
-# Backs up the database, applies pending migrations (stops here, unchanged, if one fails),
-# bootstraps the first administrator, points `current` at the release, restarts Passenger and
-# waits for /api/health. If the new release is not healthy it switches back and exits non-zero.
+# Only when the release brings new migrations: backs up the database and applies them (stops here,
+# unchanged, if one fails). First deploy only: creates the first administrator. Then points
+# `current` at the release, restarts the app and waits for /api/health. If the new release is not
+# healthy it switches back and exits non-zero.
 set -euo pipefail
 
 ID="${1:?usage: activate.sh <release-id>}"
@@ -44,27 +45,40 @@ chmod 700 "$APP/shared" "$APP/shared/storage" "$APP/backups"
 # 2. Startup file: kept in step with the release that ships it.
 cp "$REL/deploy/app.cjs" "$APP/app.cjs"
 
-# 3. Database backup before anything migrates.
-DB_URL="$(env_get DATABASE_URL)"
-if [ "${SKIP_DB_BACKUP:-0}" != "1" ] && command -v pg_dump >/dev/null; then
-  DUMP="$APP/backups/db-$(date -u +%Y%m%d%H%M%S)-$ID.dump"
-  if pg_dump --format=custom --no-owner --file="$DUMP" "$DB_URL"; then
-    chmod 600 "$DUMP"
-    log "Database backed up to $DUMP"
-    ls -1t "$APP"/backups/db-*.dump | tail -n +"$((KEEP_BACKUPS + 1))" | xargs -r rm -f
-  else
-    rm -f "$DUMP"
-    log "WARNING: pg_dump failed; continuing without a backup"
+# 3–4. Only when the release brings new migrations: back up the database, then apply them, each in
+#      one transaction. A failure stops the deploy before the switch. Most deploys skip both.
+log "Node $("$NODE" --version) at $NODE"
+PENDING="$(run_node deploy/migrate.cjs --pending prisma/migrations)"
+case "$PENDING" in '' | *[!0-9]*) log "Could not count pending migrations: $PENDING"; exit 1 ;; esac
+if [ "$PENDING" = 0 ]; then
+  log "No pending migrations: schema unchanged, no backup or migration needed"
+else
+  log "$PENDING pending migration(s)"
+  DB_URL="$(env_get DATABASE_URL)"
+  if [ "${SKIP_DB_BACKUP:-0}" != "1" ] && command -v pg_dump >/dev/null; then
+    DUMP="$APP/backups/db-$(date -u +%Y%m%d%H%M%S)-$ID.dump"
+    if pg_dump --format=custom --no-owner --file="$DUMP" "$DB_URL"; then
+      chmod 600 "$DUMP"
+      log "Database backed up to $DUMP"
+      ls -1t "$APP"/backups/db-*.dump | tail -n +"$((KEEP_BACKUPS + 1))" | xargs -r rm -f
+    else
+      rm -f "$DUMP"
+      log "WARNING: pg_dump failed; continuing without a backup"
+    fi
   fi
+  run_node deploy/migrate.cjs prisma/migrations
 fi
 
-# 4. Migrations, each in one transaction. A failure stops the deploy before the switch.
-log "Node $("$NODE" --version) at $NODE"
-run_node deploy/migrate.cjs prisma/migrations
-
 # 5. First deploy only: the first administrator (credentials file on the server, never logged).
-run_node deploy/create-admin.cjs "$APP/admin-credentials.txt" ||
-  log "WARNING: administrator bootstrap failed; see above"
+#    Never seeds demo data. The marker makes every later deploy skip this step entirely.
+BOOTSTRAPPED="$APP/.admin-bootstrapped"
+if [ -e "$BOOTSTRAPPED" ]; then
+  log "Administrator bootstrap done on an earlier deploy; skipped"
+elif run_node deploy/create-admin.cjs "$APP/admin-credentials.txt"; then
+  date -u +%FT%TZ >"$BOOTSTRAPPED"
+else
+  log "WARNING: administrator bootstrap failed; see above (retried on the next deploy)"
+fi
 
 # 6. Switch `current` atomically and restart.
 PREV="$(readlink "$APP/current" 2>/dev/null || true)"

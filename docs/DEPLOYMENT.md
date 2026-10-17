@@ -14,12 +14,16 @@ merge to main ─► CI (ci.yml)
                          Build release   flat node_modules → migrate PG10 → standalone build → bundle.sh
                                          → smoke test (app.cjs, symlinks preserved, health + pages + admin bootstrap)
                          Deploy          one SSH login: upload → activate.sh
-                                         pg_dump → migrate.cjs → create-admin.cjs → switch `current`
-                                         → restart Passenger → wait for "db":"up" → auto-rollback if unhealthy
+                                         pending migrations? → pg_dump + migrate.cjs (else skipped)
+                                         first deploy only → create-admin.cjs (never demo data)
+                                         → switch `current` → restart → wait for "db":"up" → auto-rollback
 ```
 
 - Only the newest commit on `main` deploys, one deploy at a time.
 - **Redeploy or roll back:** Actions → _Deploy (cPanel)_ → Run workflow → a SHA on `main`.
+- Most deploys change no schema: with no pending migration there is no backup and no migration step.
+  The administrator bootstrap runs once, ever (marker `~/apps/rireb/.admin-bootstrapped`). Demo seeds
+  (`pnpm db:seed`, `seed-applications.ts`) never run in production.
 - A failed migration stops the deploy **before** the switch. Each migration runs in one transaction, so the
   site and schema stay as they were.
 

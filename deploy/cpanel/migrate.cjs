@@ -1,7 +1,8 @@
 /**
  * Applies pending Prisma migrations on the cPanel server (docs/DEPLOYMENT.md, ADR-012).
  *
- *   node deploy/migrate.cjs [migrations-dir]     # DATABASE_URL from the environment
+ *   node deploy/migrate.cjs [migrations-dir]             # apply; DATABASE_URL from the environment
+ *   node deploy/migrate.cjs --pending [migrations-dir]   # read-only: print how many are pending
  *
  * The release ships no Prisma CLI (its schema engine is a native binary for another platform and
  * thousands of files against the account's inode cap), so this applies `prisma/migrations/*` itself
@@ -131,8 +132,22 @@ function hint(err) {
   return "";
 }
 
+/** Read-only count of migrations not yet recorded as applied (activate.sh skips work when 0). */
+async function countPending(db, names) {
+  const table = await db.query(`SELECT to_regclass('"_prisma_migrations"') AS t`);
+  if (!table.rows[0].t) return names.length;
+  const done = await db.query(
+    `SELECT migration_name FROM "_prisma_migrations" WHERE rolled_back_at IS NULL AND finished_at IS NOT NULL`,
+  );
+  const applied = new Set(done.rows.map((r) => r.migration_name));
+  return names.filter((n) => !applied.has(n)).length;
+}
+
 async function main() {
-  const dir = path.resolve(process.argv[2] || path.join(__dirname, "..", "prisma", "migrations"));
+  const args = process.argv.slice(2);
+  const pendingOnly = args.includes("--pending");
+  const dirArg = args.find((a) => !a.startsWith("--"));
+  const dir = path.resolve(dirArg || path.join(__dirname, "..", "prisma", "migrations"));
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
   const names = fs
@@ -143,6 +158,14 @@ async function main() {
 
   const db = new Client({ connectionString: url });
   await db.connect();
+  if (pendingOnly) {
+    try {
+      console.log(await countPending(db, names));
+    } finally {
+      await db.end();
+    }
+    return;
+  }
   try {
     const version = Number((await db.query("SHOW server_version_num")).rows[0].server_version_num);
     await db.query("SELECT pg_advisory_lock($1)", [LOCK_KEY]);
