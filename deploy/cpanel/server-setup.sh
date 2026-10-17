@@ -68,9 +68,7 @@ step "3. pg_trgm extension (register search, FR-REG-002)"
 if psql "$DATABASE_URL" -Atc "CREATE EXTENSION IF NOT EXISTS pg_trgm" >/dev/null 2>&1; then
   ok "available"
 else
-  warn "the database user cannot create pg_trgm. Ask Namecheap support to run, as a superuser:"
-  printf '      CREATE EXTENSION pg_trgm;   -- in database %s\n' "$DB_NAME"
-  warn "deploys stop at the migration step until it exists"
+  ok "not creatable by this user: migrations install a plain-SQL word_similarity instead (ADR-012)"
 fi
 
 step "4. SMTP mailbox"

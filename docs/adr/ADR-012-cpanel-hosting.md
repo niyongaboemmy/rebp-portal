@@ -31,9 +31,11 @@ no Docker, Redis or root access.
   Committed migration files and their checksums stay as they are. The `postgres10` CI job applies every
   migration on PostgreSQL 10 so a new incompatibility fails the PR, not the deploy.
 
-- **`pg_trgm` is a host prerequisite.** On PostgreSQL 10 only a superuser can create it, and register search
-  (ADR-006) needs `word_similarity`. Until it exists, the deploy stops at the migration step with an actionable
-  message.
+- **Without `pg_trgm`.** On PostgreSQL 10 only a superuser can create it, and the host's user isn't one. When
+  it's missing, the migrator installs a plain-SQL `word_similarity(text, text)`, the only trigram function the app
+  calls (ADR-006), and skips the trigram GIN index. It matches pg_trgm on exact and typo searches and scores
+  partial words a little lower, which the `ILIKE` substring match covers. CI checks this path as a
+  non-superuser. Swapping in the real extension later is a three-statement change (DEPLOYMENT §3 step 4).
 - **No demo data in production.** The first deploy creates one `SYSTEM_ADMIN` from `BOOTSTRAP_ADMIN_EMAIL`, with a
   random password written to a mode-600 file on the server and never logged. That admin enrols two-step
   verification at first sign-in.

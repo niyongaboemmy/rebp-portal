@@ -14,6 +14,12 @@
  *   - < 12: `ALTER TYPE … ADD VALUE` cannot run in a transaction, so each one runs first, on its
  *     own, as `ADD VALUE IF NOT EXISTS` (idempotent if the rest of the migration then fails).
  * Each migration otherwise runs in one transaction: a failure leaves the schema as it was.
+ *
+ * pg_trgm (register search, FR-REG-002): on PostgreSQL 10 only a superuser may create it. When this
+ * database user can't, `CREATE EXTENSION pg_trgm` is replaced by a plain-SQL `word_similarity(text,
+ * text)` (the only trigram function the app calls, ADR-006) and the trigram GIN index is skipped.
+ * Search then scans the register (fine at pilot size). To switch to the real extension later, see
+ * docs/DEPLOYMENT.md, "pg_trgm".
  */
 /* eslint-disable @typescript-eslint/no-require-imports -- plain CommonJS run by the server's Node */
 const fs = require("node:fs");
@@ -25,11 +31,84 @@ const { Client } = require("pg");
 const LOCK_KEY = 72707369;
 const ADD_VALUE = /^[ \t]*ALTER[ \t]+TYPE[ \t]+[^;]*?[ \t]ADD[ \t]+VALUE[ \t]+[^;]*;[ \t]*$/gim;
 
+const CREATE_TRGM =
+  /^[ \t]*CREATE[ \t]+EXTENSION[ \t]+(?:IF[ \t]+NOT[ \t]+EXISTS[ \t]+)?"?pg_trgm"?[^;]*;/gim;
+const TRGM_INDEX = /^[ \t]*CREATE[ \t]+INDEX[^;]*gin_trgm_ops[^;]*;/gim;
+
+// Stand-in for pg_trgm's word_similarity(q, t): the best Jaccard similarity between the trigrams of
+// q and those of any run of consecutive words in t (pg_trgm uses runs of trigrams; close enough for
+// the 0.35 threshold). Trigrams follow pg_trgm: lower-cased alphanumeric words padded "  w ".
+const TRGM_SHIM = `
+CREATE OR REPLACE FUNCTION rebp_trgm_words(s text) RETURNS text[] LANGUAGE sql IMMUTABLE AS $f$
+  SELECT coalesce(array_agg(w ORDER BY n), '{}')
+  FROM regexp_split_to_table(lower(coalesce(s, '')), '[^[:alnum:]]+') WITH ORDINALITY AS t(w, n)
+  WHERE w <> ''
+$f$;
+CREATE OR REPLACE FUNCTION rebp_trgm(words text[]) RETURNS text[] LANGUAGE sql IMMUTABLE AS $f$
+  SELECT coalesce(array_agg(DISTINCT substr('  ' || w || ' ', i, 3)), '{}')
+  FROM unnest(words) AS w, generate_series(1, length(w) + 1) AS i
+$f$;
+CREATE OR REPLACE FUNCTION word_similarity(q text, t text) RETURNS real
+LANGUAGE plpgsql IMMUTABLE STRICT AS $f$
+DECLARE
+  qw text[] := rebp_trgm_words(q);
+  tw text[] := rebp_trgm_words(t);
+  qg text[] := rebp_trgm(qw);
+  n int := coalesce(array_length(qw, 1), 0);
+  m int := coalesce(array_length(tw, 1), 0);
+  best real := 0;
+  wg text[];
+  common int;
+  total int;
+BEGIN
+  IF n = 0 OR m = 0 THEN RETURN 0; END IF;
+  FOR k IN 1 .. least(m, n + 1) LOOP
+    CONTINUE WHEN k < n - 1 AND k < m;
+    FOR i IN 1 .. m - k + 1 LOOP
+      wg := rebp_trgm(tw[i:i + k - 1]);
+      SELECT count(*) INTO common FROM (SELECT unnest(qg) INTERSECT SELECT unnest(wg)) x;
+      total := cardinality(qg) + cardinality(wg) - common;
+      IF total > 0 AND common::real / total > best THEN best := common::real / total; END IF;
+    END LOOP;
+  END LOOP;
+  RETURN best;
+END
+$f$;`;
+
 const log = (msg) => console.log(`[migrate] ${msg}`);
 
-function adapt(sql, version) {
+/** True when pg_trgm is installed or this user may create it (tried, then rolled back). */
+async function trgmAvailable(db) {
+  const installed = await db.query(`SELECT 1 FROM pg_extension WHERE extname = 'pg_trgm'`);
+  if (installed.rowCount) return true;
+  try {
+    await db.query("BEGIN");
+    await db.query("CREATE EXTENSION IF NOT EXISTS pg_trgm");
+    return true;
+  } catch {
+    return false;
+  } finally {
+    await db.query("ROLLBACK").catch(() => {});
+  }
+}
+
+function adapt(sql, version, trgm) {
   let body = sql;
   const early = [];
+  if (!trgm && CREATE_TRGM.test(body)) {
+    CREATE_TRGM.lastIndex = 0;
+    log("pg_trgm is not available to this user: installing the plain-SQL word_similarity instead");
+    body = body
+      .replace(
+        CREATE_TRGM,
+        () => `-- pg_trgm unavailable (ADR-012): plain-SQL stand-in${TRGM_SHIM}`,
+      )
+      .replace(
+        TRGM_INDEX,
+        (stmt) => `-- skipped without pg_trgm: ${stmt.trim().replace(/\n/g, " ")}`,
+      );
+  }
+  CREATE_TRGM.lastIndex = 0;
   if (version < 110000) body = body.replace(/\bEXECUTE\s+FUNCTION\b/gi, "EXECUTE PROCEDURE");
   if (version < 120000) {
     body = body.replace(ADD_VALUE, (stmt) => {
@@ -43,11 +122,10 @@ function adapt(sql, version) {
 }
 
 function hint(err) {
-  const text = String(err && err.message);
-  if (/pg_trgm|gin_trgm_ops|word_similarity/i.test(text) || (err && err.code === "42501")) {
+  if (/gin_trgm_ops|similarity|%>|<%/i.test(String(err && err.message))) {
     return (
-      "\n  The database user may not create the pg_trgm extension on this server. Ask the host to run" +
-      '\n  `CREATE EXTENSION pg_trgm;` in this database (see docs/DEPLOYMENT.md, "pg_trgm"), then deploy again.'
+      "\n  This migration uses pg_trgm features beyond word_similarity(text, text), which the stand-in" +
+      '\n  does not provide. Have the host create the extension (docs/DEPLOYMENT.md, "pg_trgm").'
     );
   }
   return "";
@@ -98,6 +176,7 @@ async function main() {
 
     const pending = names.filter((n) => !applied.has(n));
     log(`PostgreSQL ${version}; ${applied.size} applied, ${pending.length} pending`);
+    const trgm = pending.length ? await trgmAvailable(db) : true;
     for (const name of names) {
       const sql = fs.readFileSync(path.join(dir, name, "migration.sql"), "utf8");
       const checksum = crypto.createHash("sha256").update(sql).digest("hex");
@@ -106,7 +185,7 @@ async function main() {
           log(`WARNING: ${name} was modified after it was applied`);
         continue;
       }
-      const { early, body } = adapt(sql, version);
+      const { early, body } = adapt(sql, version, trgm);
       const id = crypto.randomUUID();
       log(`Applying ${name}`);
       try {

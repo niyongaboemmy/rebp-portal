@@ -72,10 +72,14 @@ merge to main ─► CI (ci.yml)
 
    Read its summary and fix every warning before the first deploy.
 
-4. **<a id="pg_trgm"></a>pg_trgm.** If step 3 warns that the extension can't be created, open a Namecheap
-   support ticket: _"Please run `CREATE EXTENSION pg_trgm;` as superuser in PostgreSQL database
-   `uruzjktk_rireb`."_ Register search (FR-REG-002) depends on it, and deploys stop at the migration until it
-   exists.
+4. **<a id="pg_trgm"></a>pg_trgm.** The host's database user can't create it (PostgreSQL 10 needs a
+   superuser). The migrator then installs a plain-SQL `word_similarity(text, text)` instead: it agrees with
+   pg_trgm on exact and typo matches, but there's no trigram index, so search scans the register. That's fine at
+   pilot size. To switch to the real extension later (for example after a Namecheap ticket):
+   `DROP FUNCTION word_similarity(text, text), rebp_trgm(text[]), rebp_trgm_words(text);` then, as superuser,
+   `CREATE EXTENSION pg_trgm;` and
+   `CREATE INDEX "RegisterEntry_searchText_trgm" ON "RegisterEntry" USING gin ("searchText" gin_trgm_ops);`.
+   A future migration that uses other pg_trgm features fails with a pointer here.
 5. **GitHub** (Settings → Secrets and variables → Actions, or `gh`):
 
    | Secret                   | Value                                                                     |

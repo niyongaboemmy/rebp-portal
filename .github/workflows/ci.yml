@@ -104,6 +104,17 @@ jobs:
       - name: Prisma reads the history the migrator wrote
         working-directory: apps/web
         run: pnpm exec prisma migrate status
+      # The host's database user is not a superuser, so it can't create pg_trgm: the migrator
+      # must install its plain-SQL word_similarity instead, and register search must still work.
+      - name: Without pg_trgm (non-superuser, like the host)
+        env:
+          NODE_PATH: "apps/web/node_modules:node_modules/.pnpm/node_modules"
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -c "create role app login password 'app'" -c "create database plain owner app"
+          DATABASE_URL=postgresql://app:app@localhost:5432/plain node deploy/cpanel/migrate.cjs apps/web/prisma/migrations | tee plain.log
+          grep -q "plain-SQL word_similarity" plain.log
+          test "$(psql -h localhost -U postgres -d plain -Atc "select word_similarity('mukamna', 'Uwase Mukamana Grace') > 0.35")" = t
 
   # Production deploy to cPanel, only for pushes to main and only when every check passed.
   deploy:
