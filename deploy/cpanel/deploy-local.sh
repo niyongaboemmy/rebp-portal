@@ -57,7 +57,7 @@ done
 # The server is linux-x64 with glibc: drop the other platforms' binaries (disk and inodes).
 find "$TMP/release" -depth -type d -path '*/node_modules/@*/*' \
   \( -name '*darwin*' -o -name '*arm64*' -o -name '*musl*' -o -name '*win32*' \) -exec rm -r {} +
-COPYFILE_DISABLE=1 tar -czf "$TMP/release.tgz" -C "$TMP/release" .
+COPYFILE_DISABLE=1 tar --no-xattrs --no-mac-metadata -czf "$TMP/release.tgz" -C "$TMP/release" .
 if [ -n "${DRY_RUN:-}" ]; then
   cp "$TMP/release.tgz" "$DRY_RUN" && echo "Built $DRY_RUN ($RELEASE); nothing uploaded."
   exit 0

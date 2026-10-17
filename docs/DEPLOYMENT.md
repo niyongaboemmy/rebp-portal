@@ -110,7 +110,7 @@ merge to main ─► CI (ci.yml)
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Deploy            | Merge to `main` (about 15 min end to end; watch Actions)                                                                                |
 | Roll back         | Actions → Deploy (cPanel) → older SHA; or on the server: `ln -sfn releases/<prev> current && touch tmp/restart.txt`                     |
-| Restart           | `touch ~/apps/rireb/tmp/restart.txt`                                                                                                    |
+| Restart           | `pkill -u $USER -f '^lsnode:/home/uruzjktk/apps/rireb/'` (LiteSpeed ignores `tmp/restart.txt` here); the next request starts it         |
 | Health            | `https://rireb.irebpmr.rw/api/health` → `"db":"up"`                                                                                     |
 | Logs              | `~/apps/rireb/logs/node.log`, `cron.log`; `stderr.log` in the app root                                                                  |
 | Edit env          | `nano ~/apps/rireb/.env.production`, then restart. **Never change** `AUTH_SECRET` or `APP_ENCRYPTION_KEY` (docs/runbook.md, Secrets)    |
