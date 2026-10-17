@@ -69,6 +69,11 @@ function vendor(name, from) {
 for (const name of roots) vendor(name, web);
 console.log(`Vendored for deploy scripts: ${[...seen].join(", ")}`);
 NODE
+# The app loads argon2's native binary at runtime by platform name, so the trace only holds the
+# build machine's. Give it every installed platform build (the server's, when built elsewhere).
+for pkg in "$OUT"/deploy/node_modules/@node-rs/argon2-*; do
+  [ -e "$OUT/node_modules/@node-rs/$(basename "$pkg")" ] || cp -a "$pkg" "$OUT/node_modules/@node-rs/"
+done
 git rev-parse HEAD >"$OUT/REVISION" 2>/dev/null || true
 
 # Never ship local data or secrets.
