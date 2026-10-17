@@ -88,7 +88,20 @@ export function accountLinks(
   kind?: { person: boolean; applicant: boolean },
 ): NavItem[] {
   const links: NavItem[] = [];
-  if (area === null) links.push(AREA_HOME.portal);
+  if (area === null)
+    // Applicants go to "My portal"; anyone else gets "Dashboard": the back-office overview for
+    // staff, the account dashboard otherwise.
+    links.push(
+      kind && !kind.applicant
+        ? {
+            ...AREA_HOME.portal,
+            label: "dashboard",
+            href: capabilities.includes("backoffice.access")
+              ? AREA_HOME.backoffice.href
+              : AREA_HOME.portal.href,
+          }
+        : AREA_HOME.portal,
+    );
   else if (canSwitchArea) links.push(AREA_HOME[area === "portal" ? "backoffice" : "portal"]);
   return [...links, ...accountLinksFor(capabilities, kind)];
 }
