@@ -1,7 +1,7 @@
 import "server-only";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import type { Capability } from "@rebp/contracts";
+import type { Capability, Role } from "@rebp/contracts";
 import { userCan } from "../access/permissions";
 import { profileBlocks } from "../profile/profile";
 import { isFullyVerified } from "./account";
@@ -57,9 +57,20 @@ export async function requireCapability(
   return current;
 }
 
+/**
+ * A person's home (ADR-011): staff who are not applicants work in the back office; everyone else
+ * starts on the applicant dashboard. Used whenever no explicit destination was asked for.
+ */
+export async function homeFor(user: { roles: readonly Role[] }): Promise<string> {
+  return !user.roles.includes("APPLICANT") && (await userCan(user, "backoffice.access"))
+    ? "/backoffice"
+    : "/dashboard";
+}
+
 /** For auth pages: bounce signed-in users to their home. */
 export async function redirectIfSignedIn() {
-  if (await getCurrentSession()) redirect("/dashboard");
+  const current = await getCurrentSession();
+  if (current) redirect((await homeFor(current.user)) as never);
 }
 
 /** Only allow same-origin relative paths as post-login destinations (open-redirect guard). */
@@ -75,10 +86,11 @@ export function safeNextPath(next: string | null | undefined, fallback = "/dashb
  * the client has left the sign-in pages, which the router can't settle across layouts.
  */
 export async function landingFor(
-  user: Parameters<typeof profileBlocks>[0] & Parameters<typeof mfaRecommended>[0],
+  user: Parameters<typeof profileBlocks>[0] &
+    Parameters<typeof mfaRecommended>[0] & { roles: readonly Role[] },
   next?: string | null,
 ): Promise<string> {
-  const target = safeNextPath(next);
+  const target = next ? safeNextPath(next, await homeFor(user)) : await homeFor(user);
   if (await profileBlocks(user))
     return `/settings/profile?welcome=1&next=${encodeURIComponent(target)}`;
   // Staff without two-step are sent to set it up after signing in, with a way to skip (FR-ACC-004).

@@ -4,7 +4,7 @@ import { isFullyVerified } from "@/server/auth/account";
 import { clearCookie, COOKIE, readCookie, setCookie } from "@/server/auth/cookies";
 import { getCurrentSession } from "@/server/auth/current";
 import { googleClient } from "@/server/auth/google";
-import { safeNextPath } from "@/server/auth/guards";
+import { landingFor, safeNextPath } from "@/server/auth/guards";
 import { handleGoogleIdentity, type GoogleProfile } from "@/server/auth/oauth";
 import { safeEqual } from "@/server/auth/crypto";
 import { env } from "@/server/env";
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 
   let parsedIntent: { intent: "signin" | "link"; next: string } = {
     intent: "signin",
-    next: "/dashboard",
+    next: "",
   };
   try {
     if (rawIntent) parsedIntent = JSON.parse(rawIntent);
@@ -87,13 +87,21 @@ export async function GET(request: NextRequest) {
     if (outcome.kind === "mfa") {
       await setCookie(COOKIE.challenge(), outcome.challengeToken, outcome.expiresAt);
       return NextResponse.redirect(
-        absolute(`/sign-in/two-step?next=${encodeURIComponent(safeNextPath(parsedIntent.next))}`),
+        absolute(
+          parsedIntent.next
+            ? `/sign-in/two-step?next=${encodeURIComponent(safeNextPath(parsedIntent.next))}`
+            : "/sign-in/two-step",
+        ),
       );
     }
     if (outcome.kind === "session") {
       await setCookie(COOKIE.session(), outcome.token, outcome.expiresAt);
       return NextResponse.redirect(
-        absolute(isFullyVerified(outcome.user) ? safeNextPath(parsedIntent.next) : "/verify"),
+        absolute(
+          isFullyVerified(outcome.user)
+            ? await landingFor(outcome.user, parsedIntent.next || null)
+            : "/verify",
+        ),
       );
     }
     return failure("oauthFailed");

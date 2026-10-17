@@ -36,7 +36,9 @@ export async function POST(request: NextRequest) {
     } | null;
     const credential = typeof body?.credential === "string" ? body.credential : "";
     const intent = body?.intent === "link" ? "link" : "signin";
-    const next = safeNextPath(typeof body?.next === "string" ? body.next : null);
+    // Raw: when absent, landingFor sends the person to their own home (back office for staff).
+    const requested = typeof body?.next === "string" ? body.next : null;
+    const next = safeNextPath(requested);
     const failure = (reason: string) =>
       NextResponse.json({
         redirect:
@@ -71,14 +73,16 @@ export async function POST(request: NextRequest) {
       if (outcome.kind === "mfa") {
         await setCookie(COOKIE.challenge(), outcome.challengeToken, outcome.expiresAt);
         return NextResponse.json({
-          redirect: `/sign-in/two-step?next=${encodeURIComponent(next)}`,
+          redirect: requested
+            ? `/sign-in/two-step?next=${encodeURIComponent(next)}`
+            : "/sign-in/two-step",
         });
       }
       if (outcome.kind === "session") {
         await setCookie(COOKIE.session(), outcome.token, outcome.expiresAt);
         return NextResponse.json({
           redirect: isFullyVerified(outcome.user)
-            ? await landingFor(outcome.user, next)
+            ? await landingFor(outcome.user, requested)
             : "/verify",
         });
       }
