@@ -5,7 +5,10 @@ import type { Prisma } from "@/generated/prisma/client";
  * server and the seed script (which runs outside Next.js). Only public fields are written.
  */
 /** Any Prisma client or transaction (the seed passes its own). */
-type Client = Pick<Prisma.TransactionClient, "licence" | "adminDivision" | "registerEntry">;
+type Client = Pick<
+  Prisma.TransactionClient,
+  "licence" | "registrant" | "firm" | "branch" | "adminDivision" | "registerEntry"
+>;
 
 export interface PublicCondition {
   code: string;
@@ -15,25 +18,46 @@ export interface PublicCondition {
 }
 
 export async function projectLicenceWith(client: Client, licenceId: string) {
-  const licence = await client.licence.findUnique({
-    where: { id: licenceId },
-    include: {
-      registrant: true,
-      affiliatedFirm: true,
-      branch: true,
-      firm: { include: { branches: true } },
-    },
-  });
+  const licence = await client.licence.findUnique({ where: { id: licenceId } });
   if (!licence) return;
-  const firm = licence.firm ?? licence.affiliatedFirm;
-  const district = licence.branch?.district ?? firm?.district ?? null;
+  // One relation at a time, not `include`: Prisma loads included relations concurrently, and a
+  // transaction (licence issuance passes one) has a single connection that can't run queries in
+  // parallel (pg deprecation today, an error in pg 9).
+  const firmFields = {
+    legalName: true,
+    tradingName: true,
+    district: true,
+    principalLicenceId: true,
+  } as const;
+  const registrant = await client.registrant.findUniqueOrThrow({
+    where: { id: licence.registrantId },
+    select: { registrationNo: true, kind: true },
+  });
+  const ownFirm = licence.firmId
+    ? await client.firm.findUnique({ where: { id: licence.firmId }, select: firmFields })
+    : null;
+  const affiliatedFirm =
+    !ownFirm && licence.affiliatedFirmId
+      ? await client.firm.findUnique({
+          where: { id: licence.affiliatedFirmId },
+          select: firmFields,
+        })
+      : null;
+  const branch = licence.branchId
+    ? await client.branch.findUnique({
+        where: { id: licence.branchId },
+        select: { name: true, district: true },
+      })
+    : null;
+  const firm = ownFirm ?? affiliatedFirm;
+  const district = branch?.district ?? firm?.district ?? null;
   const districtRow = district
     ? await client.adminDivision.findUnique({ where: { code: district } })
     : null;
   const principal =
-    licence.category === "REBF" && licence.firm?.principalLicenceId
+    licence.category === "REBF" && ownFirm?.principalLicenceId
       ? await client.licence.findUnique({
-          where: { id: licence.firm.principalLicenceId },
+          where: { id: ownFirm.principalLicenceId },
           select: { displayName: true },
         })
       : null;
@@ -44,7 +68,7 @@ export async function projectLicenceWith(client: Client, licenceId: string) {
     licence.category === "REBF" ? null : (firm?.tradingName ?? firm?.legalName ?? null);
   const searchText = [
     licence.displayName,
-    licence.registrant.registrationNo,
+    registrant.registrationNo,
     licence.licenceNo,
     firm?.legalName,
     firm?.tradingName,
@@ -53,16 +77,16 @@ export async function projectLicenceWith(client: Client, licenceId: string) {
     .join(" ")
     .toLowerCase();
   const data = {
-    registrationNo: licence.registrant.registrationNo,
+    registrationNo: registrant.registrationNo,
     licenceNo: licence.licenceNo,
-    kind: licence.registrant.kind,
+    kind: registrant.kind,
     displayName: licence.displayName,
     category: licence.category,
     status: licence.status,
     issuedAt: licence.issuedAt,
     expiresAt: licence.expiresAt,
     firmName,
-    branchName: licence.branch?.name ?? null,
+    branchName: branch?.name ?? null,
     district,
     province: districtRow?.parentCode ?? null,
     scope: licence.scope,

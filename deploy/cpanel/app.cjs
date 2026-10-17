@@ -23,6 +23,18 @@ process.env.STORAGE_DIR ||= path.join(root, "shared", "storage");
 // makes Next treat its own rewrites as external (500 on every page).
 process.env.HOSTNAME = "localhost";
 
+// activate.sh restarts the app by stopping these processes: LiteSpeed's lsnode ignores
+// tmp/restart.txt here, and Next renames the process ("next-server"), so it can't be found by name.
+const pids = path.join(root, "tmp", "pids");
+const pidFile = path.join(pids, String(process.pid));
+try {
+  fs.mkdirSync(pids, { recursive: true });
+  fs.writeFileSync(pidFile, "");
+  process.on("exit", () => fs.rmSync(pidFile, { force: true }));
+} catch (err) {
+  console.error("[app.cjs] Could not record the process id", err);
+}
+
 const server = path.join(fs.realpathSync(path.join(root, "current")), "apps", "web", "server.js");
 import(pathToFileURL(server).href).catch((err) => {
   console.error("[app.cjs] Could not start", server, err);

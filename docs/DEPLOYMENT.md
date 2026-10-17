@@ -7,19 +7,24 @@ credentials go in `docs/DEPLOYMENT.private.md`, which is git-ignored and must ne
 ## 1. How a merge reaches production
 
 ```
-merge to main ─► CI (ci.yml)
-                  ├─ verify: format · lint · typecheck · unit+integration · build · audit · E2E
-                  └─ postgres10: every migration applied on PostgreSQL 10 by the deploy's migrator
-                       both green ─► Deploy (deploy.yml)
+merge to main ─► CI (ci.yml), in parallel
+                  ├─ verify: format · lint · typecheck · unit+integration · audit   (~5 min)
+                  ├─ postgres10: every migration applied on PostgreSQL 10 by the deploy's migrator
+                  └─ e2e: build + Playwright (~12 min; required on every PR, doesn't hold up the deploy)
+                       verify + postgres10 green ─► Deploy (deploy.yml), ~6 min:
                          Build release   flat node_modules → migrate PG10 → standalone build → bundle.sh
                                          → smoke test (app.cjs, symlinks preserved, health + pages + admin bootstrap)
                          Deploy          one SSH login: upload → activate.sh
-                                         pg_dump → migrate.cjs → create-admin.cjs → switch `current`
-                                         → restart Passenger → wait for "db":"up" → auto-rollback if unhealthy
+                                         pending migrations? → pg_dump + migrate.cjs (else skipped)
+                                         first deploy only → create-admin.cjs (never demo data)
+                                         → switch `current` → restart → wait for "db":"up" → auto-rollback
 ```
 
 - Only the newest commit on `main` deploys, one deploy at a time.
 - **Redeploy or roll back:** Actions → _Deploy (cPanel)_ → Run workflow → a SHA on `main`.
+- Most deploys change no schema: with no pending migration there is no backup and no migration step.
+  The administrator bootstrap runs once, ever (marker `~/apps/rireb/.admin-bootstrapped`). Demo seeds
+  (`pnpm db:seed`, `seed-applications.ts`) never run in production.
 - A failed migration stops the deploy **before** the switch. Each migration runs in one transaction, so the
   site and schema stay as they were.
 
@@ -106,18 +111,18 @@ merge to main ─► CI (ci.yml)
 
 ## 4. Everyday operations
 
-| Task              | How                                                                                                                                     |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Deploy            | Merge to `main` (about 15 min end to end; watch Actions)                                                                                |
-| Roll back         | Actions → Deploy (cPanel) → older SHA; or on the server: `ln -sfn releases/<prev> current && touch tmp/restart.txt`                     |
-| Restart           | `pkill -u $USER -f '^lsnode:/home/uruzjktk/apps/rireb/'` (LiteSpeed ignores `tmp/restart.txt` here); the next request starts it         |
-| Health            | `https://rireb.irebpmr.rw/api/health` → `"db":"up"`                                                                                     |
-| Logs              | `~/apps/rireb/logs/node.log`, `cron.log`; `stderr.log` in the app root                                                                  |
-| Edit env          | `nano ~/apps/rireb/.env.production`, then restart. **Never change** `AUTH_SECRET` or `APP_ENCRYPTION_KEY` (docs/runbook.md, Secrets)    |
-| Schema change     | `prisma migrate dev --create-only` locally, commit `prisma/migrations`, merge. CI checks it on PostgreSQL 10                            |
-| DB shell          | `ssh -p 21098 -L 6543:127.0.0.1:5432 <user>@<host>`, then `psql postgres://<db user>:<pw>@127.0.0.1:6543/uruzjktk_rireb`                |
-| Restore DB        | Stop the app (cPanel → Setup Node.js App), `pg_restore --clean --if-exists --no-owner -d "$DATABASE_URL" backups/<file>.dump`, start it |
-| Back up documents | `tar czf storage-$(date +%F).tgz -C ~/apps/rireb/shared storage` (they are encrypted with `APP_ENCRYPTION_KEY`; keep both)              |
+| Task              | How                                                                                                                                                                                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Deploy            | Merge to `main` (about 15 min end to end; watch Actions)                                                                                                                                                                                                 |
+| Roll back         | Actions → Deploy (cPanel) → older SHA; or on the server: `ln -sfn releases/<prev> current && touch tmp/restart.txt`                                                                                                                                      |
+| Restart           | Stop the app's processes; the next request starts the release: `for d in /proc/[0-9]*; do [ -O $d ] && readlink $d/cwd \| grep -q ^$HOME/apps/rireb/releases/ && kill ${d#/proc/}; done` (LiteSpeed ignores `tmp/restart.txt`; Next renames the process) |
+| Health            | `https://rireb.irebpmr.rw/api/health` → `"db":"up"`                                                                                                                                                                                                      |
+| Logs              | `~/apps/rireb/logs/node.log`, `cron.log`; `stderr.log` in the app root                                                                                                                                                                                   |
+| Edit env          | `nano ~/apps/rireb/.env.production`, then restart. **Never change** `AUTH_SECRET` or `APP_ENCRYPTION_KEY` (docs/runbook.md, Secrets)                                                                                                                     |
+| Schema change     | `prisma migrate dev --create-only` locally, commit `prisma/migrations`, merge. CI checks it on PostgreSQL 10                                                                                                                                             |
+| DB shell          | `ssh -p 21098 -L 6543:127.0.0.1:5432 <user>@<host>`, then `psql postgres://<db user>:<pw>@127.0.0.1:6543/uruzjktk_rireb`                                                                                                                                 |
+| Restore DB        | Stop the app (cPanel → Setup Node.js App), `pg_restore --clean --if-exists --no-owner -d "$DATABASE_URL" backups/<file>.dump`, start it                                                                                                                  |
+| Back up documents | `tar czf storage-$(date +%F).tgz -C ~/apps/rireb/shared storage` (they are encrypted with `APP_ENCRYPTION_KEY`; keep both)                                                                                                                               |
 
 **SSH firewall:** about three logins in quick succession block your IP for 10–15 minutes. Batch commands into
 one login.
