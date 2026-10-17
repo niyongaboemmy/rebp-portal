@@ -20,7 +20,7 @@ async function signInWithEmailCode(page: Page, email: string) {
   await expect(page).toHaveURL(/\/sign-in\/two-step/);
   await page.getByRole("button", { name: "Use code" }).click();
   await page.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(/\/(dashboard|backoffice)$/);
 }
 
 async function createPerson(fullName: string) {
@@ -127,7 +127,7 @@ test("disabling an account signs the person out and blocks sign-in", async ({ pa
   await otherPage.getByLabel("Email address").fill(email);
   await otherPage.getByLabel("Password", { exact: true }).fill(DEMO_PASSWORD);
   await otherPage.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(otherPage).toHaveURL(/\/dashboard$/);
+  await expect(otherPage).toHaveURL(/\/(dashboard|backoffice)$/);
 
   await signInWithEmailCode(page, ADMIN);
   await page.goto(`/backoffice/access?q=${encodeURIComponent(email)}`);

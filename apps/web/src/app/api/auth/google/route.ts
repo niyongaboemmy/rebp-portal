@@ -33,7 +33,13 @@ export async function GET(request: NextRequest) {
   await setCookie(COOKIE.oauthVerifier(), verifier, expires);
   await setCookie(
     COOKIE.oauthIntent(),
-    JSON.stringify({ intent, next: safeNextPath(request.nextUrl.searchParams.get("next")) }),
+    JSON.stringify({
+      intent,
+      // Kept empty when none was asked for, so sign-in lands on the person's own home.
+      next: request.nextUrl.searchParams.get("next")
+        ? safeNextPath(request.nextUrl.searchParams.get("next"))
+        : "",
+    }),
     expires,
   );
   return NextResponse.redirect(url);

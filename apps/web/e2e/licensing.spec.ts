@@ -65,11 +65,11 @@ async function signIn(page: Page, email: string) {
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel("Password", { exact: true }).fill(PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await page.waitForURL(/\/(dashboard|sign-in\/two-step)/);
+  await page.waitForURL(/\/(dashboard|backoffice|sign-in\/two-step)/);
   if (page.url().includes("two-step")) {
     await page.getByRole("button", { name: "Use code" }).click();
     await page.getByRole("button", { name: "Verify" }).click();
-    await page.waitForURL(/\/dashboard/);
+    await page.waitForURL(/\/(dashboard|backoffice)/);
   }
 }
 

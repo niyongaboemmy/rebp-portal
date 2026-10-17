@@ -33,7 +33,7 @@ async function signInAdminByPaste(page: Page) {
   const code = await latestCode("admin@demo.rebp.rw", "mfaLoginCode");
   // W-04: a pasted full code submits on its own — no "Verify" tap.
   await pasteInto(page, "Verification code", code);
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(/\/backoffice$/); // Staff land in the back office (ADR-011).
 }
 
 test("I-01: scrolling past the language links never switches the language", async ({ page }) => {
