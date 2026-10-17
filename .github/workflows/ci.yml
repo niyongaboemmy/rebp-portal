@@ -7,7 +7,11 @@ on:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # A newer push supersedes a PR run; runs on main are never cancelled (each may deploy).
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
 
 jobs:
   verify:
@@ -68,3 +72,48 @@ jobs:
           name: playwright-report
           path: apps/web/playwright-report
           retention-days: 7
+
+  # Production runs PostgreSQL 10 (ADR-012): every migration must apply there, through the same
+  # migrator the deploy uses.
+  postgres10:
+    name: Migrations on PostgreSQL 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:10
+        env: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: rebp }
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/rebp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply migrations twice (the second run must be a no-op)
+        env: { NODE_PATH: "apps/web/node_modules:node_modules/.pnpm/node_modules" }
+        run: |
+          node deploy/cpanel/migrate.cjs apps/web/prisma/migrations
+          node deploy/cpanel/migrate.cjs apps/web/prisma/migrations | tee second.log
+          grep -q ' 0 pending' second.log
+      - name: Prisma reads the history the migrator wrote
+        working-directory: apps/web
+        run: pnpm exec prisma migrate status
+
+  # Production deploy to cPanel, only for pushes to main and only when every check passed.
+  deploy:
+    name: Deploy
+    needs: [verify, postgres10]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      ref: ${{ github.sha }}
+    secrets: inherit
+    permissions:
+      contents: read
+      actions: read

@@ -10,6 +10,8 @@ pnpm db:seed                                 # demo users, admin divisions, synt
 pnpm build && pnpm --filter @rebp/web start  # production; `pnpm dev` for development
 ```
 
+Production (https://rireb.irebpmr.rw, deployed from `main`): see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 Health: `GET /api/health` → `{"status":"ok","db":"up"}`.
 
 ## Demo script (FSLA happy path, ~10 minutes)

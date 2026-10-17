@@ -20,3 +20,6 @@ apps/web/var/
 
 # Generated: MapLibre worker copied at dev/build time
 apps/web/public/vendor/
+
+# Production credentials (docs/DEPLOYMENT.md): local only, never commit
+docs/DEPLOYMENT.private.md

@@ -13,3 +13,4 @@
 | [009](ADR-009-visual-language.md)       | Visual language: navy palette (v2), Ink dark theme, motion, graphics  | Proposed           |
 | [010](ADR-010-public-locale-routing.md) | Locale-prefixed URLs and hreflang for public pages                    | Proposed           |
 | [011](ADR-011-app-shell.md)             | Authenticated shell: inset layout, collapsible sidebar, viewer prefs  | Proposed           |
+| [012](ADR-012-cpanel-hosting.md)        | Pilot on cPanel shared hosting, deployed from main by GitHub Actions  | Accepted           |
