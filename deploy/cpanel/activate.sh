@@ -76,6 +76,9 @@ switch_to() {
     cloudlinux-selector restart --json --interpreter nodejs \
       --app-root "${APP#"$HOME"/}" >/dev/null 2>&1 || true
   fi
+  # LiteSpeed's lsnode ignores both of the above on this host and keeps serving the old code.
+  # Stop this app's processes (only its own root); the next request starts the new release.
+  pkill -u "$(id -un)" -f "^lsnode:$APP/" 2>/dev/null || true
 }
 switch_to "$REL"
 log "current -> releases/$ID (previous: ${PREV:-none})"
