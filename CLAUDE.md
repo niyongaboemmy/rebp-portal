@@ -22,6 +22,7 @@ apps/web/                Next.js 16 (App Router) — UI and server (server actio
   e2e/                   Playwright specs (+ axe)
 packages/contracts/      Shared Zod schemas, enums, RBAC matrix — the single source of truth
 infra/                   docker-compose (postgres, redis, mailpit)
+deploy/cpanel/           Production release scripts (ADR-012, docs/DEPLOYMENT.md): bundle, migrate, activate
 ```
 
 ## Commands
