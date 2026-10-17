@@ -26,6 +26,15 @@ const schema = z.object({
    * A production build may opt in (e.g. a pilot without a mail server); a warning banner is shown.
    */
   APP_ENV: z.enum(["dev", "staging", "production"]).optional(),
+  /**
+   * FR-ACC-004: "true" makes two-step mandatory for staff roles (they cannot use the back office
+   * until it is set up). Default off for the pilot: staff are sent to set it up after sign-in but
+   * may continue without it. Once someone has turned two-step on, it is always required at sign-in.
+   */
+  MFA_ENFORCE: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((v) => v === "true"),
   /** Multiplies every rate-limit budget; raise only for automated test environments. */
   RATE_LIMIT_SCALE: z.coerce.number().positive().default(1),
   /** Encrypted document blobs (FR-DOC-008). Local disk for the pilot; S3/MinIO adapter in R2. */
@@ -79,6 +88,8 @@ export const appEnv = (): AppEnv => env().APP_ENV ?? (isProduction() ? "producti
 /** Dev mode: OTP codes are returned to the UI instead of relying on a real mail/SMS gateway. */
 export const isDevMode = () => appEnv() === "dev";
 /** Google sign-in needs only the client ID: the browser gets a signed ID token (ADR-004 amendment). */
+/** Whether staff must have two-step before using the back office (FR-ACC-004, MFA_ENFORCE). */
+export const isMfaEnforced = () => env().MFA_ENFORCE;
 export const isGoogleEnabled = () => Boolean(env().GOOGLE_CLIENT_ID);
 /** The legacy redirect flow (/api/auth/google) also needs the secret; kept for deployments that set it. */
 export const isGoogleRedirectEnabled = () =>

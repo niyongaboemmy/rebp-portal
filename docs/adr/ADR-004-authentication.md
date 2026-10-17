@@ -43,3 +43,23 @@ client ID. The portal now uses the same model, which serves FR-ACC-006 (federate
   "Authorised JavaScript origins". The Arctic redirect flow (`/api/auth/google` with its callback) stays for deployments
   that also set `GOOGLE_CLIENT_SECRET`, but the UI no longer links to it.
 - **CSP:** `script-src`, `style-src`, `connect-src` and `frame-src` allow `https://accounts.google.com/gsi/…` only.
+
+## Amendment (2026-10-17): staff two-step is recommended, enforceable by configuration
+
+The product owner asked that staff still be sent to set up two-step, but be able to skip it and use the portal
+normally. FR-ACC-004 requires two-step for back-office roles, so mandatory mode stays available as a switch.
+
+- **Policy:** a single helper, `server/auth/mfa-policy.ts`, with `mfaBlocks` and `mfaRecommended`. It is used by page
+  guards (`requireUser`), server actions (`authorizeSelf`, `authorizeAction`) and route handlers (`apiUser`), so they
+  can't drift apart.
+  - **Two-step already set up:** the session must have passed it, always. Nobody can skip a factor they have.
+  - **Two-step not set up:** blocked only when the roles call for it (`requiresMfa`) and `MFA_ENFORCE=true`.
+- **Default `MFA_ENFORCE=false`:** after sign-in (password or Google), `landingFor` sends staff without two-step to
+  `/settings/security?setup=required&next=…`. The page recommends it, offers "Set it up now" and the guided setup,
+  and "Skip for now" returns them to `next`. After that, every page and action works without it.
+- **`MFA_ENFORCE=true`:** the previous behaviour returns. Pages redirect to the security page, actions refuse, and
+  the banner says "required".
+- **Unchanged:** removing the last method is still refused for staff roles (`mfaRequiredForRole`). Two-step is
+  optional to set up, but once on it isn't downgraded.
+- **Tests:** unit tests in `mfa-policy.test.ts` cover both modes, and e2e `auth.spec` covers "guided, then skip,
+  then the back office opens".

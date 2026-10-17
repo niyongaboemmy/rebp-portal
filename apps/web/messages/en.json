@@ -714,7 +714,8 @@
         "email": "Use email codes (quickest)",
         "app": "Use an authenticator app (most secure)",
         "quickest": "Quickest",
-        "secure": "Most secure"
+        "secure": "Most secure",
+        "titleOptional": "Turn on two-step (recommended)"
       }
     },
     "recovery": {
@@ -783,7 +784,10 @@
     },
     "requiredTitle": "Two-step verification is required for your role",
     "requiredShort": "Set up one method to keep using the back office. It takes about a minute.",
-    "requiredCta": "Set it up now"
+    "requiredCta": "Set it up now",
+    "recommendedTitle": "Two-step verification is recommended for your role",
+    "recommendedShort": "It protects the back office and takes about a minute. You can also do it later.",
+    "skip": "Skip for now"
   },
   "audit": {
     "title": "Audit trail",
