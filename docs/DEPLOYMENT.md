@@ -11,7 +11,7 @@ merge to main ─► CI (ci.yml), in parallel
                   ├─ verify: format · lint · typecheck · unit+integration · audit   (~5 min)
                   ├─ postgres10: every migration applied on PostgreSQL 10 by the deploy's migrator
                   └─ e2e: build + Playwright (~12 min; required on every PR, doesn't hold up the deploy)
-                       verify + postgres10 green ─► Deploy (deploy.yml), ~6 min: 
+                       verify + postgres10 green ─► Deploy (deploy.yml), ~6 min:
                          Build release   flat node_modules → migrate PG10 → standalone build → bundle.sh
                                          → smoke test (app.cjs, symlinks preserved, health + pages + admin bootstrap)
                          Deploy          one SSH login: upload → activate.sh
