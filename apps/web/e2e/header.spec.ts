@@ -16,9 +16,13 @@ test("header is transparent over the hero and gains a shadow once scrolled", asy
 
 test("hero fills the viewport", async ({ page }) => {
   await page.goto("/");
-  const hero = page.locator("section").first();
-  const box = await hero.boundingBox();
-  expect(box!.height).toBeGreaterThanOrEqual(page.viewportSize()!.height - 1);
+  // The page streams: the route skeleton paints first and the real hero arrives in a hidden
+  // container before it is swapped in, so measure the visible hero once the skeleton is gone.
+  await expect(page.locator("[data-route-loading]")).toHaveCount(0);
+  const hero = page.locator("main section:visible").first();
+  await expect
+    .poll(async () => (await hero.boundingBox())?.height ?? 0)
+    .toBeGreaterThanOrEqual(page.viewportSize()!.height - 1);
 });
 
 for (const width of [800, 1024, 1280, 1600]) {
