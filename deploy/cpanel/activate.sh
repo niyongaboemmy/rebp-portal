@@ -91,7 +91,24 @@ switch_to() {
       --app-root "${APP#"$HOME"/}" >/dev/null 2>&1 || true
   fi
   # LiteSpeed's lsnode ignores both of the above on this host and keeps serving the old code.
-  # Stop this app's processes (only its own root); the next request starts the new release.
+  # Stop this app's processes; the next request starts the new release. app.cjs records their
+  # ids (Next renames the process, so it can't be matched by name); a process is stopped only if
+  # its working directory is inside this app, so a reused id never hits anything else.
+  for f in "$APP"/tmp/pids/*; do
+    [ -e "$f" ] || continue
+    pid="${f##*/}"
+    cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null ||
+      lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' || true)"
+    case "$cwd" in "$APP"/*) kill "$pid" 2>/dev/null || true ;; esac
+    rm -f "$f"
+  done
+  # Linux: also any of our processes running inside a release, e.g. one started before app.cjs
+  # recorded ids (the release deployed before this logic existed).
+  for d in /proc/[0-9]*; do
+    [ -O "$d" ] && [ "${d#/proc/}" != "$$" ] || continue
+    case "$(readlink "$d/cwd" 2>/dev/null)" in "$APP"/releases/*) kill "${d#/proc/}" 2>/dev/null || true ;; esac
+  done
+  # Processes started before app.cjs ran (e.g. cPanel's placeholder) still carry lsnode's name.
   pkill -u "$(id -un)" -f "^lsnode:$APP/" 2>/dev/null || true
 }
 switch_to "$REL"
