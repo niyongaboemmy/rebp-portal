@@ -15,6 +15,7 @@ import { ProgressRing } from "@/components/data/progress-ring";
 import { TONE_SOFT_BG, TONE_TEXT } from "@/components/data/tones";
 import { chipClassName, ChipRow } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PageWidth } from "@/components/layout/page-width";
 import { PageHeader } from "@/components/ui/page-header";
 import {
   AUDIT_ACTIONS,
@@ -87,9 +88,10 @@ export default async function AuditPage({ searchParams }: PageProps<"/backoffice
 
   return (
     <>
+      <PageWidth wide />
       <PageHeader title={t("audit.title")} description={t("audit.subtitleShort")} />
 
-      <div className="grid items-start gap-4 lg:grid-cols-[1fr_1.6fr]">
+      <div className="grid items-start gap-4 @3xl/main:grid-cols-[1fr_1.6fr]">
         {/* Chain integrity: the one fact an auditor checks first (FR-AUD-003). */}
         <section
           aria-labelledby="chain-title"

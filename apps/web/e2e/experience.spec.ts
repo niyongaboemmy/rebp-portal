@@ -86,13 +86,13 @@ test("licence check states clearly when nothing matches and is not indexed", asy
 
 test("register filters live in the URL (FR-REG-002)", async ({ page }) => {
   await page.goto("/register?q=Uwase");
-  await page.getByRole("link", { name: "REA", exact: true }).click();
+  await page.getByRole("button", { name: "Category", exact: true }).click();
+  await page.getByRole("menuitem", { name: /Real Estate Agent/ }).click();
   await expect(page).toHaveURL(/category=REA/);
   await expect(page).toHaveURL(/q=Uwase/);
-  await expect(page.getByRole("link", { name: "REA", exact: true })).toHaveAttribute(
-    "aria-current",
-    "true",
-  );
+  await expect(page.getByRole("button", { name: "Category", exact: true })).toHaveText(/REA/);
+  await page.getByRole("button", { name: "Remove filter: Category" }).click();
+  await expect(page).not.toHaveURL(/category=/);
 });
 
 test("command palette jumps to a page (⌘K / Ctrl+K)", async ({ page }) => {
@@ -123,14 +123,14 @@ test("locale prefixes never apply to private areas", async ({ page }) => {
   await page.context().clearCookies();
 });
 
-test("robots, sitemap and manifest are served (SEO, UX-015)", async ({ request }) => {
+test("robots, sitemap and manifest are served (SEO, UX-015)", async ({ request, baseURL }) => {
   const robots = await (await request.get("/robots.txt")).text();
   expect(robots).toContain("Disallow: /dashboard");
-  expect(robots).toContain("Sitemap: http://localhost:3100/sitemap.xml");
+  expect(robots).toContain(`Sitemap: ${baseURL}/sitemap.xml`);
 
   const sitemap = await (await request.get("/sitemap.xml")).text();
   expect(sitemap).toContain('hreflang="rw"');
-  expect(sitemap).toContain("http://localhost:3100/fr/register");
+  expect(sitemap).toContain(`${baseURL}/fr/register`);
 
   const manifest = await (await request.get("/manifest.webmanifest")).json();
   expect(manifest).toMatchObject({ short_name: "REBP", display: "standalone" });

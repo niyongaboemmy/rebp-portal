@@ -6,10 +6,13 @@ export function Logo({
   className,
   showText = true,
   text = "REBP Portal",
+  textClassName,
 }: {
   className?: string;
   showText?: boolean;
   text?: string;
+  /** Extra classes for the wordmark (e.g. hide it on the collapsed sidebar). */
+  textClassName?: string;
 }) {
   return (
     <Link
@@ -38,7 +41,12 @@ export function Logo({
         <circle cx="25" cy="8" r="3" className="fill-sun" />
       </svg>
       {showText && (
-        <span className="font-display text-lg font-bold tracking-tight whitespace-nowrap">
+        <span
+          className={cn(
+            "font-display text-lg font-bold tracking-tight whitespace-nowrap",
+            textClassName,
+          )}
+        >
           {text}
         </span>
       )}

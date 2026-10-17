@@ -13,7 +13,17 @@ import {
  *
  * Also resolves locale-prefixed public URLs (`/fr/register` → `/register` in French, ADR-010).
  */
-const PROTECTED_PREFIXES = ["/dashboard", "/applications", "/settings", "/backoffice", "/verify"];
+const PROTECTED_PREFIXES = [
+  "/dashboard",
+  "/applications",
+  "/licenses",
+  "/confirmations",
+  "/firm",
+  "/pay",
+  "/settings",
+  "/backoffice",
+  "/verify",
+];
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 /** Router or browser prefetches (Next.js header, Fetch `Sec-Purpose`, legacy `Purpose`). */

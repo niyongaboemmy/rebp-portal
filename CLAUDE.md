@@ -10,9 +10,12 @@ apps/web/                Next.js 16 (App Router) — UI and server (server actio
   src/app/               Routes: (public) (auth) (portal) (backoffice) api/ dev/
   src/components/ui/     Design-system primitives (shadcn-style on Radix)
   src/components/layout/ Shells, navigation, header/footer, theme + language switchers
+  src/components/wizard/ The application wizard (sections B–H, documents, review & e-signature)
   src/config/            Navigation (role-filtered)
   src/hooks/             useActionForm, useErrorMessage, useCountdown, useMediaQuery…
-  src/server/            Server-only domain code: auth/, access/, audit/, notifications/, db, env, action wrapper
+  src/server/            Server-only domain code: auth/, access/, audit/, notifications/, applications/,
+                         documents/, confirmations/, payments/, backoffice/, licensing/, firms/, jobs/,
+                         config/, storage/, pdf/, privacy/; db, env, action wrapper, http (route helpers)
   src/server/actions/    "use server" entry points — thin: validate, rate-limit, call the domain, map errors
   messages/              i18n catalogues (en complete; rw/fr drafts)
   prisma/                Schema, migrations, seed
@@ -49,6 +52,10 @@ pnpm db:seed             # demo users for every role
   a code to the browser any other way.
 - **Forms validate on submit, then on change** (`useActionForm`). Don't reintroduce blur validation on short forms: it
   shifts the layout under the pointer. Hide transient UI with `invisible`, not only `opacity-0`.
+- **Shell (ADR-011).** Style the icon-rail state with the `sb-collapsed:` variant, never JS. Page grids inside the
+  shell use container breakpoints (`@3xl/main:` …), not `lg:`/`xl:`. Data-heavy pages render `<PageWidth wide />`;
+  detail pages set the last crumb with `<BreadcrumbTail>`. Nav lives in `config/navigation.ts` (`navForArea`, account
+  links and the area switch are separate). No scroll-driven CSS animations: tests wait for animations to settle.
 - **Audit every state change** with `recordAudit()`; mask PII with `maskEmail` / `maskPhone`.
 - Server-only modules import `"server-only"`; never import `src/server/**` from client code except `actions/`.
 

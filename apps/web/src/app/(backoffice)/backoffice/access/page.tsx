@@ -12,6 +12,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { LinkTabs } from "@/components/ui/link-tabs";
+import { PageWidth } from "@/components/layout/page-width";
 import { PageHeader } from "@/components/ui/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPermissionMatrix, userCan } from "@/server/access/permissions";
@@ -39,6 +40,7 @@ export default async function AccessControlPage({ searchParams }: PageProps<"/ba
 
   return (
     <StepUpProvider hasPassword={Boolean(user.passwordHash)}>
+      <PageWidth wide />
       <PageHeader title={t("title")} description={t("subtitle")} />
       <LinkTabs
         label={t("title")}

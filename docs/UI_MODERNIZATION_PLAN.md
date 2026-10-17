@@ -395,6 +395,9 @@ The **back-office analytics** (§10) need axes, crosshairs and many series, and 
 
 ### 6.1 Adaptive navigation
 
+> **Superseded** by [ADR-011](adr/ADR-011-app-shell.md) and [APP_SHELL_PLAN](APP_SHELL_PLAN.md) (2026-10-16): inset
+> layout, collapsible sidebar with remembered state, grouped back office, one account menu.
+
 | Viewport        | Applicant portal                                                                                                                                                                                                                                                               | Back office                                                         |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
 | `< md` (phones) | **Bottom tab bar** (thumb zone). Four tabs (Home, Applications, Licences, More) plus a centre **FAB "New application"** on the dashboard. A compact top bar holds the title, notifications bell and avatar. "More" opens a sheet with the secondary links, theme and language. | Bottom bar: Queue, Decisions, Search, More (filtered by capability) |

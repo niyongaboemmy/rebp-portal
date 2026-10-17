@@ -30,6 +30,9 @@ export async function HeroVisual({ className }: { className?: string }) {
         className="absolute inset-x-[16%] bottom-3 -z-10 h-8 animate-card-ground rounded-[50%] bg-brand/40 blur-xl dark:bg-black/70"
       />
       <HeroDeck
+        question={t("eligibility.title")}
+        checking={t("landing.deckChecking")}
+        yes={t("landing.deckYes")}
         licence={
           <>
             <LicenceCard

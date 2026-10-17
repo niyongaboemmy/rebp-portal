@@ -1,5 +1,6 @@
 pnpm-lock.yaml
 .next
+.next-*
 node_modules
 coverage
 playwright-report
@@ -8,3 +9,4 @@ apps/web/src/generated
 docs/SRS.md
 docs/IMPLEMENTATION_PLAN.md
 .refact
+apps/web/public/vendor

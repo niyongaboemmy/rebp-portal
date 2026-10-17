@@ -1,6 +1,7 @@
 // REBP Portal — data model.
-// This revision covers identity, sessions, MFA, OAuth, notifications and the audit trail
-// (SRS FR-ACC-001…010, FR-AUD-001…003, ADR-007). Domain entities from SRS §12.1 follow in WP-0.6.
+// Identity, sessions, MFA, OAuth, notifications and the audit trail (SRS FR-ACC-001…010,
+// FR-AUD-001…003, ADR-007), then the licensing domain (SRS §12.1, Plan WP-0.6): applications,
+// documents, eligibility, confirmations, payments, review, decisions, licences and the register.
 
 generator client {
   provider = "prisma-client"
@@ -41,6 +42,8 @@ enum VerificationPurpose {
   PASSWORD_RESET
   MFA_LOGIN
   MFA_ENROL
+  /// FR-J-004: OTP re-authentication that signs an application declaration.
+  SIGNATURE
 }
 
 enum NotificationChannel {
@@ -59,6 +62,13 @@ model User {
   passwordChangedAt    DateTime?
   accountType          AccountType @default(INDIVIDUAL)
   fullName             String
+  /// Applicant profile (UX-010): Section B answers kept on the account and reused by every
+  /// application. Same protection as Application.data.
+  profile              Json?
+  profileUpdatedAt     DateTime?
+  /// The applicant's CV (UX-018): education, training and experience, reused by every application.
+  cv                   Json?
+  cvUpdatedAt          DateTime?
   locale               String      @default("en")
   roles                Role[]      @default([APPLICANT])
   /// Preferred second factor; null when two-step verification is off.
@@ -80,10 +90,22 @@ model User {
   updatedAt            DateTime    @updatedAt
 
   sessions          Session[]
+  profileDocuments  ProfileDocument[]
   oauthAccounts     OAuthAccount[]
   recoveryCodes     RecoveryCode[]
   verificationCodes VerificationCode[]
   loginChallenges   LoginChallenge[]
+
+  applications         Application[]         @relation("ApplicationApplicant")
+  assignedApplications Application[]         @relation("ApplicationOfficer")
+  confirmations        ConfirmationRequest[] @relation("ConfirmationAddressee")
+  reviews              Review[]
+  decisions            Decision[]
+  notifications        Notification[]
+  licences             Licence[]             @relation("LicenceHolder")
+  registrant           Registrant?
+  ownedFirms           Firm[]                @relation("FirmOwner")
+  conflicts            ConflictDeclaration[]
 }
 
 /// Server-side session. The id is the SHA-256 of the cookie token, so a DB leak does not leak sessions.
@@ -212,4 +234,660 @@ model RolePermission {
   updatedAt   DateTime @updatedAt
 
   @@id([role, capability])
+}
+
+// ===========================================================================
+// Licensing domain (SRS §12.1)
+// ===========================================================================
+
+enum ApplicationType {
+  NEW
+  UPGRADE
+  RENEWAL
+  CHANGE_OF_AFFILIATION
+  REINSTATEMENT
+  FIRM_REGISTRATION
+}
+
+enum Category {
+  RERA
+  FSLA
+  REA
+  BROKER
+  ASSOCIATE_BROKER
+  MANAGING_BROKER
+  PRINCIPAL_BROKER
+  REBF
+}
+
+enum ApplicationStatus {
+  DRAFT
+  PENDING_PAYMENT
+  PENDING_CONFIRMATIONS
+  SUBMITTED
+  UNDER_REVIEW
+  ACTION_REQUIRED
+  FURTHER_ASSESSMENT
+  PENDING_DECISION
+  APPROVED
+  APPROVED_WITH_CONDITIONS
+  DEFERRED
+  REJECTED
+  LICENSE_ISSUED
+  WITHDRAWN
+  EXPIRED_DRAFT
+}
+
+enum LicenseStatus {
+  ACTIVE
+  EXPIRED
+  LAPSED
+  SUSPENDED
+  REVOKED
+  SURRENDERED
+  SUPERSEDED
+}
+
+enum ConfirmationKind {
+  SUPERVISOR
+  PRINCIPAL_BROKER
+  DESIGNATION
+}
+
+enum ConfirmationStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+enum DocumentStatus {
+  SCANNING
+  CLEAN
+  INFECTED
+  REJECTED_FILE
+  VERIFIED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+  REFUNDED
+  WAIVED
+}
+
+enum PaymentMethod {
+  MOBILE_MONEY
+  CARD
+  BANK
+  WAIVER
+}
+
+enum RegistrantKind {
+  PERSON
+  FIRM
+}
+
+enum ConfigStatus {
+  PENDING
+  ACTIVE
+  SUPERSEDED
+  REJECTED
+}
+
+/// One application (Form REBP–REG–01). Section data is JSONB keyed by section (ADR-002, DATA-001).
+model Application {
+  id                  String            @id @default(uuid()) @db.Uuid
+  /// FR-A-001: REBP-{YYYY}-{TYPE}-{SEQ6}-{CHK}; immutable.
+  referenceNo         String            @unique
+  type                ApplicationType
+  category            Category
+  status              ApplicationStatus @default(DRAFT)
+  applicantId         String            @db.Uuid
+  applicant           User              @relation("ApplicationApplicant", fields: [applicantId], references: [id])
+  /// Sections B–H as entered (ApplicationData in @rebp/contracts). Hidden sections are kept (FR-WIZ-009).
+  data                Json              @default("{}")
+  /// Renewal / upgrade: the licence concerned (FR-A-006).
+  relatedLicenceId    String?           @db.Uuid
+  relatedLicence      Licence?          @relation("ApplicationRelatedLicence", fields: [relatedLicenceId], references: [id])
+  /// REBF ↔ Principal Broker linked bundle (FR-FIRM-011).
+  linkedApplicationId String?           @db.Uuid
+  /// FR-WF-002: what an information request unlocked.
+  unlockedSections    String[]          @default([])
+  unlockedDocuments   String[]          @default([])
+  /// FR-I-005: officer-named extra documents.
+  extraDocuments      String[]          @default([])
+  lastStep            String?
+  assignedOfficerId   String?           @db.Uuid
+  assignedOfficer     User?             @relation("ApplicationOfficer", fields: [assignedOfficerId], references: [id])
+  assignedAt          DateTime?
+  /// FR-BO-004: due date of the current SLA timer.
+  slaDueAt            DateTime?
+  signedAt            DateTime?
+  /// FR-PAY-006 / K.8.
+  submittedAt         DateTime?
+  decidedAt           DateTime?
+  /// Late renewal within grace (BR-040): adds the late fee.
+  lateRenewal         Boolean           @default(false)
+  /// Latest eligibility outcome (cached for queues and dashboards).
+  eligibilityOutcome  String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  lastActivityAt      DateTime          @default(now())
+
+  events        ApplicationEvent[]
+  snapshots     ApplicationSnapshot[]
+  documents     Document[]
+  eligibility   EligibilityRun[]
+  confirmations ConfirmationRequest[]
+  payments      Payment[]
+  reviews       Review[]
+  infoRequests  InformationRequest[]
+  decisions     Decision[]
+  conflicts     ConflictDeclaration[]
+  licences      Licence[]             @relation("LicenceApplication")
+
+  @@index([applicantId])
+  @@index([status])
+  @@index([assignedOfficerId])
+}
+
+/// Status timeline (FR-WF-001, FR-PORTAL-002).
+model ApplicationEvent {
+  id            BigInt             @id @default(autoincrement())
+  applicationId String             @db.Uuid
+  application   Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStatus    ApplicationStatus?
+  toStatus      ApplicationStatus
+  actorId       String?            @db.Uuid
+  /// i18n key or free text shown on the timeline.
+  reason        String?
+  at            DateTime           @default(now())
+
+  @@index([applicationId])
+}
+
+/// Immutable submission snapshot bound to the e-signature (DATA-002, FR-J-004).
+model ApplicationSnapshot {
+  id            String      @id @default(uuid()) @db.Uuid
+  applicationId String      @db.Uuid
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  version       Int
+  data          Json
+  checklist     Json
+  /// SHA-256 of the canonical snapshot (data + checklist + document hashes).
+  hash          String
+  /// signer, method, timestamp, ip, user agent, declaration and privacy versions.
+  signature     Json
+  createdAt     DateTime    @default(now())
+
+  @@unique([applicationId, version])
+}
+
+/// Eligibility engine run with the threshold version used (FR-ELG-003).
+model EligibilityRun {
+  id                String      @id @default(uuid()) @db.Uuid
+  applicationId     String      @db.Uuid
+  application       Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  context           String
+  outcome           String
+  results           Json
+  thresholdsVersion Int
+  createdAt         DateTime    @default(now())
+
+  @@index([applicationId, createdAt])
+}
+
+/// A checklist document; replacing it adds a version (FR-DOC-007).
+model Document {
+  id             String            @id @default(uuid()) @db.Uuid
+  applicationId  String            @db.Uuid
+  application    Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type           String
+  ownerId        String            @db.Uuid
+  currentVersion Int               @default(1)
+  status         DocumentStatus    @default(SCANNING)
+  /// Officer verdict reason (FR-L-011).
+  officerNote    String?
+  verifiedById   String?           @db.Uuid
+  verifiedAt     DateTime?
+  /// Applicant removed it (only in editable states). Versions are kept for audit.
+  removedAt      DateTime?
+  /// UX-010: a copy of the applicant's profile document (ID, photo), kept in step with it.
+  fromProfile    Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  versions       DocumentVersion[]
+
+  @@index([applicationId, type])
+}
+
+model DocumentVersion {
+  id           String         @id @default(uuid()) @db.Uuid
+  documentId   String         @db.Uuid
+  document     Document       @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  version      Int
+  fileName     String
+  mimeType     String
+  size         Int
+  sha256       String
+  /// Object-storage key of the encrypted blob (FR-DOC-008).
+  storageKey   String         @unique
+  scanStatus   DocumentStatus
+  scanDetail   String?
+  uploadedById String         @db.Uuid
+  createdAt    DateTime       @default(now())
+
+  @@unique([documentId, version])
+}
+
+/// UX-010: identity documents kept on the applicant's profile (proof of identity, photo) and
+/// copied into each application (as Document rows with fromProfile), so they're uploaded once.
+/// Same checks and encrypted storage as application documents; only the owner reads them.
+model ProfileDocument {
+  id         String         @id @default(uuid()) @db.Uuid
+  userId     String         @db.Uuid
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       String
+  fileName   String
+  mimeType   String
+  size       Int
+  sha256     String
+  /// Object-storage key of the encrypted blob.
+  storageKey String         @unique
+  status     DocumentStatus
+  scanDetail String?
+  removedAt  DateTime?
+  createdAt  DateTime       @default(now())
+
+  @@index([userId, type])
+}
+
+/// Supervisor / Principal Broker confirmation (FR-F-007, SRS §4.3).
+model ConfirmationRequest {
+  id             String             @id @default(uuid()) @db.Uuid
+  applicationId  String             @db.Uuid
+  application    Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  kind           ConfirmationKind
+  addresseeId    String             @db.Uuid
+  addressee      User               @relation("ConfirmationAddressee", fields: [addresseeId], references: [id])
+  /// The addressee's licence the request relies on.
+  licenceId      String?            @db.Uuid
+  firmId         String?            @db.Uuid
+  status         ConfirmationStatus @default(PENDING)
+  reason         String?
+  dueAt          DateTime
+  respondedAt    DateTime?
+  overriddenById String?            @db.Uuid
+  overrideReason String?
+  reminders      Int                @default(0)
+  createdAt      DateTime           @default(now())
+
+  @@index([addresseeId, status])
+  @@index([applicationId])
+}
+
+/// One payment attempt (FR-PAY-003…011).
+model Payment {
+  id            String         @id @default(uuid()) @db.Uuid
+  applicationId String         @db.Uuid
+  application   Application    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reference     String         @unique
+  amount        Int
+  currency      String         @default("RWF")
+  lines         Json
+  feeVersion    Int
+  method        PaymentMethod?
+  msisdn        String?
+  status        PaymentStatus  @default(PENDING)
+  provider      String
+  providerTxnId String?        @unique
+  receiptNo     String?        @unique
+  payerId       String         @db.Uuid
+  paidAt        DateTime?
+  failureReason String?
+  /// FR-PAY-008 waiver; FR-PAY-011 duplicate flag.
+  waivedById    String?        @db.Uuid
+  waiverReason  String?
+  duplicate     Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  events        PaymentEvent[]
+
+  @@index([applicationId])
+  @@index([status])
+}
+
+/// Gateway webhook log; the event id makes processing idempotent (FR-PAY-005).
+model PaymentEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  eventId    String   @unique
+  paymentId  String?  @db.Uuid
+  payment    Payment? @relation(fields: [paymentId], references: [id])
+  type       String
+  payload    Json
+  receivedAt DateTime @default(now())
+}
+
+/// Section L review record (FR-L-001…010). Signed records are read-only; amendments add a version.
+model Review {
+  id                          String      @id @default(uuid()) @db.Uuid
+  applicationId               String      @db.Uuid
+  application                 Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  version                     Int
+  officerId                   String      @db.Uuid
+  officer                     User        @relation(fields: [officerId], references: [id])
+  checks                      Json        @default("{}")
+  documentation               String?
+  documentationOverrideReason String?
+  eligibility                 String?
+  eligibilityOverrideReason   String?
+  /// Auto-computed outcomes at signing, for BR-090 override reporting.
+  computed                    Json        @default("{}")
+  internalComment             String?
+  applicantComment            String?
+  recommendation              String?
+  reasonCodes                 String[]    @default([])
+  reasons                     String?
+  legalReference              String?
+  signedAt                    DateTime?
+  signature                   Json?
+  createdAt                   DateTime    @default(now())
+  updatedAt                   DateTime    @updatedAt
+
+  @@unique([applicationId, version])
+}
+
+/// FR-L-007 information request rounds.
+model InformationRequest {
+  id            String      @id @default(uuid()) @db.Uuid
+  applicationId String      @db.Uuid
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  officerId     String      @db.Uuid
+  template      String
+  message       String
+  sections      String[]    @default([])
+  documents     String[]    @default([])
+  extraDocument String?
+  dueAt         DateTime
+  /// OPEN | RESPONDED | CANCELLED
+  status        String      @default("OPEN")
+  respondedAt   DateTime?
+  createdAt     DateTime    @default(now())
+
+  @@index([applicationId])
+}
+
+/// Section M decision (FR-M-001…017). Immutable; corrections link a new record.
+model Decision {
+  id               String      @id @default(uuid()) @db.Uuid
+  applicationId    String      @db.Uuid
+  application      Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  approverId       String      @db.Uuid
+  approver         User        @relation(fields: [approverId], references: [id])
+  decision         String
+  approvedCategory Category?
+  conditions       Json        @default("[]")
+  geoScope         String[]    @default([])
+  reasons          String?
+  reasonCodes      String[]    @default([])
+  letterNo         String      @unique
+  signedAt         DateTime
+  signature        Json
+  correctsId       String?     @db.Uuid
+  createdAt        DateTime    @default(now())
+
+  @@index([applicationId])
+}
+
+/// Persistent practitioner / firm registration (FR-N-001).
+model Registrant {
+  id             String         @id @default(uuid()) @db.Uuid
+  kind           RegistrantKind
+  /// RP-000123 / RF-000045
+  registrationNo String         @unique
+  userId         String?        @unique @db.Uuid
+  user           User?          @relation(fields: [userId], references: [id])
+  firmId         String?        @unique @db.Uuid
+  firm           Firm?          @relation(fields: [firmId], references: [id])
+  displayName    String
+  createdAt      DateTime       @default(now())
+  licences       Licence[]
+}
+
+/// Real Estate Brokerage Firm (SRS §9.5).
+model Firm {
+  id                 String        @id @default(uuid()) @db.Uuid
+  legalName          String
+  tradingName        String?
+  companyRegNo       String        @unique
+  ownerId            String?       @db.Uuid
+  owner              User?         @relation("FirmOwner", fields: [ownerId], references: [id])
+  /// PENDING | ACTIVE | SUSPENDED | REVOKED | LAPSED
+  status             String        @default("PENDING")
+  address            Json          @default("{}")
+  district           String?
+  phone              String?
+  email              String?
+  principalLicenceId String?       @db.Uuid
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  registrant         Registrant?
+  branches           Branch[]
+  affiliations       Affiliation[]
+  licences           Licence[]     @relation("LicenceFirm")
+  affiliated         Licence[]     @relation("LicenceAffiliatedFirm")
+}
+
+model Branch {
+  id                String    @id @default(uuid()) @db.Uuid
+  firmId            String    @db.Uuid
+  firm              Firm      @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  name              String
+  address           Json      @default("{}")
+  district          String?
+  phone             String?
+  managingLicenceId String?   @db.Uuid
+  status            String    @default("ACTIVE")
+  createdAt         DateTime  @default(now())
+  licences          Licence[]
+}
+
+/// A licence instance (FR-N-002…005). Status changes add a LicenceEvent (FR-RA-002).
+model Licence {
+  id                  String           @id @default(uuid()) @db.Uuid
+  licenceNo           String           @unique
+  registrantId        String           @db.Uuid
+  registrant          Registrant       @relation(fields: [registrantId], references: [id])
+  holderId            String?          @db.Uuid
+  holder              User?            @relation("LicenceHolder", fields: [holderId], references: [id])
+  /// REBF licences: the firm itself.
+  firmId              String?          @db.Uuid
+  firm                Firm?            @relation("LicenceFirm", fields: [firmId], references: [id])
+  category            Category
+  status              LicenseStatus    @default(ACTIVE)
+  displayName         String
+  issuedAt            DateTime         @db.Date
+  expiresAt           DateTime         @db.Date
+  applicationId       String?          @db.Uuid
+  application         Application?     @relation("LicenceApplication", fields: [applicationId], references: [id])
+  decisionId          String?          @db.Uuid
+  /// Authorised geographic scope (M.8), admin-division codes.
+  scope               String[]         @default([])
+  practiceArrangement String?
+  conditions          Json             @default("[]")
+  supervisorLicenceId String?          @db.Uuid
+  affiliatedFirmId    String?          @db.Uuid
+  affiliatedFirm      Firm?            @relation("LicenceAffiliatedFirm", fields: [affiliatedFirmId], references: [id])
+  branchId            String?          @db.Uuid
+  branch              Branch?          @relation(fields: [branchId], references: [id])
+  /// Unguessable QR token; a reissue rotates it (FR-N-012, SEC-022).
+  qrToken             String           @unique
+  certificateVersion  Int              @default(1)
+  supersededById      String?          @db.Uuid
+  /// e.g. SUPERVISION_REQUIRED (BR-050).
+  flags               String[]         @default([])
+  photoVersionId      String?          @db.Uuid
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  events              LicenceEvent[]
+  affiliations        Affiliation[]
+  relatedApplications Application[]    @relation("ApplicationRelatedLicence")
+  registerActions     RegisterAction[]
+
+  @@index([category, status])
+  @@index([holderId])
+  @@index([supervisorLicenceId])
+  @@index([affiliatedFirmId])
+}
+
+model LicenceEvent {
+  id         BigInt         @id @default(autoincrement())
+  licenceId  String         @db.Uuid
+  licence    Licence        @relation(fields: [licenceId], references: [id], onDelete: Cascade)
+  fromStatus LicenseStatus?
+  toStatus   LicenseStatus
+  action     String
+  reason     String?
+  reference  String?
+  startsOn   DateTime?      @db.Date
+  endsOn     DateTime?      @db.Date
+  actorId    String?        @db.Uuid
+  at         DateTime       @default(now())
+
+  @@index([licenceId])
+}
+
+/// Practitioner ↔ firm under named supervision (FR-F-010).
+model Affiliation {
+  id                  String    @id @default(uuid()) @db.Uuid
+  licenceId           String    @db.Uuid
+  licence             Licence   @relation(fields: [licenceId], references: [id], onDelete: Cascade)
+  firmId              String    @db.Uuid
+  firm                Firm      @relation(fields: [firmId], references: [id])
+  supervisorLicenceId String?   @db.Uuid
+  branchId            String?   @db.Uuid
+  startsOn            DateTime  @db.Date
+  endsOn              DateTime? @db.Date
+  endReason           String?
+  createdAt           DateTime  @default(now())
+
+  @@index([firmId])
+  @@index([licenceId])
+}
+
+/// Public register read model (ADR-006, FR-REG-001…003). Public fields only.
+model RegisterEntry {
+  licenceId      String         @id @db.Uuid
+  registrationNo String
+  licenceNo      String         @unique
+  kind           RegistrantKind
+  displayName    String
+  category       Category
+  status         LicenseStatus
+  issuedAt       DateTime       @db.Date
+  expiresAt      DateTime       @db.Date
+  firmName       String?
+  branchName     String?
+  district       String?
+  province       String?
+  scope          String[]       @default([])
+  conditions     String[]       @default([])
+  principalName  String?
+  qrToken        String         @unique
+  /// Normalised name + numbers + firm, for trigram search (FR-REG-002).
+  searchText     String
+  updatedAt      DateTime       @updatedAt
+
+  @@index([category, status])
+  @@index([district])
+}
+
+/// Register administration with maker-checker for revocation (FR-RA-001).
+model RegisterAction {
+  id        String    @id @default(uuid()) @db.Uuid
+  licenceId String    @db.Uuid
+  licence   Licence   @relation(fields: [licenceId], references: [id])
+  action    String
+  payload   Json      @default("{}")
+  reason    String
+  reference String
+  /// PENDING | APPLIED | REJECTED
+  status    String    @default("PENDING")
+  makerId   String    @db.Uuid
+  checkerId String?   @db.Uuid
+  note      String?
+  decidedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([status])
+}
+
+/// In-app notifications (FR-NOT-002, Appendix C).
+model Notification {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code       String
+  /// i18n key under "inbox" plus values, rendered in the reader's language.
+  messageKey String
+  values     Json      @default("{}")
+  href       String?
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, readAt])
+}
+
+/// De-duplicates scheduled reminders, e.g. "renewal-30:licenceId" (FR-NOT-005).
+model ReminderLog {
+  key    String   @id
+  sentAt DateTime @default(now())
+}
+
+/// Versioned configuration with maker-checker (FR-ADM-002…004).
+model ConfigVersion {
+  id            String       @id @default(uuid()) @db.Uuid
+  key           String
+  version       Int
+  value         Json
+  status        ConfigStatus @default(PENDING)
+  effectiveFrom DateTime
+  reason        String
+  makerId       String       @db.Uuid
+  checkerId     String?      @db.Uuid
+  note          String?
+  decidedAt     DateTime?
+  createdAt     DateTime     @default(now())
+
+  @@unique([key, version])
+  @@index([key, status])
+}
+
+/// Administrative divisions Province → Village (FR-B-009, Plan P5).
+model AdminDivision {
+  code       String  @id
+  /// 1 province, 2 district, 3 sector, 4 cell, 5 village
+  level      Int
+  name       String
+  parentCode String?
+
+  @@index([parentCode])
+}
+
+/// FR-BO-003: an officer's declared conflict of interest (recusal).
+model ConflictDeclaration {
+  id            String      @id @default(uuid()) @db.Uuid
+  applicationId String      @db.Uuid
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  officerId     String      @db.Uuid
+  officer       User        @relation(fields: [officerId], references: [id])
+  reason        String
+  createdAt     DateTime    @default(now())
+
+  @@unique([applicationId, officerId])
 }

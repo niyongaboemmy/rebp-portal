@@ -1,5 +1,5 @@
 import "server-only";
-import type { Capability } from "@rebp/contracts";
+import { requiresMfa, type Capability } from "@rebp/contracts";
 import { getCurrentSession } from "../auth/current";
 import { isFullyVerified } from "../auth/account";
 import { assertRecentAuth } from "../auth/step-up";
@@ -12,14 +12,22 @@ import { userCan } from "./permissions";
  */
 export async function authorizeAction(
   capability: Capability,
-  { stepUp = false, requireMfa = true }: { stepUp?: boolean; requireMfa?: boolean } = {},
+  {
+    stepUp = false,
+    requireMfa = true,
+  }: {
+    stepUp?: boolean;
+    /** "auto": only where the user's roles make MFA mandatory (applicant actions, FR-ACC-004). */
+    requireMfa?: boolean | "auto";
+  } = {},
 ) {
   const current = await getCurrentSession();
   if (!current) throw new AppError("unauthenticated");
   const { user, session } = current;
   if (!isFullyVerified(user)) throw new AppError("forbidden");
   // Privileged actions need a session that passed two-step verification (SEC-005).
-  if (requireMfa && (user.mfaMethods.length === 0 || !session.mfaVerified))
+  const mfa = requireMfa === "auto" ? requiresMfa(user.roles) : requireMfa;
+  if (mfa && (user.mfaMethods.length === 0 || !session.mfaVerified))
     throw new AppError("mfaRequiredForAction");
   if (!(await userCan(user, capability))) throw new AppError("forbidden");
   if (stepUp) assertRecentAuth(session);

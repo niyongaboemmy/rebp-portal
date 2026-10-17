@@ -1,0 +1,106 @@
+/*
+ * Authenticated shell (ADR-011, UX-001). Imported by globals.css.
+ *
+ * The shell root carries the viewer's preferences as attributes, set on the server from the
+ * `rebp_shell` cookie so the first paint is right without JavaScript:
+ *   data-sidebar="auto | expanded | collapsed"   data-density="…"   data-width="…"
+ */
+
+:root {
+  --sidebar-w: 16rem;
+  --sidebar-w-icon: 4.5rem;
+  --content-max-default: 72rem;
+  --content-max-wide: 96rem;
+}
+
+/*
+ * Collapsed sidebar (icon rail). Base styles are the expanded look; `sb-collapsed:` overrides
+ * them when the rail applies:
+ *   - medium tier (48–64rem): always;
+ *   - ≥ 64rem: when the viewer pinned it collapsed;
+ *   - 64–80rem: in auto mode.
+ * The phone/tablet sheet is portalled outside the shell root, so it always gets the base look.
+ */
+@custom-variant sb-collapsed {
+  @media (width >= 48rem) and (width < 64rem) {
+    &:where([data-sidebar] *) {
+      @slot;
+    }
+  }
+  @media (width >= 64rem) {
+    &:where([data-sidebar="collapsed"] *) {
+      @slot;
+    }
+  }
+  @media (width >= 64rem) and (width < 80rem) {
+    &:where([data-sidebar="auto"] *) {
+      @slot;
+    }
+  }
+}
+
+/* Content width (A4): pages opt into the wide measure with <PageWidth wide />; the viewer can
+   choose full width for every page. */
+[data-sidebar] #main {
+  --content-max: var(--content-max-default);
+}
+[data-sidebar] #main:has([data-page-width="wide"]) {
+  --content-max: var(--content-max-wide);
+}
+[data-sidebar][data-width="full"] #main {
+  --content-max: none;
+}
+
+/* Compact density (S6): tighter spacing for mouse users; touch keeps 44 px targets. */
+@media (pointer: fine) {
+  [data-density="compact"] {
+    --nav-item-h: 2.125rem;
+  }
+  [data-density="compact"] #main {
+    gap: 1.25rem;
+  }
+  [data-density="compact"] #main :where(table) :where(th, td) {
+    padding-block: 0.4rem;
+  }
+}
+
+/* Windows high contrast (forced colours): backgrounds are dropped, so mark the current page
+   with a system-coloured outline instead of the tinted pill. */
+@media (forced-colors: active) {
+  #app-sidebar [aria-current="page"],
+  [data-bottom-nav] [aria-current="page"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+/* Short screens (landscape phones, 200–400 % zoom): the chrome gives height back to content.
+   Scoped to the shell, so the public header keeps its own scroll padding. */
+@media (max-height: 40rem) {
+  html:has([data-sidebar]) {
+    --header-h: 3.25rem;
+  }
+}
+@media (width < 48rem) and (max-height: 40rem) {
+  html:has([data-bottom-nav]) {
+    --bottom-nav-h: calc(3rem + max(0.5rem, env(safe-area-inset-bottom)));
+  }
+}
+
+/* Icon line weight (ADR-009 v7). Lucide glyphs are drawn at 2; the token sets the rendered weight
+   for every icon (CSS beats the glyph's own stroke-width attribute). Menus are lighter: 1.25 on
+   the 24 grid is about 1.05 px at 20 px, the light, smooth line chosen for navigation. An icon's
+   `strokeWidth` prop sets the token on that icon alone. */
+:root {
+  --icon-stroke: 1.5;
+}
+svg[data-icon] :where([stroke-width]) {
+  stroke-width: var(--icon-stroke);
+}
+#app-sidebar,
+#app-sidebar-sheet,
+[data-bottom-nav],
+[data-more-sheet],
+[role="menu"] {
+  --icon-stroke: 1.25;
+}

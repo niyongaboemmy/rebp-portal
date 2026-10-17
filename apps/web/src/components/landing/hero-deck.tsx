@@ -3,10 +3,15 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { CardChip, Contactless } from "@/components/licence/card-chip";
 import { parallaxStyle } from "@/components/motion/parallax";
+import { EligibilityPerson } from "@/components/eligibility/eligibility-person";
 import { cn } from "@/lib/utils";
 
 /** One round: deal in, rest, deal out. Each card starts DEAL_MS after the one beneath it. */
 const ROUND_MS = 9000;
+/** Before each deal: a person wonders (ASK_MS), does the check on a laptop (WORK_MS), cheers. */
+const ASK_MS = 2400;
+const WORK_MS = 2600;
+const CHEER_MS = 1500;
 const DEAL_MS = 380;
 
 /**
@@ -188,23 +193,54 @@ export function HeroDeck({
   licence,
   verified,
   issued,
+  question,
+  checking,
+  yes,
 }: {
   licence: React.ReactNode;
   verified: React.ReactNode;
   issued: React.ReactNode;
+  /** "Am I eligible?" shown under the wondering person. */
+  question: string;
+  /** "Checking my eligibility…" while at the laptop. */
+  checking: string;
+  /** "Yes, you can apply!" when they cheer. */
+  yes: string;
 }) {
   const [round, setRound] = useState(0);
+  const [phase, setPhase] = useState<"ask" | "work" | "cheer" | "deal">("ask");
   const reduced = useSyncExternalStore(
     subscribeReduced,
     () => window.matchMedia(REDUCED).matches,
     () => false,
   );
 
+  // ask (wondering) → work (the check on a laptop) → cheer (it's a yes) → deal → next round.
   useEffect(() => {
     if (reduced) return;
-    const timer = setInterval(() => setRound((r) => r + 1), ROUND_MS);
-    return () => clearInterval(timer);
-  }, [reduced]);
+    const id = setTimeout(
+      () => {
+        if (phase === "ask") setPhase("work");
+        else if (phase === "work") setPhase("cheer");
+        else if (phase === "cheer") setPhase("deal");
+        else {
+          setPhase("ask");
+          setRound((r) => r + 1);
+        }
+      },
+      phase === "ask"
+        ? ASK_MS
+        : phase === "work"
+          ? WORK_MS
+          : phase === "cheer"
+            ? CHEER_MS
+            : ROUND_MS,
+    );
+    return () => clearTimeout(id);
+  }, [phase, reduced]);
+  const dealing = reduced || phase === "deal";
+  // One person per round, in turn: a woman, a man, a woman with an afro and glasses.
+  const gender = (["female", "male", "afro"] as const)[round % 3]!;
 
   const front = STACK.length * DEAL_MS;
   const note = (delay: number): React.CSSProperties => ({
@@ -214,9 +250,36 @@ export function HeroDeck({
 
   return (
     <>
+      {/* The question before the cards: one of three people (in turn) wondering. */}
+      {!dealing && (
+        <div
+          key={`ask-${round}`}
+          aria-hidden
+          data-loop
+          className={cn(
+            "absolute inset-0 z-10 flex flex-col items-center justify-center gap-2",
+            phase === "cheer"
+              ? "animate-[ask-out_1500ms_var(--ease-standard)_both]"
+              : "animate-pop",
+          )}
+        >
+          <EligibilityPerson
+            key={`${phase}-${gender}`}
+            mood={phase === "cheer" ? "happy" : phase === "work" ? "working" : "thinking"}
+            gender={gender}
+            className="w-[112%] max-w-[32rem] animate-pop sm:-mt-10 sm:w-[118%]"
+          />
+          <span className="rounded-full bg-white/60 px-3.5 py-1.5 text-sm font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/0.7),0_8px_24px_-12px_oklch(0.3_0.12_264/0.35)] backdrop-blur-xl dark:bg-[oklch(0.2_0.03_265/0.62)]">
+            {phase === "cheer" ? yes : phase === "work" ? checking : question}
+          </span>
+        </div>
+      )}
       <div
         data-loop
-        className="relative z-0 [transform-style:preserve-3d]"
+        className={cn(
+          "relative z-0 transition-opacity duration-300 [transform-style:preserve-3d]",
+          !dealing && "invisible opacity-0",
+        )}
         style={{
           transform: "rotateY(calc(var(--px) * 9deg)) rotateX(calc(var(--py) * -7deg))",
           transition: "transform 500ms cubic-bezier(0.2, 0, 0, 1)",
@@ -225,14 +288,14 @@ export function HeroDeck({
         <div className="relative animate-card-drift">
           {/* Landing glow: blooms under the deck as the licence settles. */}
           <span
-            key={`glow-${round}`}
+            key={`glow-${round}-${dealing}`}
             aria-hidden
             className="absolute inset-[8%] -z-10 animate-deal-glow rounded-[2rem] bg-primary/40 blur-3xl motion-reduce:hidden"
             style={note(400)}
           />
           {STACK.map((card, index) => (
             <div
-              key={`${round}-${card.depth}`}
+              key={`${round}-${card.depth}-${dealing}`}
               aria-hidden
               className="absolute inset-0 transition-transform duration-(--dur-3)"
               style={{ transform: restFor(round, card.depth) }}
@@ -283,7 +346,7 @@ export function HeroDeck({
           ))}
           <div className="relative" style={{ transform: restFor(round, 0) }}>
             <div
-              key={`${round}-licence`}
+              key={`${round}-licence-${dealing}`}
               className={cn("relative animate-card-deal rounded-[1.75rem]", CARD_SHADOW)}
               style={deal(round, STACK.length)}
             >
@@ -293,17 +356,34 @@ export function HeroDeck({
         </div>
       </div>
 
-      <div aria-hidden className="absolute top-0 left-0 z-20 sm:-left-6" style={parallaxStyle(-14)}>
-        <div key={`verified-${round}`} data-loop className="animate-notify-loop" style={note(800)}>
+      <div
+        aria-hidden
+        className={cn("absolute top-0 left-0 z-20 sm:-left-6", !dealing && "invisible")}
+        style={parallaxStyle(-14)}
+      >
+        <div
+          key={`verified-${round}-${dealing}`}
+          data-loop
+          className="animate-notify-loop"
+          style={note(800)}
+        >
           {verified}
         </div>
       </div>
       <div
         aria-hidden
-        className="absolute right-0 -bottom-4 z-20 sm:-right-6 sm:bottom-1"
+        className={cn(
+          "absolute right-0 -bottom-4 z-20 sm:-right-6 sm:bottom-1",
+          !dealing && "invisible",
+        )}
         style={parallaxStyle(-20)}
       >
-        <div key={`issued-${round}`} data-loop className="animate-notify-loop" style={note(1200)}>
+        <div
+          key={`issued-${round}-${dealing}`}
+          data-loop
+          className="animate-notify-loop"
+          style={note(1200)}
+        >
           {issued}
         </div>
       </div>

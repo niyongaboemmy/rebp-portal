@@ -12,9 +12,12 @@ export function PageHero({
   description,
   icon,
   align = "left",
+  compact = false,
   children,
   className,
 }: {
+  /** Tighter spacing and a smaller title, for tool pages (search, lists). */
+  compact?: boolean;
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
@@ -34,7 +37,8 @@ export function PageHero({
       />
       <div
         className={cn(
-          "container-page flex flex-col gap-4 pt-10 pb-10 sm:pt-14 sm:pb-12",
+          "container-page flex flex-col",
+          compact ? "gap-3 pt-7 pb-6 sm:pt-9 sm:pb-7" : "gap-4 pt-10 pb-10 sm:pt-14 sm:pb-12",
           center && "items-center text-center",
         )}
       >
@@ -54,16 +58,26 @@ export function PageHero({
         )}
         <div className={cn("flex flex-col gap-2", center && "items-center")}>
           <h1
-            className="animate-rise text-[clamp(1.9rem,1.3rem+2vw,3rem)] leading-[1.08] font-bold tracking-[-0.03em] text-balance"
+            className={cn(
+              "animate-rise leading-[1.08] font-bold tracking-[-0.03em] text-balance",
+              compact
+                ? "text-[clamp(1.6rem,1.2rem+1.4vw,2.3rem)]"
+                : "text-[clamp(1.9rem,1.3rem+2vw,3rem)]",
+            )}
             style={{ animationDelay: "60ms" }}
           >
             {title}
           </h1>
-          <SketchUnderline className="h-2.5 w-32 sm:h-3 sm:w-40" />
+          <SketchUnderline
+            className={compact ? "h-2 w-24 sm:h-2.5 sm:w-28" : "h-2.5 w-32 sm:h-3 sm:w-40"}
+          />
         </div>
         {description && (
           <p
-            className="max-w-2xl animate-rise text-base text-muted-foreground sm:text-lg"
+            className={cn(
+              "max-w-2xl animate-rise text-muted-foreground",
+              compact ? "text-sm sm:text-base" : "text-base sm:text-lg",
+            )}
             style={{ animationDelay: "120ms" }}
           >
             {description}

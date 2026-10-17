@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { PageHero } from "@/components/layout/page-hero";
+import { CATEGORIES, type Category } from "@rebp/contracts";
 import { EligibilityQuiz } from "@/components/eligibility/eligibility-quiz";
 import { publicPageMetadata } from "@/server/seo";
 
@@ -14,14 +14,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** FR-PORTAL-006: public, no-login eligibility pre-check. */
-export default async function EligibilityPage() {
-  const t = await getTranslations("eligibility");
+export default async function EligibilityPage({ searchParams }: PageProps<"/eligibility">) {
+  // "Check for this category" from the map: ?for=BROKER (unknown values are ignored).
+  const value = (await searchParams).for;
+  const target = (CATEGORIES as readonly string[]).includes(String(value))
+    ? (value as Category)
+    : undefined;
   return (
     <div className="flex flex-col">
-      <PageHero eyebrow={t("eyebrow")} title={t("title")} description={t("metaDescription")} />
-      <div className="container-page flex flex-col pb-20 sm:pb-28 [&>*]:max-w-3xl">
-        <EligibilityQuiz />
-      </div>
+      <EligibilityQuiz key={target ?? "any"} target={target} />
     </div>
   );
 }

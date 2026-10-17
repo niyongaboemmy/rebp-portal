@@ -4,23 +4,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { Capability } from "@rebp/contracts";
-import { isActivePath, mobileTabs, navForArea } from "@/config/navigation";
+import { isActivePath, mobileTabs, navForArea, type NavBadges } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 import { MoreSheet } from "./more-sheet";
 
 /**
- * Phone navigation (< md): three primary destinations plus "More", in the thumb zone
+ * Phone navigation (< md): a floating, one-handed bar (as in 2026 mobile shells) with three
+ * primary destinations plus "More", in the thumb zone
  * (UX-001). Material 3 active indicator: a pill that grows behind the active icon. Pinned
  * during view transitions so only page content moves.
  */
 export function BottomNav({
   area,
   capabilities,
-  user,
+  badges = {},
 }: {
   area: "portal" | "backoffice";
   capabilities: Capability[];
-  user: { fullName: string; email: string };
+  badges?: NavBadges;
 }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
@@ -32,20 +33,26 @@ export function BottomNav({
       aria-label={t("tabBar")}
       data-bottom-nav
       style={{ viewTransitionName: "app-bottom-nav" }}
-      className="fixed inset-x-0 bottom-0 z-40 bg-card/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 md:hidden"
+      className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 md:hidden print:hidden short:bottom-[max(0.5rem,env(safe-area-inset-bottom))]"
     >
       <ul
-        className="mx-auto grid h-[4.5rem] max-w-md px-2"
+        className="mx-auto grid h-16 max-w-md rounded-[1.75rem] border border-border bg-card px-1.5 shadow-3 short:h-12"
         style={{ gridTemplateColumns: `repeat(${tabs.length + 1}, minmax(0, 1fr))` }}
       >
         {tabs.map((item) => {
           const active = isActivePath(pathname, item);
           const Icon = item.icon;
+          const count = item.badge ? (badges[item.badge] ?? 0) : 0;
           return (
             <li key={item.href}>
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
+                aria-label={
+                  count > 0 && item.badge
+                    ? `${t(item.label)}, ${t(`badge.${item.badge}`, { count })}`
+                    : undefined
+                }
                 className="group flex h-full flex-col items-center justify-center gap-1 text-[0.7rem] font-semibold text-muted-foreground outline-none aria-[current=page]:text-foreground"
               >
                 <span
@@ -63,18 +70,27 @@ export function BottomNav({
                   <Icon
                     className={cn(
                       "relative size-[1.3rem] transition-transform duration-(--dur-2) group-active:scale-90",
-                      active && "text-primary-soft-foreground",
+                      active ? "text-primary-soft-foreground" : "text-foreground/80",
                     )}
                     aria-hidden
                   />
+                  {count > 0 && (
+                    <span
+                      aria-hidden
+                      className="absolute top-0.5 right-3 size-2 rounded-full bg-ember ring-2 ring-card forced-colors:bg-[CanvasText]"
+                    />
+                  )}
                 </span>
-                <span className="max-w-full truncate px-1">{t(item.label)}</span>
+                {/* Icons only on foldables (< 336 px) and short screens, where labels would truncate or crowd. */}
+                <span className="max-w-full truncate px-1 max-[21rem]:sr-only short:sr-only">
+                  {t(item.label)}
+                </span>
               </Link>
             </li>
           );
         })}
         <li>
-          <MoreSheet area={area} capabilities={capabilities} user={user} />
+          <MoreSheet area={area} capabilities={capabilities} badges={badges} />
         </li>
       </ul>
     </nav>

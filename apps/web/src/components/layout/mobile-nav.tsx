@@ -3,11 +3,9 @@
 import { Menu } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import type { Capability } from "@rebp/contracts";
 import { PUBLIC_NAV } from "@/config/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -15,14 +13,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { AppNav } from "./app-nav";
 import { NavLink } from "./nav-link";
 
-type MobileNavProps =
-  { area: "public" } | { area: "portal" | "backoffice"; capabilities: Capability[] };
-
-/** Drawer navigation for viewports below `lg`. Closes on navigation. */
-export function MobileNav(props: MobileNavProps) {
+/**
+ * Public drawer navigation below `md`. Closes on navigation. (Signed-in areas use the sidebar
+ * sheet and the bottom tab bar instead.)
+ */
+export function MobileNav() {
   const [open, setOpen] = useState(false);
   const t = useTranslations();
   const close = () => setOpen(false);
@@ -33,7 +30,7 @@ export function MobileNav(props: MobileNavProps) {
         <Button
           variant="ghost"
           size="icon"
-          className={cn("rounded-full", props.area === "public" ? "md:hidden" : "lg:hidden")}
+          className="rounded-full md:hidden"
           aria-label={t("common.openMenu")}
         >
           <Menu className="size-5" />
@@ -45,16 +42,11 @@ export function MobileNav(props: MobileNavProps) {
         <div className="pt-1 pb-2">
           <Logo />
         </div>
-        {props.area === "public" ? (
-          <nav aria-label={t("nav.mainNavigation")} className="flex flex-col gap-1">
-            {PUBLIC_NAV.map((item) => (
-              <NavLink key={item.href} item={item} onNavigate={close} />
-            ))}
-          </nav>
-        ) : null}
-        {props.area !== "public" && (
-          <AppNav area={props.area} capabilities={props.capabilities} onNavigate={close} />
-        )}
+        <nav aria-label={t("nav.mainNavigation")} className="flex flex-col gap-1">
+          {PUBLIC_NAV.map((item) => (
+            <NavLink key={item.href} item={item} onNavigate={close} />
+          ))}
+        </nav>
       </SheetContent>
     </Sheet>
   );

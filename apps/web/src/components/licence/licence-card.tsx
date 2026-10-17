@@ -18,6 +18,8 @@ export interface LicenceCardProps {
   scanBeam?: boolean;
   /** Iridescent security seal beside the QR (marketing illustrations only). */
   hologram?: boolean;
+  /** Inside a `TiltCard`: it supplies the tilt, glare and foil, so the card's own hover is off. */
+  still?: boolean;
   className?: string;
 }
 
@@ -38,6 +40,7 @@ export async function LicenceCard({
   sampleLabel,
   scanBeam = false,
   hologram = false,
+  still = false,
   className,
 }: LicenceCardProps) {
   const qr = await QRCode.toString(verifyUrl, {
@@ -48,9 +51,13 @@ export async function LicenceCard({
   });
 
   return (
-    <div className={cn("[perspective:1000px]", className)}>
+    <div className={cn(!still && "[perspective:1000px]", className)}>
       <article
-        className="group relative isolate flex aspect-[1.586] w-full flex-col justify-between overflow-hidden rounded-[1.75rem] bg-brand p-5 transition-transform duration-(--dur-4) ease-standard sm:p-6 [@media(hover:hover)]:hover:[transform:rotateX(5deg)_rotateY(-7deg)]"
+        className={cn(
+          "group relative isolate flex aspect-[1.586] w-full flex-col justify-between overflow-hidden rounded-[1.75rem] bg-brand p-5 sm:p-6",
+          !still &&
+            "transition-transform duration-(--dur-4) ease-standard [@media(hover:hover)]:hover:[transform:rotateX(5deg)_rotateY(-7deg)]",
+        )}
         aria-label={`${categoryName} — ${holder}`}
       >
         <div aria-hidden className="absolute inset-0 -z-10 bg-imigongo text-white opacity-[0.07]" />
@@ -58,10 +65,12 @@ export async function LicenceCard({
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(110%_70%_at_100%_0%,oklch(0.78_0.13_235/0.45),transparent_60%),radial-gradient(90%_60%_at_0%_100%,oklch(0.2_0.12_268/0.5),transparent_70%)]"
         />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 translate-x-[-120%] bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-[900ms] ease-standard group-hover:translate-x-[120%]"
-        />
+        {!still && (
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10 translate-x-[-120%] bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-[900ms] ease-standard group-hover:translate-x-[120%]"
+          />
+        )}
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className="font-mono text-xs font-semibold opacity-80">{section}</span>
@@ -71,7 +80,7 @@ export async function LicenceCard({
           </div>
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold text-brand">
             <span
-              className="size-1.5 animate-pulse rounded-full bg-[oklch(0.55_0.15_150)]"
+              className="size-1.5 animate-pulse rounded-full bg-[oklch(0.62_0.17_240)]"
               aria-hidden
             />
             {statusLabel}

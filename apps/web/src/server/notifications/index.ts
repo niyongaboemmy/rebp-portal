@@ -19,7 +19,8 @@ export type TemplateId =
   | "passwordChanged"
   | "mfaChanged"
   | "contactChanged"
-  | "accessChanged";
+  | "accessChanged"
+  | "signatureCode";
 
 interface Recipient {
   locale?: string | null;
@@ -40,6 +41,94 @@ async function render(
     subject: t(`${template}.subject`, values),
     body: t(`${template}.body`, values),
   };
+}
+
+/** Renders a domain event message (Appendix C) from the "inbox" catalogue in the reader's language. */
+export function renderEvent(
+  messageKey: string,
+  locale: string | null | undefined,
+  values: Record<string, string | number>,
+) {
+  const resolved = resolveLocale(locale);
+  // Event keys are data (stored with each notification), so the translator is used untyped here.
+  const t = createTranslator({ locale: resolved, messages: loadMessages(resolved) }) as unknown as (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  return {
+    subject: t(`inbox.${messageKey}.title`, values),
+    body: t(`inbox.${messageKey}.body`, values),
+  };
+}
+
+/**
+ * Sends a domain event (e.g. N-011 submitted) by email or SMS. The text is the in-app message
+ * plus a link, so all channels say the same thing (FR-NOT-002).
+ */
+export async function sendEvent(
+  channel: "EMAIL" | "SMS",
+  to: string,
+  messageKey: string,
+  values: Record<string, string | number>,
+  { locale, href }: { locale?: string | null; href?: string | null } = {},
+) {
+  const { subject, body } = renderEvent(messageKey, locale, values);
+  const link = href ? `${env().APP_URL}${href}` : null;
+  const text = link ? `${body}\n\n${link}` : body;
+  const config = env();
+  if (channel === "EMAIL" && config.SMTP_HOST) {
+    try {
+      await createSmtpTransport().sendMail({ from: config.SMTP_FROM, to, subject, text });
+      await logEvent({
+        channel,
+        recipient: to,
+        template: messageKey,
+        subject,
+        body: text,
+        provider: "smtp",
+        status: "SENT",
+      });
+    } catch (error) {
+      await logEvent({
+        channel,
+        recipient: to,
+        template: messageKey,
+        subject,
+        body: text,
+        provider: "smtp",
+        status: "FAILED",
+      });
+      console.error("[notifications] event email failed", {
+        messageKey,
+        error: (error as Error).message,
+      });
+    }
+    return;
+  }
+  await logEvent({
+    channel,
+    recipient: to,
+    template: messageKey,
+    subject: channel === "EMAIL" ? subject : undefined,
+    body: channel === "EMAIL" ? text : `${subject}: ${body}`,
+    provider: channel === "EMAIL" ? "log" : config.SMS_PROVIDER,
+    status: "LOGGED",
+  });
+}
+
+async function logEvent(entry: {
+  channel: "EMAIL" | "SMS";
+  recipient: string;
+  template: string;
+  subject?: string;
+  body: string;
+  provider: string;
+  status: string;
+}) {
+  // Event messages carry no secrets; bodies are still kept only in dev mode (no PII at rest).
+  await db.notificationLog.create({
+    data: { ...entry, body: isDevMode() ? entry.body : null, devCode: null },
+  });
 }
 
 interface LogEntry {

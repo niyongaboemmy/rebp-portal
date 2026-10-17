@@ -28,6 +28,14 @@ const schema = z.object({
   APP_ENV: z.enum(["dev", "staging", "production"]).optional(),
   /** Multiplies every rate-limit budget; raise only for automated test environments. */
   RATE_LIMIT_SCALE: z.coerce.number().positive().default(1),
+  /** Encrypted document blobs (FR-DOC-008). Local disk for the pilot; S3/MinIO adapter in R2. */
+  STORAGE_DIR: z.string().default("./var/storage"),
+  /** "mock" = the sandbox gateway with a simulated checkout (ADR-005, INT-023). */
+  PAYMENT_PROVIDER: z.enum(["mock"]).default("mock"),
+  /** HMAC secret the gateway signs webhooks with (FR-PAY-005). Derived from AUTH_SECRET when unset. */
+  PAYMENT_WEBHOOK_SECRET: optional,
+  /** Bearer token for scheduled jobs (/api/jobs/*). Jobs are disabled over HTTP when unset. */
+  CRON_SECRET: optional,
   AUTH_BREACHED_PASSWORD_CHECK: z
     .enum(["true", "false"])
     .default("true")

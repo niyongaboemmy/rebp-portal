@@ -13,13 +13,14 @@ export async function settle(page: Page) {
   }
   await page.mouse.move(0, 0);
   await page.waitForFunction(() =>
-    document
-      .getAnimations()
-      .every(
-        (a) =>
-          a.playState !== "running" ||
-          a.effect?.getComputedTiming().iterations === Infinity ||
-          !!((a.effect as KeyframeEffect | null)?.target as Element | null)?.closest("[data-loop]"),
-      ),
+    document.getAnimations().every(
+      (a) =>
+        a.playState !== "running" ||
+        a.effect?.getComputedTiming().iterations === Infinity ||
+        // Scroll-driven animations (e.g. the top bar's edge) follow scrolling, not time:
+        // they never "finish", so waiting for them would never resolve.
+        !(a.timeline instanceof DocumentTimeline) ||
+        !!((a.effect as KeyframeEffect | null)?.target as Element | null)?.closest("[data-loop]"),
+    ),
   );
 }

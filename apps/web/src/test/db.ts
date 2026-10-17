@@ -1,12 +1,14 @@
 import { invalidatePermissionCache } from "@/server/access/permissions";
+import { invalidateConfigCache } from "@/server/config/config";
 import { db } from "@/server/db";
 
 /** Clears mutable tables between integration tests. AuditEvent is append-only and is left alone. */
 export async function resetDatabase() {
   await db.$executeRawUnsafe(
-    'TRUNCATE "Session", "OAuthAccount", "RecoveryCode", "VerificationCode", "LoginChallenge", "NotificationLog", "RolePermission", "User" CASCADE',
+    'TRUNCATE "Session", "OAuthAccount", "RecoveryCode", "VerificationCode", "LoginChallenge", "NotificationLog", "RolePermission", "Application", "Licence", "LicenceEvent", "Registrant", "Firm", "Branch", "RegisterEntry", "RegisterAction", "ConfigVersion", "Notification", "ReminderLog", "PaymentEvent", "User" CASCADE',
   );
   invalidatePermissionCache();
+  invalidateConfigCache();
 }
 
 /** Reads the latest one-time code delivered to a recipient through the mock adapters. */

@@ -1,5 +1,6 @@
 node_modules/
 .next/
+.next-*/
 dist/
 coverage/
 .turbo/
@@ -15,3 +16,7 @@ test-results/
 blob-report/
 apps/web/src/generated/
 .refact/
+apps/web/var/
+
+# Generated: MapLibre worker copied at dev/build time
+apps/web/public/vendor/

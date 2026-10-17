@@ -1,7 +1,7 @@
 "use client";
 
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
-import { ArrowRight, Check } from "@/components/icons";
+import { ArrowRight, Check, ChevronRight } from "@/components/icons";
 import type { Route } from "next";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -84,6 +84,51 @@ export function DropdownMenuRadioItem({
         <Check className="size-3! text-primary-foreground!" strokeWidth={3} />
       </DropdownMenuPrimitive.ItemIndicator>
     </DropdownMenuPrimitive.RadioItem>
+  );
+}
+
+export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
+
+/** A row that opens a submenu (→ or ← keys, hover, Enter); shows the current value on the right. */
+export function DropdownMenuSubTrigger({
+  className,
+  icon,
+  value,
+  children,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
+  icon?: React.ReactNode;
+  value?: React.ReactNode;
+}) {
+  return (
+    <DropdownMenuPrimitive.SubTrigger
+      className={cn(itemClass, "data-[state=open]:bg-foreground/[0.05]", className)}
+      {...props}
+    >
+      {icon}
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+      {value && <span className="truncate text-xs text-muted-foreground">{value}</span>}
+      <ChevronRight className="size-3.5!" aria-hidden />
+    </DropdownMenuPrimitive.SubTrigger>
+  );
+}
+
+export function DropdownMenuSubContent({
+  className,
+  sideOffset = 6,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
+  return (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        sideOffset={sideOffset}
+        className={cn(
+          "z-50 min-w-48 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 text-popover-foreground shadow-3 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+          className,
+        )}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
   );
 }
 

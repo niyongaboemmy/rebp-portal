@@ -30,14 +30,17 @@ export function StatTile({
   const body = (
     <>
       <div className="flex items-start justify-between gap-3">
-        <span className="text-sm font-medium text-muted-foreground">{label}</span>
+        {/* min-w-0 + break-word: a one-word label ("Unassigned") never pushes the icon off a 280 px screen. */}
+        <span className="min-w-0 text-sm font-medium [overflow-wrap:break-word] hyphens-auto text-muted-foreground">
+          {label}
+        </span>
         {Icon && (
           <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground">
             <Icon className="size-[1.1rem]" aria-hidden />
           </span>
         )}
       </div>
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex flex-col gap-1">
           <CountUp
             value={value}

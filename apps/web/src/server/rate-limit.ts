@@ -56,4 +56,10 @@ export const RATE_LIMITS = {
   otpSend: { limit: 5, windowMs: 15 * 60_000 },
   otpVerify: { limit: 10, windowMs: 15 * 60_000 },
   passwordReset: { limit: 5, windowMs: 60 * 60_000 },
+  upload: { limit: 60, windowMs: 10 * 60_000 },
+  lookup: { limit: 120, windowMs: 10 * 60_000 },
+  /** FR-REG-005: anti-scraping budget for anonymous register searches. */
+  registerSearch: { limit: 120, windowMs: 10 * 60_000 },
+  signature: { limit: 10, windowMs: 15 * 60_000 },
+  payment: { limit: 20, windowMs: 15 * 60_000 },
 } as const;

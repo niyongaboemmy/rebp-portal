@@ -2,7 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 
 const testEnv = config({ path: ".env.test", processEnv: {} }).parsed ?? {};
-const PORT = 3100;
+// E2E_PORT lets a run target another server when 3100 is taken (default 3100).
+const PORT = Number(process.env.E2E_PORT ?? 3100);
 
 export default defineConfig({
   testDir: "./e2e",

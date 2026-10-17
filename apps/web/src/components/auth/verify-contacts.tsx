@@ -1,23 +1,20 @@
 "use client";
 
-import { CheckCircle2, Mail, Smartphone } from "@/components/icons";
+import { Check, CheckCircle2, Mail, Smartphone } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { otpSchema, updatePhoneSchema } from "@rebp/contracts";
 import { z } from "zod";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldControl } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { OtpInput } from "@/components/ui/otp-input";
-import { ProgressRing } from "@/components/data/progress-ring";
 import { useActionForm } from "@/hooks/use-action-form";
 import { useCountdown } from "@/hooks/use-countdown";
 import { useErrorMessage } from "@/hooks/use-error-message";
-import { maskPhoneForDisplay } from "@/lib/utils";
+import { cn, maskPhoneForDisplay } from "@/lib/utils";
 import { sendVerificationCodeAction, verifyContactAction } from "@/server/actions/auth";
 import { updatePhoneAction } from "@/server/actions/security";
 import { DevCode } from "./dev-code";
@@ -34,9 +31,20 @@ interface ContactInfo {
 interface VerifyContactsProps {
   email: ContactInfo;
   phone: ContactInfo | null;
+  /** Where to go once both are verified: the dashboard, or the profile first (UX-010). */
+  home?: string;
 }
 
-export function VerifyContacts({ email, phone: initialPhone }: VerifyContactsProps) {
+/**
+ * FR-ACC-001: confirm email, then phone. One contact at a time: two tabs show both and tick as
+ * they are confirmed; the active one asks for its 6-digit code. Finishing the first moves on to
+ * the second; finishing both goes to the dashboard.
+ */
+export function VerifyContacts({
+  email,
+  phone: initialPhone,
+  home = "/dashboard",
+}: VerifyContactsProps) {
   const t = useTranslations("auth.verify");
   const router = useRouter();
   const [verified, setVerified] = useState({
@@ -44,57 +52,90 @@ export function VerifyContacts({ email, phone: initialPhone }: VerifyContactsPro
     PHONE: initialPhone?.verified ?? false,
   });
   const [phone, setPhone] = useState(initialPhone);
+  const [active, setActive] = useState<Channel>(email.verified ? "PHONE" : "EMAIL");
 
   const onVerified = (channel: Channel, complete: boolean) => {
     setVerified((v) => ({ ...v, [channel]: true }));
     if (complete) {
       toast.success(t("allDone"));
-      router.replace("/dashboard");
+      router.replace(home as never);
       router.refresh();
-    }
+    } else if (channel === "EMAIL") setActive("PHONE");
   };
 
-  const done = Number(verified.EMAIL) + Number(verified.PHONE);
+  const tabs: { channel: Channel; icon: typeof Mail; label: string }[] = [
+    { channel: "EMAIL", icon: Mail, label: t("emailTitle") },
+    { channel: "PHONE", icon: Smartphone, label: t("phoneTitle") },
+  ];
+
   return (
-    <div className="flex flex-col gap-4">
-      {/* W-03: overall progress across both contacts. */}
-      <div className="flex items-center gap-3 rounded-2xl bg-surface-2 p-3" aria-live="polite">
-        <ProgressRing
-          value={done}
-          total={2}
-          tone={done === 2 ? "good" : undefined}
-          className="size-11"
-          label={t("progress", { done, total: 2 })}
-        >
-          <span className="text-xs font-bold num">{done}/2</span>
-        </ProgressRing>
-        <span className="text-sm font-medium">{t("progress", { done, total: 2 })}</span>
+    <div className="flex flex-col gap-5">
+      {/* Both contacts, ticked as they are confirmed. */}
+      <div role="tablist" aria-label={t("title")} className="grid grid-cols-2 gap-2">
+        {tabs.map(({ channel, icon: Icon, label }, i) => {
+          const done = verified[channel];
+          const on = active === channel;
+          return (
+            <button
+              key={channel}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={() => setActive(channel)}
+              className={cn(
+                "flex items-center gap-3 rounded-2xl p-3 text-left transition-[background-color,box-shadow] duration-(--dur-2)",
+                on
+                  ? "bg-primary-soft shadow-[inset_0_0_0_1.5px_var(--primary)] dark:bg-primary/15"
+                  : "bg-foreground/[0.04] hover:bg-foreground/[0.07] dark:bg-white/[0.04]",
+              )}
+            >
+              <span
+                className={cn(
+                  "inline-flex size-9 shrink-0 items-center justify-center rounded-xl",
+                  done
+                    ? "bg-success text-white"
+                    : on
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card text-muted-foreground dark:bg-white/[0.06]",
+                )}
+              >
+                {done ? <Check className="size-4 animate-pop" /> : <Icon className="size-4" />}
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="text-[0.7rem] font-semibold text-muted-foreground">
+                  {t("step", { n: i + 1 })}
+                </span>
+                <span className="truncate text-sm font-semibold">{label}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <ContactCard
-        channel="EMAIL"
-        icon={Mail}
-        title={t("emailTitle")}
-        destination={email.display}
-        verified={verified.EMAIL}
-        initialDevCode={email.devCode}
-        onVerified={onVerified}
-      />
-      {phone ? (
-        <ContactCard
-          key={phone.display}
-          channel="PHONE"
-          icon={Smartphone}
-          title={t("phoneTitle")}
-          destination={phone.display}
-          verified={verified.PHONE}
-          initialDevCode={phone.devCode}
-          onVerified={onVerified}
-        />
-      ) : (
-        <AddPhoneCard
-          onAdded={(display, devCode) => setPhone({ display, verified: false, devCode })}
-        />
-      )}
+
+      <div key={active} className="animate-rise [animation-duration:var(--dur-3)]">
+        {active === "EMAIL" ? (
+          <ContactCard
+            channel="EMAIL"
+            destination={email.display}
+            verified={verified.EMAIL}
+            initialDevCode={email.devCode}
+            onVerified={onVerified}
+          />
+        ) : phone ? (
+          <ContactCard
+            key={phone.display}
+            channel="PHONE"
+            destination={phone.display}
+            verified={verified.PHONE}
+            initialDevCode={phone.devCode}
+            onVerified={onVerified}
+          />
+        ) : (
+          <AddPhoneCard
+            onAdded={(display, devCode) => setPhone({ display, verified: false, devCode })}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -103,16 +144,12 @@ const codeSchema = z.object({ code: otpSchema });
 
 function ContactCard({
   channel,
-  icon: Icon,
-  title,
   destination,
   verified,
   initialDevCode,
   onVerified,
 }: {
   channel: Channel;
-  icon: typeof Mail;
-  title: string;
   destination: string;
   verified: boolean;
   initialDevCode: string | null;
@@ -145,51 +182,44 @@ function ContactCard({
       }
     });
 
+  if (verified)
+    return (
+      <p
+        className="flex items-center gap-3 rounded-2xl bg-success-soft p-4 text-sm font-medium"
+        data-testid={`verify-${channel.toLowerCase()}`}
+      >
+        <CheckCircle2 className="size-5 shrink-0 text-success" aria-hidden />
+        {t("confirmed", { destination })}
+      </p>
+    );
+
   return (
-    <Card className="gap-4" data-testid={`verify-${channel.toLowerCase()}`}>
-      <CardHeader className="flex-row items-center gap-3">
-        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground">
-          <Icon className="size-5" aria-hidden />
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col">
-          <CardTitle className="text-base">{title}</CardTitle>
-          <p className="truncate text-sm text-muted-foreground">
-            {verified ? destination : t("sentTo", { destination })}
-          </p>
-        </div>
-        {verified && (
-          <Badge variant="success" className="animate-in zoom-in-50">
-            <CheckCircle2 /> {t("done")}
-          </Badge>
-        )}
-      </CardHeader>
-      {!verified && (
-        <form onSubmit={submit} noValidate className="flex flex-col gap-3">
-          <DevCode
-            code={devCode}
-            onUse={(value) => form.setValue("code", value, { shouldValidate: true })}
-          />
-          <Field label={t("codeLabel")} error={form.formState.errors.code?.message}>
-            <FieldControl>
-              <OtpInput webOtp={channel === "PHONE"} {...form.register("code")} />
-            </FieldControl>
-          </Field>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button type="submit" loading={pending}>
-              {t("submit")}
-            </Button>
-            <Button
-              type="button"
-              variant="link"
-              disabled={cooldown.active || sending}
-              onClick={resend}
-            >
-              {cooldown.active ? t("resendIn", { seconds: cooldown.seconds }) : t("resend")}
-            </Button>
-          </div>
-        </form>
-      )}
-    </Card>
+    <form
+      onSubmit={submit}
+      noValidate
+      data-wide
+      data-testid={`verify-${channel.toLowerCase()}`}
+      className="flex flex-col gap-4"
+    >
+      <p className="text-sm text-muted-foreground">{t("sentTo", { destination })}</p>
+      <DevCode
+        code={devCode}
+        onUse={(value) => form.setValue("code", value, { shouldValidate: true })}
+      />
+      <Field label={t("codeLabel")} error={form.formState.errors.code?.message}>
+        <FieldControl>
+          <OtpInput webOtp={channel === "PHONE"} {...form.register("code")} />
+        </FieldControl>
+      </Field>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="submit" size="lg" loading={pending} className="flex-1 sm:flex-none sm:px-10">
+          {t("submit")}
+        </Button>
+        <Button type="button" variant="link" disabled={cooldown.active || sending} onClick={resend}>
+          {cooldown.active ? t("resendIn", { seconds: cooldown.seconds }) : t("resend")}
+        </Button>
+      </div>
+    </form>
   );
 }
 
@@ -203,24 +233,20 @@ function AddPhoneCard({ onAdded }: { onAdded: (display: string, devCode: string 
     onSuccess: ({ phone, devCode }): void => onAdded(maskPhoneForDisplay(phone ?? ""), devCode),
   });
   return (
-    <Card className="gap-4">
-      <CardHeader>
-        <CardTitle className="text-base">{t("addPhone")}</CardTitle>
-      </CardHeader>
-      <form onSubmit={submit} noValidate className="flex flex-col gap-3">
-        <Field
-          label={tSignUp("phone")}
-          error={form.formState.errors.phone?.message}
-          description={tSignUp("phoneHint")}
-        >
-          <FieldControl>
-            <Input type="tel" autoComplete="tel" inputMode="tel" {...form.register("phone")} />
-          </FieldControl>
-        </Field>
-        <Button type="submit" loading={pending}>
-          {t("addPhoneSubmit")}
-        </Button>
-      </form>
-    </Card>
+    <form onSubmit={submit} noValidate data-wide className="flex flex-col gap-4">
+      <p className="text-sm text-muted-foreground">{t("addPhone")}</p>
+      <Field
+        label={tSignUp("phone")}
+        error={form.formState.errors.phone?.message}
+        description={tSignUp("phoneHint")}
+      >
+        <FieldControl>
+          <Input type="tel" autoComplete="tel" inputMode="tel" {...form.register("phone")} />
+        </FieldControl>
+      </Field>
+      <Button type="submit" size="lg" loading={pending} className="sm:self-start sm:px-10">
+        {t("addPhoneSubmit")}
+      </Button>
+    </form>
   );
 }

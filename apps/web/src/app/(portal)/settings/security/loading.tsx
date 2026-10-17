@@ -1,10 +1,11 @@
-import { Skeleton, SkeletonPageHeader } from "@/components/ui/skeleton";
+import { SettingsHeroSkeleton } from "@/components/layout/settings-hero";
+import { Skeleton } from "@/components/ui/skeleton";
 
-/** Security settings: header, protection summary, then the setting cards. */
+/** Security settings: the shared hero and tabs, protection summary, then the setting cards. */
 export default function SecurityLoading() {
   return (
     <div className="flex flex-col gap-6" aria-busy data-route-loading>
-      <SkeletonPageHeader />
+      <SettingsHeroSkeleton />
       <div className="grid gap-3 sm:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-20 rounded-2xl" />

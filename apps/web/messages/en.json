@@ -38,7 +38,8 @@
     "unapprovedTranslation": "This translation is a draft awaiting approval by the Professional Body.",
     "dismiss": "Dismiss",
     "notice": "Notice",
-    "capsLock": "Caps Lock is on"
+    "capsLock": "Caps Lock is on",
+    "moreInfo": "More information"
   },
   "nav": {
     "home": "Home",
@@ -83,7 +84,55 @@
       "verify": "Verify",
       "categories": "Categories",
       "eligibility": "Eligibility"
-    }
+    },
+    "sectionWork": "Work",
+    "sectionRegistry": "Registry",
+    "sectionInsights": "Insights",
+    "sectionAdmin": "Administration",
+    "accountFor": "Account, {name}",
+    "badge": {
+      "queue": "{count} waiting",
+      "decisions": "{count} awaiting decision",
+      "register": "{count} pending",
+      "finance": "{count} awaiting payment",
+      "configuration": "{count} to approve",
+      "confirmations": "{count} to confirm",
+      "applications": "{count} need you"
+    },
+    "profile": "Profile",
+    "cv": "CV"
+  },
+  "shell": {
+    "navigation": "Navigation",
+    "navigationHint": "Every page you can open",
+    "openNavigation": "Open navigation",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "help": "Help",
+    "shortcuts": "Keyboard shortcuts",
+    "shortcutSearch": "Search or jump to a page",
+    "shortcutSidebar": "Collapse or expand the sidebar",
+    "areaSwitch": "Switch area",
+    "area": {
+      "portal": "Applicant portal",
+      "backoffice": "Back office"
+    },
+    "areaHint": {
+      "portal": "Your applications and licences",
+      "backoffice": "Review, decide and administer"
+    },
+    "switchTo": "Go to {area}",
+    "layout": "Layout",
+    "density": "Density",
+    "densityComfortable": "Comfortable",
+    "densityCompact": "Compact",
+    "width": "Page width",
+    "widthDefault": "Standard",
+    "widthFull": "Full width",
+    "resetLayout": "Reset layout",
+    "moreWaiting": "{count} waiting",
+    "resizeSidebar": "Resize sidebar",
+    "resizeHint": "Drag to resize, double-click to reset, click to collapse"
   },
   "theme": {
     "toggle": "Change theme",
@@ -160,7 +209,20 @@
     "map": {
       "eligible": "Am I eligible?",
       "requirements": "Requirements",
-      "close": "Close"
+      "close": "Close",
+      "checkFor": "Check for {category}",
+      "applyAs": "Apply as {category}",
+      "updateAnswers": "Update my answers",
+      "findLicensed": "Find licensed",
+      "met": "Met",
+      "notMet": "Missing",
+      "standing": {
+        "held": "This is your current licence.",
+        "eligible": "You qualify for this category.",
+        "notYet": "{years, plural, one {# more year} other {# more years}} of practice and you qualify.",
+        "missing": "Still needed: {items}.",
+        "unknown": "see the requirements"
+      }
     },
     "trustItems": {
       "secure": {
@@ -175,7 +237,20 @@
         "title": "Your phone, your language",
         "body": "English, Kinyarwanda and French"
       }
-    }
+    },
+    "demo": {
+      "live": "Live demo",
+      "title": "Am I eligible?",
+      "cta": "Try it yourself",
+      "lead": "Not sure which one is yours? Watch the one-minute check, then try it yourself.",
+      "congrats": "Congratulations!",
+      "footnote": "Example applicants · real rules"
+    },
+    "categoriesTitleTop": "Eight categories,",
+    "categoriesTitleBottom": "one guided journey",
+    "pathsGuide": "Follow your path through the eight categories",
+    "deckYes": "Yes, you can apply!",
+    "deckChecking": "Checking my eligibility…"
   },
   "categories": {
     "title": "Professional categories",
@@ -224,15 +299,18 @@
     "faq": {
       "which": {
         "q": "Which category should I apply for?",
-        "a": "It depends on your age, education, experience and any licence you already hold. The eligibility check recommends a category in about a minute."
+        "a": "It depends on your age, education, experience and any licence you already hold. The eligibility check recommends a category in about a minute.",
+        "action": "Check my eligibility"
       },
       "upgrade": {
         "q": "How do I move up to a higher category?",
-        "a": "Most upgrades need three years of documented practice in the category below, plus the training and exam for the new one. Your experience carries forward."
+        "a": "Most upgrades need three years of documented practice in the category below, plus the training and exam for the new one. Your experience carries forward.",
+        "action": "See the career map"
       },
       "firm": {
         "q": "Can a company be licensed?",
-        "a": "Yes. A Real Estate Brokerage Firm registers as a legal entity and must name a licensed Principal Broker."
+        "a": "Yes. A Real Estate Brokerage Firm registers as a legal entity and must name a licensed Principal Broker.",
+        "action": "Find licensed firms"
       }
     },
     "short": {
@@ -245,7 +323,23 @@
       "PRINCIPAL_BROKER": "Principal",
       "REBF": "Firm"
     },
-    "eyebrow": "Eight categories"
+    "eyebrow": "Eight categories",
+    "hero": {
+      "findMine": "Find my category",
+      "explore": "Explore the career map"
+    },
+    "stats": {
+      "categories": "Categories",
+      "tiers": "Career tiers",
+      "years": "Years between steps"
+    },
+    "faqEyebrow": "FAQ",
+    "faqBody": "Quick answers about choosing a category, moving up and licensing a firm.",
+    "faqHelp": {
+      "title": "Not sure where you fit?",
+      "body": "Answer a few questions and we'll recommend a category in about a minute.",
+      "cta": "Take the eligibility check"
+    }
   },
   "placeholders": {
     "registerTitle": "Public register",
@@ -338,21 +432,23 @@
       "backToSignIn": "Back to sign in"
     },
     "verify": {
-      "title": "Verify your contact details",
-      "subtitle": "We need to confirm your email and phone before you can apply (this keeps your account safe).",
+      "title": "Verify your contacts",
+      "subtitle": "Confirm your email and phone to start applying.",
       "emailTitle": "Email address",
       "phoneTitle": "Mobile number",
-      "sentTo": "Code sent to {destination}",
-      "codeLabel": "6-digit code",
+      "sentTo": "Enter the code sent to {destination}",
+      "codeLabel": "Code",
       "submit": "Verify",
       "resend": "Resend code",
       "resendIn": "Resend in {seconds}s",
       "done": "Verified",
       "allDone": "All set! Taking you to your dashboard…",
-      "addPhone": "Add your mobile number",
+      "addPhone": "Add your mobile number to get a code.",
       "addPhoneSubmit": "Send code",
       "resent": "A new code is on its way.",
-      "progress": "{done} of {total} verified"
+      "progress": "{done} of {total} verified",
+      "step": "Step {n}",
+      "confirmed": "{destination} is confirmed."
     },
     "forgot": {
       "title": "Reset your password",
@@ -421,11 +517,113 @@
     "setup": {
       "email": "Email verified",
       "phone": "Phone verified",
-      "twoStep": "Two-step verification"
+      "twoStep": "Two-step verification",
+      "profile": "Complete your profile",
+      "cv": "Build your CV"
     },
     "noLicence": "No licence yet",
     "activity": "Recent activity",
-    "noActivity": "Nothing yet."
+    "noActivity": "Nothing yet.",
+    "inProgressShort": "{count, plural, one {# application in progress} other {# applications in progress}}",
+    "allApplications": "All applications",
+    "actions": {
+      "respond": "Answer the information request on {reference}",
+      "dueOn": "Due {date}",
+      "pay": "Pay the fee for {reference}",
+      "inbox": "{count, plural, one {# confirmation request is} other {# confirmation requests are}} waiting for you",
+      "renew": "Renew licence {number}",
+      "renewLate": "Expired — late renewal still possible",
+      "expiresIn": "Expires in {count, plural, one {# day} other {# days}}",
+      "waitingFor": "Waiting for {name} to confirm",
+      "continueDraft": "Continue your {category} application"
+    },
+    "smart": {
+      "renewTitle": "Your licence expires in {count, plural, one {# day} other {# days}}",
+      "renewLateTitle": "Your licence has expired — renew now",
+      "renewBody": "{category} · {number}. Renew now to keep practising without a break.",
+      "renewCta": "Renew now"
+    },
+    "hero": {
+      "next": "Next for you",
+      "headline": {
+        "you": "{count, plural, one {One thing needs you.} other {# things need you.}}",
+        "waiting": "Nothing needs you — the regulator has it from here.",
+        "clear": "You're all caught up.",
+        "new": "Let's get you licensed."
+      },
+      "focus": {
+        "respond": {
+          "title": "The officer asked for something on {reference}",
+          "cta": "Respond"
+        },
+        "renew": {
+          "title": "Licence {number} expires in {count, plural, one {# day} other {# days}}",
+          "cta": "Renew now"
+        },
+        "renewLate": {
+          "title": "Licence {number} has expired — late renewal is still open",
+          "cta": "Renew now"
+        },
+        "pay": {
+          "title": "Pay the fee for {reference} to submit it",
+          "cta": "Pay"
+        },
+        "inbox": {
+          "title": "{count, plural, one {Someone is} other {# people are}} waiting for your confirmation",
+          "cta": "Confirm"
+        },
+        "draft": {
+          "title": "Your {category} application is saved — finish it",
+          "cta": "Continue"
+        },
+        "waiting": {
+          "title": "{reference} is moving — we'll tell you the moment it changes",
+          "cta": "Track it"
+        },
+        "licence": {
+          "title": "Licence {number} is active",
+          "cta": "Open wallet"
+        },
+        "start": {
+          "title": "Check your category, then apply in minutes",
+          "cta": "Start an application"
+        }
+      },
+      "bubble": {
+        "worried": "Needs your help",
+        "badge": "Time to renew",
+        "pay": "Almost there!",
+        "documents": "They're waiting on you",
+        "write": "Let's finish it!",
+        "waiting": "We're on it…",
+        "celebrate": "You're licensed!",
+        "wave": "Welcome!"
+      }
+    },
+    "stats": {
+      "label": "At a glance",
+      "yours": "Your turn",
+      "yoursHint": "Tap to start with the first",
+      "yoursClear": "Nothing waiting on you",
+      "progress": "In progress",
+      "progressHint": "{count, plural, =0 {Moving on schedule} one {Waiting on # person} other {Waiting on # people}}",
+      "licences": "Active licences",
+      "nextExpiry": "Next expiry in {count, plural, one {# day} other {# days}}",
+      "account": "Account"
+    },
+    "todo": {
+      "count": "{count, plural, one {# item} other {# items}}",
+      "yours": "Your turn",
+      "others": "Waiting on others",
+      "clear": "All caught up",
+      "clearBody": "We'll let you know when something needs you."
+    },
+    "updates": {
+      "title": "Notifications",
+      "empty": "No notifications yet."
+    },
+    "openWallet": "Open wallet",
+    "openLicence": "Open licence {number} in the wallet"
   },
   "security": {
     "title": "Security",
@@ -548,6 +746,23 @@
         "twoStep": "Two-step verification",
         "recovery": "Recovery codes ready"
       }
+    },
+    "data": {
+      "title": "Your data",
+      "description": "Download a machine-readable copy of the personal data we hold about you: your account, applications, licences and activity.",
+      "download": "Download my data (JSON)"
+    },
+    "hero": {
+      "strong": "All {total} protections are on.",
+      "todo": "{left, plural, one {# protection} other {# protections}} left to turn on.",
+      "action": "Show me",
+      "bubble": {
+        "strong": "You're well protected",
+        "email": "Verify your email",
+        "phone": "Verify your phone",
+        "twoStep": "Turn on two-step",
+        "recovery": "Get new recovery codes"
+      }
     }
   },
   "audit": {
@@ -648,7 +863,26 @@
     "nameTooLong": "Use 120 characters or fewer.",
     "privacyRequired": "Please confirm you have read the privacy notice.",
     "rolesRequired": "Choose at least one role.",
-    "fixFields": "{count, plural, one {Please check the highlighted field} other {Please check the # highlighted fields}}"
+    "fixFields": "{count, plural, one {Please check the highlighted field} other {Please check the # highlighted fields}}",
+    "tooLong": "That's too long.",
+    "nameChars": "Use letters, spaces, hyphens or apostrophes.",
+    "nationalId": "A National ID number has 16 digits.",
+    "passport": "A passport number has 6 to 20 letters and digits.",
+    "documentExpired": "This document has expired.",
+    "dateInFuture": "The date can't be in the future.",
+    "yearRange": "Enter a year between 1950 and this year.",
+    "dateOrder": "The end date must be after the start date.",
+    "atLeastOne": "Add at least one.",
+    "reliedUpon": "Mark at least one qualification you rely on for this category.",
+    "examRequired": "This category requires a licensing examination.",
+    "affiliationTooLate": "The start date can be at most 30 days from today.",
+    "mustAccept": "Please confirm to continue.",
+    "acceptAll": "Confirm each responsibility.",
+    "disclosureRequired": "Describe each \"Yes\" answer.",
+    "reasonTooShort": "Give a reason of at least 10 characters.",
+    "identityNotNa": "Identity must be verified or failed.",
+    "overrideReason": "You changed the computed outcome: give a reason (at least 10 characters).",
+    "unlockSomething": "Unlock at least one section or document, or name an extra document."
   },
   "errors": {
     "unexpected": "Something went wrong. Please try again.",
@@ -690,7 +924,45 @@
     "userNotFound": "That account no longer exists.",
     "staffRoleOnOrganisation": "Staff roles can't be given to firm accounts.",
     "lastAdmin": "At least one active system administrator must remain.",
-    "matrixInvalid": "These changes break an access rule. Review the highlighted cells."
+    "matrixInvalid": "These changes break an access rule. Review the highlighted cells.",
+    "notFound": "We couldn't find that. It may have been removed, or you may not have access.",
+    "categoryUnavailable": "This category isn't available for this application type.",
+    "licenceNotFound": "We couldn't find the licence this application relates to.",
+    "applicationExists": "You already have an open application for this category. Continue that one instead.",
+    "sectionNotApplicable": "This section doesn't apply to your application.",
+    "sectionLocked": "This part can't be changed right now.",
+    "payloadTooLarge": "That's more text than we can save in one section. Shorten it and try again.",
+    "categoryLocked": "The category can't be changed for this application.",
+    "invalidTransition": "This action isn't possible at the application's current stage.",
+    "staleState": "Something changed while you were working. Refresh the page and try again.",
+    "documentTypeInvalid": "This document type isn't on your checklist.",
+    "fileEmpty": "The file is empty. Save it again, then choose it once more.",
+    "fileTooLarge": "The file is larger than {maxMb} MB. Scan it in black and white, or export a smaller PDF.",
+    "fileTypeInvalid": "Upload a PDF, JPEG or PNG file.",
+    "fileExtensionMismatch": "The file's name doesn't match its content. Save it again as PDF, JPEG or PNG.",
+    "photoTooSmall": "The photo must be at least 600 × 600 pixels.",
+    "tooManyFiles": "You can upload up to {max} files here. Replace or remove one first.",
+    "documentNotReviewable": "This file failed the security check and can't be verified.",
+    "reasonRequired": "Give a short reason.",
+    "notReadyToSubmit": "Some steps still need attention before you can sign.",
+    "capacityRequired": "Enter the capacity in which you sign for the firm.",
+    "configPending": "A change to this setting is already waiting for approval.",
+    "makerChecker": "You proposed this change, so someone else must approve it.",
+    "reminderAlreadySent": "A reminder was already sent today.",
+    "notAReviewer": "That person can't review applications.",
+    "conflictOfInterest": "A conflict of interest prevents this assignment.",
+    "invalidSignature": "The request signature is invalid.",
+    "notAssigned": "This application is assigned to another officer.",
+    "reviewIncomplete": "Complete the highlighted parts of the review before signing.",
+    "segregationOfDuties": "You reviewed this application, so another approver must decide it.",
+    "categoryChangeNotAllowed": "The approved category must match the category applied for.",
+    "principalNotApproved": "The firm's Principal Broker must hold an active Principal Broker licence first.",
+    "noApproval": "A licence can only be issued after a signed approval.",
+    "registerActionPending": "Another change to this licence is waiting for approval.",
+    "badOrigin": "The request came from an unexpected site.",
+    "mfaRequired": "Two-step verification is required for this action.",
+    "profileIncomplete": "Complete your profile first: your personal details are reused in every application.",
+    "cvIncomplete": "Complete your CV first: the parts this category needs are missing."
   },
   "notifications": {
     "emailVerify": {
@@ -728,6 +1000,10 @@
     "accessChanged": {
       "subject": "Your REBP Portal access changed",
       "body": "Hello {name},\n\nAn administrator changed the roles on your REBP Portal account. Sign in to see what you can do now (Settings → My access). If you didn't expect this, contact the Professional Body."
+    },
+    "signatureCode": {
+      "subject": "Code {code} to sign application {reference}",
+      "body": "REBP Portal: {code} is your code to sign and submit application {reference}. It expires in 10 minutes. Never share it."
     }
   },
   "footer": {
@@ -986,7 +1262,12 @@
     "cannotTitle": "Not part of your roles",
     "count": "{count} of {total} permissions",
     "mfa": "Your roles require two-step verification.",
-    "requestNote": "Need more access? Ask a system administrator — every change is recorded in the audit trail."
+    "requestNote": "Need more access? Ask a system administrator — every change is recorded in the audit trail.",
+    "hero": {
+      "status": "{roles} · {count} of {total} permissions",
+      "bubble": "{count, plural, one {# thing} other {# things}} you can do",
+      "action": "Show what you can do"
+    }
   },
   "ladder": {
     "title": "The career ladder",
@@ -1109,7 +1390,9 @@
       "firm": "A company (brokerage firm)",
       "yes": "Yes",
       "no": "Not yet",
-      "noLicence": "No licence yet"
+      "noLicence": "No licence yet",
+      "individualDetail": "Agents, brokers and referral partners",
+      "firmDetail": "A registered brokerage company"
     },
     "educationLevels": {
       "NONE": "Below A2",
@@ -1128,7 +1411,82 @@
       "start": "Create my account",
       "share": "Share",
       "restart": "Start again",
-      "ladder": "Where you stand"
+      "ladder": "Where you stand",
+      "ready": "{ready} of {total} ready",
+      "nextSteps": "Next steps",
+      "copied": "Link copied",
+      "edit": "Change answers"
+    },
+    "short": {
+      "who": "Applicant",
+      "age": "Age",
+      "education": "Education",
+      "licence": "Current licence",
+      "years": "Experience"
+    },
+    "hints": {
+      "who": "Firms register as a company; everyone else applies as a person.",
+      "age": "You must be an adult to hold a licence.",
+      "education": "Pick the highest certificate or degree you hold.",
+      "licence": "Pick the licence you hold today, if any.",
+      "years": "Count documented years of practice in this category."
+    },
+    "summary": {
+      "title": "Your answers",
+      "empty": "Your answers appear here as you go. Tap one to change it.",
+      "edit": "Change {question}",
+      "private": "Nothing is saved or sent. This check runs in your browser."
+    },
+    "quick": "Quick picks",
+    "guide": {
+      "title": "Your next move",
+      "account": {
+        "title": "Create your account",
+        "body": "Sign up with your email or phone. It takes two minutes."
+      },
+      "documents": {
+        "title": "Gather your documents",
+        "body": "Use the checklist below and tick them off as you find them."
+      },
+      "apply": {
+        "title": "Apply as {category}",
+        "body": "Fill in the form, sign it and pay online. Track every step live."
+      },
+      "missing": {
+        "adult": {
+          "title": "Turn 18",
+          "body": "Licences are for adults. You can apply from your 18th birthday."
+        },
+        "education": {
+          "title": "Earn an A2 certificate",
+          "body": "The first category needs at least an A2 certificate."
+        },
+        "general": {
+          "title": "Talk to us",
+          "body": "Your answers don't match a category yet. Check the categories or contact the regulator."
+        }
+      },
+      "upgrade": "With {years, plural, one {# more year} other {# more years}} of practice you can move up to {category}.",
+      "need": {
+        "adult": "aged 18 or over",
+        "education": "a higher qualification",
+        "experience": "more years of practice",
+        "brokerLicence": "a Broker licence",
+        "firm": "a registered company"
+      }
+    },
+    "celebrate": {
+      "winTitle": "Congratulations!",
+      "winBody": "Good news: you can apply for a licence as",
+      "notYetTitle": "Not yet, but you're on your way",
+      "notYetBody": "Here is what stands between you and your first licence.",
+      "continue": "See where I stand"
+    },
+    "goal": {
+      "checkingFor": "Checking for",
+      "any": "Check all",
+      "yourGoal": "Your goal",
+      "seePath": "See the path"
     }
   },
   "palette": {
@@ -1141,12 +1499,15 @@
     "groups": {
       "search": "Search",
       "go": "Go to",
-      "prefs": "Preferences"
+      "prefs": "Preferences",
+      "recent": "Recent"
     }
   },
   "licence": {
     "expires": "Expires",
-    "sample": "Sample"
+    "sample": "Sample",
+    "referralOnly": "Referral only (Article 10)",
+    "nationwide": "Nationwide"
   },
   "verify": {
     "label": "Search the public register",
@@ -1155,7 +1516,8 @@
     "scan": "Scan a licence QR code",
     "scanTitle": "Scan the QR code",
     "scanBody": "Point your camera at the code on the licence certificate.",
-    "scanError": "We couldn't open the camera. Type the licence number instead."
+    "scanError": "We couldn't open the camera. Type the licence number instead.",
+    "clear": "Clear search"
   },
   "register": {
     "title": "Public register",
@@ -1175,7 +1537,48 @@
     "resultTitle": "Licence {number}",
     "notFound": "No licence found",
     "notFoundBody": "Check the number and try again. A practitioner without a valid licence must not offer brokerage services.",
-    "checkedAt": "Checked {time}"
+    "checkedAt": "Checked {time}",
+    "hint": "Licence numbers (e.g. FSL-2025-00121) open the result at once; names show matches as you type.",
+    "try": "Try one:",
+    "steps": {
+      "title": "Three steps to peace of mind",
+      "find": {
+        "title": "Type or scan",
+        "body": "Enter the licence number or scan the QR code on the certificate. A name works too."
+      },
+      "read": {
+        "title": "Read the verdict",
+        "body": "Green means licensed. You also see the category, area, conditions and the certificate seal."
+      },
+      "locate": {
+        "title": "Find them on the map",
+        "body": "See licensed practitioners and firms by district, and open anyone's details in one tap."
+      }
+    },
+    "legend": {
+      "title": "What the result means",
+      "body": "Only a valid licence allows someone to offer brokerage services."
+    },
+    "map": {
+      "eyebrow": "Directory map",
+      "title": "Licensed near you",
+      "body": "Practitioners and firms by district. Tap a district to see who is licensed there.",
+      "cta": "Open the map",
+      "tip": "{total} licensed · {valid} valid",
+      "districtAria": "{district}: {count, plural, one {# licence} other {# licences}}, open on the map",
+      "stats": {
+        "licensed": "Licensed",
+        "valid": "Valid now",
+        "districts": "Districts"
+      },
+      "credit": "Boundaries: geoBoundaries (CC BY 4.0). Positions are district centres."
+    },
+    "examples": {
+      "number": "FSL-2025-00121",
+      "name": "a name, e.g. Aline",
+      "firm": "a firm, e.g. Keza Realty"
+    },
+    "tryTyping": "Try"
   },
   "backoffice": {
     "kpis": "Key figures",
@@ -1190,7 +1593,26 @@
     "last14": "Last 14 days",
     "activityTitle": "Activity",
     "byRole": "People by role",
-    "consoles": "Consoles"
+    "consoles": "Consoles",
+    "applicationKpis": "Applications",
+    "submittedWeek": "Submitted this week",
+    "submittedWeekHint": "Last 7 days",
+    "underReview": "Under review",
+    "underReviewHint": "Including further assessment",
+    "awaitingDecision": "Awaiting decision",
+    "awaitingDecisionHint": "Reviews signed",
+    "slaBreaches": "SLA breaches",
+    "slaBreachesHint": "Past their due date",
+    "slaOnTrack": "All on track",
+    "consoleHints": {
+      "queue": "{count, plural, =0 {Nothing assigned to you} one {# open item} other {# open items}}",
+      "decisions": "{count, plural, =0 {Nothing to decide} other {# awaiting decision}}",
+      "register": "{count, plural, =0 {No pending approvals} one {# pending approval} other {# pending approvals}}",
+      "finance": "{count, plural, =0 {Nothing awaiting payment} other {# awaiting payment}}",
+      "configuration": "{count, plural, =0 {No pending changes} one {# pending change} other {# pending changes}}",
+      "reports": "View reports",
+      "open": "Open"
+    }
   },
   "offline": {
     "title": "You're offline",
@@ -1238,5 +1660,3309 @@
     "minutes": "{count} min ago",
     "hours": "{count} h ago",
     "days": "{count, plural, one {# day} other {# days}} ago"
+  },
+  "rules": {
+    "BR-001": {
+      "pass": "Age {age}: meets the minimum age of {min}.",
+      "fail": "You must be at least {min} to apply (you are {age}).",
+      "failFix": "Check your date of birth. If it's right, you can apply once you turn {min}."
+    },
+    "BR-010": {
+      "pass": "Education meets the A2 minimum.",
+      "fail": "This category needs at least an A2 certificate or a recognised equivalent.",
+      "assess": "An officer will assess whether your qualification is equivalent to A2.",
+      "failFix": "Check your highest level, or add an A2 certificate or recognised equivalent."
+    },
+    "BR-011": {
+      "pass": "Your qualification meets the REA requirement.",
+      "fail": "REA needs a relevant A1, a business-related A0, a bachelor's degree or a qualification recognised under Article 12.",
+      "assess": "An officer will assess your recognised qualification (Article 12).",
+      "failFix": "Check your highest level, or add a qualification that meets the REA requirement."
+    },
+    "BR-012": {
+      "warn": "{count, plural, one {A qualification was obtained abroad: upload recognition or equivalence evidence.} other {# qualifications were obtained abroad: upload recognition or equivalence evidence.}}",
+      "warnFix": "Upload the recognition or equivalence letter with your education documents."
+    },
+    "BR-013": {
+      "fail": "Your field of study doesn't count as relevant or business-related for REA.",
+      "assess": "An officer will check whether your field of study is relevant for REA.",
+      "failFix": "Check the field of study of the qualification you rely on."
+    },
+    "BR-014": {
+      "pass": "Your field of study meets the Broker requirement.",
+      "fail": "Brokers need a qualification in Estate Management and Valuation, Valuation and Property Management, Real Estate, or a recognised equivalent.",
+      "assess": "An officer will assess whether your qualification is a recognised equivalent.",
+      "failFix": "Rely on a qualification in one of these fields, or check the field you chose."
+    },
+    "BR-015": {
+      "pass": "Required training completed.",
+      "missing": "This category requires the {programme, select, ENTRY {entry-level} PROFESSIONAL {professional} ADVANCED_BROKER {advanced Broker} other {management}} training certificate.",
+      "mismatch": "Your training doesn't match: this category needs the {programme, select, ENTRY {entry-level} PROFESSIONAL {professional} ADVANCED_BROKER {advanced Broker} other {management}} programme.",
+      "missingFix": "Complete the training first, then come back and add its certificate.",
+      "mismatchFix": "Choose the programme named on your certificate."
+    },
+    "BR-016": {
+      "pass": "Licensing exam passed; valid until {until}.",
+      "missing": "This category requires a passed licensing examination.",
+      "expired": "Your exam result is older than {years} years and is no longer valid.",
+      "missingFix": "Pass the licensing exam, then record the result here.",
+      "expiredFix": "Retake the exam and enter the date of the new result."
+    },
+    "BR-020": {
+      "pass": "{years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} of qualifying FSLA experience: meets the {required}-year requirement.",
+      "fail": "You have {years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} of qualifying FSLA experience; REA requires {required} years.",
+      "notYet": "You have {years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} of qualifying FSLA experience; REA requires {required} years.",
+      "equivalence": "Your experience is short of {required} years; the recognised equivalence will be assessed by an officer.",
+      "failFix": "Add any qualifying experience we've missed, with its start and end dates.",
+      "notYetFix": "Add any experience we've missed, or come back on the date below."
+    },
+    "BR-021": {
+      "pass": "{years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} as a licensed REA: meets the {required}-year requirement.",
+      "fail": "You have {years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} as a licensed REA; Broker requires {required} years.",
+      "notYet": "You have {years, plural, one {# year} other {# years}} {months, plural, one {# month} other {# months}} as a licensed REA; Broker requires {required} years.",
+      "failFix": "Add any REA licence periods we've missed, with their dates.",
+      "notYetFix": "Add any periods we've missed, or come back on the date below."
+    },
+    "BR-022": {
+      "excluded": "{count, plural, one {A suspension period was} other {# suspension periods were}} not counted towards your experience.",
+      "excludedFix": "Nothing to do, unless a period is wrong: then correct its dates."
+    },
+    "BR-030": {
+      "pass": "Supervisor {licence} holds an active licence that may supervise this category.",
+      "notFound": "We couldn't find licence {licence} on the register.",
+      "self": "You can't name yourself as supervisor.",
+      "inactive": "Licence {licence} isn't active, so it can't supervise.",
+      "category": "{licence} is a {held} licence, which can't supervise this category.",
+      "notFoundFix": "Copy the number from your supervisor's licence. It looks like BRK-2022-00104.",
+      "selfFix": "Name the licensed practitioner who will supervise you.",
+      "inactiveFix": "Name another supervisor, or ask yours to renew their licence.",
+      "categoryFix": "Name a supervisor who holds one of these licences: {allowed}."
+    },
+    "BR-031": {
+      "pass": "Your Broker licence {licence} is active.",
+      "expiring": "Your Broker licence expires on {date}: renew it so this designation isn't interrupted.",
+      "fail": "This category requires an active Broker licence held by you.",
+      "failFix": "Enter your own active Broker licence number.",
+      "expiringFix": "Renew your Broker licence before {date}."
+    },
+    "BR-032": {
+      "pass": "The proposed Principal Broker holds an active Principal Broker licence.",
+      "linked": "The Principal Broker designation is pending; both applications are decided together.",
+      "fail": "Name a Principal Broker with an active Principal Broker licence (or apply for the designation first).",
+      "linkedFix": "Nothing to do: both applications are decided together.",
+      "failFix": "Enter the licence number of an active Principal Broker."
+    },
+    "BR-033": {
+      "pass": "The branch has no other active Managing Broker.",
+      "fail": "This branch already has an active Managing Broker.",
+      "failFix": "Choose a branch that has no Managing Broker yet."
+    },
+    "BR-035": {
+      "pass": "The firm is licensed and active.",
+      "unverified": "The firm isn't on the register yet. An officer will check it; nothing to do.",
+      "inactive": "The firm's licence isn't active.",
+      "referral": "An officer will verify the approved referral arrangement.",
+      "inactiveFix": "Choose an active firm, or ask this firm to renew its licence."
+    },
+    "BR-036": {
+      "verify": "An officer will verify your independent-practice authorisation.",
+      "fail": "Independent practice needs an authorisation reference from the Professional Body.",
+      "failFix": "Enter the reference shown on the Professional Body's authorisation."
+    },
+    "BR-040": {
+      "pass": "Your licence is active and can be renewed (expires {date}).",
+      "late": "Your licence expired on {date}: a late fee applies during the grace period.",
+      "lapsed": "The grace period has ended; the licence has lapsed and needs reinstatement.",
+      "noLicence": "We couldn't find the licence to renew.",
+      "lateFix": "Submit soon: the late fee applies until the grace period ends.",
+      "lapsedFix": "Apply for reinstatement instead of a renewal.",
+      "noLicenceFix": "Check the number on your licence certificate, or contact the Professional Body."
+    },
+    "BR-060": {
+      "assess": "A \"Yes\" in the integrity questions is assessed by an officer. It does not mean refusal."
+    },
+    "BR-061": {
+      "pass": "Criminal record certificate is recent enough (valid until {until}).",
+      "fail": "Your certificate was issued on {issued}, more than {months} months ago.",
+      "failFix": "Upload a certificate issued on or after {cutoff}."
+    },
+    "BR-062": {
+      "fail": "You must agree to comply with the code of conduct to apply.",
+      "failFix": "Tick the code of conduct agreement to continue."
+    },
+    "BR-070": {
+      "pass": "Indemnity insurance is valid until {until}.",
+      "fail": "The indemnity insurance must be valid when the licence is issued.",
+      "failFix": "Enter a policy that is valid on the issue date, or renew it first."
+    },
+    "BR-100": {
+      "pass": "Your current licence {licence} is active.",
+      "fail": "An upgrade needs an active licence in the lower category.",
+      "failFix": "Renew your current licence first, then apply for the upgrade."
+    },
+    "outcome": {
+      "PASS": "Eligible",
+      "WARN": "Eligible, with notes",
+      "NEEDS_ASSESSMENT": "Needs officer assessment",
+      "FAIL": "Not eligible yet"
+    }
+  },
+  "inbox": {
+    "submitted": {
+      "title": "Application {reference} received",
+      "body": "Your application was submitted. Keep the reference {reference}; review normally starts within 3 working days."
+    },
+    "confirmSupervisor": {
+      "title": "Please confirm supervision",
+      "body": "{name} named you as supervisor in application {reference}. Confirm or decline in your inbox."
+    },
+    "confirmPrincipal": {
+      "title": "Please confirm affiliation",
+      "body": "{name} named your firm in application {reference}. Confirm or decline in your inbox."
+    },
+    "confirmationConfirmed": {
+      "title": "{name} confirmed",
+      "body": "{name} confirmed your application {reference}."
+    },
+    "confirmationDeclined": {
+      "title": "{name} declined",
+      "body": "{name} declined to confirm application {reference}. Update your affiliation details and submit again."
+    },
+    "confirmationExpired": {
+      "title": "Confirmation not received",
+      "body": "A confirmation for application {reference} wasn't given in time. Update your details and submit again."
+    },
+    "confirmationReminder": {
+      "title": "A confirmation is waiting",
+      "body": "Application {reference} is waiting for your confirmation."
+    },
+    "paymentReceived": {
+      "title": "Payment received",
+      "body": "We received RWF {amount} for payment {reference}. Receipt {receipt} is ready to download."
+    },
+    "paymentFailed": {
+      "title": "Payment didn't go through",
+      "body": "Payment {reference} failed. You can try again with another method."
+    },
+    "assigned": {
+      "title": "New application assigned",
+      "body": "Application {reference} was assigned to you for review."
+    },
+    "applicantResponded": {
+      "title": "Applicant responded",
+      "body": "The applicant answered the information request on {reference}."
+    },
+    "infoRequested": {
+      "title": "More information needed",
+      "body": "The officer needs more information on application {reference}. Please respond by {due}."
+    },
+    "referred": {
+      "title": "Further assessment",
+      "body": "Application {reference} was referred for further assessment. We'll let you know the outcome."
+    },
+    "approved": {
+      "title": "Licence approved",
+      "body": "Congratulations! Application {reference} is approved. Your licence {licence} and certificate are in your wallet."
+    },
+    "approvedConditions": {
+      "title": "Licence approved with conditions",
+      "body": "Application {reference} is approved with conditions. Your licence {licence} and its conditions are in your wallet."
+    },
+    "deferred": {
+      "title": "Decision deferred",
+      "body": "The decision on application {reference} is deferred pending more information. Open the application to respond."
+    },
+    "rejected": {
+      "title": "Application not approved",
+      "body": "Application {reference} was not approved. The decision letter explains the reasons and your options."
+    },
+    "affiliateLicensed": {
+      "title": "New licence in your firm",
+      "body": "{name} now holds licence {licence} with your firm."
+    },
+    "configPending": {
+      "title": "Configuration change awaiting approval",
+      "body": "Version {version} of the {key} settings needs a checker's approval."
+    },
+    "renewalReminder": {
+      "title": "Licence expires in {days} days",
+      "body": "Licence {licence} expires on {date}. Renew now to keep practising without interruption."
+    },
+    "licenceExpired": {
+      "title": "Licence expired",
+      "body": "Licence {licence} has expired. You can still renew during the {graceDays}-day grace period (a late fee applies)."
+    },
+    "graceReminder": {
+      "title": "Renew before {date}",
+      "body": "Licence {licence} is in its grace period. After {date} it lapses and needs reinstatement."
+    },
+    "licenceLapsed": {
+      "title": "Licence lapsed",
+      "body": "Licence {licence} has lapsed. Practice is not authorised until it is reinstated."
+    },
+    "licenceSuspend": {
+      "title": "Licence suspended",
+      "body": "Licence {licence} has been suspended. See the details in your wallet."
+    },
+    "licenceLift": {
+      "title": "Suspension lifted",
+      "body": "The suspension of licence {licence} has been lifted. It is active again."
+    },
+    "licenceRevoke": {
+      "title": "Licence revoked",
+      "body": "Licence {licence} has been revoked."
+    },
+    "licenceSurrender": {
+      "title": "Licence surrendered",
+      "body": "The surrender of licence {licence} has been recorded."
+    },
+    "supervisionRequired": {
+      "title": "Name a new supervisor",
+      "body": "Your supervisor's licence is no longer active. Name a new supervisor for licence {licence} within 30 days."
+    },
+    "affiliationEnded": {
+      "title": "Affiliation ended",
+      "body": "Your firm ended the affiliation of licence {licence} on {date}. Arrange a new affiliation within 30 days."
+    },
+    "draftExpiring": {
+      "title": "Your draft expires soon",
+      "body": "Draft {reference} will expire in {days} days without activity. Open it to keep it."
+    },
+    "slaBreach": {
+      "title": "Service level breached",
+      "body": "Application {reference} is past its service-level due date."
+    },
+    "upgradeEligible": {
+      "title": "You can now upgrade",
+      "body": "Based on your licence history you can now apply for {category, select, REA {Real Estate Agent} BROKER {Real Estate Broker} other {a higher category}}."
+    }
+  },
+  "conditions": {
+    "SUPERVISED_PRACTICE": "Practice under named supervision",
+    "REFERRAL_ONLY": "Referral only (Article 10)",
+    "TERRITORY_LIMITED": "Limited to the authorised territory",
+    "REPORT_QUARTERLY": "Quarterly compliance reporting",
+    "COMPLETE_TRAINING": "Complete the prescribed training",
+    "PROVIDE_INSURANCE": "Provide indemnity insurance evidence",
+    "CUSTOM": "Other condition"
+  },
+  "arrangements": {
+    "AFFILIATED": "Affiliated with a licensed firm",
+    "INDEPENDENT": "Independent practice (authorised)",
+    "ESTABLISH_OR_JOIN_REBF": "Establishing or joining a licensed firm",
+    "REFERRAL_ONLY": "Approved referral-only arrangement",
+    "FIRM_PRINCIPAL": "Principal Broker of a firm",
+    "FIRM": "Brokerage firm"
+  },
+  "applicationTypes": {
+    "NEW": {
+      "name": "New registration and licensing",
+      "summary": "First licence in a category."
+    },
+    "UPGRADE": {
+      "name": "Upgrade to a higher category",
+      "summary": "Move up from a licence you already hold."
+    },
+    "RENEWAL": {
+      "name": "Licence renewal",
+      "summary": "Renew an active licence for another year."
+    },
+    "CHANGE_OF_AFFILIATION": {
+      "name": "Change of firm or affiliation",
+      "summary": "Move to another firm or supervisor."
+    },
+    "REINSTATEMENT": {
+      "name": "Reinstatement",
+      "summary": "Restore a lapsed or suspended licence."
+    },
+    "FIRM_REGISTRATION": {
+      "name": "Brokerage firm registration",
+      "summary": "Register and license a Real Estate Brokerage Firm."
+    }
+  },
+  "payment": {
+    "methods": {
+      "MOBILE_MONEY": "Mobile money",
+      "CARD": "Card",
+      "BANK": "Bank transfer",
+      "WAIVER": "Fee waiver"
+    },
+    "lines": {
+      "registration": "Registration fee",
+      "licensing": "Licensing fee",
+      "renewal": "Renewal fee",
+      "latePenalty": "Late renewal penalty"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "FAILED": "Failed",
+      "EXPIRED": "Expired",
+      "REFUNDED": "Refunded",
+      "WAIVED": "Waived"
+    }
+  },
+  "decision": {
+    "types": {
+      "APPROVED": "Approved",
+      "APPROVED_WITH_CONDITIONS": "Approved with conditions",
+      "DEFERRED": "Deferred pending information",
+      "REJECTED": "Rejected"
+    }
+  },
+  "documents": {
+    "receiptTitle": "Payment receipt",
+    "waiverTitle": "Fee waiver record",
+    "payer": "Payer",
+    "application": "Application reference",
+    "applicant": "Applicant",
+    "paymentReference": "Payment reference",
+    "method": "Method",
+    "transaction": "Transaction ID",
+    "paidAt": "Date",
+    "item": "Item",
+    "amount": "Amount",
+    "total": "Total paid",
+    "waiverNote": "The fee was waived by the Finance office. Reason: {reason}",
+    "receiptFooter": "Electronic receipt issued by the REBP Portal. Keep it for your records.",
+    "ackTitle": "Acknowledgment of receipt",
+    "category": "Professional category",
+    "type": "Application type",
+    "submittedAt": "Submitted",
+    "snapshotHash": "Submission fingerprint (SHA-256)",
+    "ackBody": "The Professional Body acknowledges receipt of your application. Submission does not by itself confer registration or a licence.",
+    "ackNext": "An officer will review your application. Review normally starts within 3 working days. You will be notified at each step and can follow progress in the portal.",
+    "ackFooter": "Electronic acknowledgment issued by the REBP Portal.",
+    "letterTitle": "Decision letter",
+    "decision": "Decision",
+    "decidedAt": "Date of decision",
+    "approver": "Approving authority",
+    "conditions": "Conditions",
+    "reasons": "Reasons",
+    "letterFooter": "This decision was signed electronically by the approving authority.",
+    "letter": {
+      "APPROVED": "We are pleased to inform you that your application for registration and licensing as {category} has been approved. Your licence and electronic certificate are available in the REBP Portal.",
+      "APPROVED_WITH_CONDITIONS": "Your application for registration and licensing as {category} has been approved subject to the conditions below. The conditions are shown on your licence and in the portal.",
+      "DEFERRED": "The decision on your application as {category} has been deferred pending additional information. Please respond through the REBP Portal.",
+      "REJECTED": "After review, your application for registration and licensing as {category} has not been approved, for the reasons below.",
+      "appeal": "You may request reconsideration of this decision in writing within 30 days of this letter, in line with the Professional Body's procedures."
+    }
+  },
+  "registerResults": {
+    "kind": {
+      "label": "Practitioners or firms",
+      "all": "Everyone",
+      "PERSON": "Practitioners",
+      "FIRM": "Firms"
+    },
+    "district": {
+      "label": "District",
+      "all": "All districts",
+      "search": "Search districts",
+      "noMatch": "No district matches “{query}”",
+      "clear": "Clear search"
+    },
+    "count": "{count, plural, one {# entry} other {# entries}}",
+    "listLabel": "Register entries",
+    "noMatch": "No entries match these filters",
+    "noResultsBody": "Check the spelling or remove a filter.",
+    "clearFilters": "Clear filters",
+    "rateLimitedTitle": "Too many searches",
+    "rateLimitedBody": "You've searched a lot in a short time. Please wait about {minutes, plural, one {# minute} other {# minutes}} and try again. Checking a single licence number still works.",
+    "fields": {
+      "licenceNo": "Licence no.",
+      "registrationNo": "Registration no.",
+      "validity": "Valid",
+      "firm": "Firm",
+      "principal": "Principal Broker",
+      "scope": "Authorised area",
+      "district": "District",
+      "conditions": "Conditions"
+    },
+    "validRange": "{from} – {to}",
+    "verify": "Verify",
+    "pagination": "Result pages",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {pages}",
+    "yearsLeft": "{count, plural, one {# year left} other {# years left}}",
+    "monthsLeft": "{count, plural, =0 {Expires soon} one {# month left} other {# months left}}",
+    "removeFilter": "Remove filter: {filter}",
+    "trust": {
+      "official": "Official register",
+      "qr": "Every licence has a QR code",
+      "live": "Updated live"
+    },
+    "details": "Details",
+    "allStatuses": "Any status",
+    "selected": "Selected",
+    "view": {
+      "label": "View",
+      "map": "Map",
+      "list": "List"
+    },
+    "searchList": "Search this list",
+    "loadMore": "Load more",
+    "shownOf": "{shown} of {total}",
+    "loadedOf": "Showing {shown} of {total} entries",
+    "loading": "Loading more…",
+    "loadFailed": "Couldn't load more entries.",
+    "retry": "Retry",
+    "loadLimited": "Too many searches for now. More results in {seconds}s.",
+    "endOfList": "That's all {total, plural, one {# entry} other {# entries}}",
+    "backToTop": "Back to top",
+    "backToStart": "Back to the first results",
+    "facets": {
+      "category": "Category",
+      "status": "Status",
+      "kind": "Type",
+      "district": "District"
+    },
+    "allCategories": "All categories",
+    "matching": "{count, plural, =0 {No entries match} one {# entry matches} other {# entries match}}",
+    "clearAll": "Clear all"
+  },
+  "verification": {
+    "metaTitle": "{name} — licence {number}",
+    "metaDescription": "{name} is registered as {category}. Licence status: {status}. Verified on the official public register.",
+    "category": "Category",
+    "detailsTitle": "Licence details",
+    "verdict": {
+      "ACTIVE": "Licensed",
+      "EXPIRED": "Licence expired",
+      "LAPSED": "Licence lapsed",
+      "SUSPENDED": "Licence suspended",
+      "REVOKED": "Licence revoked",
+      "SURRENDERED": "Licence surrendered",
+      "SUPERSEDED": "Licence replaced"
+    },
+    "verdictBody": {
+      "ACTIVE": "This licence is valid. The holder may practise within the category, area and conditions shown below.",
+      "EXPIRED": "This licence has expired. The holder must not offer brokerage services until it is renewed.",
+      "LAPSED": "This licence has lapsed. The holder must not offer brokerage services.",
+      "SUSPENDED": "This licence is suspended. The holder must not offer brokerage services while the suspension lasts.",
+      "REVOKED": "This licence has been revoked. The holder must not offer brokerage services.",
+      "SURRENDERED": "The holder gave up this licence. It is no longer valid.",
+      "SUPERSEDED": "This licence was replaced by a newer one. Check the current licence."
+    },
+    "referralOnlyBody": "A referral agent may only refer clients to licensed practitioners. They may not negotiate, show property for a fee or hold client money.",
+    "supersededBy": "This licence was replaced by licence {number}.",
+    "replacedTitle": "This certificate was replaced",
+    "replacedBody": "A newer certificate was issued for this licence, so this QR code is no longer current. See the current licence {number}.",
+    "seeCurrent": "See licence {number}",
+    "sealTitle": "Certificate seal",
+    "sealBody": "This code is printed on certificate version {version}. If the seal on the paper certificate is different, the certificate has been altered or replaced.",
+    "historyTitle": "Status history",
+    "checkAnother": "Check another licence",
+    "events": {
+      "ISSUED": "Licence issued",
+      "RENEWED": "Licence renewed",
+      "CERTIFICATE_REISSUED": "Certificate reissued",
+      "SUPERSEDED": "Replaced by a new licence",
+      "EXPIRED": "Licence expired",
+      "LAPSED": "Licence lapsed",
+      "MIGRATED": "Moved from the previous register",
+      "CORRECTED": "Register entry corrected",
+      "AFFILIATION_ENDED": "Firm affiliation ended",
+      "SUSPEND": "Licence suspended",
+      "LIFT": "Suspension lifted",
+      "REVOKE": "Licence revoked",
+      "SURRENDER": "Licence surrendered",
+      "other": "Licence updated"
+    }
+  },
+  "wallet": {
+    "subtitle": "Your licences, certificates and QR codes in one place.",
+    "emptyTitle": "No licences yet",
+    "detailTitle": "Licence details",
+    "daysUnit": "days",
+    "daysLeft": "{count, plural, one {# day} other {# days}} left",
+    "expiresOn": "Valid until {date}",
+    "expiredOn": "Ended {date}",
+    "renew": "Renew",
+    "renewOpen": "Renewal is open. Your licence expires in {count, plural, one {# day} other {# days}}.",
+    "renewLate": "Your licence has expired. You can still renew late for {days, plural, one {# more day} other {# more days}} (a late fee applies).",
+    "viewDetails": "View details",
+    "downloadCertificate": "Download certificate",
+    "status": "Status",
+    "issuedOn": "Issued",
+    "arrangement": "Practice arrangement",
+    "branch": "Branch",
+    "supervisor": "Supervisor",
+    "certificateVersion": "Certificate",
+    "versionValue": "Version {version}",
+    "validityTitle": "Validity",
+    "replacedTitle": "This licence was replaced",
+    "replacedBody": "Open the current licence {number}",
+    "documentsTitle": "Documents",
+    "certificate": "Licence certificate (PDF)",
+    "decisionLetter": "Decision letter (PDF)",
+    "application": "Original application",
+    "publicEntry": "See your public register entry",
+    "conditionUntil": "Until {date}",
+    "flags": {
+      "SUPERVISION_REQUIRED": {
+        "title": "Name a new supervisor",
+        "body": "Your supervisor's licence is no longer active. Name a new supervising broker to keep practising."
+      },
+      "AFFILIATION_REQUIRED": {
+        "title": "Join a licensed firm",
+        "body": "Your affiliation with your firm has ended. Apply for a change of affiliation to keep practising."
+      },
+      "RENEWAL_PENDING": {
+        "title": "Renewal in progress",
+        "body": "You applied to renew in time, so your licence stays valid until the decision."
+      }
+    },
+    "obligations": {
+      "title": "Your professional obligations",
+      "intro": "In short, the code of conduct asks every licensed practitioner to:",
+      "items": {
+        "honesty": "Act honestly and in your client's best interest.",
+        "disclosure": "Tell clients about any personal interest or conflict before you act.",
+        "clientMoney": "Keep client money separate and account for every franc.",
+        "records": "Keep clear records of every transaction and agreement.",
+        "scope": "Work only within your category, authorised area and conditions.",
+        "training": "Keep your knowledge up to date and renew your licence on time."
+      }
+    },
+    "article10": {
+      "title": "Referral only (Article 10)",
+      "intro": "As a referral agent, your licence lets you introduce clients only. In plain language:",
+      "items": {
+        "referOnly": "Refer clients to a licensed agent, broker or firm — nothing more.",
+        "noNegotiation": "Do not negotiate prices, terms or contracts for anyone.",
+        "noMoney": "Do not take deposits or hold money for clients.",
+        "disclose": "Tell the client who you are referring them to and any referral fee you receive."
+      }
+    },
+    "allTitle": "All licences ({count})",
+    "tiltHint": "Move over the card to see its security foil.",
+    "publicHint": "Anyone can check it on the public register — always up to date.",
+    "hero": {
+      "active": "{count, plural, one {active licence} other {active licences}}",
+      "nextExpiry": "Next expiry in {count, plural, one {# day} other {# days}}",
+      "renewDue": "{count, plural, one {# renewal due} other {# renewals due}}",
+      "bubble": {
+        "empty": "Your card lives here",
+        "renew": "Time to renew!",
+        "active": "Licensed & verified",
+        "ended": "Let's renew it"
+      },
+      "eyebrow": "Digital wallet",
+      "activeLabel": "Active",
+      "expiryLabel": "Days to expiry",
+      "renewLabel": "Renewals due",
+      "renewCta": "Renew now",
+      "openCta": "Open my licence"
+    },
+    "empty": {
+      "track": "Your way to a licence",
+      "holder": "Your name here",
+      "category": "Your category"
+    },
+    "present": {
+      "open": "Show QR",
+      "title": "Show your licence",
+      "body": "Let a client or inspector scan this — it opens your live record on the public register.",
+      "qrLabel": "QR code for licence {number}",
+      "live": "Active — verified live",
+      "notLive": "Not active",
+      "brightness": "Turn your screen brightness up for a quick scan.",
+      "copy": "Copy verification link",
+      "copied": "Link copied"
+    }
+  },
+  "registerAdmin": {
+    "title": "Register administration",
+    "subtitle": "Search licences, review their history and record suspensions, revocations, surrenders and corrections.",
+    "licences": "Licences",
+    "search": {
+      "label": "Search licences",
+      "placeholder": "Licence number, name or registration number",
+      "clear": "Clear",
+      "count": "{count, plural, =0 {No licences} one {# licence} other {# licences}}",
+      "empty": "No licences match your search",
+      "page": "Page {page} of {count}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "columns": {
+      "category": "Category",
+      "registration": "Registration no.",
+      "holder": "Holder",
+      "firm": "Firm",
+      "issued": "Issued",
+      "expires": "Expires"
+    },
+    "detail": {
+      "flags": "Flags",
+      "pendingTitle": "Change awaiting approval",
+      "pendingBody": "{action} has been proposed and is waiting for an approving authority. No other change can be made until it is decided.",
+      "actions": "Register actions",
+      "history": "Status history",
+      "historyHint": "Every change is recorded and can't be edited or deleted.",
+      "noHistory": "No history recorded yet.",
+      "reference": "Ref. {reference}",
+      "period": "{from} – {to}",
+      "from": "From {from}"
+    },
+    "flags": {
+      "SUPERVISION_REQUIRED": "New supervisor needed"
+    },
+    "events": {
+      "ISSUED": "Licence issued",
+      "RENEWED": "Renewed",
+      "CERTIFICATE_REISSUED": "Certificate reissued",
+      "SUPERSEDED": "Superseded by a new licence",
+      "MIGRATED": "Imported from the legacy register",
+      "SUSPEND": "Suspended",
+      "LIFT": "Suspension lifted",
+      "REVOKE": "Revoked",
+      "SURRENDER": "Surrendered",
+      "CORRECTED": "Public details corrected",
+      "EXPIRED": "Expired",
+      "LAPSED": "Lapsed"
+    },
+    "actions": {
+      "SUSPEND": {
+        "title": "Suspend licence",
+        "button": "Suspend",
+        "description": "Licence {licence} will show as suspended on the public register from the start date.",
+        "submit": "Suspend licence"
+      },
+      "LIFT": {
+        "title": "Lift suspension",
+        "button": "Lift suspension",
+        "description": "Licence {licence} will show as valid again on the public register.",
+        "submit": "Lift suspension"
+      },
+      "REVOKE": {
+        "title": "Revoke licence",
+        "button": "Revoke",
+        "description": "Licence {licence} will be revoked once an approving authority confirms it.",
+        "submit": "Revoke licence"
+      },
+      "SURRENDER": {
+        "title": "Record surrender",
+        "button": "Record surrender",
+        "description": "Record that the holder of licence {licence} has given it up.",
+        "submit": "Record surrender"
+      },
+      "CORRECT": {
+        "title": "Correct public name",
+        "button": "Correct name",
+        "description": "Change the name shown for licence {licence} on the public register.",
+        "submit": "Save correction"
+      }
+    },
+    "actionDialog": {
+      "startsOn": "Start date",
+      "endsOn": "End date",
+      "endsOnHint": "Leave empty if the end date isn't known yet.",
+      "displayName": "Public name",
+      "reason": "Reason",
+      "reasonHint": "At least 10 characters. The holder may see this.",
+      "reference": "Reference",
+      "referenceHint": "For example the board resolution or letter number.",
+      "cancel": "Cancel",
+      "submitForApproval": "Send for approval",
+      "makerCheckerNote": "Revocation needs a second person: an approving authority must confirm it before it takes effect.",
+      "applied": "Licence {licence} updated. The public register now shows the change.",
+      "awaiting": "Revocation of {licence} sent for approval."
+    },
+    "pending": {
+      "title": "Pending approval",
+      "count": "{count, plural, =0 {Nothing waiting} one {# waiting} other {# waiting}}",
+      "empty": "No register changes are waiting for approval.",
+      "awaiting": "Awaiting approval",
+      "newName": "New name: {name}",
+      "proposedBy": "Proposed by {name} · {date}",
+      "ownProposal": "You proposed this. Another approver must decide.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveTitle": "Approve this change?",
+      "rejectTitle": "Reject this change?",
+      "decideDescription": "{action} for licence {licence}.",
+      "note": "Note",
+      "noteHint": "Optional. Kept with the decision.",
+      "confirmApprove": "Approve and apply",
+      "confirmReject": "Reject change",
+      "approvedToast": "Change approved. Licence {licence} is updated.",
+      "rejectedToast": "Change for {licence} rejected.",
+      "makerCheckerTitle": "A second person is needed",
+      "makerChecker": "You proposed this change, so someone else must approve or reject it."
+    }
+  },
+  "finance": {
+    "title": "Finance",
+    "subtitle": "Collections, waivers and payments awaiting action.",
+    "export": "Export payments (CSV)",
+    "kpis": {
+      "collected": "Collected (RWF)",
+      "collectedHint": "{count, plural, one {# payment} other {# payments}}",
+      "waived": "Waived (RWF)",
+      "waivedHint": "{count, plural, one {# waiver} other {# waivers}}",
+      "duplicates": "Duplicates flagged",
+      "duplicatesHint": "Need a refund check",
+      "outstanding": "Awaiting payment",
+      "outstandingHint": "Applications"
+    },
+    "byMethod": "Collected by method",
+    "amountUnit": "RWF",
+    "paymentsCount": "{count, plural, one {# payment} other {# payments}}",
+    "unknownMethod": "Other",
+    "noPayments": "No payments yet.",
+    "awaiting": {
+      "title": "Awaiting payment",
+      "count": "{count, plural, one {# application} other {# applications}}",
+      "empty": "No applications are waiting for payment."
+    },
+    "waive": {
+      "button": "Waive fee",
+      "title": "Waive the fee?",
+      "description": "Application {reference} will move on without payment. The fee of {amount} is recorded as waived.",
+      "reason": "Reason",
+      "reasonHint": "At least 10 characters. Kept in the audit trail.",
+      "cancel": "Cancel",
+      "confirm": "Waive fee",
+      "done": "Fee waived for {reference}."
+    },
+    "recent": {
+      "title": "Recent payments",
+      "reference": "Payment",
+      "application": "Application",
+      "amount": "Amount",
+      "method": "Method",
+      "status": "Status",
+      "receipt": "Receipt",
+      "view": "Receipt",
+      "duplicate": "Duplicate"
+    }
+  },
+  "configuration": {
+    "title": "Configuration",
+    "subtitle": "Fees, eligibility thresholds and feature flags. Every change needs a second person to approve it.",
+    "tabs": {
+      "fees": "Fees",
+      "thresholds": "Thresholds",
+      "flags": "Feature flags"
+    },
+    "on": "On",
+    "off": "Off",
+    "inForce": {
+      "fees": "Fee schedule in force",
+      "thresholds": "Thresholds in force",
+      "flags": "Feature flags in force",
+      "default": "Built-in defaults (no approved change yet)",
+      "version": "Version {version}, in force since {date}"
+    },
+    "states": {
+      "inForce": "In force",
+      "pending": "Awaiting approval",
+      "scheduled": "Scheduled",
+      "superseded": "Superseded",
+      "rejected": "Rejected"
+    },
+    "makerHint": {
+      "fees": "Change the values below to propose a new fee schedule. Fees are proposed by Finance and approved by an approving authority.",
+      "thresholds": "Change the values below to propose new thresholds. They apply to eligibility runs from the effective date; earlier runs keep their version.",
+      "flags": "Change the switches below to propose new feature flags. They take effect from the effective date once approved."
+    },
+    "pendingLock": "A proposal is waiting for approval. You can propose another change once it's decided.",
+    "readOnly": "You can view these settings and approve proposals, but not propose changes.",
+    "fees": {
+      "category": "Category",
+      "registration": "Registration fee (RWF)",
+      "licensing": "Licensing fee (RWF)",
+      "latePenalty": "Late renewal penalty (%)",
+      "latePenaltyHint": "Percentage of the licensing fee, charged during the grace period.",
+      "reference": "Schedule reference",
+      "referenceHint": "For example the gazette or board resolution.",
+      "sample": "Sample schedule",
+      "sampleHint": "Shows a “sample” notice on fee quotes until the official schedule is approved."
+    },
+    "thresholds": {
+      "fields": {
+        "minAge": {
+          "label": "Minimum age (years)",
+          "hint": "16 to 25."
+        },
+        "reaExperienceMonths": {
+          "label": "Experience for Real Estate Agent (months)",
+          "hint": "Field experience needed before applying as an agent."
+        },
+        "brokerExperienceMonths": {
+          "label": "Experience for Broker (months)",
+          "hint": "Time as a licensed agent before applying as a broker."
+        },
+        "examValidityYears": {
+          "label": "Exam result validity (years)",
+          "hint": "How long a passed exam can be used."
+        },
+        "criminalRecordMonths": {
+          "label": "Criminal record certificate age (months)",
+          "hint": "Maximum age of the certificate."
+        },
+        "renewalWindowDays": {
+          "label": "Renewal window (days)",
+          "hint": "How early before expiry renewal opens."
+        },
+        "graceDays": {
+          "label": "Grace period (days)",
+          "hint": "Late renewal allowed after expiry, with a penalty."
+        },
+        "licenceValidityYears": {
+          "label": "Licence validity (years)",
+          "hint": "How long a new or renewed licence lasts."
+        },
+        "brokerExpiryWarningDays": {
+          "label": "Supervisor expiry warning (days)",
+          "hint": "Warn when a supervising broker's licence expires within this time."
+        },
+        "reraCountsForRea": {
+          "label": "Referral agent experience counts for Real Estate Agent",
+          "hint": "When on, time as a referral agent counts towards the agent experience requirement."
+        }
+      }
+    },
+    "flags": {
+      "fields": {
+        "genderField": {
+          "label": "Ask for gender",
+          "hint": "Show the gender question in applications."
+        },
+        "publicPhoto": {
+          "label": "Photo on the public register",
+          "hint": "Show practitioners' photos in the public directory."
+        },
+        "indemnityRequired": {
+          "label": "Indemnity insurance required",
+          "hint": "Require proof of professional indemnity insurance."
+        },
+        "autoAssign": {
+          "label": "Auto-assign applications",
+          "hint": "Share new submissions among reviewing officers automatically."
+        }
+      }
+    },
+    "form": {
+      "effectiveFrom": "Effective from",
+      "effectiveHint": "The change applies from this date once approved.",
+      "reason": "Reason for the change",
+      "reasonHint": "At least 10 characters. The approver sees this.",
+      "submit": "Propose change",
+      "submitHint": "You may be asked to confirm your password.",
+      "proposed": "Change proposed. An approver has been notified.",
+      "invalidNumber": "Enter a whole number in the allowed range."
+    },
+    "pending": {
+      "title": "Proposed version {version}",
+      "badge": "Awaiting approval",
+      "effective": "Effective from {date}",
+      "proposedBy": "Proposed by {name}",
+      "changes": "{count, plural, =0 {No changes} one {# change} other {# changes}}",
+      "noChanges": "This proposal has the same values as the version in force.",
+      "before": "Before:",
+      "after": "After:",
+      "note": "Note",
+      "noteHint": "Optional. Kept with the decision.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approvedToast": "Version {version} approved.",
+      "rejectedToast": "Version {version} rejected.",
+      "ownProposal": "You proposed this change. Another approver must decide.",
+      "waiting": "Waiting for an approving authority.",
+      "makerCheckerTitle": "A second person is needed",
+      "makerChecker": "You proposed this change, so someone else must approve or reject it."
+    },
+    "history": {
+      "title": "History",
+      "empty": "No changes yet. The built-in defaults are in force.",
+      "version": "Version {version}",
+      "effective": "Effective {date}",
+      "maker": "Proposed by {name}",
+      "checker": "Decided by {name}",
+      "note": "Note: {note}"
+    },
+    "jobs": {
+      "title": "Scheduled jobs",
+      "devOnly": "Dev only",
+      "description": "Run the nightly jobs now: expiries, reminders, payment checks and SLA warnings.",
+      "run": "Run now",
+      "done": "Jobs finished.",
+      "names": {
+        "licences": "Licence lifecycle",
+        "drafts": "Draft expiry",
+        "confirmations": "Confirmations",
+        "payments": "Payments",
+        "issuance": "Issuance retries",
+        "sla": "SLA warnings",
+        "upgrades": "Upgrade nudges"
+      }
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Throughput, service levels, the register and collections.",
+    "exportApplications": "Applications (CSV)",
+    "exportPayments": "Payments (CSV)",
+    "noData": "No data yet.",
+    "last30": "Last 30 days",
+    "operational": {
+      "title": "Operations",
+      "submitted": "Applications submitted",
+      "open": "{count} open now",
+      "sla": "SLA compliance",
+      "breached": "{count, plural, =0 {No breaches} one {# breach} other {# breaches}}",
+      "infoRate": "Information requests",
+      "infoRateHint": "Per submitted application",
+      "overrides": "Officer overrides",
+      "overridesHint": "Signed reviews that overrode a computed outcome",
+      "decisions": "Decision mix",
+      "throughput": "Reviews signed per officer",
+      "byStatus": "Applications by status",
+      "byCategory": "Applications by category",
+      "byType": "Applications by type"
+    },
+    "register": {
+      "title": "Register",
+      "active": "Valid licences",
+      "activeHint": "On the public register",
+      "expiring": "Expiring soon",
+      "expiringHint": "Within 90 days",
+      "firms": "Active firms",
+      "firmsHint": "Licensed brokerage firms",
+      "byCategory": "Valid licences by category",
+      "byStatus": "Licences by status"
+    },
+    "financial": {
+      "title": "Collections"
+    }
+  },
+  "queue": {
+    "title": "Work queue",
+    "subtitle": "Applications to review, oldest deadline first.",
+    "kpis": "Queue figures",
+    "kpi": {
+      "mine": "Assigned to me",
+      "mineHint": "Open files you own",
+      "unassigned": "Unassigned",
+      "unassignedHint": "Waiting for an officer",
+      "breached": "SLA breached",
+      "breachedHint": "Past their deadline",
+      "decision": "Awaiting decision",
+      "decisionHint": "Signed reviews"
+    },
+    "views": "Queue views",
+    "view": {
+      "mine": "Mine",
+      "unassigned": "Unassigned",
+      "all": "All",
+      "sla": "SLA risk",
+      "decision": "Decision"
+    },
+    "results": "Applications",
+    "empty": {
+      "mine": "Nothing assigned to you",
+      "unassigned": "Every application has an officer",
+      "all": "No open applications",
+      "sla": "Nothing at risk",
+      "decision": "Nothing awaiting a decision"
+    },
+    "emptyFiltered": "No application matches these filters. Clear them to see more.",
+    "emptyHint": "New work appears here as applications are submitted.",
+    "count": "{count, plural, one {# application} other {# applications}}",
+    "submitted": "Submitted {date}",
+    "officer": "Officer",
+    "you": "You",
+    "unassigned": "Unassigned",
+    "page": "Page {page} of {count}",
+    "prev": "Previous",
+    "next": "Next",
+    "search": "Search by reference or applicant name",
+    "categoryLabel": "Category",
+    "allCategories": "All categories",
+    "typeLabel": "Application type",
+    "allTypes": "All types",
+    "statusLabel": "Status",
+    "allStatuses": "All statuses",
+    "clear": "Clear filters",
+    "sla": {
+      "ok": "On track",
+      "dueSoon": "Due soon",
+      "breached": "Overdue",
+      "withDue": "{state} · {due}"
+    },
+    "assign": {
+      "assign": "Assign",
+      "reassign": "Reassign",
+      "description": "Choose the officer who will review {reference}. They are notified straight away.",
+      "officer": "Officer",
+      "me": "{name} (me)",
+      "current": "current",
+      "done": "{reference} assigned.",
+      "conflictTitle": "This officer can't take the file"
+    },
+    "conflictReasons": {
+      "applicant": "They are the applicant.",
+      "declared": "They declared a conflict of interest.",
+      "supervisor": "They are the named supervisor.",
+      "firm": "They belong to the applicant's firm."
+    }
+  },
+  "review": {
+    "metaTitle": "Review {id}",
+    "eyebrow": "Section L review",
+    "backToQueue": "Back to queue",
+    "overview": "Application status",
+    "officer": "Officer",
+    "snapshot": "Signed version {version} · {hash}…",
+    "alerts": {
+      "conflictTitle": "You have a conflict of interest on this file",
+      "readOnly": "You can read this file but not review it.",
+      "assignedElsewhere": "{name} is reviewing this file. Only the assigned officer can record checks.",
+      "waitingTitle": "Waiting for the applicant",
+      "waiting": "Information was requested. The applicant has until {date} to respond.",
+      "waitingNoDate": "Information was requested from the applicant."
+    },
+    "data": "Application",
+    "documents": "{count, plural, =0 {Documents} one {Documents (#)} other {Documents (#)}}",
+    "eligibility": "Eligibility rules",
+    "computedOutcome": "Computed: {outcome}",
+    "noRules": "No rules apply to this application.",
+    "checklist": "Document checklist",
+    "mandatory": "Required",
+    "conditional": "If applicable",
+    "confirmations": "Confirmations",
+    "noConfirmations": "No confirmations are needed for this application.",
+    "confirmationKinds": {
+      "SUPERVISOR": "Supervisor",
+      "PRINCIPAL_BROKER": "Principal Broker of the firm",
+      "DESIGNATION": "Principal Broker designation"
+    },
+    "respondedOn": "Answered {date}",
+    "dueOn": "Due {date}",
+    "overriddenBy": "Confirmed by officer {name}: {reason}",
+    "startFirst": "Start the review to record checks, comments and your recommendation.",
+    "notStarted": "No review has been recorded yet.",
+    "signedReviews": "{count, plural, one {Signed review} other {Signed reviews (#)}}",
+    "previousVersion": "Version {version} · signed {date}",
+    "timeline": {
+      "title": "Timeline",
+      "empty": "No status changes yet.",
+      "system": "System"
+    },
+    "eventReasons": {
+      "created": "Draft created",
+      "signed": "Declaration signed",
+      "paid": "Fee paid",
+      "submitted": "Submitted",
+      "resubmitted": "Resubmitted after a request",
+      "reviewStarted": "Review started",
+      "informationRequested": "Information requested",
+      "reviewSigned": "Review signed",
+      "referred": "Referred for further assessment",
+      "confirmationDeclined": "A confirmation was declined",
+      "deferred": "Deferred: the applicant may update the file",
+      "licenceIssued": "Licence issued",
+      "withdrawn": "Withdrawn by the applicant",
+      "inactive": "Expired after inactivity",
+      "decision_APPROVED": "Decision: approved",
+      "decision_APPROVED_WITH_CONDITIONS": "Decision: approved with conditions",
+      "decision_DEFERRED": "Decision: deferred",
+      "decision_REJECTED": "Decision: rejected"
+    },
+    "rounds": {
+      "title": "Information requests",
+      "empty": "No information has been requested.",
+      "round": "Round {n}",
+      "status": {
+        "OPEN": "Waiting",
+        "RESPONDED": "Answered",
+        "CANCELLED": "Cancelled"
+      },
+      "sent": "Sent",
+      "due": "Due",
+      "responded": "Answered",
+      "sections": "Sections unlocked",
+      "documents": "Documents requested"
+    },
+    "applicant": {
+      "title": "Applicant at a glance",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Mobile",
+      "account": "Account",
+      "accountTypes": {
+        "INDIVIDUAL": "Individual",
+        "ORGANISATION": "Organisation"
+      },
+      "since": "Joined",
+      "twoStep": "Two-step on",
+      "licences": "{count, plural, =0 {Licences} other {Licences (#)}}",
+      "noLicences": "No licences held.",
+      "expires": "expires {date}",
+      "applications": "{count, plural, =0 {Applications} other {Applications (#)}}"
+    },
+    "docTypes": {
+      "proofOfIdentity": "Proof of identity",
+      "photo": "Passport photo",
+      "educationCertificate": "Education certificate",
+      "transcript": "Academic transcript",
+      "foreignRecognition": "Recognition of a foreign qualification",
+      "trainingCertificate": "Training certificate",
+      "examResult": "Examination result",
+      "experienceEvidence": "Proof of experience",
+      "equivalenceDecision": "Equivalence decision",
+      "criminalRecord": "Criminal record certificate",
+      "integrityDisclosure": "Integrity disclosure documents",
+      "affiliationEvidence": "Firm affiliation evidence",
+      "referralApproval": "Referral arrangement approval",
+      "independentAuthorisation": "Independent practice authorisation",
+      "previousLicence": "Previous licence",
+      "appointmentLetter": "Appointment letter",
+      "designationProof": "Principal Broker designation",
+      "managementTraining": "Management training certificate",
+      "indemnityInsurance": "Indemnity insurance",
+      "companyRegistration": "Company registration (RDB)",
+      "fullRegistrationInfo": "Full company registration details",
+      "taxRegistration": "Tax registration (TIN)",
+      "businessAddressProof": "Proof of business address",
+      "supervisorySystems": "Supervisory systems and manual",
+      "clientFunds": "Client funds arrangements",
+      "directorsIdentity": "Directors' identity documents",
+      "other": "Other document"
+    },
+    "docStatus": {
+      "SCANNING": "Security check",
+      "CLEAN": "To check",
+      "INFECTED": "Blocked file",
+      "REJECTED_FILE": "Unreadable file",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected",
+      "MISSING": "Missing"
+    },
+    "viewer": {
+      "none": "No documents were uploaded.",
+      "previous": "Previous document",
+      "next": "Next document",
+      "document": "Document",
+      "version": "Version",
+      "versionN": "Version {version}",
+      "latest": "latest",
+      "rejectionReason": "Rejected because",
+      "unavailable": {
+        "SCANNING": "The file is still being checked for viruses. Try again in a moment.",
+        "INFECTED": "The security check blocked this file. It can't be opened.",
+        "REJECTED_FILE": "This file couldn't be read. Ask the applicant for a new copy."
+      },
+      "imageTools": "Image tools",
+      "zoomOut": "Zoom out",
+      "zoomIn": "Zoom in",
+      "zoom": "Zoom in or out",
+      "rotateLeft": "Rotate left",
+      "rotateRight": "Rotate right",
+      "download": "Download (watermarked)",
+      "open": "Open in new tab",
+      "shortcuts": "Keyboard shortcuts",
+      "shortcutsHint": "Shortcuts work when you're not typing in a field.",
+      "verify": "Verify",
+      "verifiedState": "Verified",
+      "reject": "Reject",
+      "verified": "Document verified.",
+      "rejected": "Document rejected.",
+      "rejectTitle": "Reject this document",
+      "rejectDescription": "Tell the applicant what is wrong with the {document}. They will see this reason.",
+      "reason": "Reason",
+      "reasonHint": "At least 5 characters, e.g. \"The scan is cut off at the bottom\"."
+    },
+    "items": {
+      "identity": {
+        "label": "Identity",
+        "hint": "ID document, photo and age match the application."
+      },
+      "education": {
+        "label": "Education",
+        "hint": "Qualifications are genuine and meet the category minimum."
+      },
+      "experience": {
+        "label": "Experience",
+        "hint": "Years and roles are supported by evidence."
+      },
+      "trainingExam": {
+        "label": "Training and examination",
+        "hint": "Required training and exam results are on file."
+      },
+      "affiliation": {
+        "label": "Affiliation and supervision",
+        "hint": "Firm, supervisor and arrangements are confirmed."
+      },
+      "integrity": {
+        "label": "Integrity",
+        "hint": "Criminal record and disclosures are acceptable."
+      }
+    },
+    "outcomes": {
+      "VERIFIED": "Verified",
+      "PENDING": "Pending",
+      "FAILED": "Failed",
+      "NA": "Not applicable"
+    },
+    "documentationOutcomes": {
+      "COMPLETE": "Complete",
+      "INCOMPLETE": "Incomplete"
+    },
+    "eligibilityOutcomes": {
+      "SATISFIED": "Satisfied",
+      "NOT_SATISFIED": "Not satisfied",
+      "FURTHER_ASSESSMENT": "Needs further assessment"
+    },
+    "recommendations": {
+      "APPROVE": {
+        "label": "Approve",
+        "hint": "Send to the approver with a recommendation to approve."
+      },
+      "REFER": {
+        "label": "Refer",
+        "hint": "Needs further assessment before a recommendation."
+      },
+      "REJECT": {
+        "label": "Reject",
+        "hint": "Send to the approver with reasons to reject."
+      }
+    },
+    "reasonCodes": {
+      "INELIGIBLE_AGE": "Below the minimum age",
+      "INSUFFICIENT_EDUCATION": "Education requirement not met",
+      "INSUFFICIENT_EXPERIENCE": "Experience requirement not met",
+      "TRAINING_OR_EXAM": "Training or examination not met",
+      "INTEGRITY": "Integrity concerns",
+      "FALSE_INFORMATION": "False or misleading information",
+      "NO_SUPERVISION": "No valid supervision or affiliation",
+      "OTHER": "Other reason"
+    },
+    "ruleOutcomes": {
+      "PASS": "Passed",
+      "WARN": "Warning",
+      "NEEDS_ASSESSMENT": "Needs assessment",
+      "FAIL": "Failed"
+    },
+    "form": {
+      "title": "Section L — administrative review",
+      "subtitle": "Record each check, confirm the outcomes and recommend. Drafts save as you go.",
+      "checks": "Verification checks",
+      "applySuggestions": "Fill in suggestions",
+      "useSuggestion": "Use suggestion: {outcome}",
+      "matchesSuggestion": "Matches the suggestion",
+      "note": "Note for {item}",
+      "notePlaceholder": "Optional note",
+      "documentation": "Documentation",
+      "eligibility": "Eligibility",
+      "internalComment": "Internal comment",
+      "internalHint": "Only staff see this.",
+      "applicantComment": "Comment for the applicant",
+      "applicantHint": "The applicant sees this with the outcome.",
+      "recommendation": "Recommendation",
+      "reasonCodes": "Reason codes",
+      "reasonsReject": "Reasons for rejection",
+      "reasonsRefer": "Why further assessment is needed",
+      "reasonsHint": "At least 10 characters. Write plainly: the applicant may read this.",
+      "legalReference": "Legal reference",
+      "legalReferenceHint": "e.g. Article 12, Ministerial Order",
+      "save": "Save draft",
+      "saved": "Draft saved.",
+      "sign": "Sign review",
+      "signed": "Review signed and sent on.",
+      "saving": "Saving…",
+      "unsaved": "Unsaved changes",
+      "saveFailed": "Not saved",
+      "savedAt": "Saved {time}",
+      "notSaved": "Not saved yet",
+      "noEvidence": "No automatic evidence for this check.",
+      "evidence": "Evidence",
+      "computed": "Computed: {value}",
+      "computedMark": "Computed outcome",
+      "overrideReason": "Why you changed the computed outcome",
+      "overrideHint": "Required when you override (at least 10 characters). Overrides are reported."
+    },
+    "sign": {
+      "title": "Sign the review",
+      "description": "Signing locks this version and sends the application on. Confirm with your password.",
+      "password": "Your password",
+      "submit": "Sign review"
+    },
+    "signed": {
+      "by": "Version {version} signed by {name} on {date}",
+      "methods": {
+        "PASSWORD_REAUTH": "password confirmed"
+      },
+      "readOnly": "Read-only",
+      "overridden": "Overridden",
+      "reasons": "Reasons"
+    },
+    "actions": {
+      "take": "Assign to me",
+      "taken": "The file is now yours.",
+      "start": "Start review",
+      "started": "Review started. The review deadline is now running."
+    },
+    "request": {
+      "open": "Request information",
+      "title": "Request information",
+      "description": "The application returns to the applicant with only the parts you unlock open for changes.",
+      "template": "Template",
+      "templates": {
+        "missingDocument": {
+          "label": "Missing or unclear document",
+          "message": "Please upload a clear, complete copy of the document listed below. Make sure every page is readable."
+        },
+        "clarifyExperience": {
+          "label": "Clarify experience",
+          "message": "Please clarify your practice experience: give the firm, dates and duties for each period, and upload supporting evidence."
+        },
+        "supervisor": {
+          "label": "Supervisor or affiliation",
+          "message": "We could not confirm your supervisor or firm. Please check the details in your practice arrangement and update them."
+        },
+        "custom": {
+          "label": "Custom message",
+          "message": ""
+        }
+      },
+      "message": "Message to the applicant",
+      "messageHint": "At least 10 characters. Be specific about what to change.",
+      "sections": "Sections to unlock",
+      "documents": "Documents to replace or add",
+      "extraDocument": "Extra document (optional)",
+      "extraDocumentHint": "Name a document not on the checklist, e.g. \"Letter from former employer\".",
+      "dueInDays": "Days to respond",
+      "send": "Send request",
+      "sent": "Request sent. The applicant has been notified."
+    },
+    "conflict": {
+      "open": "Declare conflict",
+      "title": "Declare a conflict of interest",
+      "description": "You will be removed from this file and it will be reassigned. This is recorded in the audit trail.",
+      "reason": "Reason",
+      "submit": "Declare and step aside",
+      "done": "Conflict recorded. The file has been reassigned."
+    },
+    "override": {
+      "open": "Confirm on their behalf",
+      "title": "Confirm on behalf of the addressee",
+      "description": "Record a confirmation for {name}, for example when they confirmed in writing. Your reason is audited.",
+      "reason": "Reason",
+      "submit": "Confirm",
+      "done": "Confirmation recorded."
+    }
+  },
+  "decide": {
+    "listTitle": "Decisions",
+    "listSubtitle": "Signed reviews waiting for a Section M decision.",
+    "count": "{count, plural, =0 {Nothing waiting} one {# waiting} other {# waiting}}",
+    "empty": "No decisions waiting",
+    "emptyHint": "Applications appear here once an officer signs the review.",
+    "recommends": "Recommends: {recommendation}",
+    "noReview": "No signed review",
+    "youReviewed": "You reviewed this",
+    "officer": "Reviewing officer",
+    "waiting": "{count, plural, =0 {Since today} one {Waiting # day} other {Waiting # days}}",
+    "open": "Decide",
+    "title": "Decision",
+    "eyebrow": "Section M decision",
+    "back": "Back to decisions",
+    "openReview": "Open the full review",
+    "recordedTitle": "Decision recorded",
+    "recordedBody": "Decision letter {letter} has been issued and the applicant notified.",
+    "blockedTitle": "You can't decide this application",
+    "notPendingTitle": "Not ready for a decision",
+    "notPending": "This application is {status}. It needs a signed review first.",
+    "review": "Signed review",
+    "allRulesPass": "Every eligibility rule passed.",
+    "application": "Application details",
+    "immutable": "Signed and final",
+    "recommendationLine": "{name} recommends: {recommendation}.",
+    "noDecisionYet": "There is no decision on this application yet.",
+    "record": {
+      "approver": "Approving authority",
+      "signedAt": "Signed",
+      "letterNo": "Decision letter",
+      "category": "Approved category",
+      "scope": "Geographic scope",
+      "conditions": "Conditions",
+      "until": "until {date}",
+      "private": "not shown on the register",
+      "public": "shown on the register",
+      "reasons": "Reasons",
+      "licence": "Licence issued",
+      "validity": "Valid {from} to {to}",
+      "certificate": "Certificate (PDF)",
+      "issuancePending": "The licence is being issued. It will appear here shortly.",
+      "letter": "Decision letter (PDF)"
+    },
+    "form": {
+      "recorded": "Decision signed.",
+      "outcome": "Decision",
+      "hints": {
+        "APPROVED": "Issue the licence as applied for.",
+        "APPROVED_WITH_CONDITIONS": "Issue the licence with conditions.",
+        "DEFERRED": "Return to the applicant for more information.",
+        "REJECTED": "Refuse the application, with reasons."
+      },
+      "conditions": "Conditions",
+      "removeCondition": "Remove condition {n}",
+      "conditionText": "Condition wording",
+      "conditionNote": "Details (optional)",
+      "endsOn": "Ends on (optional)",
+      "public": "Show on the public register",
+      "addCondition": "Add a condition",
+      "scope": "Geographic scope",
+      "scopeNationwide": "The licence is valid nationwide.",
+      "scopeCount": "{count, plural, one {Limited to # district.} other {Limited to # districts.}}",
+      "nationwide": "Nationwide",
+      "reasonsOptional": "Reasons (optional)",
+      "reasons": "Reasons",
+      "reasonsHint": "Required for conditions, deferral and rejection (at least 10 characters). They appear in the decision letter.",
+      "password": "Your password",
+      "passwordHint": "Signing a decision needs your password. Decisions can't be changed afterwards.",
+      "submit": "Sign decision"
+    }
+  },
+  "summary": {
+    "yes": "Yes",
+    "no": "No",
+    "abroad": "Outside Rwanda",
+    "notProvided": "Not provided",
+    "sectionLetter": "Section {letter}:",
+    "edit": "Edit",
+    "editSection": "Edit {section}",
+    "empty": "Nothing entered yet.",
+    "untitled": "Untitled",
+    "sections": {
+      "b": "Identity and contact",
+      "c": "Education",
+      "d": "Training and examination",
+      "e": "Experience",
+      "f": "Practice arrangement",
+      "g": "Category requirements",
+      "h": "Integrity"
+    },
+    "gTitles": {
+      "RERA": "Referral agent terms",
+      "FSLA": "Sales associate terms",
+      "REA": "Agent requirements",
+      "BROKER": "Broker requirements",
+      "ASSOCIATE_BROKER": "Associate Broker",
+      "MANAGING_BROKER": "Managing Broker",
+      "PRINCIPAL_BROKER": "Principal Broker",
+      "REBF": "Firm details"
+    },
+    "lists": {
+      "qualifications": "{count, plural, one {Qualification} other {Qualifications (#)}}",
+      "records": "{count, plural, one {Practice record} other {Practice records (#)}}",
+      "responsiblePersons": "{count, plural, one {Director or shareholder} other {Directors and shareholders (#)}}",
+      "branches": "{count, plural, one {Branch} other {Branches (#)}}",
+      "disclosures": "{count, plural, one {Disclosure} other {Disclosures (#)}}"
+    },
+    "fields": {
+      "b": {
+        "surname": "Surname",
+        "givenNames": "Given names",
+        "otherNames": "Other names",
+        "fullNameOnId": "Full name on ID",
+        "idType": "ID type",
+        "idNumber": "ID number",
+        "idCountry": "Issuing country",
+        "idExpiry": "ID expiry",
+        "dateOfBirth": "Date of birth",
+        "nationality": "Nationality",
+        "gender": "Gender",
+        "phone": "Mobile",
+        "email": "Email",
+        "residentialAddress": "Residential address",
+        "professionalSameAsResidential": "Work address same as home",
+        "professionalAddress": "Professional address",
+        "occupation": "Occupation",
+        "employer": "Employer"
+      },
+      "c": {
+        "highestLevel": "Highest level",
+        "institution": "Institution",
+        "qualification": "Qualification",
+        "fieldOfStudy": "Field of study",
+        "fieldOther": "Field (other)",
+        "yearCompleted": "Year completed",
+        "certificateNo": "Certificate number",
+        "isForeign": "Obtained abroad",
+        "reliedUpon": "Relied on for this category"
+      },
+      "d": {
+        "trainingCompleted": "Training completed",
+        "trainingProvider": "Training provider",
+        "trainingProviderOther": "Provider (other)",
+        "trainingProgramme": "Programme",
+        "trainingCompletedOn": "Completed on",
+        "trainingCertificateNo": "Certificate number",
+        "examPassed": "Licensing examination",
+        "examReference": "Exam reference",
+        "examDate": "Exam date"
+      },
+      "e": {
+        "currentCategory": "Current category",
+        "previousLicenceNo": "Previous licence number",
+        "declaredYears": "Years of experience",
+        "priorCategoryForExperience": "Experience gained as",
+        "initialRegistrationDate": "First registered on",
+        "equivalentRecognised": "Equivalent experience recognised",
+        "equivalenceReference": "Equivalence reference",
+        "firm": "Firm",
+        "category": "Role",
+        "from": "From",
+        "to": "To",
+        "current": "Current role",
+        "duties": "Duties",
+        "refereeName": "Referee",
+        "refereeRole": "Referee's role",
+        "refereePhone": "Referee's phone",
+        "refereeEmail": "Referee's email"
+      },
+      "f": {
+        "practiceArrangement": "Arrangement",
+        "reraMode": "Referral mode",
+        "isAffiliated": "Affiliated with a firm",
+        "firmName": "Firm",
+        "supervisorLicenceNo": "Supervisor's licence",
+        "affiliationStart": "Affiliation starts",
+        "referralArrangementName": "Referral arrangement",
+        "referralApprovalRef": "Approval reference",
+        "independentAuthorisationRef": "Authorisation reference",
+        "independentNotes": "Notes"
+      },
+      "g": {
+        "dataConfirmed": "Details confirmed",
+        "article10Ack": "Article 10 acknowledged",
+        "territory": "Territory",
+        "restrictionsAck": "Restrictions acknowledged",
+        "brokerLicenceNo": "Broker licence",
+        "supervisionAck": "Supervision acknowledged",
+        "proposedBranchName": "Branch to manage",
+        "supervisedCount": "Practitioners supervised",
+        "supervisoryFunctions": "Supervisory functions",
+        "supervisoryNotes": "Supervision notes",
+        "proposedFirmRef": "Firm reference",
+        "indemnityInsurer": "Insurer",
+        "indemnityPolicyNo": "Policy number",
+        "indemnityCover": "Cover",
+        "indemnityFrom": "Cover from",
+        "indemnityTo": "Cover to",
+        "responsibilities": "Responsibilities accepted",
+        "legalName": "Legal name",
+        "tradingName": "Trading name",
+        "legalForm": "Legal form",
+        "companyRegNo": "Company registration number",
+        "tin": "TIN",
+        "incorporatedOn": "Incorporated on",
+        "registeredOffice": "Registered office",
+        "placeSameAsOffice": "Business place same as office",
+        "principalPlace": "Principal place of business",
+        "phone": "Phone",
+        "email": "Email",
+        "principalBrokerLicenceNo": "Principal Broker's licence",
+        "name": "Name",
+        "role": "Role",
+        "idType": "ID type",
+        "idNumber": "ID number",
+        "nationality": "Nationality",
+        "shareholding": "Shareholding",
+        "address": "Address",
+        "managingBrokerLicenceNo": "Managing Broker's licence",
+        "openingDate": "Opening date",
+        "clientFundsApplicable": "Holds client funds",
+        "hasSupervisoryManual": "Supervisory manual in place"
+      },
+      "h": {
+        "criminalConviction": "Criminal conviction",
+        "disciplinarySanction": "Disciplinary sanction",
+        "licenceRevoked": "Licence refused, suspended or revoked",
+        "currentRestriction": "Current restriction",
+        "question": "Question",
+        "nature": "Nature",
+        "date": "Date",
+        "authority": "Authority",
+        "outcome": "Outcome",
+        "currentStatus": "Current status",
+        "criminalRecordIssuedOn": "Criminal record issued on",
+        "codeOfConduct": "Code of conduct accepted"
+      }
+    },
+    "enums": {
+      "idTypes": {
+        "NATIONAL_ID": "National ID",
+        "PASSPORT": "Passport",
+        "REFUGEE_ID": "Refugee ID",
+        "OTHER": "Other"
+      },
+      "genders": {
+        "FEMALE": "Female",
+        "MALE": "Male",
+        "UNDISCLOSED": "Prefer not to say"
+      },
+      "educationLevels": {
+        "A2": "A2 certificate",
+        "A1": "A1 diploma",
+        "A0": "A0 degree",
+        "BACHELOR": "Bachelor's degree",
+        "POSTGRADUATE": "Postgraduate degree",
+        "OTHER_RECOGNISED": "Other recognised qualification"
+      },
+      "fieldsOfStudy": {
+        "REAL_ESTATE": "Real estate",
+        "ESTATE_MANAGEMENT_VALUATION": "Estate management and valuation",
+        "VALUATION_PROPERTY_MANAGEMENT": "Valuation and property management",
+        "BUSINESS": "Business",
+        "ECONOMICS": "Economics",
+        "FINANCE": "Finance",
+        "ACCOUNTING": "Accounting",
+        "MARKETING": "Marketing",
+        "LAW": "Law",
+        "CIVIL_ENGINEERING": "Civil engineering",
+        "ARCHITECTURE": "Architecture",
+        "URBAN_PLANNING": "Urban planning",
+        "LAND_SURVEYING": "Land surveying",
+        "GENERAL_SECONDARY": "General secondary",
+        "OTHER": "Other"
+      },
+      "trainingProviders": {
+        "PBTI": "PBTI",
+        "KSRE": "KSRE",
+        "EAPA": "EAPA",
+        "OTHER": "Other provider"
+      },
+      "trainingProgrammes": {
+        "ENTRY": "Entry-level",
+        "PROFESSIONAL": "Professional",
+        "ADVANCED_BROKER": "Advanced Broker",
+        "MANAGEMENT": "Management"
+      },
+      "examAnswers": {
+        "YES": "Passed",
+        "NO": "Not passed",
+        "NOT_APPLICABLE": "Not applicable"
+      },
+      "experienceCategories": {
+        "RERA": "Referral agent (RERA)",
+        "FSLA": "Sales associate (FSLA)",
+        "REA": "Agent (REA)",
+        "BROKER": "Broker",
+        "EQUIVALENT": "Equivalent experience"
+      },
+      "reraModes": {
+        "FIRM": "Through a licensed firm",
+        "REFERRAL": "Approved referral arrangement"
+      },
+      "legalForms": {
+        "PRIVATE_LIMITED": "Private limited company",
+        "PUBLIC_COMPANY": "Public company",
+        "PARTNERSHIP": "Partnership",
+        "SOLE_PROPRIETORSHIP": "Sole proprietorship",
+        "COOPERATIVE": "Cooperative",
+        "OTHER": "Other"
+      },
+      "supervisoryFunctions": {
+        "TRANSACTIONS": "Transactions",
+        "TRAINING": "Training",
+        "COMPLIANCE": "Compliance",
+        "CLIENT_FUNDS": "Client funds",
+        "COMPLAINTS": "Complaints"
+      },
+      "responsibilities": {
+        "supervision": "Supervision of practitioners",
+        "clientFunds": "Client funds",
+        "records": "Records",
+        "compliance": "Compliance",
+        "complaints": "Complaints handling"
+      },
+      "integrityQuestions": {
+        "criminalConviction": "Criminal conviction",
+        "disciplinarySanction": "Disciplinary sanction",
+        "licenceRevoked": "Licence refused, suspended or revoked",
+        "currentRestriction": "Current restriction"
+      }
+    },
+    "answers": "{count, plural, =0 {No answers} one {# answer} other {# answers}}"
+  },
+  "notificationsUi": {
+    "label": "Notifications",
+    "labelUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}",
+    "title": "Notifications",
+    "empty": "You're all caught up."
+  },
+  "applications": {
+    "title": "Applications",
+    "subtitle": "Your drafts and submitted applications, and what each one needs next.",
+    "newButton": "New application",
+    "checkEligibility": "Am I eligible?",
+    "emptyTitle": "No applications yet",
+    "emptyBody": "Start an application when you're ready. You can save and come back at any time.",
+    "journey": "Stage: {stage}",
+    "stages": {
+      "draft": "Draft",
+      "payment": "Payment",
+      "confirmation": "Confirmation",
+      "review": "Review",
+      "decision": "Decision"
+    },
+    "progress": "{percent}% complete",
+    "respondBy": "Information requested — respond by {date}",
+    "updated": "Updated {date}",
+    "actions": {
+      "continue": "Continue",
+      "respond": "Respond",
+      "pay": "Pay",
+      "view": "View"
+    },
+    "detail": {
+      "metaTitle": "Application {id}",
+      "journey": "Stage: {stage}",
+      "next": {
+        "draft": "Finish the remaining steps, then sign and submit. Your progress is saved automatically.",
+        "payment": "Your application is signed. Pay the fees to send it for review.",
+        "confirmations": "We've asked your supervisor and firm to confirm. Most confirm within a few days.",
+        "submitted": "Received. Review normally starts within 3 working days.",
+        "review": "An officer is reviewing your application. Review normally takes up to 15 working days.",
+        "action": "The officer needs something from you. Open the application to see what and respond.",
+        "assessment": "Your application needs a specialist assessment. We'll let you know the outcome.",
+        "decision": "The review is complete and the decision is being made, normally within 5 working days.",
+        "issued": "Your licence is issued and on the public register.",
+        "rejected": "Your application was not approved. The decision letter explains why and your options.",
+        "withdrawn": "You withdrew this application.",
+        "expired": "This draft expired after 90 days without activity."
+      },
+      "cta": {
+        "DRAFT": "Continue application",
+        "ACTION_REQUIRED": "Respond to the request",
+        "PENDING_PAYMENT": "Pay now"
+      },
+      "viewLicence": "View licence {number}",
+      "requestTitle": "The officer needs more information",
+      "requestDue": "Respond by {date}",
+      "officerComment": "Message from the officer",
+      "confirmationsTitle": "Confirmations",
+      "confirmationKinds": {
+        "SUPERVISOR": "Supervisor",
+        "PRINCIPAL_BROKER": "Principal Broker of the firm",
+        "DESIGNATION": "Proposed Principal Broker"
+      },
+      "dueBy": "due {date}",
+      "remind": "Send reminder",
+      "remindedShort": "Reminder sent",
+      "reminded": "We've sent a reminder.",
+      "decisionTitle": "Decision",
+      "decisionLine": "{decision} on {date}.",
+      "decisions": {
+        "APPROVED": "Approved",
+        "APPROVED_WITH_CONDITIONS": "Approved with conditions",
+        "DEFERRED": "Deferred pending information",
+        "REJECTED": "Not approved"
+      },
+      "timeline": "Timeline",
+      "files": "Documents to download",
+      "acknowledgment": "Acknowledgment of receipt",
+      "receipt": "Payment receipt {number}",
+      "letter": "Decision letter {number}",
+      "certificate": "Licence certificate",
+      "noFiles": "Documents appear here once you submit.",
+      "payments": "Payments",
+      "fingerprint": "Signed submission v{version} · fingerprint",
+      "withdraw": "Withdraw",
+      "withdrawTitle": "Withdraw this application?",
+      "withdrawBody": "The application stops here and can't be reopened. Fees already paid follow the refund rules.",
+      "keep": "Keep it",
+      "withdrawConfirm": "Withdraw application",
+      "withdrawn": "Application withdrawn.",
+      "resumeAt": "You stopped at {step}. Your answers are saved.",
+      "back": "My applications",
+      "backToApplication": "Back to application",
+      "hero": {
+        "eyebrow": "Step {n} of {total}",
+        "complete": "Journey complete",
+        "bubble": {
+          "write": "Let's finish it!",
+          "pay": "Almost there!",
+          "waiting": "Hang tight…",
+          "celebrate": "Congratulations!",
+          "worried": "Needs your help",
+          "wave": "See you soon"
+        }
+      },
+      "confirmedCount": "{done} of {total} confirmed",
+      "confirmationsHint": "We'll email them for you — remind anyone who's slow.",
+      "updatesTitle": "Updates",
+      "updatesEmpty": "No updates yet. We'll notify you here and by email."
+    },
+    "new": {
+      "eyebrow": "Section A",
+      "title": "Start an application",
+      "subtitle": "Choose what you're applying for. We'll only ask what applies to you.",
+      "typeTitle": "What do you want to do?",
+      "r2Types": "Change of firm and reinstatement open in the next release.",
+      "categoryTitle": "Which category?",
+      "notSure": "Not sure? Check your eligibility",
+      "req": {
+        "education": {
+          "NONE": "No minimum education",
+          "A2": "A2 or equivalent",
+          "A1_OR_HIGHER": "A1 or higher",
+          "REAL_ESTATE_DEGREE": "Real estate degree"
+        },
+        "experience": "{years} yrs as {as}",
+        "prerequisite": "{licence} licence",
+        "training": "Training",
+        "exam": "Exam"
+      },
+      "reasons": {
+        "firmOnly": "For firm accounts only.",
+        "individualOnly": "For individual accounts only.",
+        "needsLicence": "Renewal is available once you hold a licence in this category.",
+        "needsBrokerLicence": "Needs an active Broker licence.",
+        "needsLowerLicence": "Needs an active licence in the category below.",
+        "alreadyLicensed": "You already hold an active licence in this category.",
+        "notInPilot": "Opens in the next release.",
+        "notApplicable": "Not available for this type."
+      },
+      "fee": "From {amount}",
+      "sample": "sample fees",
+      "licenceTitle": "Which licence?",
+      "noRenewable": "None of your licences in this category is in its renewal window yet.",
+      "expires": "Expires {date}",
+      "lateFee": "In grace period — a late fee applies",
+      "start": "Start application",
+      "openExisting": "Open my existing application",
+      "before": {
+        "title": "Before you start",
+        "docs": "Documents to have ready",
+        "docsCount": "{count} required",
+        "more": "Some answers add a document, for example a qualification from abroad.",
+        "fees": "Fees",
+        "total": "Total",
+        "payWhen": "Paid after you sign.",
+        "sample": "Sample amounts.",
+        "time": "About 15 minutes. Answers save as you go.",
+        "cv": "Your CV",
+        "cvReady": "ready",
+        "cvMissing": "Missing",
+        "cvComplete": "Complete it"
+      },
+      "survey": {
+        "progress": "Step {current} of {total}",
+        "step": "{current} of {total}",
+        "back": "Back",
+        "change": "Change",
+        "continue": "Continue"
+      },
+      "completeCv": "Complete your CV"
+    },
+    "celebrate": {
+      "next": "What happens next",
+      "submitted": {
+        "title": "Application submitted!",
+        "body": "Well done. Your {category} application is with the regulator.",
+        "cta": "Track my application",
+        "steps": {
+          "review": {
+            "title": "An officer reviews it",
+            "body": "Usually within 3 working days."
+          },
+          "notify": {
+            "title": "We keep you posted",
+            "body": "By email and SMS at every step."
+          },
+          "decision": {
+            "title": "A decision",
+            "body": "If anything is missing, you'll be asked here."
+          }
+        },
+        "continue": "Continue to my applications"
+      },
+      "issued": {
+        "title": "Your licence is issued!",
+        "body": "Congratulations, you are now a licensed {category}.",
+        "cta": "Open my licence wallet",
+        "steps": {
+          "wallet": {
+            "title": "Your e-licence is ready",
+            "body": "Download it or show it from your wallet."
+          },
+          "verify": {
+            "title": "Anyone can verify it",
+            "body": "Clients scan the QR code to check it live."
+          },
+          "renew": {
+            "title": "We'll remind you to renew",
+            "body": "Well before it expires."
+          }
+        }
+      }
+    },
+    "board": {
+      "filters": "Filter applications",
+      "filter": {
+        "all": "All",
+        "you": "Your turn",
+        "review": "In review",
+        "done": "Finished"
+      },
+      "empty": {
+        "all": "No applications yet.",
+        "you": "Nothing waiting on you.",
+        "review": "Nothing in review right now.",
+        "done": "Nothing finished yet."
+      },
+      "unread": "{count, plural, one {# new update} other {# new updates}}",
+      "draftHint": "Saved as you go — pick up where you left off.",
+      "updated": "Updated {when}",
+      "newHint": "Another category or a renewal — start in a minute.",
+      "bubble": {
+        "write": "Let's finish it!",
+        "waiting": "We're on it…",
+        "celebrate": "Well done!",
+        "wave": "Let's begin!"
+      }
+    },
+    "summary": {
+      "yours": "your turn",
+      "theirs": "in review",
+      "finished": "finished"
+    }
+  },
+  "payments": {
+    "title": "Pay the fees",
+    "subtitle": "{category} application",
+    "breakdown": "Fee breakdown",
+    "total": "Total",
+    "schedule": "Fee schedule: {reference}",
+    "previous": "Earlier attempts",
+    "methodTitle": "How would you like to pay?",
+    "methodHints": {
+      "MOBILE_MONEY": "MTN MoMo or Airtel Money — approve on your phone",
+      "CARD": "Visa or Mastercard with 3-D Secure",
+      "BANK": "Bank transfer or deposit"
+    },
+    "wallet": "Mobile money number",
+    "walletHint": "We'll send the payment request to this number.",
+    "payNow": "Pay {total}",
+    "secure": "Payments are processed by the payment gateway; we never see your card or PIN.",
+    "sandbox": {
+      "title": "Payment gateway (sandbox)",
+      "badge": "Sandbox gateway — no real money moves",
+      "merchant": "REBP Portal",
+      "for": "Application {reference}",
+      "momoPrompt": "A payment request was sent to {msisdn}. Approve it to continue.",
+      "otherPrompt": "Confirm the payment to continue.",
+      "approve": "Approve payment",
+      "later": "Approve later (delayed confirmation)",
+      "decline": "Decline",
+      "waiting": "Waiting for the gateway to confirm…",
+      "paid": "Payment received. Your receipt is ready.",
+      "back": "Back to my application",
+      "failed": "The payment didn't go through.",
+      "retry": "Try again",
+      "note": "In the pilot this page stands in for the bank or mobile-money provider."
+    }
+  },
+  "confirmations": {
+    "title": "Confirmations",
+    "subtitle": "Applicants who named you as their supervisor or firm. Confirm only if the arrangement is real.",
+    "emptyTitle": "Nothing to confirm",
+    "emptyBody": "Supervision and affiliation requests addressed to you will appear here.",
+    "pending": "{count, plural, one {# waiting for you} other {# waiting for you}}",
+    "selectAll": "Select all",
+    "select": "Select {name}",
+    "kinds": {
+      "SUPERVISOR": "Supervision · {category}",
+      "PRINCIPAL_BROKER": "Affiliation with your firm · {category}",
+      "DESIGNATION": "Designation as Principal Broker · {category}"
+    },
+    "dueBy": "answer by {date}",
+    "from": "from {date}",
+    "decline": "Decline",
+    "confirm": "Confirm",
+    "selected": "{count} selected",
+    "confirmSelected": "Confirm {count}",
+    "confirmedToast": "{count, plural, one {Confirmed.} other {# confirmed.}}",
+    "declinedToast": "Declined. The applicant has been told.",
+    "answered": "Answered",
+    "declineTitle": "Decline this request?",
+    "declineBody": "Tell the applicant why, so they can correct their details.",
+    "reason": "Reason",
+    "cancel": "Cancel",
+    "declineConfirm": "Decline"
+  },
+  "firm": {
+    "title": "Firm workspace",
+    "emptyTitle": "No firm linked to your account",
+    "emptyBody": "When your firm is licensed, or you are its Principal Broker, its roster appears here.",
+    "principal": "Principal Broker: {name} ({licence})",
+    "noPrincipal": "No active Principal Broker",
+    "export": "Export roster (CSV)",
+    "switch": "Your firms",
+    "kpis": "Firm figures",
+    "activeLicences": "Active licences",
+    "rosterTotal": "{count} on the roster",
+    "expiring": "Expiring soon",
+    "expiringHint": "Within 90 days",
+    "flagged": "Need attention",
+    "flaggedHint": "Supervision or affiliation",
+    "confirmations": "To confirm",
+    "confirmationsHint": "Open your inbox",
+    "roster": "Roster",
+    "rosterEmpty": "No practitioners are affiliated with this firm yet.",
+    "expires": "Expires",
+    "supervisor": "Supervisor",
+    "branch": "Branch",
+    "flags": {
+      "SUPERVISION_REQUIRED": "Supervisor needed",
+      "AFFILIATION_REQUIRED": "Affiliation needed",
+      "RENEWAL_PENDING": "Renewal pending"
+    },
+    "branches": "Branches",
+    "managed": "Has a Managing Broker",
+    "noManager": "No Managing Broker",
+    "end": {
+      "button": "End affiliation",
+      "title": "End {name}'s affiliation?",
+      "body": "The practitioner and the Professional Body are notified. The practitioner has 30 days to arrange a new affiliation.",
+      "date": "Effective date",
+      "reason": "Reason",
+      "cancel": "Cancel",
+      "confirm": "End affiliation",
+      "done": "{name}'s affiliation has ended."
+    }
+  },
+  "wizard": {
+    "metaTitle": "Application",
+    "typeLine": {
+      "NEW": "New registration and licensing",
+      "UPGRADE": "Upgrade to a higher category",
+      "RENEWAL": "Licence renewal",
+      "CHANGE_OF_AFFILIATION": "Change of firm or affiliation",
+      "REINSTATEMENT": "Reinstatement",
+      "FIRM_REGISTRATION": "Brokerage firm registration"
+    },
+    "choose": "Choose…",
+    "yes": "Yes",
+    "no": "No",
+    "yesNo": "Yes or no",
+    "fixFields": "{count, plural, one {Please check the highlighted field} other {Please check the # highlighted fields}}",
+    "actionRequired": "Information requested — respond by {due}",
+    "actionRequiredHint": "Only the parts the officer unlocked can be changed. When you're done, sign and resubmit on the last step.",
+    "stepOf": "Step {current} of {total}",
+    "progress": "{percent}% complete",
+    "progressLabel": "Your progress",
+    "jumpTo": "Go to step",
+    "help": "Why we ask",
+    "whyTitle": "Why we ask:",
+    "locked": "This section is locked. Only the parts the officer asked about can be changed.",
+    "back": "Back",
+    "saveContinue": "Save and continue",
+    "feeTitle": "Fees",
+    "feeHint": "Paid after you sign.",
+    "feeSample": "Sample fees — the official schedule is pending.",
+    "state": {
+      "complete": "complete",
+      "inProgress": "in progress",
+      "errors": "needs attention",
+      "notStarted": "not started",
+      "locked": "locked",
+      "blocked": "needs a fix"
+    },
+    "save": {
+      "idle": "Changes save automatically",
+      "saving": "Saving…",
+      "saved": "All changes saved",
+      "error": "Couldn't save — retrying"
+    },
+    "eligibility": {
+      "title": "Eligibility",
+      "empty": "As you fill in your details, we'll show here whether you meet each requirement.",
+      "showPassed": "{count, plural, one {Show # requirement met} other {Show # requirements met}}",
+      "hidePassed": "Hide requirements met",
+      "disclaimer": "Indicative. The final check runs when you submit, and an officer confirms it.",
+      "eligibleFrom": "You become eligible on {date}, if you continue.",
+      "issuesTitle": "{count, plural, one {1 thing to check} other {# things to check}}",
+      "showMore": "Show {count} more",
+      "showFewer": "Show fewer",
+      "disclaimerShort": "Indicative; confirmed by an officer."
+    },
+    "steps": {
+      "label": "Application steps",
+      "a": {
+        "eyebrow": "Section A",
+        "title": "Application",
+        "intro": "Your reference number, application type and category.",
+        "help": "The type and category decide which sections, documents, rules and fees apply (form REBP–REG–01, Section A)."
+      },
+      "b": {
+        "eyebrow": "Section B",
+        "title": "Personal details",
+        "intro": "Who you are and how we can reach you.",
+        "help": "The register must identify each practitioner reliably. Your ID number and date of birth are never published."
+      },
+      "c": {
+        "eyebrow": "Section C",
+        "title": "Education",
+        "intro": "Your qualifications, including the ones you rely on for this category.",
+        "help": "Each category has a minimum education level. Qualifications from abroad need recognition or equivalence evidence (Article 12)."
+      },
+      "d": {
+        "eyebrow": "Section D",
+        "title": "Training and exams",
+        "intro": "Prescribed training and the licensing examination.",
+        "help": "FSLA needs entry-level training, REA professional training and an exam, and Brokers advanced training and an exam. Exam results stay valid for 3 years."
+      },
+      "e": {
+        "eyebrow": "Section E",
+        "title": "Experience",
+        "intro": "Where and when you practised.",
+        "help": "REA needs 3 years as an FSLA; Broker needs 3 years as a licensed REA. Overlapping periods count once, and suspensions don't count."
+      },
+      "f": {
+        "eyebrow": "Section F",
+        "title": "Firm and supervision",
+        "intro": "The firm you work with and who supervises you.",
+        "help": "Most categories practise under a licensed firm and a named supervisor, who confirms digitally after you submit."
+      },
+      "g": {
+        "eyebrow": "Section G",
+        "title": "Category requirements",
+        "intro": "What's specific to the category you're applying for.",
+        "help": "We re-use what you've already told us and ask only what this category adds."
+      },
+      "h": {
+        "eyebrow": "Section H",
+        "title": "Integrity",
+        "intro": "Questions about your professional record.",
+        "help": "Answering \"Yes\" does not mean refusal: an officer assesses the circumstances. These answers are restricted and every view is logged."
+      },
+      "i": {
+        "eyebrow": "Section I",
+        "title": "Documents",
+        "intro": "Everything we need, in one checklist.",
+        "help": "The list changes with your answers. Files are checked for viruses and stored encrypted."
+      },
+      "review": {
+        "eyebrow": "Sections J and K",
+        "title": "Review and sign",
+        "intro": "Check everything, read the declaration and sign with a one-time code.",
+        "help": "Your signature is bound to a fingerprint of the exact data you submit, so it can't be changed afterwards."
+      }
+    },
+    "address": {
+      "province": "Province",
+      "district": "District",
+      "sector": "Sector",
+      "cell": "Cell",
+      "village": "Village",
+      "choose": "Choose…",
+      "chooseAbove": "Choose the level above first",
+      "details": "Street, house or other details",
+      "detailsHint": "Optional. For example: KG 7 Ave, house 12.",
+      "abroad": "Outside Rwanda",
+      "abroadText": "Full address",
+      "abroadHint": "Street, city, postal code and country."
+    },
+    "lookup": {
+      "firmName": "Firm",
+      "registration": "Registration no.",
+      "principal": "Principal Broker",
+      "noPrincipal": "Not on record",
+      "change": "Choose another firm",
+      "verified": "Licensed firm — details from the register",
+      "firmHint": "Search by name or registration number.",
+      "firmPlaceholder": "e.g. Keza Realty",
+      "noFirm": "No licensed firm matches. You can type the name below.",
+      "manual": "My firm isn't on the register yet",
+      "manualPlaceholder": "Firm's legal name",
+      "manualHint": "An officer will verify an unregistered firm.",
+      "licenceNotFound": "We couldn't find this licence number on the register.",
+      "allowedCategories": "A supervisor for this category must hold one of: {list}.",
+      "useSuggestion": "Use {name} · {licence}",
+      "canSupervise": "Can supervise",
+      "cannotSupervise": "Can't supervise",
+      "verifiedShort": "On the register",
+      "searching": "Searching the register…",
+      "checkingLicence": "Checking the licence…",
+      "searchPlaceholder": "Name or licence number",
+      "matches": "Matches on the register",
+      "choose": "Choose",
+      "guide": "Licence number format",
+      "segments": {
+        "category": "Category",
+        "year": "Year",
+        "number": "Number"
+      }
+    },
+    "documents": {
+      "stepTitle": "Documents",
+      "stepHint": "Upload them here, or later from the checklist.",
+      "conditional": "because of your answers",
+      "limits": "{types} · up to {mb} MB",
+      "upload": "Upload",
+      "camera": "Take a photo",
+      "uploading": "Uploading… {percent}%",
+      "uploaded": "{name} uploaded.",
+      "infected": "This file failed the virus check and was blocked. Upload a clean copy.",
+      "rejectedFile": "This PDF contains active content or a password and was rejected. Save it again as a plain PDF.",
+      "view": "View {name}",
+      "replace": "Replace {name}",
+      "remove": "Remove {name}",
+      "officerNote": "Officer: {note}",
+      "noneLocked": "Nothing uploaded.",
+      "types": {
+        "proofOfIdentity": {
+          "name": "Proof of identity",
+          "hint": "Front and back of your ID, or your passport's photo page"
+        },
+        "photo": {
+          "name": "Passport-size colour photo",
+          "hint": "Plain background, no sunglasses, at least 600 × 600 px"
+        },
+        "educationCertificate": {
+          "name": "Education certificates",
+          "hint": "For each qualification you rely on"
+        },
+        "transcript": {
+          "name": "Academic transcripts",
+          "hint": "Shows your field of study"
+        },
+        "foreignRecognition": {
+          "name": "Recognition or equivalence",
+          "hint": "From the education authority, for qualifications from abroad"
+        },
+        "trainingCertificate": {
+          "name": "Training certificate",
+          "hint": "The certificate for the required programme"
+        },
+        "examResult": {
+          "name": "Exam result",
+          "hint": "Result slip or certificate"
+        },
+        "experienceEvidence": {
+          "name": "Evidence of experience",
+          "hint": "Letters or contracts covering your periods of practice"
+        },
+        "equivalenceDecision": {
+          "name": "Equivalence decision",
+          "hint": "The Professional Body's recognition decision"
+        },
+        "criminalRecord": {
+          "name": "Criminal record certificate",
+          "hint": "Issued in the last 6 months"
+        },
+        "integrityDisclosure": {
+          "name": "Disclosure documents",
+          "hint": "Decisions or letters about what you disclosed"
+        },
+        "affiliationEvidence": {
+          "name": "Affiliation or appointment",
+          "hint": "Agreement or letter from the firm"
+        },
+        "referralApproval": {
+          "name": "Referral arrangement approval",
+          "hint": "The approval of your referral-only arrangement"
+        },
+        "independentAuthorisation": {
+          "name": "Independent practice authorisation",
+          "hint": "The Professional Body's authorisation"
+        },
+        "previousLicence": {
+          "name": "Previous licence",
+          "hint": "Your earlier registration or licence"
+        },
+        "appointmentLetter": {
+          "name": "Appointment letter",
+          "hint": "From the firm, naming the branch"
+        },
+        "designationProof": {
+          "name": "Designation as Principal Broker",
+          "hint": "Board resolution or appointment letter"
+        },
+        "managementTraining": {
+          "name": "Management training",
+          "hint": "Where the category requires it"
+        },
+        "indemnityInsurance": {
+          "name": "Indemnity insurance",
+          "hint": "Policy schedule showing insurer, cover and period"
+        },
+        "companyRegistration": {
+          "name": "Company registration certificate",
+          "hint": "Certificate of Domestic Company Registration"
+        },
+        "fullRegistrationInfo": {
+          "name": "Full registration information",
+          "hint": "Full Registration Information of Domestic Company"
+        },
+        "taxRegistration": {
+          "name": "Tax registration",
+          "hint": "TIN certificate"
+        },
+        "businessAddressProof": {
+          "name": "Proof of business address",
+          "hint": "Lease or title for the registered office"
+        },
+        "supervisorySystems": {
+          "name": "Supervisory systems",
+          "hint": "Policy manual for supervising practitioners"
+        },
+        "clientFunds": {
+          "name": "Client funds arrangements",
+          "hint": "Client account letter and record-keeping policy"
+        },
+        "directorsIdentity": {
+          "name": "Directors' identity",
+          "hint": "ID for each director or responsible person"
+        },
+        "other": {
+          "name": "Other documents requested",
+          "hint": "Named by the officer"
+        }
+      },
+      "summaryFiles": "{count, plural, one {# file} other {# files}}",
+      "add": "Add",
+      "details": {
+        "label": "Details for {name}",
+        "formats": "Formats",
+        "size": "Size",
+        "maxSize": "Up to {mb} MB",
+        "filesLabel": "Files",
+        "maxFiles": "{count, plural, one {One file} other {Up to # files}}",
+        "none": "Nothing uploaded yet.",
+        "because": "Needed because of {reason}"
+      },
+      "preview": {
+        "open": "Preview {name}",
+        "previous": "Previous file",
+        "next": "Next file",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "rotate": "Rotate",
+        "position": "{current} of {total}",
+        "replace": "Replace",
+        "download": "Download",
+        "noReader": "Your browser can't show PDFs here.",
+        "openTab": "Open in a new tab",
+        "loading": "Loading the file…"
+      },
+      "fromProfile": "From your profile",
+      "edit": "Edit",
+      "editFiles": "Edit {name}",
+      "replaceFile": "Replace file",
+      "addAnother": "Add another file",
+      "removeFile": "Remove",
+      "missing": "Missing",
+      "optionalEmpty": "Optional, not uploaded"
+    },
+    "documentStatus": {
+      "SCANNING": "Checking",
+      "CLEAN": "Uploaded",
+      "INFECTED": "Blocked",
+      "REJECTED_FILE": "Rejected",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected by officer"
+    },
+    "checklist": {
+      "progress": "{done} of {total} required documents",
+      "complete": "All required documents are here",
+      "incomplete": "Some documents are still missing",
+      "hint": "Only documents that apply to you are listed.",
+      "extraTitle": "The officer also asked for:",
+      "required": "Required",
+      "conditional": "Because of your answers",
+      "conditions": {
+        "foreign": "a qualification from abroad",
+        "fieldCheck": "to confirm the field of study",
+        "equivalence": "equivalent experience claimed",
+        "previousLicence": "a previous licence number given",
+        "tin": "a tax number given",
+        "clientFunds": "you hold client funds",
+        "indemnity": "insurance is required",
+        "disclosure": "a \"Yes\" in the integrity questions",
+        "referral": "a referral-only arrangement",
+        "affiliated": "you'll practise in a firm",
+        "independent": "you'll practise independently",
+        "management": "where applicable",
+        "authority": "requested by the officer"
+      },
+      "paymentAuto": "Proof of payment is added automatically when you pay online.",
+      "missingCount": "{count, plural, one {# missing} other {# missing}}"
+    },
+    "a": {
+      "reference": "Reference number",
+      "type": "Application type",
+      "category": "Category",
+      "change": "Change category",
+      "changed": "Category changed to {category}.",
+      "intro": "Your answers are saved as you go. You can leave and come back from any device.",
+      "start": "Start",
+      "changeTitle": "Change the category?",
+      "changeBody": "Sections and documents will change to match the new category.",
+      "changeWarning": "Nothing is deleted: answers that no longer apply are kept and come back if you switch again.",
+      "newCategory": "New category",
+      "cancel": "Cancel",
+      "confirmChange": "Change category",
+      "welcome": "Let's get you licensed",
+      "expect": {
+        "steps": "{count} short parts, one question at a time",
+        "time": "About 15 minutes; you can stop any time",
+        "save": "Every answer saves automatically"
+      },
+      "prepareTitle": "Have these documents ready",
+      "prepareCount": "{count} required",
+      "prepareHint": "You'll upload them in the Documents step. Ticked ones are already done."
+    },
+    "b": {
+      "optional": "optional",
+      "nameTitle": "Your name",
+      "nameHint": "As it appears on your identity document.",
+      "surname": "Surname",
+      "givenNames": "Given names",
+      "otherNames": "Other names",
+      "fullNameOnId": "Full name as on the ID",
+      "idTitle": "Identity",
+      "idType": "Identity document",
+      "idTypes": {
+        "NATIONAL_ID": "National ID",
+        "PASSPORT": "Passport",
+        "REFUGEE_ID": "Refugee ID",
+        "OTHER": "Other prescribed document"
+      },
+      "idNumber": "Document number",
+      "nidHint": "16 digits, no spaces.",
+      "idCountry": "Issuing country",
+      "idExpiry": "Expiry date",
+      "dateOfBirth": "Date of birth",
+      "dobHint": "You must be at least 18.",
+      "gender": "Gender",
+      "genders": {
+        "FEMALE": "Female",
+        "MALE": "Male",
+        "UNDISCLOSED": "Prefer not to say"
+      },
+      "nationality": "Nationality",
+      "secondNationality": "Second nationality",
+      "contactTitle": "Contact",
+      "contactHint": "We'll use these for messages about your application.",
+      "phone": "Mobile number",
+      "email": "Email",
+      "residential": "Home address",
+      "sameAddress": "Is your professional address the same as your home address?",
+      "professional": "Professional address",
+      "workTitle": "Work",
+      "occupation": "Current occupation",
+      "employer": "Current employer",
+      "addressTitle": "Address"
+    },
+    "c": {
+      "highestLevel": "Highest level of education",
+      "highestHint": "A2 = advanced secondary; A1 = advanced diploma; A0 = bachelor's level.",
+      "levels": {
+        "A2": "A2 or equivalent",
+        "A1": "A1 or equivalent",
+        "A0": "A0 or equivalent",
+        "BACHELOR": "Bachelor's degree",
+        "POSTGRADUATE": "Postgraduate qualification",
+        "OTHER_RECOGNISED": "Other recognised qualification"
+      },
+      "qualificationsTitle": "Qualifications",
+      "qualificationsHint": "Add each qualification and tick the ones you rely on for this category.",
+      "qualificationN": "Qualification {n}",
+      "remove": "Remove qualification {n}",
+      "institution": "Institution",
+      "qualification": "Qualification obtained",
+      "fieldOfStudy": "Field of study",
+      "fields": {
+        "REAL_ESTATE": "Real Estate",
+        "ESTATE_MANAGEMENT_VALUATION": "Estate Management and Valuation",
+        "VALUATION_PROPERTY_MANAGEMENT": "Valuation and Property Management",
+        "BUSINESS": "Business",
+        "ECONOMICS": "Economics",
+        "FINANCE": "Finance",
+        "ACCOUNTING": "Accounting",
+        "MARKETING": "Marketing",
+        "LAW": "Law",
+        "CIVIL_ENGINEERING": "Civil Engineering",
+        "ARCHITECTURE": "Architecture",
+        "URBAN_PLANNING": "Urban Planning",
+        "LAND_SURVEYING": "Land Surveying",
+        "GENERAL_SECONDARY": "General secondary",
+        "OTHER": "Other"
+      },
+      "fieldOther": "Field of study (other)",
+      "yearCompleted": "Year completed",
+      "certificateNo": "Certificate number",
+      "isForeign": "Was this qualification obtained outside Rwanda?",
+      "foreignHint": "You'll need recognition or equivalence evidence.",
+      "reliedUpon": "I rely on this qualification for this category",
+      "add": "Add a qualification",
+      "qualificationEmpty": "Add the institution and year",
+      "qualificationsEmpty": "No qualifications yet. Add each one you rely on.",
+      "newQualification": "New qualification",
+      "reliedChip": "Relied upon"
+    },
+    "d": {
+      "trainingTitle": "Professional training",
+      "requiredTraining": "This category requires the {programme} programme.",
+      "noTrainingRequired": "No specific training is required for this category, but tell us if you completed one.",
+      "trainingCompleted": "Have you completed the prescribed professional training?",
+      "trainingMissing": "This category requires the {programme} programme. You can save your draft and submit once you have the certificate.",
+      "provider": "Training provider",
+      "providerOther": "Provider name",
+      "programme": "Programme",
+      "programmes": {
+        "ENTRY": "Entry-level (FSLA)",
+        "PROFESSIONAL": "Professional (REA)",
+        "ADVANCED_BROKER": "Advanced Broker",
+        "MANAGEMENT": "Management"
+      },
+      "providers": {
+        "PBTI": "Professional Body Training Institute",
+        "KSRE": "Kigali School of Real Estate (sample)",
+        "EAPA": "East Africa Property Academy (sample)",
+        "OTHER": "Other provider"
+      },
+      "completedOn": "Date completed",
+      "certificateNo": "Certificate number",
+      "examTitle": "Licensing examination",
+      "examRequired": "This category requires a passed licensing examination, valid for 3 years.",
+      "examNotRequired": "This category has no licensing examination.",
+      "examPassed": "Have you passed the required licensing examination?",
+      "exam": {
+        "YES": "Yes",
+        "NO": "No",
+        "NOT_APPLICABLE": "Not applicable"
+      },
+      "examReference": "Examination reference",
+      "examDate": "Examination date",
+      "examValidity": "Results are valid for 3 years from this date.",
+      "cvTrainingHint": "Professional training you have completed.",
+      "cvExamHint": "The licensing examination, if you have sat it."
+    },
+    "e": {
+      "recordsTitle": "Periods of practice",
+      "recordsHint": "List each period, newest first. Overlapping periods are counted once.",
+      "recordN": "Period {n}",
+      "remove": "Remove period {n}",
+      "firm": "Firm",
+      "category": "Category held",
+      "categories": {
+        "RERA": "RERA",
+        "FSLA": "FSLA",
+        "REA": "REA",
+        "BROKER": "Broker",
+        "EQUIVALENT": "Recognised equivalent"
+      },
+      "from": "From",
+      "to": "To",
+      "current": "I still work here",
+      "duties": "Your main duties",
+      "add": "Add a period",
+      "registrationTitle": "Registration history",
+      "registrationHint": "For REA and Broker: when you were first registered and in which category.",
+      "priorCategory": "Experience gained as",
+      "initialRegistration": "Date first registered",
+      "currentCategory": "Current category",
+      "previousLicence": "Previous licence number",
+      "declaredYears": "Years you declare",
+      "declaredHint": "We calculate this from your periods; tell us if your own figure differs.",
+      "equivalent": "Has the Professional Body recognised equivalent experience?",
+      "equivalentHint": "Only if you have a recognition decision.",
+      "equivalenceReference": "Recognition reference",
+      "refereeTitle": "Referee",
+      "refereeHint": "Someone who can confirm your experience. Optional.",
+      "refereeName": "Name",
+      "refereeRole": "Role",
+      "refereePhone": "Phone",
+      "refereeEmail": "Email",
+      "timeline": {
+        "title": "Your qualifying experience",
+        "total": "{years} y {months} m of {required} years",
+        "progress": "{percent}% of the requirement",
+        "periods": "Qualifying periods",
+        "register": "From the register",
+        "declared": "Declared by you",
+        "merged": "Overlaps counted once",
+        "excluded": "{count, plural, one {# suspension excluded} other {# suspensions excluded}}",
+        "eligibleFrom": "If you continue, you meet the requirement on {date}."
+      },
+      "emptyRecords": "No periods yet. Add each place you practised, with its dates.",
+      "coach": {
+        "counts": "Counts toward {target}",
+        "reasonCategory": "{category} practice doesn't count toward {target}",
+        "reasonFrom": "Add its start date",
+        "notCounted": "Not counted yet",
+        "fix": "Fix",
+        "waysTitle": "Ways to reach {required} years",
+        "addPeriod": "Add a period of {category} practice",
+        "equivalence": "Recognised equivalent experience?",
+        "duration": "{years, plural, =0 {} one {# year} other {# years}}{both, select, yes { } other {}}{months, plural, =0 {} one {# month} other {# months}}",
+        "metShort": "{target} requirement met",
+        "toGo": "{duration} to go",
+        "countsShort": "{category} counts",
+        "eligibleOn": "Eligible {date}",
+        "ofYears": "of {required}y"
+      },
+      "present": "present",
+      "recordEmpty": "Add the firm and dates",
+      "newRecord": "New period of practice"
+    },
+    "f": {
+      "reraMode": "How will you operate?",
+      "reraFirm": "Through a licensed firm",
+      "reraFirmHint": "You refer clients under a firm and a supervising practitioner.",
+      "reraReferral": "Approved referral-only arrangement",
+      "reraReferralHint": "An arrangement the Professional Body has approved.",
+      "arrangement": "Your intended practice arrangement",
+      "arrangements": {
+        "AFFILIATED": "With a licensed firm",
+        "INDEPENDENT": "Independently",
+        "ESTABLISH_OR_JOIN_REBF": "Set up or join a firm"
+      },
+      "arrangementHints": {
+        "AFFILIATED": "You'll practise under a licensed brokerage firm.",
+        "INDEPENDENT": "Needs an authorisation from the Professional Body.",
+        "ESTABLISH_OR_JOIN_REBF": "You plan to found or join a firm being registered."
+      },
+      "firmTitle": "Firm",
+      "firmHint": "The licensed brokerage firm you work with or will join.",
+      "designationHint": "The licensed firm that appoints you. Its Principal Broker will confirm.",
+      "isAffiliated": "Are you currently affiliated with a licensed firm?",
+      "proposedHint": "Then name the firm you propose to join.",
+      "proposedFirm": "Firm you propose to join",
+      "firm": "Your firm",
+      "branch": "Branch you will manage",
+      "branchHint": "A branch can have one active Managing Broker.",
+      "branchTaken": "has a Managing Broker",
+      "affiliationStart": "Start of affiliation",
+      "affiliationStartHint": "At most 30 days from today.",
+      "referralTitle": "Referral arrangement",
+      "referralName": "Name of the approved arrangement",
+      "referralRef": "Approval reference",
+      "independentTitle": "Independent practice authorisation",
+      "independentHint": "The Professional Body's authorisation to practise independently.",
+      "independentRef": "Authorisation reference",
+      "independentNotes": "Supporting information",
+      "establishTitle": "Firm registration",
+      "establishOrg": "Register the firm with \"Brokerage firm registration\" from the applications page. This application can continue in parallel.",
+      "establishPerson": "A firm is registered from an organisation account. You can continue this application; we'll link the two once the firm applies.",
+      "supervisorTitle": "Supervision",
+      "supervisorHint": "Your supervisor confirms digitally after you submit.",
+      "supervisorLicence": "Supervisor's licence number",
+      "isAffiliatedWith": "Do you already work with {firm}?",
+      "proposedNote": "We'll record {firm} as the firm you propose to join."
+    },
+    "g": {
+      "reusedTitle": "What you've already told us",
+      "reusedHint": "We use your earlier answers; here's how they meet this category's requirements.",
+      "reusedEmpty": "Fill in the earlier sections and the checks appear here.",
+      "confirmData": "I confirm the information in the earlier sections is accurate for this category.",
+      "confirmDataHint": "You can still go back and change it before signing.",
+      "brokerLicence": "Your Broker licence number",
+      "brokerLicenceHint": "Must be active and held by you.",
+      "g1": {
+        "title": "Referral-only restrictions (Article 10)",
+        "article10": "Article 10 — Real Estate Referral Agents\n\n1. A Referral Agent may only introduce or refer prospective clients to a licensed practitioner or firm.\n2. A Referral Agent may not negotiate terms, show or market property on their own account, hold client money, or sign or witness any agreement on behalf of a party.\n3. A Referral Agent works under the supervision named in their licence and must disclose their referral role to every client.\n4. Any referral fee is paid only through the supervising firm and must be recorded.\n\n(Summary for the pilot — the approved legal text will replace it.)",
+        "ack": "I have read and accept the referral-only restrictions of Article 10.",
+        "digest": {
+          "refer": "Refer clients to licensed people",
+          "supervised": "Work under your named supervisor",
+          "disclose": "Tell clients you are a referral agent",
+          "fees": "Take fees only through the firm",
+          "negotiate": "Negotiate terms",
+          "market": "Show or market property yourself",
+          "money": "Hold client money",
+          "sign": "Sign or witness agreements"
+        }
+      },
+      "g2": {
+        "territoryTitle": "Proposed territory",
+        "territoryHint": "The districts where you'll work. It becomes the authorised scope on your licence.",
+        "restrictionsTitle": "Restrictions for Field Sales and Leasing Agents",
+        "restrictions": "As an FSLA you may show property, collect information and assist clients under supervision. You may not independently negotiate terms or execute binding agreements on behalf of a party; these remain with your supervising practitioner.\n\n(Summary for the pilot — the approved legal text will replace it.)",
+        "ack": "I understand I may not negotiate independently or execute binding agreements.",
+        "digest": {
+          "show": "Show property",
+          "collect": "Collect client information",
+          "assist": "Assist clients, supervised",
+          "negotiate": "Negotiate terms on your own",
+          "sign": "Sign binding agreements"
+        }
+      },
+      "g5": {
+        "title": "Principal Broker's supervision",
+        "text": "As an Associate Broker you practise under the professional supervision and regulatory responsibility of the firm's Principal Broker, who is answerable for your conduct within the firm.\n\n(Summary for the pilot.)",
+        "ack": "I acknowledge the Principal Broker's supervision and regulatory responsibility.",
+        "digest": {
+          "supervised": "Practise under the Principal Broker",
+          "answerable": "They answer for your conduct"
+        }
+      },
+      "g6": {
+        "title": "Supervisory responsibilities",
+        "hint": "What you'll supervise at the branch.",
+        "count": "Number of practitioners you'll supervise",
+        "functions": "Functions",
+        "functionNames": {
+          "TRANSACTIONS": "Transactions",
+          "TRAINING": "Training",
+          "COMPLIANCE": "Compliance",
+          "CLIENT_FUNDS": "Client funds",
+          "COMPLAINTS": "Complaints"
+        },
+        "notes": "Details"
+      },
+      "g7": {
+        "firmRef": "Firm registration number, or the reference of its pending application",
+        "firmRefHint": "Your designation and the firm's registration can be decided together.",
+        "responsibilitiesTitle": "Your responsibilities as Principal Broker",
+        "responsibilitiesHint": "Confirm each one.",
+        "responsibilities": {
+          "supervision": "Supervising all practitioners of the firm",
+          "clientFunds": "Proper handling of client funds",
+          "records": "Keeping complete transaction records",
+          "compliance": "The firm's regulatory compliance",
+          "complaints": "Handling consumer complaints"
+        }
+      },
+      "indemnity": {
+        "title": "Professional indemnity insurance",
+        "hint": "Must be valid when the licence is issued.",
+        "insurer": "Insurer",
+        "policyNo": "Policy number",
+        "cover": "Cover amount (RWF)",
+        "from": "Valid from",
+        "to": "Valid until"
+      },
+      "g8": {
+        "identityTitle": "The firm",
+        "legalName": "Registered legal name",
+        "tradingName": "Trading name",
+        "legalForm": "Legal form",
+        "legalForms": {
+          "PRIVATE_LIMITED": "Private limited company",
+          "PUBLIC_COMPANY": "Public company",
+          "PARTNERSHIP": "Partnership",
+          "SOLE_PROPRIETORSHIP": "Sole proprietorship",
+          "COOPERATIVE": "Cooperative",
+          "OTHER": "Other"
+        },
+        "companyRegNo": "Company registration number",
+        "tin": "Tax identification number (TIN)",
+        "incorporatedOn": "Date of incorporation",
+        "phone": "Firm telephone",
+        "email": "Official email",
+        "registeredOffice": "Registered office",
+        "sameAsOffice": "Is the principal place of business the registered office?",
+        "principalPlace": "Principal place of business",
+        "peopleTitle": "Directors and responsible persons",
+        "peopleHint": "Everyone legally responsible for the firm.",
+        "personN": "Person {n}",
+        "removePerson": "Remove person {n}",
+        "personName": "Full name",
+        "personRole": "Role",
+        "idType": "Identity document",
+        "idTypes": {
+          "NATIONAL_ID": "National ID",
+          "PASSPORT": "Passport",
+          "REFUGEE_ID": "Refugee ID",
+          "OTHER": "Other"
+        },
+        "idNumber": "Document number",
+        "nationality": "Nationality",
+        "shareholding": "Shareholding (%)",
+        "addPerson": "Add a person",
+        "principalTitle": "Principal Broker",
+        "principalHint": "The Principal Broker confirms the designation digitally. A firm licence needs an approved Principal Broker.",
+        "principalLicence": "Principal Broker's licence number",
+        "branchesTitle": "Branches",
+        "branchesHint": "Offices other than the registered office. Optional.",
+        "branchN": "Branch {n}",
+        "removeBranch": "Remove branch {n}",
+        "branchName": "Branch name",
+        "branchPhone": "Phone",
+        "branchManager": "Managing Broker's licence number",
+        "openingDate": "Opening date",
+        "branchAddress": "Branch address",
+        "addBranch": "Add a branch",
+        "systemsTitle": "Supervision and client funds",
+        "clientFunds": "Will the firm hold client funds?",
+        "clientFundsHint": "If yes, upload the client account letter and record-keeping policy.",
+        "manual": "The firm has written supervisory systems and procedures",
+        "manualHint": "Upload the policy manual with the documents.",
+        "personEmpty": "Add their role and ID",
+        "peopleEmpty": "Add each director, partner or shareholder.",
+        "newPerson": "New person",
+        "branchEmpty": "Add its details",
+        "branchesEmpty": "No branches yet. Add each branch office.",
+        "newBranch": "New branch"
+      }
+    },
+    "h": {
+      "sensitive": "Only authorised officers see these answers, and every view is logged.",
+      "questionsTitle": "Your professional record",
+      "questions": {
+        "criminalConviction": "Have you been convicted of a criminal offence relevant to practising, as defined by law?",
+        "disciplinarySanction": "Have you been subject to a professional disciplinary sanction or licence suspension?",
+        "licenceRevoked": "Have you ever had a professional registration or licence revoked?",
+        "currentRestriction": "Are you currently subject to any restriction that may legally prevent you from practising?"
+      },
+      "short": {
+        "criminalConviction": "Criminal conviction",
+        "disciplinarySanction": "Disciplinary sanction",
+        "licenceRevoked": "Licence revoked",
+        "currentRestriction": "Current restriction"
+      },
+      "yesNote": "A \"Yes\" does not mean refusal. Tell us what happened; an officer assesses it.",
+      "disclosuresTitle": "Details",
+      "disclosuresHint": "One entry for each \"Yes\".",
+      "disclosureN": "Disclosure {n}",
+      "remove": "Remove disclosure {n}",
+      "question": "About",
+      "nature": "What happened",
+      "date": "Date",
+      "authority": "Authority",
+      "outcome": "Outcome",
+      "currentStatus": "Current status",
+      "add": "Add details",
+      "certificateTitle": "Criminal record certificate",
+      "criminalRecordIssuedOn": "Date the certificate was issued",
+      "criminalRecordHint": "It must be issued within the last 6 months.",
+      "codeTitle": "Code of conduct",
+      "codeHint": "The professional code of conduct and ethical standards.",
+      "codeOfConduct": "Are you willing to comply with the professional code of conduct and ethical standards?",
+      "codeBlocking": "You can't apply without agreeing to the code of conduct.",
+      "disclosureEmpty": "Add the details",
+      "disclosuresEmpty": "Add one entry for each question you answered yes.",
+      "newDisclosure": "New disclosure",
+      "trackerLabel": "Your answers",
+      "tracker": {
+        "open": "not answered",
+        "yes": "yes, details needed",
+        "no": "no"
+      },
+      "trackerCount": "{done} of {total} answered",
+      "sensitiveShort": "Only authorised officers see these; every view is logged."
+    },
+    "review": {
+      "readyTitle": "Ready to sign",
+      "readyBody": "Everything required is here. Check your answers, then read and sign the declaration.",
+      "notReady": "Before you can sign",
+      "sectionIncomplete": "Complete \"{section}\"",
+      "documentsMissing": "{count, plural, one {Upload # missing document} other {Upload # missing documents}}",
+      "ineligible": "{count, plural, one {# requirement isn't met yet} other {# requirements aren't met yet}}",
+      "feesTitle": "Fees",
+      "total": "Total",
+      "sampleFees": "Sample fees for the pilot — the official schedule is pending.",
+      "notReadyHint": "Fix these, then come back here to sign.",
+      "goFix": "Complete it",
+      "goUpload": "Upload now",
+      "feesWhen": "Paid after you sign",
+      "path": {
+        "readyHint": "Three short steps, then on to payment.",
+        "fixHint": "Fix what's below first; then accept and sign.",
+        "steps": {
+          "check": "Check answers",
+          "accept": "Accept",
+          "sign": "Sign"
+        },
+        "states": {
+          "done": "Done",
+          "now": "Now",
+          "fix": "Fix first",
+          "todo": "Next",
+          "sent": "Code sent"
+        }
+      }
+    },
+    "declaration": {
+      "title": "Declaration (Section J)",
+      "statements": {
+        "1": "The information I have given is true, accurate and complete.",
+        "2": "I meet the eligibility requirements for this category, or I have disclosed every circumstance that may affect them.",
+        "3": "I understand that submitting this application does not by itself give me registration or a licence.",
+        "4": "I will comply with the applicable laws, Instructions, professional standards and the code of conduct.",
+        "5": "I will notify the Professional Body of any material change to the information given.",
+        "6": "I understand that false statements, forged documents or omissions may lead to refusal, suspension, revocation or other sanctions.",
+        "7": "I consent to the verification of the information and documents I have provided.",
+        "8": "I acknowledge that my personal data will be processed for registration, licensing and the public register, as described in the privacy notice."
+      },
+      "privacy": "Read the <link>privacy notice</link>: who processes your data, why, for how long and your rights.",
+      "confirm": "I confirm that I have read and accepted the declaration.",
+      "signatory": "Signed by",
+      "capacity": "Signing capacity",
+      "capacityHint": "e.g. Director. You must be authorised to sign for the firm.",
+      "capacityPlaceholder": "Director",
+      "method": "Sign with a one-time code sent to",
+      "byEmail": "Email",
+      "bySms": "SMS",
+      "sendCode": "Send signing code",
+      "sentEmail": "Code sent by email.",
+      "sentSms": "Code sent by SMS.",
+      "codeSentEmail": "We sent a 6-digit code to {destination}.",
+      "codeSentSms": "We sent a 6-digit code to {destination}.",
+      "code": "6-digit code",
+      "signSubmit": "Sign and submit",
+      "resubmit": "Sign and resubmit",
+      "changeMethod": "Use another method",
+      "legal": "Signing records your identity, the time, your device and a fingerprint of this exact application.",
+      "signed": "Signed. Next: payment.",
+      "resubmitted": "Resubmitted to the officer."
+    },
+    "stages": {
+      "label": "Application stages",
+      "form": "Fill in",
+      "sign": "Sign",
+      "pay": "Pay",
+      "done": "Submitted"
+    },
+    "search": "Search",
+    "noMatch": "No match",
+    "fixIn": "Fix in {step}",
+    "saved": "Saved",
+    "partOf": "Part {current} of {total}",
+    "partSteps": "{count, plural, one {# step} other {# steps}}",
+    "saveExit": "Save and exit",
+    "phases": {
+      "you": "About you",
+      "qualifications": "Qualifications",
+      "practice": "Your practice",
+      "finish": "Documents & sign"
+    },
+    "errors": {
+      "title": "{count, plural, one {Fix 1 answer to continue} other {Fix # answers to continue}}",
+      "left": "{count, plural, one {# answer left} other {# answers left}}",
+      "allAnswered": "All answered",
+      "required": "Required",
+      "tapToGo": "Tap one to go to it."
+    },
+    "partDone": "{done} of {total} done",
+    "pages": {
+      "label": "Pages of this step",
+      "next": "Next",
+      "more": "Questions",
+      "problems": "{count, plural, one {# answer missing} other {# answers missing}}"
+    },
+    "loading": "Loading…",
+    "toFix": "{count} to fix",
+    "digest": {
+      "can": "You can",
+      "cannot": "You can't",
+      "readFull": "Read the full article",
+      "hideFull": "Hide the full article"
+    },
+    "ruleAction": {
+      "fix": "Fix this",
+      "replace": "Replace document",
+      "replaceIn": "Replace in {step}"
+    },
+    "journey": {
+      "title": "Requirements",
+      "toFix": "{count} to fix",
+      "notes": "{count, plural, one {# note} other {# notes}}",
+      "officer": "{count, plural, one {# officer check} other {# officer checks}}",
+      "allClear": "Nothing to fix so far",
+      "checking": "Checking…",
+      "resolved": "Sorted",
+      "officerStep": "Officer check",
+      "done": "Done"
+    },
+    "chain": {
+      "you": "You",
+      "firm": "Your firm",
+      "referral": "Referral scheme",
+      "supervisorNode": "Supervisor",
+      "caption": "Who you work through, and who supervises you",
+      "confirmsLater": "Your supervisor confirms digitally after you submit.",
+      "through": {
+        "empty": "No firm named yet.",
+        "checking": "Checking {name}.",
+        "ok": "You work through {name}, which is licensed.",
+        "fail": "{name} can't be used: see below.",
+        "officer": "An officer will verify {name}."
+      },
+      "supervisor": {
+        "empty": "No supervisor named yet.",
+        "checking": "Checking {name}.",
+        "ok": "{name} can supervise you.",
+        "fail": "{name} can't supervise you: see below.",
+        "officer": "An officer will verify {name}."
+      },
+      "state": {
+        "empty": "Add",
+        "checking": "Checking…",
+        "ok": "Confirmed",
+        "fail": "Fix this",
+        "officer": "Officer check"
+      }
+    },
+    "upNext": "Up next: {title}",
+    "profileStep": {
+      "title": "From your profile",
+      "hint": "Your personal details are reused from your profile.",
+      "edit": "Edit in profile",
+      "name": "Name",
+      "incomplete": "Your profile is missing some details.",
+      "incompleteFix": "Complete them in your profile; this application updates automatically.",
+      "missing": "Missing"
+    },
+    "items": {
+      "edit": "Edit",
+      "done": "Done",
+      "autosave": "Answers save as you type."
+    },
+    "issue": {
+      "topics": {
+        "age": "Age",
+        "education": "Education level",
+        "qualification": "Qualification",
+        "training": "Training",
+        "exam": "Licensing exam",
+        "experience": "Experience",
+        "supervisor": "Supervisor",
+        "broker": "Broker",
+        "firm": "Firm",
+        "authorisation": "Authorisation",
+        "licence": "Licence",
+        "integrity": "Integrity",
+        "certificate": "Criminal record",
+        "conduct": "Code of conduct",
+        "indemnity": "Indemnity insurance",
+        "requirement": "Requirement"
+      },
+      "meter": "{percent}% of the requirement",
+      "why": "Why?",
+      "short": "{duration} short",
+      "under": "Under {min}",
+      "eligibleOn": "Eligible {date}",
+      "verdict": {
+        "fail": "Not met",
+        "notYet": "Not yet",
+        "missing": "Missing",
+        "mismatch": "Doesn't match",
+        "expired": "Expired",
+        "assess": "Officer check",
+        "warn": "Check this",
+        "notFound": "Not found",
+        "self": "Can't be you",
+        "inactive": "Not active",
+        "category": "Can't supervise",
+        "expiring": "Expiring",
+        "linked": "Already linked",
+        "unverified": "Unverified",
+        "referral": "Referral only",
+        "verify": "To verify",
+        "late": "Late",
+        "lapsed": "Lapsed",
+        "noLicence": "No licence",
+        "excluded": "Time excluded",
+        "equivalence": "Officer check"
+      },
+      "do": {
+        "fix": "Fix it",
+        "dateOfBirth": "Check date of birth",
+        "education": "Update education",
+        "qualification": "Check qualification",
+        "training": "Update training",
+        "exam": "Update exam",
+        "experience": "Add experience",
+        "supervisor": "Change supervisor",
+        "broker": "Change broker",
+        "firm": "Choose firm",
+        "authorisation": "Add authorisation",
+        "certificate": "Update certificate",
+        "conduct": "Accept the code",
+        "indemnity": "Update insurance"
+      },
+      "met": "Met"
+    }
+  },
+  "registerMap": {
+    "label": "Map of licensed practitioners by district",
+    "basemap": "Map style",
+    "basemaps": {
+      "map": "Map",
+      "satellite": "Satellite"
+    },
+    "labels": "District names",
+    "measure": "Measure distance",
+    "measureHint": "Click two or more points",
+    "clear": "Clear",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "tilt": "Tilt to 3D",
+    "locate": "My location",
+    "reset": "Show all Rwanda",
+    "fullscreen": "Full screen",
+    "summary": "{count, plural, one {# entry} other {# entries}} · {districts, plural, one {# district} other {# districts}}",
+    "approx": "Positions are district centres",
+    "district": "District",
+    "close": "Close",
+    "total": "Entries",
+    "valid": "Valid",
+    "firms": "Firms",
+    "fromYou": "{distance} from you",
+    "viewList": "View {count} in the list",
+    "districtAria": "{district}: {count, plural, one {# entry} other {# entries}}",
+    "filters": "Filters",
+    "interact": "Interact",
+    "interactHint": "Turn on to pan, zoom and tilt the map",
+    "listLabel": "Register results",
+    "compass": "Reset north",
+    "gestureHint": "Turn on Interact to move the map",
+    "undo": "Undo last point",
+    "measureKeys": "Backspace undoes · Esc finishes",
+    "tip": "{valid} valid · {firms, plural, one {# firm} other {# firms}}",
+    "validShare": "{valid} of {total} valid",
+    "hereNow": "Located here",
+    "exitFullscreen": "Exit full screen"
+  },
+  "registry": {
+    "preview": "Preview",
+    "openPreview": "Preview {name}",
+    "copyNumber": "Copy licence number",
+    "openVerification": "Open verification",
+    "showOnMap": "Show on map",
+    "share": "Share",
+    "suggestions": "Suggestions",
+    "seeAll": "See all results for “{q}”",
+    "noMatches": "No matches yet. Press Enter to search the register.",
+    "searching": "Searching…",
+    "hint": "Type a name, licence or registration number"
+  },
+  "profile": {
+    "title": "Your profile",
+    "subtitle": "Your personal details, entered once and reused in every application.",
+    "progress": "Profile {percent}% complete",
+    "welcomeTitle": "Welcome! Let's set up your profile",
+    "completeTitle": "Your profile is complete",
+    "completeBody": "Every application uses these details. Change them here any time.",
+    "body": "{left, plural, one {# answer left} other {# answers left}}. You fill these in once; every application reuses them.",
+    "missing": "Still to do",
+    "sameAddress": "Professional address",
+    "formLabel": "Personal details",
+    "reuse": "Saved automatically. Used by all your applications.",
+    "continue": "Continue",
+    "finish": "Finish profile",
+    "documentsTitle": "Identity documents",
+    "documentsHint": "Uploaded once here. Every application gets its own copy.",
+    "left": "{left, plural, one {# thing left} other {# things left}}. The red numbers show where.",
+    "steps": "Profile steps",
+    "missingCount": "{count, plural, one {# missing} other {# missing}}",
+    "stepDone": "complete",
+    "back": "Back",
+    "next": "Next",
+    "stepOf": "Step {current} of {total}",
+    "photo": {
+      "add": "Add photo",
+      "menu": "Profile photo",
+      "preview": "Preview",
+      "change": "Change photo",
+      "remove": "Remove photo",
+      "saved": "Photo updated.",
+      "removed": "Photo removed."
+    },
+    "buddy": {
+      "wave": "Hi! Let's begin",
+      "write": "Nice! {left} to go",
+      "documents": "Just your ID and photo",
+      "celebrate": "All set!",
+      "worried": "Not saved yet",
+      "action": "Show what's missing"
+    },
+    "savedToast": "Profile updated",
+    "savedToastBody": "Your draft applications now use these details.",
+    "saveChanges": "Save changes",
+    "savedButton": "Saved"
+  },
+  "cv": {
+    "title": "Your CV",
+    "completeTitle": "Your CV is ready",
+    "subtitle": "Education, training and experience: entered once, used by every application.",
+    "completeBody": "Every application uses it. Keep it up to date here.",
+    "editorLabel": "Edit your CV",
+    "sectionsLabel": "Parts of your CV",
+    "sections": {
+      "c": "Education",
+      "d": "Training & exams",
+      "e": "Experience"
+    },
+    "sectionDone": "complete",
+    "sectionMissing": "{count, plural, one {# missing} other {# missing}}",
+    "sectionEmpty": "not started",
+    "back": "Back",
+    "next": "Next",
+    "saveChanges": "Save changes",
+    "savedButton": "Saved",
+    "savedToast": "CV updated",
+    "savedToastBody": "Your draft applications now use it.",
+    "buddy": {
+      "wave": "Let's build your CV",
+      "write": "{left, plural, =0 {Looking good} one {# answer to go} other {# answers to go}}",
+      "celebrate": "Ready to apply!",
+      "worried": "Not saved yet",
+      "action": "Show what's missing"
+    },
+    "preview": {
+      "label": "Your CV",
+      "eyebrow": "Curriculum vitae",
+      "education": "Education",
+      "training": "Training & exams",
+      "experience": "Experience",
+      "highest": "Highest level: {level}",
+      "abroad": "Abroad",
+      "noTraining": "No professional training yet",
+      "exam": "Licensing exam",
+      "equivalence": "Recognised equivalent experience",
+      "referee": "Referee: {name}",
+      "files": "{count, plural, one {# file} other {# files}}",
+      "add": "Add",
+      "edit": "Edit",
+      "empty": "Nothing here yet."
+    },
+    "backToApplication": "Back to application",
+    "step": {
+      "title": "From your CV",
+      "hint": "Edit once, used by every application.",
+      "edit": "Edit in CV",
+      "complete": "Complete in CV",
+      "missing": "{count, plural, one {# missing} other {# missing}}",
+      "missingValue": "Missing",
+      "relyTitle": "Rely on for this application",
+      "relyNeeded": "Choose at least one.",
+      "noTraining": "No professional training",
+      "noPeriods": "No periods yet.",
+      "counts": "Counts toward this category"
+    }
+  },
+  "lifecycle": {
+    "label": "{step} — step {n} of {total}",
+    "steps": {
+      "fill": "Fill in",
+      "sign": "Sign",
+      "pay": "Pay",
+      "confirm": "Confirmations",
+      "review": "Review",
+      "decision": "Decision"
+    },
+    "complete": "Journey complete",
+    "stepOf": "Step {n} of {total}",
+    "you": "You",
+    "regulator": "Regulator",
+    "live": {
+      "justNow": "Live · just now",
+      "ago": "Live · {minutes} min ago",
+      "hint": "This page refreshes itself while open."
+    }
   }
 }
