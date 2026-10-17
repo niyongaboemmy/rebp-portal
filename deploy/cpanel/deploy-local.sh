@@ -67,5 +67,9 @@ fi
 
 log "Upload and activate (one SSH login)"
 ssh -i "$SSH_KEY" -p "$SSH_PORT" -o BatchMode=yes -o ConnectTimeout=30 "$SSH_USER@$SSH_HOST" \
-  "set -e; mkdir -p '$APP_DIR/releases/$RELEASE'; tar -xzf - -C '$APP_DIR/releases/$RELEASE'; \
-   APP_ROOT=\$HOME/$APP_DIR bash '$APP_DIR/releases/$RELEASE/deploy/activate.sh' '$RELEASE'" <"$TMP/release.tgz"
+  "set -e; cd '$APP_DIR'; \
+   CUR=\$(basename \"\$(readlink current 2>/dev/null || echo none)\"); \
+   for d in releases/*; do [ -d \"\$d\" ] && [ \"\$(basename \"\$d\")\" != \"\$CUR\" ] && rm -rf \"\$d\"; done; true; \
+   mkdir -p 'releases/$RELEASE'; \
+   tar -xzf - -C 'releases/$RELEASE' || { rm -rf 'releases/$RELEASE'; echo 'Unpack failed: disk or inode quota? (ADR-012)' >&2; exit 1; }; \
+   APP_ROOT=\$HOME/$APP_DIR bash 'releases/$RELEASE/deploy/activate.sh' '$RELEASE'" <"$TMP/release.tgz"
