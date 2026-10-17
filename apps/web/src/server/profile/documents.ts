@@ -14,7 +14,7 @@ import { db } from "../db";
 import { cleanName, inspectUpload, isDocumentType, storageKey } from "../documents/documents";
 import { AppError } from "../errors";
 import { blobStore, sha256Hex } from "../storage/blob-store";
-import { needsProfile, profileStatus } from "./profile";
+import { keepsProfile, needsProfile, profileStatus } from "./profile";
 
 /**
  * Identity documents on the applicant profile (UX-010): proof of identity and the passport
@@ -67,7 +67,7 @@ export async function profilePhotoUrl(userId: string) {
  * photo. Accounts without a personal profile get neither.
  */
 export async function accountAvatar(user: User) {
-  if (!needsProfile(user)) return { percent: null, photoHref: null };
+  if (!keepsProfile(user)) return { percent: null, photoHref: null };
   const [status, docs] = await Promise.all([profileStatus(user), listProfileDocuments(user.id)]);
   const photo = docs.find((d) => d.type === "photo" && !blocked(d.status));
   return {
@@ -81,7 +81,7 @@ export async function uploadProfileDocument(
   input: { type: string; replaceId?: string; fileName: string; bytes: Buffer },
   ctx: RequestContext,
 ) {
-  if (!needsProfile(user)) throw new AppError("forbidden");
+  if (!keepsProfile(user)) throw new AppError("forbidden");
   if (!isProfileType(input.type)) throw new AppError("documentTypeInvalid");
   const { mime, status, scanDetail } = await inspectUpload(input.type, input.bytes, input.fileName);
   const rule = DOCUMENT_RULES[input.type];

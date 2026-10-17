@@ -3,7 +3,7 @@ import { LinkTabs } from "@/components/ui/link-tabs";
 import { accountLinksFor } from "@/config/navigation";
 import { userCapabilities } from "@/server/access/permissions";
 import { getCurrentSession } from "@/server/auth/current";
-import { needsProfile } from "@/server/profile/profile";
+import { keepsProfile, needsProfile } from "@/server/profile/profile";
 
 /**
  * Profile · CV · Security · My access. These left the main navigation for the account menu (ADR-011,
@@ -15,10 +15,10 @@ export async function SettingsTabs({
   current: "profile" | "cv" | "security" | "myAccess";
 }) {
   const [t, session] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
-  const links = accountLinksFor(
-    session ? await userCapabilities(session.user) : [],
-    session ? needsProfile(session.user) : false,
-  );
+  const links = accountLinksFor(session ? await userCapabilities(session.user) : [], {
+    person: session ? keepsProfile(session.user) : false,
+    applicant: session ? needsProfile(session.user) : false,
+  });
   return (
     <LinkTabs
       label={t("account")}

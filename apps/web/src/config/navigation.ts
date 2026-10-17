@@ -66,8 +66,8 @@ export interface NavItem {
   tab?: boolean;
   /** Count shown next to the item when something is waiting. */
   badge?: NavBadgeKey;
-  /** Only for people with a personal profile (individual applicants): Profile and CV. */
-  profileOnly?: boolean;
+  /** Profile: people only (not organisations). CV: individual applicants only. */
+  audience?: "person" | "applicant";
 }
 
 export type NavSectionLabel =
@@ -233,9 +233,9 @@ export const BACKOFFICE_NAV: NavSection[] = [
 
 /** Personal settings: reached from the account menu and the command palette, not the main nav. */
 export const ACCOUNT_LINKS: NavItem[] = [
-  { href: "/settings/profile" as Route, label: "profile", icon: UserRound, profileOnly: true },
+  { href: "/settings/profile" as Route, label: "profile", icon: UserRound, audience: "person" },
   // The applicant's CV: education, training and experience (UX-018).
-  { href: "/settings/cv" as Route, label: "cv", icon: BookUser, profileOnly: true },
+  { href: "/settings/cv" as Route, label: "cv", icon: BookUser, audience: "applicant" },
   { href: "/settings/security", label: "security", icon: ShieldCheck },
   {
     href: "/settings/access",
@@ -249,11 +249,11 @@ export const ACCOUNT_LINKS: NavItem[] = [
 /** The account links this person may open (My access is for staff). */
 export function accountLinksFor(
   capabilities: readonly Capability[],
-  /** Individual applicants keep a profile and CV; staff and organisations don't. */
-  hasProfile = true,
+  /** Who the person is: every person keeps a profile; only individual applicants a CV. */
+  kind: { person: boolean; applicant: boolean } = { person: true, applicant: true },
 ): NavItem[] {
   return ACCOUNT_LINKS.filter(
-    (item) => canSee(item, capabilities) && (hasProfile || !item.profileOnly),
+    (item) => canSee(item, capabilities) && (!item.audience || kind[item.audience]),
   );
 }
 

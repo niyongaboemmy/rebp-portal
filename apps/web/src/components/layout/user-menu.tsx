@@ -8,18 +8,20 @@ export function UserMenu({
   name,
   email,
   photoUrl,
-  hasProfile,
+  person,
+  applicant,
   capabilities,
 }: {
   name: string;
   email: string;
   photoUrl?: string | null;
-  hasProfile: boolean;
+  person: boolean;
+  applicant: boolean;
   capabilities: Capability[];
 }) {
   return (
     <HeaderAccountMenu
-      user={{ fullName: name, email, photoUrl, hasProfile }}
+      user={{ fullName: name, email, photoUrl, person, applicant }}
       area={null}
       capabilities={capabilities}
     />

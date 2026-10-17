@@ -14,7 +14,7 @@ import { canSwitchArea, type AppArea } from "@/config/navigation";
 import { userCapabilities } from "@/server/access/permissions";
 import { navBadges } from "@/server/nav-badges";
 import { profilePhotoUrl } from "@/server/profile/documents";
-import { needsProfile } from "@/server/profile/profile";
+import { keepsProfile, needsProfile } from "@/server/profile/profile";
 import { readShellPrefs } from "@/server/shell-prefs";
 import { AccountSheet, SidebarAccountMenu } from "./account-menu";
 import { AppNav } from "./app-nav";
@@ -68,7 +68,8 @@ export async function AppShell({ area, user, children }: AppShellProps) {
       email: user.email,
       roleLabel: t(primaryRole(user.roles)),
       photoUrl,
-      hasProfile: needsProfile(user),
+      person: keepsProfile(user),
+      applicant: needsProfile(user),
     },
     area,
     canSwitchArea: canSwitchArea(capabilities),
