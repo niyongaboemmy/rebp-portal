@@ -1,5 +1,6 @@
-import { ArrowDown, Download } from "@/components/icons";
-import type { Metadata } from "next";
+import { ArrowDown, ArrowRight, Download } from "@/components/icons";
+import type { Metadata, Route } from "next";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { requiresMfa } from "@rebp/contracts";
@@ -20,7 +21,8 @@ import {
   maskEmailForDisplay,
   maskPhoneForDisplay,
 } from "@/lib/utils";
-import { requireUser } from "@/server/auth/guards";
+import { requireUser, safeNextPath } from "@/server/auth/guards";
+import { isMfaEnforced } from "@/server/env";
 import { remainingRecoveryCodes } from "@/server/auth/mfa";
 import { listActiveSessions } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -54,6 +56,9 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
   ]);
   const error = typeof params.error === "string" ? params.error : null;
   const mfaRequired = requiresMfa(user.roles);
+  // FR-ACC-004: mandatory only when enforced; otherwise a recommendation the user may skip.
+  const enforced = isMfaEnforced();
+  const skipTo = safeNextPath(typeof params.next === "string" ? params.next : null);
   // The hero: how protected the account is, and the companion pointing at what's left (UX-013).
   const protection = protectionChecks({
     emailVerified: Boolean(user.emailVerifiedAt),
@@ -98,15 +103,27 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
       <SettingsTabs current="security" />
 
       {params.setup === "required" && mfaRequired && user.mfaMethods.length === 0 && (
-        // Says what is required and takes the user straight to where it is done.
-        <Alert variant="warning" title={t("requiredTitle")}>
+        // Says what is asked and takes the user straight to where it is done — or onwards.
+        <Alert
+          variant={enforced ? "warning" : "info"}
+          title={t(enforced ? "requiredTitle" : "recommendedTitle")}
+        >
           <span className="flex flex-col items-start gap-2">
-            {t("requiredShort")}
-            <Button asChild size="sm" className="rounded-full">
-              <a href="#two-step" className="text-primary-foreground! no-underline!">
-                {t("requiredCta")} <ArrowDown aria-hidden />
-              </a>
-            </Button>
+            {t(enforced ? "requiredShort" : "recommendedShort")}
+            <span className="flex flex-wrap items-center gap-2">
+              <Button asChild size="sm" className="rounded-full">
+                <a href="#two-step" className="text-primary-foreground! no-underline!">
+                  {t("requiredCta")} <ArrowDown aria-hidden />
+                </a>
+              </Button>
+              {!enforced && (
+                <Button asChild size="sm" variant="ghost" className="rounded-full">
+                  <Link href={skipTo as Route} className="text-foreground! no-underline!">
+                    {t("skip")} <ArrowRight aria-hidden />
+                  </Link>
+                </Button>
+              )}
+            </span>
           </span>
         </Alert>
       )}
@@ -134,6 +151,7 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
         }}
         recoveryRemaining={recoveryRemaining}
         required={mfaRequired}
+        enforced={enforced}
       />
 
       <div className="grid gap-6 @5xl/main:grid-cols-2">

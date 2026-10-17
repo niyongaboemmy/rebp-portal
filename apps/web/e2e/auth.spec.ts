@@ -172,22 +172,28 @@ test("protected pages redirect to sign-in and return afterwards", async ({ page 
   await expect(page).toHaveURL(/\/forbidden$/);
 });
 
-test("staff must set up two-step before using the back office", async ({ page }) => {
+test("staff are guided to two-step after sign-in, and may continue without it (FR-ACC-004)", async ({
+  page,
+}) => {
   await db.user.update({
     where: { email: "officer@demo.rebp.rw" },
     data: { mfaMethods: [], mfaPreferred: null, totpSecretEnc: null },
   });
   await signIn(page, "officer@demo.rebp.rw", "Rebp-Demo-Pilot-2026");
-  // Sign-in lands on the dashboard, whose guard forces mandatory two-step setup first.
-  await expect(page).toHaveURL(/\/settings\/security\?setup=required/);
-  await page.goto("/backoffice");
+  // Sign-in lands on the security page with the recommendation and a way to skip it.
   await expect(page).toHaveURL(/\/settings\/security\?setup=required/);
   await expect(
-    page.getByText("Two-step verification is required for your role").first(),
+    page.getByText("Two-step verification is recommended for your role").first(),
   ).toBeVisible();
-  // The guided start offers the methods directly (UX: no dead-end warning).
   await expect(page.getByRole("link", { name: /Set it up now/ })).toBeVisible();
+  await page.getByRole("link", { name: /Skip for now/ }).click();
+  await expect(page).not.toHaveURL(/\/settings\/security/);
+  // Optional (MFA_ENFORCE off): the back office opens without two-step.
+  await page.goto("/backoffice");
+  await expect(page.getByRole("heading", { level: 1, name: "Back office" })).toBeVisible();
 
+  // Setting it up still works from the guided card.
+  await page.goto("/settings/security");
   await page.getByTestId("mfa-email").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "Send code" }).click();
   await page.getByRole("dialog").getByRole("button", { name: "Use code" }).click();

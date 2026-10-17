@@ -3,7 +3,7 @@ import { isFullyVerified } from "@/server/auth/account";
 import { clearCookie, COOKIE, readCookie, setCookie } from "@/server/auth/cookies";
 import { getCurrentSession } from "@/server/auth/current";
 import { verifyGoogleIdToken } from "@/server/auth/google-id-token";
-import { safeNextPath } from "@/server/auth/guards";
+import { landingFor, safeNextPath } from "@/server/auth/guards";
 import { handleGoogleIdentity } from "@/server/auth/oauth";
 import { hasRecentAuth } from "@/server/auth/step-up";
 import { env, isGoogleEnabled } from "@/server/env";
@@ -76,7 +76,11 @@ export async function POST(request: NextRequest) {
       }
       if (outcome.kind === "session") {
         await setCookie(COOKIE.session(), outcome.token, outcome.expiresAt);
-        return NextResponse.json({ redirect: isFullyVerified(outcome.user) ? next : "/verify" });
+        return NextResponse.json({
+          redirect: isFullyVerified(outcome.user)
+            ? await landingFor(outcome.user, next)
+            : "/verify",
+        });
       }
       return failure("oauthFailed");
     } catch (error) {

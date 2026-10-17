@@ -53,6 +53,8 @@ interface MfaCardProps {
   destinations: { SMS: string | null; EMAIL: string };
   recoveryRemaining: number;
   required: boolean;
+  /** Two-step is mandatory now (MFA_ENFORCE); otherwise the guide recommends it. */
+  enforced?: boolean;
 }
 
 export function MfaCard({
@@ -62,6 +64,7 @@ export function MfaCard({
   destinations,
   recoveryRemaining,
   required,
+  enforced = true,
 }: MfaCardProps) {
   const t = useTranslations("security");
   const router = useRouter();
@@ -130,7 +133,9 @@ export function MfaCard({
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-warning" aria-hidden />
             <div className="flex flex-col gap-0.5">
-              <p className="font-semibold">{t("mfa.guide.title")}</p>
+              <p className="font-semibold">
+                {t(enforced ? "mfa.guide.title" : "mfa.guide.titleOptional")}
+              </p>
               <p className="text-sm text-muted-foreground">{t("mfa.guide.body")}</p>
             </div>
           </div>

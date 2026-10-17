@@ -714,7 +714,8 @@
         "email": "Kode kuri imeyili (byihuse)",
         "app": "Porogaramu y'umutekano (byizewe cyane)",
         "quickest": "Byihuse",
-        "secure": "Byizewe cyane"
+        "secure": "Byizewe cyane",
+        "titleOptional": "Fungura intambwe ebyiri (birasabwa)"
       }
     },
     "recovery": {
@@ -783,7 +784,10 @@
     },
     "requiredTitle": "Inshingano zawe zisaba intambwe ebyiri",
     "requiredShort": "Shyiraho uburyo bumwe kugira ngo ukomeze. Bifata nk'umunota umwe.",
-    "requiredCta": "Bishyireho ubu"
+    "requiredCta": "Bishyireho ubu",
+    "recommendedTitle": "Intambwe ebyiri zirasabwa ku nshingano zawe",
+    "recommendedShort": "Zirinda igice cy'ubuyobozi kandi bifata nk'umunota umwe. Ushobora no kubikora nyuma.",
+    "skip": "Nyuma"
   },
   "audit": {
     "title": "Amateka y'ibikorwa",

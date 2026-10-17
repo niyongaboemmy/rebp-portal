@@ -1,5 +1,6 @@
 import "server-only";
-import { requiresMfa, type Capability } from "@rebp/contracts";
+import type { Capability } from "@rebp/contracts";
+import { mfaBlocks } from "../auth/mfa-policy";
 import { getCurrentSession } from "../auth/current";
 import { isFullyVerified } from "../auth/account";
 import { assertRecentAuth } from "../auth/step-up";
@@ -19,8 +20,7 @@ export async function authorizeSelf() {
   if (!current) throw new AppError("unauthenticated");
   const { user, session } = current;
   if (!isFullyVerified(user)) throw new AppError("forbidden");
-  if (requiresMfa(user.roles) && (user.mfaMethods.length === 0 || !session.mfaVerified))
-    throw new AppError("mfaRequiredForAction");
+  if (mfaBlocks(user, session)) throw new AppError("mfaRequiredForAction");
   return current;
 }
 
@@ -40,8 +40,7 @@ export async function authorizeAction(
   const { user, session } = current;
   if (!isFullyVerified(user)) throw new AppError("forbidden");
   // Privileged actions need a session that passed two-step verification (SEC-005).
-  const mfa = requireMfa === "auto" ? requiresMfa(user.roles) : requireMfa;
-  if (mfa && (user.mfaMethods.length === 0 || !session.mfaVerified))
+  if (requireMfa !== false && mfaBlocks(user, session, requireMfa === "auto" ? undefined : true))
     throw new AppError("mfaRequiredForAction");
   if (!(await userCan(user, capability))) throw new AppError("forbidden");
   if (stepUp) assertRecentAuth(session);

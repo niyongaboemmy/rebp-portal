@@ -1,6 +1,7 @@
 import "server-only";
 import { NextResponse, type NextRequest } from "next/server";
-import { requiresMfa, type Capability } from "@rebp/contracts";
+import type { Capability } from "@rebp/contracts";
+import { mfaBlocks } from "./auth/mfa-policy";
 import { userCan } from "./access/permissions";
 import { isFullyVerified } from "./auth/account";
 import { getCurrentSession } from "./auth/current";
@@ -26,8 +27,7 @@ export async function apiUser(capability?: Capability): Promise<SessionWithUser>
   if (!current) throw new HttpError(401, "unauthenticated");
   const { user, session } = current;
   if (!isFullyVerified(user)) throw new HttpError(403, "forbidden");
-  if (requiresMfa(user.roles) && (user.mfaMethods.length === 0 || !session.mfaVerified))
-    throw new HttpError(403, "mfaRequired");
+  if (mfaBlocks(user, session)) throw new HttpError(403, "mfaRequired");
   if (capability && !(await userCan(user, capability))) throw new HttpError(403, "forbidden");
   return current;
 }

@@ -714,7 +714,8 @@
         "email": "Codes par e-mail (le plus rapide)",
         "app": "Application d'authentification (la plus sûre)",
         "quickest": "Le plus rapide",
-        "secure": "La plus sûre"
+        "secure": "La plus sûre",
+        "titleOptional": "Activez la double étape (recommandé)"
       }
     },
     "recovery": {
@@ -783,7 +784,10 @@
     },
     "requiredTitle": "La vérification en deux étapes est obligatoire pour votre rôle",
     "requiredShort": "Activez une méthode pour continuer à utiliser le back-office. Cela prend environ une minute.",
-    "requiredCta": "L'activer maintenant"
+    "requiredCta": "L'activer maintenant",
+    "recommendedTitle": "La vérification en deux étapes est recommandée pour votre rôle",
+    "recommendedShort": "Elle protège le back-office et prend environ une minute. Vous pouvez aussi le faire plus tard.",
+    "skip": "Plus tard"
   },
   "audit": {
     "title": "Journal d'audit",
