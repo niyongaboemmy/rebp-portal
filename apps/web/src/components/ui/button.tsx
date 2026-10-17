@@ -20,7 +20,9 @@ export const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary)_86%,black)]",
-        tonal: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
+        tonal:
+          // Opaque on hover too, so it reads the same over any surface (UX-035).
+          "bg-primary-soft text-primary-soft-foreground hover:bg-[color-mix(in_oklch,var(--primary)_14%,var(--primary-soft))] dark:hover:bg-[color-mix(in_oklch,var(--primary)_22%,var(--primary-soft))]",
         secondary: "bg-primary-soft text-primary-soft-foreground hover:bg-primary/15",
         outline:
           "border border-foreground/12 bg-transparent text-foreground hover:border-foreground/20 hover:bg-foreground/[0.04]",

@@ -207,11 +207,25 @@ export async function decisionLetterFor(decisionId: string, viewer: User) {
     throw new AppError("notFound");
   const t = translator(viewer.locale);
   const app = decision.application;
-  const conditions = ((decision.conditions as unknown as DecisionCondition[]) ?? []).map((c) =>
-    c.code === "CUSTOM"
-      ? (c.text ?? "")
-      : `${t(`conditions.${c.code}`)}${c.text ? ` - ${c.text}` : ""}`,
-  );
+  const conditions = ((decision.conditions as unknown as DecisionCondition[]) ?? [])
+    .map((c) =>
+      c.code === "CUSTOM"
+        ? (c.text ?? "")
+        : `${t(`conditions.${c.code}`)}${c.text ? ` - ${c.text}` : ""}`,
+    )
+    .map((text, i) =>
+      // FR-M-011: say which conditions need compliance evidence.
+      (decision.conditions as unknown as DecisionCondition[])[i]?.evidenceRequired
+        ? `${text} (${t("documents.evidenceRequired")})`
+        : text,
+    );
+  // FR-M-017: a correcting letter names the letter it replaces and why.
+  const corrected = decision.correctsId
+    ? await db.decision.findUnique({
+        where: { id: decision.correctsId },
+        select: { letterNo: true },
+      })
+    : null;
   const paragraphs = [
     t(`documents.letter.${decision.decision}`, {
       category: t(`categories.items.${app.category}.name`),
@@ -220,6 +234,13 @@ export async function decisionLetterFor(decisionId: string, viewer: User) {
   if (conditions.length) paragraphs.push(`${t("documents.conditions")}: ${conditions.join("; ")}`);
   if (decision.reasons) paragraphs.push(`${t("documents.reasons")}: ${decision.reasons}`);
   if (decision.decision === "REJECTED") paragraphs.push(t("documents.letter.appeal"));
+  if (corrected)
+    paragraphs.unshift(
+      t("documents.letter.correction", {
+        letter: corrected.letterNo,
+        reason: decision.correctionReason ?? "",
+      }),
+    );
   const bytes = await simpleDocumentPdf({
     title: t("documents.letterTitle"),
     subtitle: decision.letterNo,

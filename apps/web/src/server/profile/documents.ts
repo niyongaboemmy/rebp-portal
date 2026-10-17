@@ -14,7 +14,7 @@ import { db } from "../db";
 import { cleanName, inspectUpload, isDocumentType, storageKey } from "../documents/documents";
 import { AppError } from "../errors";
 import { blobStore, sha256Hex } from "../storage/blob-store";
-import { needsProfile, profileStatus } from "./profile";
+import { keepsProfile, needsProfile, profileStatus } from "./profile";
 
 /**
  * Identity documents on the applicant profile (UX-010): proof of identity and the passport
@@ -67,7 +67,7 @@ export async function profilePhotoUrl(userId: string) {
  * photo. Accounts without a personal profile get neither.
  */
 export async function accountAvatar(user: User) {
-  if (!needsProfile(user)) return { percent: null, photoHref: null };
+  if (!keepsProfile(user)) return { percent: null, photoHref: null };
   const [status, docs] = await Promise.all([profileStatus(user), listProfileDocuments(user.id)]);
   const photo = docs.find((d) => d.type === "photo" && !blocked(d.status));
   return {
@@ -81,7 +81,7 @@ export async function uploadProfileDocument(
   input: { type: string; replaceId?: string; fileName: string; bytes: Buffer },
   ctx: RequestContext,
 ) {
-  if (!needsProfile(user)) throw new AppError("forbidden");
+  if (!keepsProfile(user)) throw new AppError("forbidden");
   if (!isProfileType(input.type)) throw new AppError("documentTypeInvalid");
   const { mime, status, scanDetail } = await inspectUpload(input.type, input.bytes, input.fileName);
   const rule = DOCUMENT_RULES[input.type];
@@ -284,4 +284,47 @@ async function syncOpenApplications(user: User, ctx: RequestContext) {
     },
   });
   for (const app of open) await syncProfileDocuments(app, user, ctx);
+}
+
+/**
+ * Applicants' current profile photos for staff lists (UX-035): user id → the URL of the staff
+ * photo route, one query for a whole page. Users without a photo are absent (initials show).
+ */
+export async function applicantPhotoUrls(userIds: readonly string[]) {
+  const ids = [...new Set(userIds)];
+  if (ids.length === 0) return new Map<string, string>();
+  const photos = await db.profileDocument.findMany({
+    where: {
+      userId: { in: ids },
+      type: "photo",
+      removedAt: null,
+      status: { notIn: ["INFECTED", "REJECTED_FILE"] },
+    },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, userId: true },
+  });
+  const urls = new Map<string, string>();
+  for (const p of photos)
+    if (!urls.has(p.userId))
+      urls.set(p.userId, `/api/backoffice/applicants/${p.userId}/photo?v=${p.id}`);
+  return urls;
+}
+
+/** The applicant's current profile photo for staff (UX-035); access is checked by the route. */
+export async function readApplicantPhoto(userId: string) {
+  const doc = await db.profileDocument.findFirst({
+    where: {
+      userId,
+      type: "photo",
+      removedAt: null,
+      status: { notIn: ["INFECTED", "REJECTED_FILE"] },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (!doc) throw new AppError("notFound");
+  return {
+    bytes: await blobStore.get(doc.storageKey),
+    mimeType: doc.mimeType,
+    fileName: doc.fileName,
+  };
 }

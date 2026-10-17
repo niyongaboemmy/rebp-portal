@@ -16,7 +16,8 @@ import { randomToken } from "../auth/crypto";
 import { getConfig } from "../config/config";
 import { db } from "../db";
 import { AppError } from "../errors";
-import { notify } from "../notifications/inbox";
+import type { RequestContext } from "../auth/types";
+import { notify, notifyUsersWithCapability } from "../notifications/inbox";
 import { dateOf, dayOf, todayKigali } from "../time";
 import { projectLicence } from "./register";
 
@@ -68,7 +69,8 @@ async function ensureRegistrant(
   });
 }
 
-function practiceArrangement(app: Application): string {
+/** FR-M-009: the practice arrangement implied by Sections F/G; the approver may override it. */
+export function derivedArrangement(app: Pick<Application, "category" | "data">): string {
   const f = asData(app.data).f;
   switch (app.category) {
     case "RERA":
@@ -266,7 +268,7 @@ export async function issueLicence(
           applicationId: app.id,
           decisionId: decision.id,
           scope,
-          practiceArrangement: practiceArrangement(app),
+          practiceArrangement: decision.practiceArrangement ?? derivedArrangement(app),
           conditions: conditions as object[],
           supervisorLicenceId: supervisor?.id ?? null,
           affiliatedFirmId,
@@ -359,11 +361,22 @@ export async function issueLicence(
   return licence;
 }
 
-/** FR-N-012: reissue rotates the QR token; the old QR then shows "superseded, see current". */
-export async function reissueCertificate(licenceId: string, actorId: string, reason: string) {
-  const licence = await db.licence.findUniqueOrThrow({ where: { id: licenceId } });
-  await db.$transaction(async (tx) => {
-    await tx.licence.update({
+/**
+ * FR-N-012: reissue rotates the QR token and bumps the certificate version; the old QR then shows
+ * "superseded, see current". The holder is told a new certificate is available.
+ */
+export async function reissueCertificate(
+  licenceId: string,
+  actorId: string,
+  reason: string,
+  ctx: Partial<RequestContext> = {},
+) {
+  const licence = await db.licence.findUnique({ where: { id: licenceId } });
+  if (!licence) throw new AppError("notFound");
+  if (["REVOKED", "SUPERSEDED", "SURRENDERED", "LAPSED"].includes(licence.status))
+    throw new AppError("invalidTransition");
+  const updated = await db.$transaction(async (tx) => {
+    const next = await tx.licence.update({
       where: { id: licenceId },
       data: { qrToken: randomToken(18), certificateVersion: { increment: 1 } },
     });
@@ -373,14 +386,63 @@ export async function reissueCertificate(licenceId: string, actorId: string, rea
       reference: licence.qrToken,
     });
     await projectLicence(licenceId, tx);
+    return next;
   });
   await recordAudit({
     action: "licence.certificate_reissued",
     entityType: "Licence",
     entityId: licenceId,
     actorId,
-    metadata: { licenceNo: licence.licenceNo },
+    metadata: { licenceNo: licence.licenceNo, version: updated.certificateVersion },
+    ...ctx,
   });
+  if (licence.holderId)
+    await notify(licence.holderId, {
+      code: "N-060",
+      messageKey: "certificateReissued",
+      values: { licence: licence.licenceNo, version: updated.certificateVersion },
+      href: `/licenses/${licence.id}`,
+      email: true,
+    });
+  return { certificateVersion: updated.certificateVersion };
+}
+
+/**
+ * FR-N-009: licence issuance failed after a signed approval. The approval stands and the job
+ * retries; the failure is audited and the registrars (register.administer) are alerted — once a
+ * day per application, so a stuck file doesn't flood the inbox on every retry.
+ */
+export async function alertIssuanceFailure(
+  app: Pick<Application, "id" | "referenceNo">,
+  error: unknown,
+  actorId: string | null,
+  now = new Date(),
+) {
+  const message = error instanceof AppError ? error.code : (error as Error)?.name || "Error";
+  console.error("[licensing] licence issuance failed, will retry", {
+    applicationId: app.id,
+    error: message,
+  });
+  try {
+    await db.reminderLog.create({ data: { key: `issuance-failed:${app.id}:${todayKigali(now)}` } });
+  } catch {
+    return false; // already alerted today
+  }
+  await recordAudit({
+    action: "licence.issuance_failed",
+    entityType: "Application",
+    entityId: app.id,
+    actorId,
+    metadata: { reference: app.referenceNo, error: message },
+  });
+  await notifyUsersWithCapability("register.administer", {
+    code: "N-030",
+    messageKey: "issuanceFailed",
+    values: { reference: app.referenceNo },
+    href: `/backoffice/review/${app.id}`,
+    email: true,
+  });
+  return true;
 }
 
 /** Applicant-facing notices after a decision (N-060/N-061/N-062) — also tells the firm's PB. */
@@ -429,7 +491,7 @@ export async function retryPendingIssuance() {
       status: { in: ["APPROVED", "APPROVED_WITH_CONDITIONS"] },
       decidedAt: { lt: new Date(Date.now() - 60_000) },
     },
-    select: { id: true },
+    select: { id: true, referenceNo: true },
   });
   let issued = 0;
   for (const app of stuck) {
@@ -437,10 +499,7 @@ export async function retryPendingIssuance() {
       await issueLicence(app.id, null);
       issued++;
     } catch (error) {
-      console.error("[licensing] retry failed", {
-        applicationId: app.id,
-        error: (error as Error).message,
-      });
+      await alertIssuanceFailure(app, error, null);
     }
   }
   return { retried: stuck.length, issued };

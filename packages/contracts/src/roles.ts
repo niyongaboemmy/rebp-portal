@@ -40,6 +40,7 @@ export const CAPABILITIES = [
   "confirmation.override",
   "review.perform",
   "review.view",
+  "review.assign",
   "decision.make",
   "decision.view",
   "register.administer",
@@ -83,6 +84,8 @@ export const CAPABILITY_META: Record<Capability, CapabilityMeta> = {
   "confirmation.override": { group: "review", scope: "staff" },
   "review.perform": { group: "review", scope: "staff" },
   "review.view": { group: "review", scope: "staff" },
+  /** FR-BO-002/005: team lead — assign, reassign or take over any open file; SLA escalations. */
+  "review.assign": { group: "review", scope: "staff" },
   "decision.make": { group: "review", scope: "staff" },
   "decision.view": { group: "review", scope: "staff" },
   "register.administer": { group: "register", scope: "staff" },
@@ -115,13 +118,21 @@ const BASELINE: Record<Capability, readonly Role[]> = {
     "REGISTRAR",
     "FINANCE_OFFICER",
     "AUDITOR",
+    "SYSTEM_ADMIN",
   ],
   "confirmation.decide": ["SUPERVISOR", "PRINCIPAL_BROKER"],
-  "confirmation.override": ["REVIEWING_OFFICER"],
-  "review.perform": ["REVIEWING_OFFICER"],
-  "review.view": ["REVIEWING_OFFICER", "APPROVING_AUTHORITY", "REGISTRAR", "AUDITOR"],
-  "decision.make": ["APPROVING_AUTHORITY"],
-  "decision.view": ["APPROVING_AUTHORITY", "REGISTRAR", "AUDITOR"],
+  "confirmation.override": ["REVIEWING_OFFICER", "SYSTEM_ADMIN"],
+  "review.perform": ["REVIEWING_OFFICER", "SYSTEM_ADMIN"],
+  "review.view": [
+    "REVIEWING_OFFICER",
+    "APPROVING_AUTHORITY",
+    "REGISTRAR",
+    "AUDITOR",
+    "SYSTEM_ADMIN",
+  ],
+  "review.assign": ["APPROVING_AUTHORITY", "SYSTEM_ADMIN"],
+  "decision.make": ["APPROVING_AUTHORITY", "SYSTEM_ADMIN"],
+  "decision.view": ["APPROVING_AUTHORITY", "REGISTRAR", "AUDITOR", "SYSTEM_ADMIN"],
   "register.administer": ["REGISTRAR"],
   "register.revoke": ["APPROVING_AUTHORITY"],
   "payments.pay": ["APPLICANT", "PRINCIPAL_BROKER", "FIRM_ADMIN"],
@@ -132,6 +143,7 @@ const BASELINE: Record<Capability, readonly Role[]> = {
     "REGISTRAR",
     "FINANCE_OFFICER",
     "AUDITOR",
+    "SYSTEM_ADMIN",
   ],
   "config.edit": ["SYSTEM_ADMIN", "FINANCE_OFFICER"],
   "config.approve": ["APPROVING_AUTHORITY"],
@@ -248,6 +260,13 @@ export const CONFLICTING_CAPABILITIES: ReadonlyArray<{
   { id: "makerChecker", pair: ["config.edit", "config.approve"] },
 ];
 
+/**
+ * Roles allowed to hold review and decision powers together (owner request, UX-032): the system
+ * administrator can validate and approve applications. Segregation of duties still holds where it
+ * matters, per application (BR-091): whoever reviewed or was assigned a file can never decide it.
+ */
+export const SOD_EXEMPT_ROLES: readonly Role[] = ["SYSTEM_ADMIN"];
+
 /** Cells that are fixed, with the reason. Prevents lock-out and keeps staff-only powers behind MFA. */
 export type CellLock = "required" | "staffOnly";
 
@@ -275,6 +294,7 @@ export function validateMatrix(matrix: PermissionMatrix): MatrixViolation[] {
   for (const role of ROLES) {
     const caps = matrix[role];
     for (const { id, pair } of CONFLICTING_CAPABILITIES) {
+      if (id === "sod" && SOD_EXEMPT_ROLES.includes(role)) continue;
       if (caps.includes(pair[0]) && caps.includes(pair[1]))
         violations.push({ type: id, role, capabilities: pair });
     }

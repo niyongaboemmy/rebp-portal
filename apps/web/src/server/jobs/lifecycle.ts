@@ -8,9 +8,9 @@ import { db } from "../db";
 import { retryPendingIssuance } from "../licensing/licensing";
 import { flagSupervisees } from "../licensing/register-admin";
 import { projectLicence } from "../licensing/register";
-import { notify } from "../notifications/inbox";
+import { notify, notifyUsersWithCapability } from "../notifications/inbox";
 import { reconcilePayments } from "../payments/payments";
-import { dayOf, todayKigali } from "../time";
+import { addWorkingDays, dayOf, todayKigali } from "../time";
 
 /**
  * Scheduled jobs (WP-4.1 renewal-lite, FR-REN-001…003, FR-NOT-005, FR-WF-004/006, BR-040…042,
@@ -222,30 +222,93 @@ export async function runDraftExpiry(now = new Date()) {
   return { expired };
 }
 
-/** FR-BO-004 / N-031: one SLA breach warning per application per day. */
+/** Working days past the SLA due date after which a breach is escalated to the team lead. */
+export const SLA_ESCALATION_WORKING_DAYS = 2;
+
+/**
+ * FR-BO-004 / N-031: one SLA breach warning per application per day to its officer; a file still
+ * breached more than two working days after its due date is escalated, once, to the team leads
+ * (review.assign) — assigned or not.
+ */
 export async function runSlaWarnings(now = new Date()) {
   const breached = await db.application.findMany({
     where: {
       slaDueAt: { lt: now },
-      assignedOfficerId: { not: null },
       status: { in: ["SUBMITTED", "UNDER_REVIEW", "FURTHER_ASSESSMENT"] },
     },
-    select: { id: true, referenceNo: true, assignedOfficerId: true },
+    select: { id: true, referenceNo: true, assignedOfficerId: true, slaDueAt: true },
   });
   let warned = 0;
+  let escalated = 0;
   for (const app of breached) {
-    const sent = await once(`sla:${app.id}:${todayKigali(now)}`, () =>
-      notify(app.assignedOfficerId!, {
-        code: "N-031",
-        messageKey: "slaBreach",
-        values: { reference: app.referenceNo },
-        href: `/backoffice/review/${app.id}`,
-        email: true,
-      }),
-    );
-    if (sent) warned++;
+    if (app.assignedOfficerId) {
+      const sent = await once(`sla:${app.id}:${todayKigali(now)}`, () =>
+        notify(app.assignedOfficerId!, {
+          code: "N-031",
+          messageKey: "slaBreach",
+          values: { reference: app.referenceNo },
+          href: `/backoffice/review/${app.id}`,
+          email: true,
+        }),
+      );
+      if (sent) warned++;
+    }
+    if (addWorkingDays(app.slaDueAt!, SLA_ESCALATION_WORKING_DAYS) < now) {
+      const sent = await once(`sla-escalated:${app.id}:${app.slaDueAt!.toISOString()}`, () =>
+        notifyUsersWithCapability("review.assign", {
+          code: "N-031",
+          messageKey: "slaEscalated",
+          values: { reference: app.referenceNo, date: dayOf(app.slaDueAt!) },
+          href: `/backoffice/review/${app.id}`,
+          email: true,
+        }),
+      );
+      if (sent) escalated++;
+    }
   }
-  return { warned };
+  return { warned, escalated };
+}
+
+/**
+ * N-041 (UX-032): an open information request two days before it falls due (applicant), and once
+ * it is overdue (applicant and the officer who asked). Each is sent once.
+ */
+export async function runInformationReminders(now = new Date()) {
+  const soon = new Date(now.getTime() + 2 * 86_400_000);
+  const open = await db.informationRequest.findMany({
+    where: { status: "OPEN", dueAt: { lt: soon }, application: { status: "ACTION_REQUIRED" } },
+    select: {
+      id: true,
+      dueAt: true,
+      officerId: true,
+      application: { select: { id: true, referenceNo: true, applicantId: true } },
+    },
+  });
+  let reminded = 0;
+  for (const request of open) {
+    const { application: app } = request;
+    const overdue = request.dueAt < now;
+    const values = { reference: app.referenceNo, due: request.dueAt.toISOString().slice(0, 10) };
+    const sent = await once(`info:${request.id}:${overdue ? "overdue" : "soon"}`, async () => {
+      await notify(app.applicantId, {
+        code: "N-041",
+        messageKey: overdue ? "infoOverdue" : "infoReminder",
+        values,
+        href: `/applications/${app.id}`,
+        email: true,
+        sms: true,
+      });
+      if (overdue)
+        await notify(request.officerId, {
+          code: "N-041",
+          messageKey: "infoOverdueOfficer",
+          values,
+          href: `/backoffice/review/${app.id}`,
+        });
+    });
+    if (sent) reminded++;
+  }
+  return { reminded };
 }
 
 /** N-090: "You can now apply for REA / Broker" when the experience threshold is reached. */
@@ -282,13 +345,25 @@ export async function runUpgradeNudges(now = new Date()) {
 
 /** Everything the scheduler runs (POST /api/jobs/run, or "Run now" in the console). */
 export async function runScheduledJobs(now = new Date()) {
-  return {
+  const result = {
     licences: await runLicenceLifecycle(now),
     drafts: await runDraftExpiry(now),
     confirmations: await processConfirmationTimers(now),
     payments: await reconcilePayments(now),
     issuance: await retryPendingIssuance(),
     sla: await runSlaWarnings(now),
+    information: await runInformationReminders(now),
     upgrades: await runUpgradeNudges(now),
   };
+  // The health panel reads this as the exact last run (FR-ADM-005).
+  await recordAudit({
+    action: "jobs.run",
+    entityType: "System",
+    entityId: "scheduler",
+    actorId: null,
+    metadata: Object.fromEntries(
+      Object.entries(result).map(([job, counts]) => [job, counts as Record<string, number>]),
+    ),
+  });
+  return result;
 }

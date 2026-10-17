@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
     assertSameOrigin(request);
     if (Number(request.headers.get("content-length") ?? 0) > 6 * 1024 * 1024)
       throw new HttpError(413, "payloadTooLarge");
-    const { user } = await apiUser("application.edit");
+    // Self-service: every person keeps a profile photo and ID (checked in uploadProfileDocument).
+    const { user } = await apiUser();
     await enforceRateLimit("upload", user.id);
     const form = await request.formData();
     const file = form.get("file");

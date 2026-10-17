@@ -50,7 +50,12 @@ export function WaiveFeeDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="tonal" data-testid={`waive-${referenceNo}`}>
+        <Button
+          size="sm"
+          variant="tonal"
+          className="rounded-full"
+          data-testid={`waive-${referenceNo}`}
+        >
           <Money /> {t("button")}
         </Button>
       </DialogTrigger>

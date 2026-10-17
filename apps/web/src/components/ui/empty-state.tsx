@@ -30,7 +30,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "relative flex animate-rise flex-col items-center gap-5 overflow-hidden rounded-[2rem] bg-card/80 px-6 py-12 text-center backdrop-blur-xl dark:bg-white/[0.03]",
+        "glass relative flex animate-rise flex-col items-center gap-5 overflow-hidden rounded-[1.75rem] px-6 py-12 text-center ring-1 ring-primary/[0.08] dark:ring-white/[0.06]",
         className,
       )}
     >

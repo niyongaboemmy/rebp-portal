@@ -7,7 +7,8 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: "border-transparent bg-secondary text-secondary-foreground",
-        success: "border-transparent bg-success-soft text-success",
+        // "OK" is the primary family app-wide (UX-031): soft blue, never green.
+        success: "border-transparent bg-primary-soft text-primary-soft-foreground",
         warning: "text-warning-strong border-transparent bg-warning-soft",
         danger: "border-transparent bg-danger-soft text-destructive",
         info: "border-transparent bg-info-soft text-info",

@@ -17,6 +17,7 @@
     "format:check": "prettier --check .",
     "db:migrate": "pnpm --filter @rebp/web db:migrate",
     "db:seed": "pnpm --filter @rebp/web db:seed",
+    "db:seed:applications": "pnpm --filter @rebp/web db:seed:applications",
     "prepare": "husky"
   },
   "devDependencies": {

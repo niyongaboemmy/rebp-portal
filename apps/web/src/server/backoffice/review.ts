@@ -15,10 +15,9 @@ import { runEligibility, storeEligibilityRun } from "../applications/facts";
 import { checklistRows } from "../applications/submission";
 import { recordAudit } from "../audit/audit";
 import type { RequestContext } from "../auth/types";
-import { reauthenticate } from "../auth/step-up";
 import { db } from "../db";
 import { AppError } from "../errors";
-import { notify } from "../notifications/inbox";
+import { notify, notifyUsersWithCapability } from "../notifications/inbox";
 import { addDaysTo, addWorkingDays } from "../time";
 import { conflictsFor } from "./assignment";
 
@@ -55,6 +54,14 @@ export async function startReview(applicationId: string, officer: User, ctx: Req
   );
   await auditTransition(app, "SUBMITTED", "UNDER_REVIEW", officer.id, ctx);
   await storeEligibilityRun(app.id, "REVIEW", await runEligibility(app, asData(app.data)));
+  // The applicant sees the review begin (UX-032): their journey moves to "Review".
+  await notify(app.applicantId, {
+    code: "N-011",
+    messageKey: "reviewStarted",
+    values: { reference: app.referenceNo },
+    href: `/applications/${app.id}`,
+    email: true,
+  });
 }
 
 /** Auto-computed evidence per verification item (FR-L-004) and pre-computed L.10 / L.11. */
@@ -189,17 +196,11 @@ export async function saveReview(input: ReviewDraft, officer: User) {
 }
 
 /**
- * Signs the review (FR-L-010): re-authentication, BR-090 override reasons, mandatory reject
+ * Signs the review (FR-L-010): an explicit approval in the officer's two-step-verified session, BR-090 override reasons, mandatory reject
  * reasons (FR-L-009). Approve/reject recommendations go to the approver; "refer" goes to
  * further assessment (FR-L-012).
  */
-export async function signReview(
-  applicationId: string,
-  password: string,
-  officer: User,
-  session: Parameters<typeof reauthenticate>[1],
-  ctx: RequestContext,
-) {
+export async function signReview(applicationId: string, officer: User, ctx: RequestContext) {
   const app = await db.application.findUnique({ where: { id: applicationId } });
   if (!app) throw new AppError("notFound");
   await assertReviewer(app, officer);
@@ -249,7 +250,6 @@ export async function signReview(
   if (Object.keys(fieldErrors).length > 0)
     throw new AppError("reviewIncomplete", "errors.reviewIncomplete", fieldErrors);
 
-  await reauthenticate(officer, session, password, ctx);
   const signedAt = new Date();
   const overridden = {
     documentation: review.documentation !== computed.documentation,
@@ -264,7 +264,7 @@ export async function signReview(
         signature: {
           officerId: officer.id,
           name: officer.fullName,
-          method: "PASSWORD_REAUTH",
+          method: "CONFIRMED_MFA_SESSION",
           at: signedAt.toISOString(),
           ipAddress: ctx.ipAddress,
           userAgent: ctx.userAgent,
@@ -301,7 +301,16 @@ export async function signReview(
     ...ctx,
   });
   if (next !== app.status) await auditTransition(app, app.status, next, officer.id, ctx);
-  if (next === "FURTHER_ASSESSMENT")
+  // The officer's part is done: what pointed them at this file leaves their inbox (UX-036).
+  await db.notification.updateMany({
+    where: {
+      userId: officer.id,
+      readAt: null,
+      href: { in: [`/backoffice/review/${app.id}`, `/backoffice/decisions/${app.id}`] },
+    },
+    data: { readAt: new Date() },
+  });
+  if (next === "FURTHER_ASSESSMENT") {
     await notify(app.applicantId, {
       code: "N-050",
       messageKey: "referred",
@@ -309,6 +318,37 @@ export async function signReview(
       href: `/applications/${app.id}`,
       email: true,
     });
+    // N-050 (specialist): the decision-makers see the referral and its reasons.
+    await notifyUsersWithCapability(
+      "decision.make",
+      {
+        code: "N-050",
+        messageKey: "referredInternal",
+        values: { reference: app.referenceNo, officer: officer.fullName },
+        href: `/backoffice/review/${app.id}`,
+      },
+      [officer.id],
+    );
+  } else {
+    // The signed review is the approver's work item (UX-032), and the applicant's next stage.
+    await notifyUsersWithCapability(
+      "decision.make",
+      {
+        code: "N-030",
+        messageKey: "decisionReady",
+        values: { reference: app.referenceNo, officer: officer.fullName },
+        href: `/backoffice/decisions/${app.id}`,
+        email: true,
+      },
+      [officer.id],
+    );
+    await notify(app.applicantId, {
+      code: "N-011",
+      messageKey: "reviewComplete",
+      values: { reference: app.referenceNo },
+      href: `/applications/${app.id}`,
+    });
+  }
 }
 
 /** FR-L-007: request information; unlock named sections and documents; ACTION_REQUIRED. */

@@ -22,6 +22,14 @@ import { todayKigali } from "../time";
  * hold one — organisations and staff are never asked.
  */
 
+/**
+ * Everyone who is a person keeps a profile — name, contact details, photo — staff included
+ * (UX-010). Organisations don't. Applicants must also complete it (`needsProfile`).
+ */
+export function keepsProfile(user: Pick<User, "accountType">): boolean {
+  return user.accountType === "INDIVIDUAL";
+}
+
 export function needsProfile(user: Pick<User, "accountType" | "roles">): boolean {
   return user.accountType === "INDIVIDUAL" && user.roles.includes("APPLICANT");
 }
@@ -62,7 +70,7 @@ export async function profileStatus(
   const completion = profileCompletion(
     profileOf(user),
     await profileContext(),
-    needsProfile(user) ? await profileDocumentFlags(user.id) : undefined,
+    keepsProfile(user) ? await profileDocumentFlags(user.id) : undefined,
   );
   return { ...completion, required: needsProfile(user) };
 }

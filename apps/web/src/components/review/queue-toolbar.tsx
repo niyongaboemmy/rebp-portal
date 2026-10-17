@@ -1,14 +1,15 @@
 "use client";
 
+import { Select } from "@/components/ui/select";
 import { Loader2, Search, X } from "@/components/icons";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
-import { APPLICATION_TYPES, CATEGORIES } from "@rebp/contracts";
+import { APPLICATION_TYPES, CATEGORIES, QUEUE_SORTS, QUEUE_UNASSIGNED } from "@rebp/contracts";
 import { Button } from "@/components/ui/button";
 import { Chip, ChipRow } from "@/components/ui/chip";
-import { Input, inputClass } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useUrlState } from "@/hooks/use-url-state";
-import { cn } from "@/lib/utils";
+import type { OfficerOption } from "./assign-dialog";
 
 /** Statuses a reviewer works on (FR-BO-001); the "all" chip clears the filter. */
 const STATUS_FILTERS = [
@@ -21,10 +22,19 @@ const STATUS_FILTERS = [
 ] as const;
 
 /**
- * Queue filters (FR-BO-001): debounced search on reference or applicant, status chips, category
- * and type selects. Everything lives in the URL so a filtered view can be bookmarked and shared.
+ * Queue filters (FR-BO-001): debounced search on reference or applicant, status chips, category,
+ * type and assigned-officer selects, and the sort. Everything lives in the URL so a filtered view
+ * can be bookmarked and shared.
  */
-export function QueueToolbar({ counts }: { counts: Record<string, number> }) {
+export function QueueToolbar({
+  counts,
+  officers,
+  selfId,
+}: {
+  counts: Record<string, number>;
+  officers: OfficerOption[];
+  selfId: string;
+}) {
   const t = useTranslations();
   const { params, set, pending } = useUrlState();
   const [query, setQuery] = useState(params.get("q") ?? "");
@@ -32,7 +42,9 @@ export function QueueToolbar({ counts }: { counts: Record<string, number> }) {
   const status = params.get("status") ?? "";
   const category = params.get("category") ?? "";
   const type = params.get("type") ?? "";
-  const hasFilters = Boolean(params.get("q") || status || category || type);
+  const officer = params.get("officer") ?? "";
+  const sort = params.get("sort") ?? "";
+  const hasFilters = Boolean(params.get("q") || status || category || type || officer);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
@@ -70,36 +82,67 @@ export function QueueToolbar({ counts }: { counts: Record<string, number> }) {
           <label className="sr-only" htmlFor="queue-category">
             {t("queue.categoryLabel")}
           </label>
-          <select
+          <Select
             id="queue-category"
-            value={category}
-            onChange={(e) => set({ category: e.target.value || null })}
-            className={cn(inputClass, "w-full bg-card @3xl/main:w-56 dark:bg-transparent")}
-          >
-            <option value="">{t("queue.allCategories")}</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {t(`categories.items.${c}.name`)}
-              </option>
-            ))}
-          </select>
+            value={category ?? ""}
+            onChange={(v) => set({ category: v || null })}
+            className="w-full @3xl/main:w-56"
+            options={[
+              { value: "", label: t("queue.allCategories") },
+              ...CATEGORIES.map((c) => ({ value: c, label: t(`categories.items.${c}.name`) })),
+            ]}
+          />
           <label className="sr-only" htmlFor="queue-type">
             {t("queue.typeLabel")}
           </label>
-          <select
+          <Select
             id="queue-type"
-            value={type}
-            onChange={(e) => set({ type: e.target.value || null })}
-            className={cn(inputClass, "w-full bg-card @3xl/main:w-56 dark:bg-transparent")}
-          >
-            <option value="">{t("queue.allTypes")}</option>
-            {APPLICATION_TYPES.map((value) => (
-              <option key={value} value={value}>
-                {t(`applicationTypes.${value}.name`)}
-              </option>
-            ))}
-          </select>
+            value={type ?? ""}
+            onChange={(v) => set({ type: v || null })}
+            className="w-full @3xl/main:w-56"
+            options={[
+              { value: "", label: t("queue.allTypes") },
+              ...APPLICATION_TYPES.map((value) => ({
+                value,
+                label: t(`applicationTypes.${value}.name`),
+              })),
+            ]}
+          />
         </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3 @3xl/main:flex">
+        <label className="sr-only" htmlFor="queue-officer">
+          {t("queue.officerLabel")}
+        </label>
+        <Select
+          id="queue-officer"
+          value={officer ?? ""}
+          onChange={(v) => set({ officer: v || null })}
+          className="w-full @3xl/main:w-56"
+          data-testid="queue-officer"
+          options={[
+            { value: "", label: t("queue.allOfficers") },
+            { value: QUEUE_UNASSIGNED, label: t("queue.unassigned") },
+            ...officers.map((o) => ({
+              value: o.id,
+              label: o.id === selfId ? t("queue.assign.me", { name: o.fullName }) : o.fullName,
+            })),
+          ]}
+        />
+        <label className="sr-only" htmlFor="queue-sort">
+          {t("queue.sortLabel")}
+        </label>
+        <Select
+          id="queue-sort"
+          value={sort ?? ""}
+          onChange={(v) => set({ sort: !v || v === "deadline" ? null : v })}
+          className="w-full @3xl/main:w-56"
+          data-testid="queue-sort"
+          options={QUEUE_SORTS.map((value) => ({
+            value: value === "deadline" ? "" : value,
+            label: t(`queue.sorts.${value}`),
+          }))}
+        />
       </div>
       <div className="flex items-center gap-2">
         <ChipRow role="group" aria-label={t("queue.statusLabel")}>
@@ -120,7 +163,7 @@ export function QueueToolbar({ counts }: { counts: Record<string, number> }) {
             className="hidden shrink-0 sm:inline-flex"
             onClick={() => {
               setQuery("");
-              set({ q: null, status: null, category: null, type: null });
+              set({ q: null, status: null, category: null, type: null, officer: null });
             }}
           >
             <X /> {t("queue.clear")}
@@ -134,7 +177,7 @@ export function QueueToolbar({ counts }: { counts: Record<string, number> }) {
           className="self-start sm:hidden"
           onClick={() => {
             setQuery("");
-            set({ q: null, status: null, category: null, type: null });
+            set({ q: null, status: null, category: null, type: null, officer: null });
           }}
         >
           <X /> {t("queue.clear")}

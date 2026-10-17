@@ -12,17 +12,26 @@ import {
   Wallet,
 } from "@/components/icons";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
+import { ICON_TILE } from "@/components/admin/surfaces";
 import { BarList } from "@/components/data/bar-list";
+import { ColumnChart } from "@/components/data/column-chart";
 import { DistributionBar } from "@/components/data/distribution-bar";
 import { ProgressRing } from "@/components/data/progress-ring";
 import { StatTile } from "@/components/data/stat-tile";
 import { Button } from "@/components/ui/button";
 import { PageWidth } from "@/components/layout/page-width";
 import { PageHeader } from "@/components/ui/page-header";
+import { PANEL } from "@/components/ui/surface";
+import { cn } from "@/lib/utils";
 import { userCapabilities } from "@/server/access/permissions";
 import { requireCapability } from "@/server/auth/guards";
-import { financialReport, operationalReport, registerReport } from "@/server/backoffice/reports";
+import {
+  financialReport,
+  operationalReport,
+  reasonsReport,
+  registerReport,
+} from "@/server/backoffice/reports";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("reports"))("title") };
@@ -45,7 +54,7 @@ function ChartCard({
   return (
     <section
       // min-w-0: a grid item may shrink below its chart's min-content width (no sideways scroll at 320 px).
-      className="flex min-w-0 flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
+      className={cn("flex min-w-0 flex-col gap-4", PANEL)}
       aria-labelledby={id}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -56,6 +65,26 @@ function ChartCard({
       </div>
       {children}
     </section>
+  );
+}
+
+/** A report section's title: a soft medallion and the heading (the icon is rendered here, on the server). */
+function SectionTitle({
+  id,
+  icon,
+  children,
+}: {
+  id: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <h2 id={id} className="flex items-center gap-3 text-xl">
+      <span aria-hidden className={cn(ICON_TILE, "size-9")}>
+        {icon}
+      </span>
+      {children}
+    </h2>
   );
 }
 
@@ -71,35 +100,64 @@ export default async function ReportsPage() {
   // The applications export is for regulator staff, not firm users (see /api/exports).
   const canExportApplications = capabilities.includes("backoffice.access");
 
-  const [t, ops, register, finance] = await Promise.all([
+  const [t, format, ops, register, reasons, finance] = await Promise.all([
     getTranslations(),
+    getFormatter(),
     operationalReport(),
     registerReport(),
+    reasonsReport(),
     canSeePayments ? financialReport() : null,
   ]);
+  const reasonLabel = (code: string) =>
+    t.has(`review.reasonCodes.${code}`)
+      ? t(`review.reasonCodes.${code}` as "review.reasonCodes.OTHER")
+      : code;
   const sla = Math.round(ops.slaCompliance * 100);
   const infoRate = Math.round(ops.infoRequestRate * 100);
   const activeLicences = register.byCategory.reduce((sum, c) => sum + c.count, 0);
-  const none = <p className="text-sm text-muted-foreground">{t("reports.noData")}</p>;
+  const none = (
+    <p className="rounded-2xl bg-foreground/[0.025] px-4 py-6 text-center text-sm text-muted-foreground dark:bg-white/[0.03]">
+      {t("reports.noData")}
+    </p>
+  );
 
   return (
     <>
       <PageWidth wide />
       <PageHeader
+        eyebrow={t("reports.header.eyebrow")}
         title={t("reports.title")}
         description={t("reports.subtitle")}
+        stats={[
+          { value: ops.open, label: t("reports.header.open") },
+          {
+            value: ops.breached,
+            label: t("reports.header.breached"),
+            tone: ops.breached > 0 ? "now" : "muted",
+          },
+          { value: activeLicences, label: t("reports.header.licences") },
+        ]}
+        mood={ops.breached > 0 ? "waiting" : "documents"}
+        bubble={t("reports.header.bubble", { sla })}
         actions={
           (canExportApplications || canSeePayments) && (
             <div className="flex flex-wrap gap-2">
               {canExportApplications && (
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="rounded-full">
                   <a href="/api/exports/applications" download>
                     <FileDown /> {t("reports.exportApplications")}
                   </a>
                 </Button>
               )}
+              {canExportApplications && (
+                <Button asChild variant="outline" className="rounded-full">
+                  <a href="/api/exports/applications-by-reason" download>
+                    <FileDown /> {t("reports.exportReasons")}
+                  </a>
+                </Button>
+              )}
               {canSeePayments && (
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="rounded-full">
                   <a href="/api/exports/payments" download>
                     <FileDown /> {t("reports.exportPayments")}
                   </a>
@@ -112,10 +170,10 @@ export default async function ReportsPage() {
 
       {/* Operational (FR-RPT-001/002) */}
       <section aria-labelledby="ops-title" className="flex flex-col gap-4">
-        <h2 id="ops-title" className="text-xl">
+        <SectionTitle id="ops-title" icon={<ClipboardCheck />}>
           {t("reports.operational.title")}
-        </h2>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 @5xl/main:grid-cols-4">
+        </SectionTitle>
+        <div className="grid grid-cols-1 gap-3 @md/main:grid-cols-2 @md/main:gap-4 @5xl/main:grid-cols-4">
           <StatTile
             icon={ClipboardCheck}
             label={t("reports.operational.submitted")}
@@ -228,12 +286,82 @@ export default async function ReportsPage() {
         </div>
       </section>
 
-      {/* Register (FR-RPT-003) */}
+      {/* Rejection reasons and recommendations (FR-RPT-001) */}
+      <section aria-labelledby="reasons-title" className="flex flex-col gap-4">
+        <SectionTitle id="reasons-title" icon={<Scale />}>
+          {t("reports.reasons.title")}
+        </SectionTitle>
+        <div className="grid grid-cols-1 items-start gap-4 @3xl/main:grid-cols-2 @6xl/main:grid-cols-3">
+          <ChartCard
+            id="rejection-reasons-title"
+            title={t("reports.reasons.rejectionReasons")}
+            aside={t("reports.reasons.rejectionsHint", {
+              rejections: reasons.rejections,
+              deferrals: reasons.deferrals,
+            })}
+          >
+            {reasons.rejectionReasons.length === 0 ? (
+              none
+            ) : (
+              <BarList
+                label={t("reports.reasons.rejectionReasons")}
+                items={reasons.rejectionReasons.map((r) => ({
+                  key: r.key,
+                  label: reasonLabel(r.key),
+                  value: r.count,
+                }))}
+              />
+            )}
+          </ChartCard>
+          <ChartCard
+            id="recommendations-title"
+            title={t("reports.reasons.recommendations")}
+            aside={t("reports.reasons.signedReviews")}
+          >
+            {reasons.recommendations.length === 0 ? (
+              none
+            ) : (
+              <DistributionBar
+                label={t("reports.reasons.recommendations")}
+                segments={reasons.recommendations.map((r) => ({
+                  key: r.key,
+                  label: t.has(`review.recommendations.${r.key}.label`)
+                    ? t(
+                        `review.recommendations.${r.key}.label` as "review.recommendations.APPROVE.label",
+                      )
+                    : r.key,
+                  value: r.count,
+                }))}
+              />
+            )}
+          </ChartCard>
+          <ChartCard
+            id="review-reasons-title"
+            title={t("reports.reasons.reviewReasons")}
+            aside={t("reports.reasons.reviewReasonsHint")}
+          >
+            {reasons.reviewReasons.length === 0 ? (
+              none
+            ) : (
+              <BarList
+                label={t("reports.reasons.reviewReasons")}
+                items={reasons.reviewReasons.map((r) => ({
+                  key: r.key,
+                  label: reasonLabel(r.key),
+                  value: r.count,
+                }))}
+              />
+            )}
+          </ChartCard>
+        </div>
+      </section>
+
+      {/* Register (FR-RPT-002) */}
       <section aria-labelledby="register-title" className="flex flex-col gap-4">
-        <h2 id="register-title" className="text-xl">
+        <SectionTitle id="register-title" icon={<BadgeCheck />}>
           {t("reports.register.title")}
-        </h2>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 @5xl/main:grid-cols-3">
+        </SectionTitle>
+        <div className="grid grid-cols-1 gap-3 @md/main:grid-cols-2 @md/main:gap-4 @5xl/main:grid-cols-3">
           <StatTile
             icon={BadgeCheck}
             label={t("reports.register.active")}
@@ -251,7 +379,7 @@ export default async function ReportsPage() {
             label={t("reports.register.firms")}
             value={register.firms}
             hint={t("reports.register.firmsHint")}
-            className="col-span-2 @5xl/main:col-span-1"
+            className="@md/main:col-span-2 @5xl/main:col-span-1"
           />
         </div>
         <div className="grid grid-cols-1 items-start gap-4 @3xl/main:grid-cols-2">
@@ -286,13 +414,13 @@ export default async function ReportsPage() {
         </div>
       </section>
 
-      {/* Financial (FR-RPT-004, payments.view) */}
+      {/* Financial (FR-RPT-003, payments.view) */}
       {finance && (
         <section aria-labelledby="finance-title" className="flex flex-col gap-4">
-          <h2 id="finance-title" className="text-xl">
+          <SectionTitle id="finance-title" icon={<Wallet />}>
             {t("reports.financial.title")}
-          </h2>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 @5xl/main:grid-cols-4">
+          </SectionTitle>
+          <div className="grid grid-cols-1 gap-3 @md/main:grid-cols-2 @md/main:gap-4 @5xl/main:grid-cols-4">
             <StatTile
               icon={Wallet}
               label={t("finance.kpis.collected")}
@@ -317,6 +445,43 @@ export default async function ReportsPage() {
               value={finance.outstanding}
               hint={t("finance.kpis.outstandingHint")}
             />
+          </div>
+          <div className="grid grid-cols-1 items-start gap-4 @3xl/main:grid-cols-[1fr_1.4fr]">
+            <ChartCard
+              id="fee-types-title"
+              title={t("finance.revenue.byFeeType")}
+              aside={t("finance.amountUnit")}
+            >
+              {finance.byFeeType.every((f) => f.amount === 0) ? (
+                none
+              ) : (
+                <BarList
+                  label={t("finance.revenue.byFeeType")}
+                  items={finance.byFeeType.map((f) => ({
+                    key: f.key,
+                    label: t(`finance.revenue.types.${f.key}`),
+                    value: f.amount,
+                  }))}
+                />
+              )}
+            </ChartCard>
+            <ChartCard
+              id="months-title"
+              title={t("finance.revenue.byMonth")}
+              aside={t("finance.revenue.last12")}
+            >
+              <ColumnChart
+                label={t("finance.revenue.byMonth")}
+                valueLabel={t("finance.amountUnit")}
+                columns={finance.byMonth.map((m) => ({
+                  key: m.month,
+                  label: format.dateTime(new Date(`${m.month}-15T12:00:00Z`), {
+                    month: "short",
+                  }),
+                  value: m.amount,
+                }))}
+              />
+            </ChartCard>
           </div>
           <ChartCard
             id="methods-title"

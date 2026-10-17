@@ -1,5 +1,6 @@
 "use client";
 
+import { Select } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import {
@@ -22,7 +23,6 @@ import {
   User,
   ArrowRight,
   Check,
-  ChevronDown,
   CircleDashed,
   Info,
   Loader2,
@@ -347,24 +347,16 @@ function WizardShell() {
               />
             </div>
             {step !== "a" && <JourneyStatus journey={journey} step={step} compact />}
-            <div className="relative">
-              <select
-                aria-label={t("jumpTo")}
-                value={step}
-                onChange={(e) => go(e.target.value as StepKey)}
-                className="h-12 w-full appearance-none rounded-xl bg-card px-4 pr-10 text-sm font-semibold raised"
-              >
-                {steps.map((s, i) => (
-                  <option key={s} value={s}>
-                    {i + 1}. {t(`steps.${s}.title`)} — {t(`state.${stateOf(s)}`)}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                aria-hidden
-                className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-muted-foreground"
-              />
-            </div>
+            <Select
+              aria-label={t("jumpTo")}
+              value={step}
+              onChange={(v) => v && go(v as StepKey)}
+              className="h-12 font-semibold"
+              options={steps.map((s, i) => ({
+                value: s,
+                label: `${i + 1}. ${t(`steps.${s}.title`)} — ${t(`state.${stateOf(s)}`)}`,
+              }))}
+            />
           </div>
 
           <div className="grid items-start gap-5 @4xl/main:grid-cols-[16rem_minmax(0,1fr)]">
@@ -383,7 +375,7 @@ function WizardShell() {
                   </span>
                   <span
                     className={cn(
-                      "text-2xl leading-none font-bold num tracking-[-0.03em]",
+                      "text-2xl leading-none font-bold num tracking-[-0.02em]",
                       progress === 100 ? "text-link" : "text-foreground",
                     )}
                   >

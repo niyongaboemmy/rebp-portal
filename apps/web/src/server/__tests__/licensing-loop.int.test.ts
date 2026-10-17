@@ -30,22 +30,14 @@ import { respondToConfirmations } from "@/server/confirmations/confirmations";
 import { db } from "@/server/db";
 import { uploadDocument } from "@/server/documents/documents";
 import { AppError } from "@/server/errors";
-import { runLicenceLifecycle } from "@/server/jobs/lifecycle";
+import { runInformationReminders, runLicenceLifecycle } from "@/server/jobs/lifecycle";
 import { certificateFor } from "@/server/licensing/official-documents";
 import { decideRegisterAction, proposeRegisterAction } from "@/server/licensing/register-admin";
 import { findRegisterEntry, searchRegister } from "@/server/licensing/register";
 import { gateway, simulatedEvent } from "@/server/payments/gateway";
 import { processWebhook, simulateCheckout, startPayment } from "@/server/payments/payments";
 import { ctx, latestCode, resetDatabase } from "@/test/db";
-import {
-  EICAR,
-  makeFirmWithPeople,
-  makeLicence,
-  makeUser,
-  PASSWORD,
-  pdfOf,
-  pngOf,
-} from "@/test/fixtures";
+import { EICAR, makeFirmWithPeople, makeLicence, makeUser, pdfOf, pngOf } from "@/test/fixtures";
 
 /**
  * The end-to-end licensing loop through the domain layer (Plan O1, WP-3.10, SRS §19.2):
@@ -198,6 +190,12 @@ describe("FSLA end-to-end licensing loop", () => {
 
     // Section L.
     await startReview(app.id, officer.user, ctx);
+    // UX-032: the applicant sees the review begin.
+    expect(
+      await db.notification.count({
+        where: { userId: applicant.user.id, messageKey: "reviewStarted" },
+      }),
+    ).toBe(1);
     const computed = await computedReview(
       await db.application.findUniqueOrThrow({ where: { id: app.id } }),
     );
@@ -219,10 +217,7 @@ describe("FSLA end-to-end licensing loop", () => {
       officer.user,
     );
     // BR-090: overriding the computed eligibility without a reason is rejected.
-    await expectAppError(
-      signReview(app.id, PASSWORD, officer.user, officer.session, ctx),
-      "reviewIncomplete",
-    );
+    await expectAppError(signReview(app.id, officer.user, ctx), "reviewIncomplete");
     await saveReview(
       {
         applicationId: app.id,
@@ -234,9 +229,26 @@ describe("FSLA end-to-end licensing loop", () => {
       },
       officer.user,
     );
-    await signReview(app.id, PASSWORD, officer.user, officer.session, ctx);
+    await signReview(app.id, officer.user, ctx);
     current = await db.application.findUniqueOrThrow({ where: { id: app.id } });
     expect(current.status).toBe("PENDING_DECISION");
+    // UX-032: the signed review reaches the decision-makers, and the applicant hears it's done.
+    expect(
+      await db.notification.count({
+        where: { messageKey: "decisionReady", href: `/backoffice/decisions/${app.id}` },
+      }),
+    ).toBeGreaterThan(0);
+    expect(
+      await db.notification.count({
+        where: { userId: applicant.user.id, messageKey: "reviewComplete" },
+      }),
+    ).toBe(1);
+    // BR-091 (UX-036): the signer can't decide it, so it never lands in their inbox.
+    expect(
+      await db.notification.count({
+        where: { userId: officer.user.id, messageKey: "decisionReady" },
+      }),
+    ).toBe(0);
 
     // BR-091: the reviewer can never decide.
     await expectAppError(assertCanDecide(app.id, officer.user), "segregationOfDuties");
@@ -249,10 +261,8 @@ describe("FSLA end-to-end licensing loop", () => {
         conditions: [],
         geoScope: [],
         reasonCodes: [],
-        password: PASSWORD,
       },
       approver.user,
-      approver.session,
       ctx,
     );
     expect(licenceId).not.toBeNull();
@@ -451,6 +461,26 @@ describe("controls and branches", () => {
     );
     let current = await db.application.findUniqueOrThrow({ where: { id: app.id } });
     expect(current.status).toBe("ACTION_REQUIRED");
+    // N-041: reminders before and after the due date, each sent once.
+    const request = await db.informationRequest.findFirstOrThrow({
+      where: { applicationId: app.id },
+    });
+    await db.informationRequest.update({
+      where: { id: request.id },
+      data: { dueAt: new Date(Date.now() - 86_400_000) },
+    });
+    await runInformationReminders();
+    await runInformationReminders();
+    expect(
+      await db.notification.count({
+        where: { userId: applicant.user.id, messageKey: "infoOverdue" },
+      }),
+    ).toBe(1);
+    expect(
+      await db.notification.count({
+        where: { userId: officer.user.id, messageKey: "infoOverdueOfficer" },
+      }),
+    ).toBe(1);
     await expectAppError(
       saveSection(app.id, { section: "b", data: {} }, applicant.user, ctx),
       "sectionLocked",
@@ -627,7 +657,7 @@ async function reviewAndApprove(applicationId: string, officer: Person, approver
     },
     officer.user,
   );
-  await signReview(applicationId, PASSWORD, officer.user, officer.session, ctx);
+  await signReview(applicationId, officer.user, ctx);
   return recordDecision(
     {
       applicationId,
@@ -635,10 +665,8 @@ async function reviewAndApprove(applicationId: string, officer: Person, approver
       conditions: [],
       geoScope: [],
       reasonCodes: [],
-      password: PASSWORD,
     },
     approver.user,
-    approver.session,
     ctx,
   );
 }

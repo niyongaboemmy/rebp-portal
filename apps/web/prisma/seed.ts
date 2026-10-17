@@ -50,9 +50,21 @@ const DEMO_USERS: {
   { email: "auditor@demo.rebp.rw", fullName: "Joyce Mutoni", roles: ["AUDITOR"] },
   // Licensed FSLA practitioner: 2 y 5 m of experience (UAT-03) and a licence in its renewal window (UAT-10).
   { email: "agent@demo.rebp.rw", fullName: "Jean Bosco Habyarimana", roles: ["APPLICANT"] },
+  // Last, so earlier accounts keep their seeded phone numbers. A second officer: files can be assigned across the team and handed over (FR-BO-002/005).
+  {
+    email: "officer2@demo.rebp.rw",
+    fullName: "Alice Mukandayisenga",
+    roles: ["REVIEWING_OFFICER"],
+  },
 ];
 
 async function main() {
+  // The demo password is public (docs/DEMO_ACCOUNTS.md): production is bootstrapped by
+  // deploy/cpanel/create-admin.cjs instead, never by this seed.
+  const appEnv =
+    process.env.APP_ENV ?? (process.env.NODE_ENV === "production" ? "production" : "dev");
+  if (appEnv === "production")
+    throw new Error("Refusing to seed demo accounts with APP_ENV=production.");
   const db = new PrismaClient({
     adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
   });

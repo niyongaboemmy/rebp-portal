@@ -13,6 +13,7 @@ import {
   requiresMfa,
   ROLES,
   validateMatrix,
+  SOD_EXEMPT_ROLES,
   type Capability,
   type Role,
 } from "../roles";
@@ -28,6 +29,10 @@ describe("default permission matrix (SRS Appendix D)", () => {
     ["REVIEWING_OFFICER", "decision.make", false],
     ["APPROVING_AUTHORITY", "decision.make", true],
     ["APPROVING_AUTHORITY", "review.perform", false],
+    // FR-BO-002: the team lead (approving authority) and the administrator assign and take over.
+    ["APPROVING_AUTHORITY", "review.assign", true],
+    ["SYSTEM_ADMIN", "review.assign", true],
+    ["REVIEWING_OFFICER", "review.assign", false],
     ["REGISTRAR", "register.administer", true],
     ["FINANCE_OFFICER", "payments.manage", true],
     ["FINANCE_OFFICER", "audit.export", false],
@@ -91,6 +96,12 @@ describe("guard-rails", () => {
     ]);
   });
 
+  it("lets the system administrator validate and approve; BR-091 then applies per file", () => {
+    for (const cap of ["review.perform", "review.view", "decision.make", "decision.view"] as const)
+      expect(DEFAULT_PERMISSIONS.SYSTEM_ADMIN).toContain(cap);
+    expect(validateMatrix(DEFAULT_PERMISSIONS)).toEqual([]);
+  });
+
   it("blocks maker and checker in one role", () => {
     const matrix = applyOverrides([
       { role: "SYSTEM_ADMIN", capability: "config.approve", granted: true },
@@ -123,9 +134,11 @@ describe("guard-rails", () => {
     });
   });
 
-  it("no default role holds review and decision together", () => {
+  it("only the exempt administrator holds review and decision together by default", () => {
     for (const role of ROLES)
-      expect(can([role], "review.perform") && can([role], "decision.make")).toBe(false);
+      expect(can([role], "review.perform") && can([role], "decision.make")).toBe(
+        SOD_EXEMPT_ROLES.includes(role),
+      );
   });
 });
 

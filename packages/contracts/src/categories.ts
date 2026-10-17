@@ -29,6 +29,8 @@ export interface CategoryInfo {
   code: Category;
   /** Short label used in badges and register listings. */
   abbreviation: string;
+  /** Two-letter code for compact tiles in lists (UX-034), unique across categories. */
+  monogram: string;
   tier: CategoryTier;
   applicantType: "INDIVIDUAL" | "ORGANISATION";
   /** Form REBP–REG–01 Section G subsection. */
@@ -39,6 +41,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   RERA: {
     code: "RERA",
     abbreviation: "RERA",
+    monogram: "RR",
     tier: "entry",
     applicantType: "INDIVIDUAL",
     section: "G1",
@@ -46,6 +49,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   FSLA: {
     code: "FSLA",
     abbreviation: "FSLA",
+    monogram: "FS",
     tier: "entry",
     applicantType: "INDIVIDUAL",
     section: "G2",
@@ -53,6 +57,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   REA: {
     code: "REA",
     abbreviation: "REA",
+    monogram: "RA",
     tier: "agent",
     applicantType: "INDIVIDUAL",
     section: "G3",
@@ -60,6 +65,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   BROKER: {
     code: "BROKER",
     abbreviation: "Broker",
+    monogram: "BR",
     tier: "broker",
     applicantType: "INDIVIDUAL",
     section: "G4",
@@ -67,6 +73,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   ASSOCIATE_BROKER: {
     code: "ASSOCIATE_BROKER",
     abbreviation: "Assoc. Broker",
+    monogram: "AB",
     tier: "broker",
     applicantType: "INDIVIDUAL",
     section: "G5",
@@ -74,6 +81,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   MANAGING_BROKER: {
     code: "MANAGING_BROKER",
     abbreviation: "Managing Broker",
+    monogram: "MB",
     tier: "broker",
     applicantType: "INDIVIDUAL",
     section: "G6",
@@ -81,6 +89,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   PRINCIPAL_BROKER: {
     code: "PRINCIPAL_BROKER",
     abbreviation: "Principal Broker",
+    monogram: "PB",
     tier: "broker",
     applicantType: "INDIVIDUAL",
     section: "G7",
@@ -88,6 +97,7 @@ export const CATEGORY_INFO: Record<Category, CategoryInfo> = {
   REBF: {
     code: "REBF",
     abbreviation: "REBF",
+    monogram: "BF",
     tier: "firm",
     applicantType: "ORGANISATION",
     section: "G8",

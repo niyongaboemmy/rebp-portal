@@ -6,7 +6,10 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ICON_TILE } from "@/components/admin/surfaces";
+import { PANEL, PANEL_ROW } from "@/components/ui/surface";
 import { useErrorMessage } from "@/hooks/use-error-message";
+import { cn } from "@/lib/utils";
 import { runJobsAction } from "@/server/actions/backoffice";
 
 type Summary = Record<string, Record<string, number>>;
@@ -18,6 +21,7 @@ const JOBS = [
   "payments",
   "issuance",
   "sla",
+  "information",
   "upgrades",
 ] as const;
 
@@ -37,13 +41,10 @@ export function RunJobsCard() {
     });
 
   return (
-    <section
-      aria-labelledby="jobs-title"
-      className="flex flex-col gap-4 rounded-3xl border border-dashed bg-card p-5 sm:p-6"
-    >
+    <section aria-labelledby="jobs-title" className={cn("flex flex-col gap-4", PANEL)}>
       <div className="flex flex-wrap items-start gap-3">
-        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground">
-          <Timer className="size-5" aria-hidden />
+        <span className={ICON_TILE} aria-hidden>
+          <Timer />
         </span>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex flex-wrap items-center gap-2">
@@ -54,23 +55,20 @@ export function RunJobsCard() {
           </div>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
-        <Button variant="tonal" loading={pending} onClick={run}>
+        <Button variant="tonal" className="rounded-full" loading={pending} onClick={run}>
           <Play /> {t("run")}
         </Button>
       </div>
       <div aria-live="polite">
         {summary && (
-          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-2 @xl/main:grid-cols-4">
             {JOBS.filter((job) => summary[job]).map((job) => {
               const total = Object.values(summary[job]!).reduce(
                 (sum, n) => sum + (typeof n === "number" ? n : 0),
                 0,
               );
               return (
-                <div
-                  key={job}
-                  className="flex flex-col gap-0.5 rounded-2xl bg-surface-2 px-3 py-2.5"
-                >
+                <div key={job} className={cn("flex flex-col gap-0.5 px-3 py-2.5", PANEL_ROW)}>
                   <dt className="text-xs text-muted-foreground">{t(`names.${job}`)}</dt>
                   <dd className="text-lg font-bold num">{total}</dd>
                 </div>

@@ -3,6 +3,7 @@ import { Logo } from "@/components/ui/logo";
 import { getCurrentSession } from "@/server/auth/current";
 import { userCapabilities } from "@/server/access/permissions";
 import { profilePhotoUrl } from "@/server/profile/documents";
+import { keepsProfile, needsProfile } from "@/server/profile/profile";
 import { AuthMenu } from "./auth-menu";
 import { CommandPalette } from "./command-palette";
 import { HeaderNav } from "./header-nav";
@@ -39,6 +40,8 @@ export async function SiteHeader() {
               name={current.user.fullName}
               email={current.user.email}
               photoUrl={photoUrl}
+              person={keepsProfile(current.user)}
+              applicant={needsProfile(current.user)}
               capabilities={capabilities}
             />
           ) : (

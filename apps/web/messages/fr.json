@@ -39,7 +39,10 @@
     "dismiss": "Ignorer",
     "notice": "Avis",
     "capsLock": "Verr. Maj activé",
-    "moreInfo": "Plus d'informations"
+    "moreInfo": "Plus d'informations",
+    "search": "Rechercher",
+    "noMatch": "Aucun résultat",
+    "notYet": "Pas encore"
   },
   "nav": {
     "home": "Accueil",
@@ -118,8 +121,8 @@
       "backoffice": "Back-office"
     },
     "areaHint": {
-      "portal": "Vos demandes et licences",
-      "backoffice": "Examiner, décider et administrer"
+      "portal": "Déposer et suivre",
+      "backoffice": "Examiner et décider"
     },
     "switchTo": "Aller au {area}",
     "layout": "Disposition",
@@ -367,6 +370,7 @@
     },
     "continueWithGoogle": "Continuer avec Google",
     "googleUnavailable": "La connexion Google n'est pas configurée dans cet environnement.",
+    "googleLoadFailed": "La connexion Google n'a pas pu se charger. Vérifiez votre connexion ou le blocage du navigateur, puis rechargez la page.",
     "signIn": {
       "title": "Bon retour",
       "subtitle": "Connectez-vous pour poursuivre votre demande.",
@@ -698,6 +702,19 @@
         "send": "Envoyer le code",
         "sent": "Code envoyé. Saisissez-le ci-dessous.",
         "phoneRequired": "Vérifiez d'abord votre numéro de mobile."
+      },
+      "guide": {
+        "title": "Activez la double étape pour continuer",
+        "body": "Choisissez une méthode ci-dessous. Vous pourrez en ajouter d'autres.",
+        "steps": {
+          "pick": "Choisir une méthode",
+          "code": "Saisir le code",
+          "save": "Enregistrer vos codes de secours"
+        },
+        "email": "Codes par e-mail (le plus rapide)",
+        "app": "Application d'authentification (la plus sûre)",
+        "quickest": "Le plus rapide",
+        "secure": "La plus sûre"
       }
     },
     "recovery": {
@@ -763,7 +780,10 @@
         "twoStep": "Activez la double vérification",
         "recovery": "Obtenez de nouveaux codes"
       }
-    }
+    },
+    "requiredTitle": "La vérification en deux étapes est obligatoire pour votre rôle",
+    "requiredShort": "Activez une méthode pour continuer à utiliser le back-office. Cela prend environ une minute.",
+    "requiredCta": "L'activer maintenant"
   },
   "audit": {
     "title": "Journal d'audit",
@@ -794,7 +814,37 @@
       "signin": "Connexion",
       "account": "Compte",
       "twoStep": "Deux étapes",
-      "access": "Accès"
+      "access": "Accès",
+      "applications": "Demandes",
+      "administration": "Administration"
+    },
+    "header": {
+      "eyebrow": "Sécurité",
+      "checked": "événements vérifiés",
+      "today": "aujourd'hui",
+      "fortnight": "en 14 jours",
+      "bubbleOk": "Rien n'a été altéré",
+      "bubbleBroken": "Quelque chose a changé !",
+      "events": "Événements"
+    },
+    "export": {
+      "csv": "Exporter en CSV",
+      "json": "Exporter en JSON"
+    },
+    "search": {
+      "label": "Rechercher dans la piste d’audit",
+      "actor": "Auteur",
+      "actorPlaceholder": "Nom ou e-mail",
+      "entity": "Entité ou référence",
+      "entityPlaceholder": "ex. REBP-2026-000123",
+      "action": "Action",
+      "actionPlaceholder": "ex. config.",
+      "from": "Du",
+      "to": "Au",
+      "submit": "Rechercher",
+      "clear": "Effacer les filtres",
+      "results": "{count, plural, =0 {Aucun événement} one {# événement} other {# événements}}{more, select, yes { (suite à la page suivante)} other {}}",
+      "empty": "Aucun événement ne correspond à ces filtres."
     }
   },
   "privacy": {
@@ -962,7 +1012,9 @@
     "badOrigin": "La requête provient d'un site inattendu.",
     "mfaRequired": "La vérification en deux étapes est requise pour cette action.",
     "profileIncomplete": "Complétez d'abord votre profil : vos informations personnelles sont réutilisées dans chaque demande.",
-    "cvIncomplete": "Complétez d'abord votre CV : il manque des parties requises pour cette catégorie."
+    "cvIncomplete": "Complétez d'abord votre CV : il manque des parties requises pour cette catégorie.",
+    "exportFormatInvalid": "Choisissez CSV ou JSON pour l’export.",
+    "decisionAlreadyCorrected": "Cette décision a déjà été corrigée. Corrigez plutôt la décision la plus récente."
   },
   "notifications": {
     "emailVerify": {
@@ -1150,6 +1202,10 @@
     "backoffice_access": {
       "label": "Ouvrir le back-office",
       "description": "Utiliser la console du personnel du régulateur."
+    },
+    "review_assign": {
+      "label": "Attribuer et réattribuer les dossiers",
+      "description": "Attribuer, réattribuer ou reprendre toute demande ouverte (chef d'équipe) et recevoir les escalades de délai."
     }
   },
   "access": {
@@ -1252,6 +1308,14 @@
       },
       "staffRole": "Personnel",
       "noMatches": "Aucune autorisation ne correspond à « {query} »."
+    },
+    "header": {
+      "eyebrow": "Personnes et autorisations",
+      "people": "comptes actifs",
+      "twoStep": "avec double vérification",
+      "noTwoStep": "sans double vérification",
+      "bubble": "Qui peut faire quoi",
+      "bubbleReadOnly": "Lecture seule"
     }
   },
   "myAccess": {
@@ -1612,6 +1676,50 @@
       "configuration": "{count, plural, =0 {Aucune modification en attente} one {# modification en attente} other {# modifications en attente}}",
       "reports": "Voir les rapports",
       "open": "Ouvrir"
+    },
+    "hero": {
+      "hello": "Bonjour, {name}",
+      "next": "Prochaine étape",
+      "waiting": "{count, plural, one {# élément vous attend} other {# éléments vous attendent}}",
+      "clear": "rien ne vous attend",
+      "focus": {
+        "overdue": {
+          "title": "{count, plural, one {# de vos dossiers a dépassé son échéance} other {# de vos dossiers ont dépassé leur échéance}}",
+          "cta": "Voir les retards"
+        },
+        "decisions": {
+          "title": "{count, plural, one {# examen signé attend votre décision} other {# examens signés attendent votre décision}}",
+          "cta": "Décider"
+        },
+        "queue": {
+          "title": "{count, plural, one {# demande vous est attribuée} other {# demandes vous sont attribuées}}",
+          "cta": "Ouvrir la file"
+        },
+        "register": {
+          "title": "{count, plural, one {# modification du registre à approuver} other {# modifications du registre à approuver}}",
+          "cta": "Examiner"
+        },
+        "configuration": {
+          "title": "{count, plural, one {# changement de configuration à approuver} other {# changements de configuration à approuver}}",
+          "cta": "Examiner"
+        },
+        "clear": {
+          "title": "Vous êtes à jour",
+          "cta": ""
+        }
+      },
+      "bubble": {
+        "overdue": "En retard !",
+        "decisions": "À vous de décider",
+        "queue": "Dossiers à vérifier",
+        "register": "Un second regard",
+        "configuration": "Approuver ou rejeter",
+        "clear": "Tout est en ordre !"
+      }
+    },
+    "pipeline": {
+      "title": "Circuit d'examen",
+      "decided": "{count, plural, one {# décidée cette semaine} other {# décidées cette semaine}}"
     }
   },
   "offline": {
@@ -1653,7 +1761,31 @@
     "access_permissions_changed": "Autorisations modifiées",
     "access_permissions_reset": "Autorisations réinitialisées par défaut",
     "access_account_disabled": "Compte désactivé",
-    "access_account_enabled": "Compte réactivé"
+    "access_account_enabled": "Compte réactivé",
+    "audit_exported": "Piste d’audit exportée",
+    "report_exported": "Rapport exporté",
+    "config_proposed": "Modification de configuration proposée",
+    "config_approved": "Modification de configuration approuvée",
+    "config_rejected": "Modification de configuration rejetée",
+    "application_created": "Demande commencée",
+    "application_signed": "Demande signée",
+    "application_transition": "Statut modifié",
+    "application_assigned": "Demande attribuée",
+    "application_conflict_declared": "Conflit d'intérêts déclaré",
+    "application_category_changed": "Catégorie modifiée",
+    "confirmation_overridden": "Confirmation forcée",
+    "document_verified": "Document vérifié",
+    "document_rejected": "Document rejeté",
+    "review_signed": "Examen signé",
+    "decision_signed": "Décision signée",
+    "decision_corrected": "Décision corrigée",
+    "licence_issued": "Licence délivrée",
+    "licence_issuance_failed": "Échec de délivrance de licence",
+    "licence_certificate_reissued": "Certificat réémis",
+    "register_action_proposed": "Modification du registre proposée",
+    "register_action_rejected": "Modification du registre rejetée",
+    "payment_waived": "Frais exonérés",
+    "jobs_run": "Tâches planifiées exécutées"
   },
   "time": {
     "justNow": "À l'instant",
@@ -1935,6 +2067,58 @@
     "upgradeEligible": {
       "title": "Vous pouvez maintenant passer à une catégorie supérieure",
       "body": "Compte tenu de l'historique de votre licence, vous pouvez désormais demander {category, select, REA {la catégorie d'agent immobilier} BROKER {la catégorie de courtier immobilier} other {une catégorie supérieure}}."
+    },
+    "reviewStarted": {
+      "title": "Votre demande est en cours d'examen",
+      "body": "Un agent a commencé l'examen de la demande {reference}. Nous vous préviendrons si quelque chose est nécessaire."
+    },
+    "reviewComplete": {
+      "title": "Examen terminé",
+      "body": "L'examen de {reference} est terminé. Elle est maintenant entre les mains de l'autorité d'approbation."
+    },
+    "decisionReady": {
+      "title": "Décision requise",
+      "body": "{officer} a signé l'examen de {reference}. Elle attend votre décision."
+    },
+    "referredInternal": {
+      "title": "Renvoyée pour évaluation approfondie",
+      "body": "{officer} a renvoyé {reference} pour une évaluation approfondie."
+    },
+    "unassigned": {
+      "title": "Demande en attente d'un agent",
+      "body": "{reference} a été soumise et n'a pas encore d'agent. Attribuez-la depuis la file de travail."
+    },
+    "infoReminder": {
+      "title": "Réponse attendue bientôt",
+      "body": "Les informations demandées pour {reference} sont attendues avant le {due}. Répondez pour que l'examen continue."
+    },
+    "infoOverdue": {
+      "title": "Réponse en retard",
+      "body": "Les informations demandées pour {reference} étaient attendues le {due}. Répondez dès que possible."
+    },
+    "infoOverdueOfficer": {
+      "title": "Réponse du demandeur en retard",
+      "body": "Le demandeur n'a pas répondu à la demande d'informations sur {reference} (échéance {due})."
+    },
+    "reassigned": {
+      "title": "Dossier réattribué",
+      "body": "{name} a réattribué la demande {reference} à un autre agent."
+    },
+    "slaEscalated": {
+      "title": "Escalade du niveau de service",
+      "body": "La demande {reference} a dépassé son échéance ({date}) de plus de deux jours ouvrables. Veuillez la réattribuer ou assurer le suivi."
+    },
+    "decisionCorrected": {
+      "title": "Lettre de décision corrigée",
+      "body": "La décision sur la demande {reference} a été corrigée. La lettre {letter} remplace la lettre {previous}."
+    },
+    "certificateReissued": {
+      "title": "Nouveau certificat délivré",
+      "body": "Un nouveau certificat (version {version}) a été délivré pour la licence {licence}. Le code QR de l'ancien certificat n'est plus valable."
+    },
+    "issuanceFailed": {
+      "title": "Échec de la délivrance de la licence",
+      "body": "La licence de la demande approuvée {reference} n'a pas pu être délivrée. Une nouvelle tentative sera faite automatiquement ; veuillez vérifier le dossier."
     }
   },
   "conditions": {
@@ -2045,8 +2229,10 @@
       "APPROVED_WITH_CONDITIONS": "Votre demande d'inscription et de licence en tant que {category} a été approuvée sous réserve des conditions ci-dessous. Les conditions figurent sur votre licence et sur le portail.",
       "DEFERRED": "La décision sur votre demande en tant que {category} a été reportée dans l'attente d'informations complémentaires. Veuillez répondre via le Portail REBP.",
       "REJECTED": "Après examen, votre demande d'inscription et de licence en tant que {category} n'a pas été approuvée, pour les motifs ci-dessous.",
-      "appeal": "Vous pouvez demander par écrit le réexamen de cette décision dans un délai de 30 jours à compter de la présente lettre, conformément aux procédures de l'Organisme professionnel."
-    }
+      "appeal": "Vous pouvez demander par écrit le réexamen de cette décision dans un délai de 30 jours à compter de la présente lettre, conformément aux procédures de l'Organisme professionnel.",
+      "correction": "Cette lettre corrige la lettre de décision {letter}. Motif : {reason}"
+    },
+    "evidenceRequired": "preuve de conformité requise"
   },
   "registerResults": {
     "kind": {
@@ -2271,7 +2457,8 @@
       "brightness": "Augmentez la luminosité de l'écran pour un scan rapide.",
       "copy": "Copier le lien de vérification",
       "copied": "Lien copié"
-    }
+    },
+    "conditionEvidence": "Preuve de conformité requise"
   },
   "registerAdmin": {
     "title": "Administration du registre",
@@ -2391,7 +2578,30 @@
       "approvedToast": "Modification approuvée. La licence {licence} est mise à jour.",
       "rejectedToast": "Modification de {licence} rejetée.",
       "makerCheckerTitle": "Une seconde personne est nécessaire",
-      "makerChecker": "Vous avez proposé cette modification ; une autre personne doit donc l'approuver ou la rejeter."
+      "makerChecker": "Vous avez proposé cette modification ; une autre personne doit donc l'approuver ou la rejeter.",
+      "needsYou": "Votre approbation est requise"
+    },
+    "header": {
+      "eyebrow": "Registre des licences",
+      "active": "valides",
+      "expiring": "expirent bientôt",
+      "pending": "en attente d'approbation",
+      "bubbleDecide": "{count, plural, one {# changement à trancher} other {# changements à trancher}}",
+      "bubbleWaiting": "En attente d'une seconde personne",
+      "bubbleClear": "Le registre est à jour"
+    },
+    "reissue": {
+      "button": "Rééditer le certificat",
+      "title": "Rééditer le certificat",
+      "description": "La licence {licence} en est à la version {version} du certificat. Une nouvelle version sera émise.",
+      "qrNote": "Le code QR du certificat actuel indiquera « remplacé, voir la version actuelle ». Le titulaire est averti.",
+      "reason": "Motif",
+      "reasonHint": "Par exemple certificat perdu, changement de nom ou de condition (au moins 10 caractères).",
+      "password": "Votre mot de passe",
+      "passwordHint": "La réédition d'un certificat nécessite votre mot de passe.",
+      "submit": "Rééditer",
+      "done": "Version {version} du certificat émise pour {licence}.",
+      "version": "Version du certificat"
     }
   },
   "finance": {
@@ -2406,7 +2616,9 @@
       "duplicates": "Doublons signalés",
       "duplicatesHint": "Remboursement à vérifier",
       "outstanding": "En attente de paiement",
-      "outstandingHint": "Demandes"
+      "outstandingHint": "Demandes",
+      "refunded": "Remboursé (RWF)",
+      "refundedHint": "{count, plural, one {# remboursement} other {# remboursements}}"
     },
     "byMethod": "Encaissements par moyen de paiement",
     "amountUnit": "RWF",
@@ -2437,7 +2649,28 @@
       "status": "Statut",
       "receipt": "Reçu",
       "view": "Reçu",
-      "duplicate": "Doublon"
+      "duplicate": "Doublon",
+      "showAll": "Afficher les {count} paiements",
+      "showLess": "Afficher moins"
+    },
+    "header": {
+      "eyebrow": "Paiements",
+      "collected": "encaissés",
+      "awaiting": "en attente de paiement",
+      "duplicates": "doublons",
+      "bubbleAttention": "{count, plural, one {# élément à examiner} other {# éléments à examiner}}",
+      "bubbleClear": "Tout est réglé"
+    },
+    "revenue": {
+      "byFeeType": "Recettes par type de frais",
+      "byMonth": "Recettes par mois",
+      "last12": "12 derniers mois · RWF",
+      "types": {
+        "registration": "Enregistrement",
+        "licensing": "Licence et renouvellement",
+        "latePenalty": "Pénalité de retard",
+        "other": "Autre ou non ventilé"
+      }
     }
   },
   "configuration": {
@@ -2574,7 +2807,8 @@
       "ownProposal": "Vous avez proposé cette modification. Un autre approbateur doit décider.",
       "waiting": "En attente d'une autorité d'approbation.",
       "makerCheckerTitle": "Une seconde personne est nécessaire",
-      "makerChecker": "Vous avez proposé cette modification ; une autre personne doit donc l'approuver ou la rejeter."
+      "makerChecker": "Vous avez proposé cette modification ; une autre personne doit donc l'approuver ou la rejeter.",
+      "needsYou": "Votre approbation est requise"
     },
     "history": {
       "title": "Historique",
@@ -2598,9 +2832,22 @@
         "payments": "Paiements",
         "issuance": "Nouvelles tentatives de délivrance",
         "sla": "Alertes SLA",
-        "upgrades": "Incitations à la montée de catégorie"
+        "upgrades": "Incitations à la montée de catégorie",
+        "information": "Rappels d'information"
       }
-    }
+    },
+    "header": {
+      "eyebrow": "Paramètres",
+      "inForce": "en vigueur",
+      "defaults": "Valeurs par défaut",
+      "pending": "en attente d'approbation",
+      "versions": "versions",
+      "versionsCount": "{count, plural, =0 {Aucune version} one {# version} other {# versions}}",
+      "bubbleDecide": "Votre approbation est requise",
+      "bubbleWaiting": "En attente d'un approbateur",
+      "bubbleClear": "Deux personnes pour chaque changement"
+    },
+    "outOfScope": "Ces paramètres sont proposés par un administrateur système. Vous pouvez les consulter ici."
   },
   "reports": {
     "title": "Rapports",
@@ -2638,6 +2885,23 @@
     },
     "financial": {
       "title": "Encaissements"
+    },
+    "header": {
+      "eyebrow": "Analyses",
+      "open": "demandes ouvertes",
+      "breached": "hors délai",
+      "licences": "licences valides",
+      "bubble": "{sla} % dans les délais"
+    },
+    "exportReasons": "Exporter les motifs",
+    "reasons": {
+      "title": "Motifs",
+      "rejectionReasons": "Motifs de rejet",
+      "rejectionsHint": "{rejections, plural, one {# rejet} other {# rejets}} · {deferrals, plural, one {# report} other {# reports}}",
+      "recommendations": "Recommandations d’examen",
+      "signedReviews": "Dernier examen signé par demande",
+      "reviewReasons": "Motifs de rejet proposés par les agents",
+      "reviewReasonsHint": "Recommandations de rejet"
     }
   },
   "queue": {
@@ -2709,6 +2973,36 @@
       "declared": "Il a déclaré un conflit d'intérêts.",
       "supervisor": "Il est le superviseur désigné.",
       "firm": "Il appartient au cabinet du demandeur."
+    },
+    "bubble": {
+      "breached": "Des dossiers sont en retard",
+      "mine": "Vérifions-les",
+      "clear": "File vide !"
+    },
+    "officerLabel": "Agent attribué",
+    "allOfficers": "Tous les agents",
+    "sortLabel": "Trier par",
+    "sorts": {
+      "deadline": "Échéance, la plus proche d'abord",
+      "submitted": "Soumissions les plus récentes d'abord",
+      "stale": "Le plus longtemps dans l'état actuel"
+    },
+    "inState": "{days, plural, =0 {Dans cet état depuis aujourd'hui} one {# jour dans cet état} other {# jours dans cet état}}",
+    "bulk": {
+      "label": "Attribution groupée",
+      "select": "Sélectionner {reference}",
+      "selectAll": "Tout sélectionner sur cette page",
+      "selected": "{count, plural, one {# dossier sélectionné} other {# dossiers sélectionnés}}",
+      "officer": "Attribuer à",
+      "assign": "Attribuer la sélection",
+      "takeSelected": "M'attribuer la sélection",
+      "clear": "Effacer la sélection",
+      "confirmTitle": "{count, plural, one {Attribuer # dossier ?} other {Attribuer # dossiers ?}}",
+      "confirmBody": "{count, plural, one {# dossier sera attribué} other {# dossiers seront attribués}} à {name}. Les dossiers présentant un conflit d'intérêts sont ignorés et listés.",
+      "cancel": "Annuler",
+      "confirm": "{count, plural, one {Attribuer # dossier} other {Attribuer # dossiers}}",
+      "done": "{count, plural, one {# dossier attribué.} other {# dossiers attribués.}}",
+      "skipped": "{count, plural, one {# dossier n'a pas été attribué :} other {# dossiers n'ont pas été attribués :}}"
     }
   },
   "review": {
@@ -2803,7 +3097,17 @@
       "licences": "{count, plural, =0 {Licences} other {Licences (#)}}",
       "noLicences": "Aucune licence détenue.",
       "expires": "expire le {date}",
-      "applications": "{count, plural, =0 {Demandes} other {Demandes (#)}}"
+      "applications": "{count, plural, =0 {Demandes} other {Demandes (#)}}",
+      "affiliations": "{count, plural, =0 {Affiliations} other {Affiliations (#)}}",
+      "noAffiliations": "Aucune affiliation à une entreprise enregistrée.",
+      "period": "{from} – {to}",
+      "affiliatedSince": "depuis le {date}",
+      "history": "Historique des licences et sanctions",
+      "noHistory": "Aucun historique de licence.",
+      "payments": "{count, plural, =0 {Paiements} other {Paiements (#)}}",
+      "noPayments": "Aucun paiement pour l'instant.",
+      "communications": "Derniers messages envoyés",
+      "noCommunications": "Aucun message envoyé pour l'instant."
     },
     "docTypes": {
       "proofOfIdentity": "Pièce d'identité",
@@ -2875,7 +3179,44 @@
       "rejectTitle": "Rejeter ce document",
       "rejectDescription": "Indiquez au demandeur ce qui ne va pas dans le document « {document} ». Il verra ce motif.",
       "reason": "Motif",
-      "reasonHint": "5 caractères minimum, p. ex. « Le bas du document est coupé »."
+      "reasonHint": "5 caractères minimum, p. ex. « Le bas du document est coupé ».",
+      "verifiedCount": "{done} vérifiés sur {total}",
+      "verdict": "Avis sur {document}",
+      "rejectedState": "Rejeté",
+      "openViewer": "Ouvrir la visionneuse",
+      "carouselMove": "Document précédent ou suivant dans la visionneuse",
+      "position": "{n} sur {total}",
+      "carouselHint": "Balayez ou utilisez ← → pour passer d'un document à l'autre.",
+      "notUploaded": "Non téléversé",
+      "missingCount": "{count, plural, one {# document requis manquant} other {# documents requis manquants}}",
+      "state": {
+        "unavailable": {
+          "title": "Ce fichier ne peut pas être affiché",
+          "body": "Le fichier stocké est introuvable ou illisible. Demandez au demandeur de le téléverser à nouveau via une demande d'informations."
+        },
+        "notUploaded": {
+          "title": "Pas encore téléversé",
+          "body": "Ce document requis n'a pas été téléversé. Demandez-le au demandeur avant de signer l'examen."
+        },
+        "blocked": {
+          "title": "Ce fichier n'est pas disponible",
+          "body": "Il ne peut pas être examiné dans son état actuel."
+        },
+        "retry": "Réessayer",
+        "noPreview": {
+          "title": "Aperçu indisponible",
+          "body": "Ce type de fichier ne peut pas être affiché dans le navigateur."
+        },
+        "download": "Télécharger le fichier"
+      },
+      "autoNext": {
+        "next": "Document suivant",
+        "stay": "Rester",
+        "go": "Y aller",
+        "allDone": "Documents terminés · ensuite",
+        "nextStep": "Saisir les contrôles et signer",
+        "continue": "Continuer"
+      }
     },
     "items": {
       "identity": {
@@ -2984,18 +3325,51 @@
       "computed": "Calculé : {value}",
       "computedMark": "Résultat calculé",
       "overrideReason": "Pourquoi vous avez modifié le résultat calculé",
-      "overrideHint": "Obligatoire en cas de dérogation (10 caractères minimum). Les dérogations font l'objet d'un suivi."
+      "overrideHint": "Obligatoire en cas de dérogation (10 caractères minimum). Les dérogations font l'objet d'un suivi.",
+      "progress": {
+        "title": "Avancement de l'examen",
+        "checks": "{done} contrôles consignés sur {total}",
+        "done": "fait",
+        "todo": "à faire",
+        "ready": "{done} parties prêtes sur {total}",
+        "readyToSign": "Prêt à signer"
+      },
+      "overridden": "Modifié",
+      "nextCheck": "Suivant",
+      "nextCheckLine": "Contrôle {n} : {label} — choisissez un résultat",
+      "allChecksDone": "Les six contrôles sont saisis — confirmez les résultats et recommandez.",
+      "groups": {
+        "todo": "À faire",
+        "failed": "Échoués",
+        "done": "Terminés"
+      },
+      "suggested": "Suggéré",
+      "addNote": "note",
+      "short": {
+        "checks": "Contrôles",
+        "documentation": "Documents",
+        "eligibility": "Éligibilité",
+        "recommendation": "Recommander"
+      },
+      "done": "Terminé",
+      "add": "Ajouter",
+      "edit": "Modifier",
+      "reasons": "Motifs",
+      "reasonsNeeded": "Choisissez les motifs et expliquez-les",
+      "overrideNeeded": "Indiquez pourquoi vous l'avez modifié",
+      "overrideOf": "{part} : pourquoi modifié"
     },
     "sign": {
       "title": "Signer l'examen",
-      "description": "La signature verrouille cette version et transmet la demande. Confirmez avec votre mot de passe.",
-      "password": "Votre mot de passe",
-      "submit": "Signer l'examen"
+      "description": "La signature verrouille cette version et transmet la demande.",
+      "submit": "Signer l'examen",
+      "outcome": "Recommandation"
     },
     "signed": {
       "by": "Version {version} signée par {name} le {date}",
       "methods": {
-        "PASSWORD_REAUTH": "mot de passe confirmé"
+        "PASSWORD_REAUTH": "mot de passe confirmé",
+        "CONFIRMED_MFA_SESSION": "confirmé dans une session vérifiée"
       },
       "readOnly": "Lecture seule",
       "overridden": "Modifié",
@@ -3055,6 +3429,111 @@
       "reason": "Motif",
       "submit": "Confirmer",
       "done": "Confirmation enregistrée."
+    },
+    "hero": {
+      "next": {
+        "conflict": "Vous avez un conflit d'intérêts sur ce dossier. Récusez-vous pour qu'un autre agent le reprenne.",
+        "take": "Personne n'examine encore ce dossier. Attribuez-le-vous pour commencer.",
+        "start": "Le dossier est à vous. Commencez l'examen pour ouvrir la section L et lancer le délai.",
+        "reviewing": "Vérifiez chaque document, consignez les six contrôles et recommandez. Signez quand tout est coché.",
+        "waiting": "En attente de la réponse du demandeur à votre demande d'informations.",
+        "confirmations": "En attente des confirmations demandées par le demandeur.",
+        "decision": "L'examen est signé et transmis à l'autorité d'approbation pour décision.",
+        "decided": "Une décision a été enregistrée. L'examen ci-dessous est en lecture seule.",
+        "readOnly": "Vous pouvez consulter ce dossier. Les actions reviennent à l'agent assigné."
+      },
+      "bubble": {
+        "conflict": "Mieux vaut se retirer",
+        "take": "À prendre !",
+        "start": "Prêt quand vous l'êtes",
+        "reviewing": "Vérifions tout",
+        "waiting": "Au tour du demandeur",
+        "confirmations": "En attente des autres",
+        "decision": "Transmis pour décision",
+        "decided": "Tout est fait",
+        "readOnly": "Simple lecture"
+      }
+    },
+    "stats": {
+      "docsVerified": "documents vérifiés",
+      "rulesPassed": "règles respectées",
+      "confirmed": "confirmations reçues",
+      "missing": "obligatoires manquants"
+    },
+    "rulesCount": "{done} règles respectées sur {total}",
+    "checklistCount": "{done} documents obligatoires vérifiés sur {total}",
+    "confirmedCount": "{done} confirmées sur {total}",
+    "photo": {
+      "open": "Voir la photo de {name}",
+      "caption": "Photo de profil",
+      "alt": "Photo de profil de {name}",
+      "hint": "Comparez-la avec la photo de la pièce d'identité.",
+      "missing": "{name} n'a pas de photo de profil"
+    },
+    "tabs": {
+      "label": "Parties du dossier",
+      "documents": "Documents",
+      "application": "Demande",
+      "checks": "Contrôles",
+      "review": "Examen",
+      "history": "Historique",
+      "applicant": "Demandeur"
+    },
+    "dock": {
+      "eyebrow": "Étape suivante",
+      "take": {
+        "label": "Me l'attribuer",
+        "done": "Dossier attribué."
+      },
+      "start": {
+        "label": "Commencer l'examen",
+        "done": "Examen commencé."
+      },
+      "verify": {
+        "label": "{left, plural, one {Vérifier # document} other {Vérifier # documents}}"
+      },
+      "record": {
+        "label": "Saisir les contrôles et signer"
+      },
+      "waiting": {
+        "label": "Voir la demande ouverte"
+      },
+      "confirmations": {
+        "label": "Voir les confirmations"
+      },
+      "decide": {
+        "label": "Prendre la décision"
+      },
+      "signed": {
+        "label": "Voir l'examen signé"
+      },
+      "nextFile": {
+        "eyebrow": "Terminé · l'approbateur décide",
+        "label": "Ouvrir mon dossier suivant",
+        "queue": "Retour à la file"
+      }
+    },
+    "guide": {
+      "step": "Étape {n} sur {total}",
+      "then": "Ensuite",
+      "verify": "{count, plural, one {vérifier ou rejeter # document} other {vérifier ou rejeter # documents}}",
+      "record": "saisir les six contrôles, recommander et signer"
+    },
+    "celebrate": {
+      "title": "Validation terminée",
+      "stay": "Rester ici",
+      "next": "Dossier suivant",
+      "review": {
+        "APPROVE": "Approbation recommandée. L'approbateur décide ensuite.",
+        "REFER": "Renvoyé pour une évaluation complémentaire.",
+        "REJECT": "Rejet recommandé. L'approbateur décide ensuite."
+      },
+      "decision": {
+        "APPROVED": "Approuvé : la licence est délivrée.",
+        "APPROVED_WITH_CONDITIONS": "Approuvé sous conditions : la licence est délivrée.",
+        "DEFERRED": "Reporté : le demandeur sait ce qui manque.",
+        "REJECTED": "Rejeté : le demandeur reçoit la lettre avec les motifs."
+      }
     }
   },
   "decide": {
@@ -3099,7 +3578,13 @@
       "validity": "Valide du {from} au {to}",
       "certificate": "Certificat (PDF)",
       "issuancePending": "La licence est en cours de délivrance. Elle apparaîtra ici sous peu.",
-      "letter": "Lettre de décision (PDF)"
+      "letter": "Lettre de décision (PDF)",
+      "corrects": "Corrige",
+      "arrangement": "Modalité d'exercice",
+      "overridden": "fixée par l'autorité",
+      "evidenceRequired": "preuve requise",
+      "earlier": "Décisions antérieures (corrigées)",
+      "letterShort": "Lettre"
     },
     "form": {
       "recorded": "Décision signée.",
@@ -3124,9 +3609,57 @@
       "reasonsOptional": "Motifs (facultatif)",
       "reasons": "Motifs",
       "reasonsHint": "Obligatoires pour les conditions, l'ajournement et le rejet (10 caractères minimum). Ils figurent dans la lettre de décision.",
-      "password": "Votre mot de passe",
-      "passwordHint": "La signature d'une décision exige votre mot de passe. Les décisions ne peuvent plus être modifiées ensuite.",
-      "submit": "Signer la décision"
+      "submit": "Signer la décision",
+      "details": "Détails et motifs",
+      "signStep": "Signer la décision",
+      "intro": "Choisissez la décision, motivez-la, puis signez.",
+      "arrangement": "Modalité d'exercice autorisée",
+      "arrangementHint": "Déduite de la demande : {derived}. N'en choisissez une autre que si la décision autorise une modalité différente.",
+      "derived": "selon la demande",
+      "evidenceRequired": "Preuve de conformité requise",
+      "evidenceRequiredHint": "Le titulaire doit fournir la preuve que la condition est remplie.",
+      "signHint": "Vérifiez le résumé, puis signez. Une décision ne peut plus être modifiée.",
+      "confirmTitle": "Signer la décision ?",
+      "confirmBody": "La lettre est émise et le demandeur est informé. Une décision ne peut plus être modifiée."
+    },
+    "bubble": {
+      "empty": "Tout est à jour !",
+      "waiting": "{count, plural, one {# à décider} other {# à décider}}"
+    },
+    "stats": {
+      "waiting": "en attente",
+      "approve": "recommandés pour approbation",
+      "overdue": "en retard"
+    },
+    "hero": {
+      "recommends": "{name} recommande : {recommendation}",
+      "signed": "Examen signé par {name} le {date}.",
+      "checks": "{done} contrôles vérifiés sur {total}",
+      "noOverrides": "Aucune modification",
+      "overridden": {
+        "documentation": "Documentation modifiée",
+        "eligibility": "Éligibilité modifiée"
+      },
+      "rulesToLook": "{count, plural, one {# règle à examiner} other {# règles à examiner}}",
+      "bubble": {
+        "badge": "À vous de décider",
+        "celebrate": "Licence en route !",
+        "worried": "Décision enregistrée",
+        "lock": "Pas à vous de décider",
+        "waiting": "Pas encore prêt"
+      }
+    },
+    "correct": {
+      "button": "Corriger la décision",
+      "title": "Corriger cette décision",
+      "description": "Une nouvelle décision et une nouvelle lettre remplaceront la lettre {letter}. Le résultat reste le même.",
+      "immutableNote": "Les décisions signées ne peuvent pas être modifiées. L'original reste enregistré, lié à la correction.",
+      "reason": "Motif de la correction",
+      "reasonHint": "Par exemple « correction d'une erreur matérielle dans les motifs » (au moins 10 caractères).",
+      "reasons": "Motifs corrigés (facultatif)",
+      "reasonsHint": "Affichés dans la nouvelle lettre. Laissez tel quel pour garder la formulation d'origine.",
+      "submit": "Signer la correction",
+      "done": "Correction signée. Lettre {letter} émise."
     }
   },
   "summary": {
@@ -4963,6 +5496,160 @@
       "justNow": "En direct · à l'instant",
       "ago": "En direct · il y a {minutes} min",
       "hint": "Cette page s'actualise toute seule tant qu'elle est ouverte."
+    },
+    "applicant": "Demandeur"
+  },
+  "health": {
+    "title": "État du système",
+    "description": "Base de données, planificateur, délivrance, notifications et chaîne d’audit.",
+    "checkedAt": "Vérifié {when}",
+    "database": "Base de données",
+    "latency": "{ms} ms aller-retour",
+    "unreachable": "Injoignable",
+    "jobs": "Tâches planifiées",
+    "lastRun": "Dernière activité {when}",
+    "neverRun": "Aucune exécution enregistrée",
+    "issuance": "Reprises de délivrance",
+    "issuancePending": "{count, plural, =0 {Aucune en attente} one {# approbation en attente} other {# approbations en attente}}",
+    "notifications": "Envoi des notifications",
+    "notificationsFailed": "{failed} échecs sur {total} en {days} jours",
+    "chain": "Chaîne d’audit",
+    "chainOk": "{count} événements intacts",
+    "chainBroken": "Rompue à l’événement #{id}",
+    "unknown": "Non vérifié",
+    "queue": "File d’examen",
+    "queueDepth": "{open} ouvertes · {breached} hors délai",
+    "ok": "OK",
+    "attention": "À vérifier",
+    "allClear": "Tout fonctionne normalement.",
+    "needsAttention": "{count, plural, one {# élément à vérifier.} other {# éléments à vérifier.}}"
+  },
+  "boDash": {
+    "pulse": "Pouls",
+    "days": "{count, plural, one {# jour} other {# jours}}",
+    "underDay": "< 1 jour",
+    "open": "Ouvrir",
+    "details": "Détails",
+    "now": "Maintenant",
+    "previous": "Semaine précédente",
+    "vsPrevious": "par rapport à la semaine précédente",
+    "kpi": {
+      "in": "Déposées · 7 j",
+      "out": "Décidées · 7 j",
+      "open": "Dossiers ouverts",
+      "overdue": "En retard",
+      "daily14": "Par jour, 14 derniers jours",
+      "open14": "Dossiers ouverts, 14 derniers jours",
+      "month": "30 derniers jours"
+    },
+    "command": {
+      "hello": "Bonjour, {name}",
+      "next": "Ensuite",
+      "clear": "Tout est à jour : rien en attente",
+      "waiting": "en attente",
+      "slice": {
+        "overdue": "En retard",
+        "queue": "Mes dossiers",
+        "decisions": "Décisions",
+        "register": "Registre",
+        "configuration": "Configuration"
+      },
+      "hint": "Sélectionnez une part pour y aller",
+      "act": {
+        "overdue": "Traiter {count} en retard",
+        "queue": "Ouvrir mes {count, plural, one {# dossier} other {# dossiers}}",
+        "decisions": "Décider {count, plural, one {# dossier} other {# dossiers}}",
+        "register": "Examiner {count} {count, plural, one {modification} other {modifications}} du registre",
+        "configuration": "Examiner {count} {count, plural, one {modification} other {modifications}} en attente"
+      }
+    },
+    "live": {
+      "label": "En direct",
+      "now": "à l'instant",
+      "ago": "il y a {seconds} s",
+      "refresh": "Actualiser"
+    },
+    "flow": {
+      "title": "Flux",
+      "in": "Entrées",
+      "out": "Décidées",
+      "range": "Période",
+      "days": "{count} j",
+      "growing": "Arriéré +{count}",
+      "shrinking": "Arriéré −{count}",
+      "steady": "Arriéré stable",
+      "adviceGrowing": "Il arrive plus de dossiers qu'il n'en est décidé.",
+      "adviceSteady": "Les décisions suivent le rythme des nouveaux dossiers.",
+      "assign": "Attribuer les dossiers non attribués",
+      "newest": "Voir les derniers dépôts"
+    },
+    "pipeline": {
+      "title": "Pipeline",
+      "open": "ouverts",
+      "week": "décidés · 7 j",
+      "detail": "Dossiers à cette étape",
+      "files": "Dossiers",
+      "share": "Part",
+      "avgWait": "Attente moy.",
+      "oldest": "En attente depuis le plus longtemps"
+    },
+    "sla": {
+      "title": "Délais",
+      "overdue": "En retard",
+      "dueSoon": "Échéance sous 2 jours",
+      "dueWeek": "Échéance cette semaine",
+      "onTrack": "Dans les délais",
+      "onTime": "à temps",
+      "detail": "Dossiers les plus en retard",
+      "none": "Aucun retard."
+    },
+    "decisions": {
+      "title": "Décisions",
+      "approved": "approuvées",
+      "window": "{count, plural, one {# décision} other {# décisions}} · 30 jours"
+    },
+    "activity": {
+      "title": "Activité",
+      "total": "{count} événements · 30 jours",
+      "less": "Moins",
+      "more": "Plus",
+      "open": "Journal d'audit",
+      "hint": "Sélectionnez un jour pour voir ses événements"
+    },
+    "security": {
+      "title": "Sécurité",
+      "twoStep": "deux étapes",
+      "protected": "Protégés",
+      "unprotected": "Sans deux étapes",
+      "accounts": "Comptes",
+      "sessions": "Sessions actives",
+      "new": "Nouveaux · 7 j",
+      "details": "Détails",
+      "byRole": "Comptes par rôle",
+      "open": "Contrôle d'accès",
+      "openPeople": "Ouvrir les personnes",
+      "remind": "Voir qui n'a pas la double étape",
+      "hint": "Sélectionnez une part pour voir qui"
+    },
+    "actions": {
+      "reviewOverdue": "Traiter les dossiers en retard",
+      "planDue": "Planifier les échéances proches",
+      "allOpen": "Voir tous les dossiers ouverts",
+      "openReports": "Ouvrir les rapports",
+      "viewStage": "Ouvrir {count, plural, one {ce dossier} other {ces # dossiers}}"
+    },
+    "hint": {
+      "select": "Sélectionnez une part pour agir"
+    },
+    "guide": {
+      "title": "À faire maintenant",
+      "overdue": "{count, plural, one {# dossier a} other {# dossiers ont}} dépassé l'échéance",
+      "dueSoon": "{count, plural, one {# dossier arrive} other {# dossiers arrivent}} à échéance sous 2 jours",
+      "decisions": "{count, plural, one {# décision vous attend} other {# décisions vous attendent}}",
+      "backlog": "L'arriéré a augmenté de {count} cette semaine",
+      "applicants": "{count, plural, one {# dossier attend} other {# dossiers attendent}} les demandeurs",
+      "twoStep": "Seuls {share} % des comptes utilisent la double étape",
+      "clear": "Tout est à jour. Rien ne requiert votre attention."
     }
   }
 }

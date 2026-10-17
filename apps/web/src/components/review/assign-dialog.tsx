@@ -1,5 +1,7 @@
 "use client";
 
+import { Controller } from "react-hook-form";
+import { Select } from "@/components/ui/select";
 import { UserCog, UserPlus } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -17,7 +19,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Field, FieldControl } from "@/components/ui/field";
-import { inputClass } from "@/components/ui/input";
 import { useActionForm } from "@/hooks/use-action-form";
 import { cn } from "@/lib/utils";
 import { assignAction } from "@/server/actions/backoffice";
@@ -105,17 +106,24 @@ export function AssignDialog({
           )}
           <Field label={t("officer")} error={form.formState.errors.officerId?.message}>
             <FieldControl>
-              <select
-                {...form.register("officerId", { onChange: () => setConflict(null) })}
-                className={cn(inputClass, "bg-card dark:bg-transparent")}
-              >
-                {officers.map((officer) => (
-                  <option key={officer.id} value={officer.id}>
-                    {officer.id === selfId ? t("me", { name: officer.fullName }) : officer.fullName}
-                    {officer.id === currentOfficerId ? ` · ${t("current")}` : ""}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                control={form.control}
+                name="officerId"
+                render={({ field }) => (
+                  <Select
+                    value={field.value}
+                    onChange={(v) => {
+                      field.onChange(v);
+                      setConflict(null);
+                    }}
+                    onBlur={field.onBlur}
+                    options={officers.map((officer) => ({
+                      value: officer.id,
+                      label: `${officer.id === selfId ? t("me", { name: officer.fullName }) : officer.fullName}${officer.id === currentOfficerId ? ` · ${t("current")}` : ""}`,
+                    }))}
+                  />
+                )}
+              />
             </FieldControl>
           </Field>
           <DialogFooter>

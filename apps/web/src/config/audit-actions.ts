@@ -1,5 +1,12 @@
 import {
+  ArrowRight,
   BadgeCheck,
+  ClipboardCheck,
+  Download,
+  FilePlus2,
+  Gavel,
+  PenLine,
+  Wallet,
   CircleUserRound,
   KeyRound,
   Link2,
@@ -25,7 +32,14 @@ import type { StatusTone } from "@rebp/contracts";
  * Human presentation of audit actions (FR-AUD-001/004): category for filtering, icon and tone
  * for scanning. Labels live in messages under `auditActions.<action with "." → "_">`.
  */
-export const AUDIT_CATEGORIES = ["signin", "account", "twoStep", "access"] as const;
+export const AUDIT_CATEGORIES = [
+  "signin",
+  "account",
+  "twoStep",
+  "access",
+  "applications",
+  "administration",
+] as const;
 export type AuditCategory = (typeof AUDIT_CATEGORIES)[number];
 
 interface ActionMeta {
@@ -63,6 +77,32 @@ export const AUDIT_ACTIONS: Record<string, ActionMeta> = {
   "access.permissions_reset": { category: "access", icon: SlidersHorizontal, tone: "info" },
   "access.account_disabled": { category: "access", icon: UserX, tone: "critical" },
   "access.account_enabled": { category: "access", icon: UserCheck, tone: "good" },
+  // The licensing workflow (UX-033): applications, review, decisions, licences.
+  "application.created": { category: "applications", icon: FilePlus2, tone: "info" },
+  "application.signed": { category: "applications", icon: PenLine, tone: "info" },
+  "application.transition": { category: "applications", icon: ArrowRight, tone: "neutral" },
+  "application.assigned": { category: "applications", icon: UserCheck, tone: "info" },
+  "application.conflict_declared": { category: "applications", icon: ShieldAlert, tone: "warning" },
+  "application.category_changed": { category: "applications", icon: ArrowRight, tone: "neutral" },
+  "confirmation.overridden": { category: "applications", icon: ShieldAlert, tone: "warning" },
+  "document.verified": { category: "applications", icon: BadgeCheck, tone: "good" },
+  "document.rejected": { category: "applications", icon: ShieldAlert, tone: "warning" },
+  "review.signed": { category: "applications", icon: ClipboardCheck, tone: "good" },
+  "decision.signed": { category: "applications", icon: Gavel, tone: "good" },
+  "decision.corrected": { category: "applications", icon: Gavel, tone: "warning" },
+  "licence.issued": { category: "applications", icon: BadgeCheck, tone: "good" },
+  "licence.issuance_failed": { category: "applications", icon: ShieldAlert, tone: "critical" },
+  "licence.certificate_reissued": { category: "applications", icon: BadgeCheck, tone: "info" },
+  // Administration: configuration, register changes, payments, exports.
+  "config.proposed": { category: "administration", icon: SlidersHorizontal, tone: "info" },
+  "config.approved": { category: "administration", icon: SlidersHorizontal, tone: "good" },
+  "config.rejected": { category: "administration", icon: SlidersHorizontal, tone: "warning" },
+  "register.action_proposed": { category: "administration", icon: BadgeCheck, tone: "info" },
+  "register.action_rejected": { category: "administration", icon: BadgeCheck, tone: "warning" },
+  "payment.waived": { category: "administration", icon: Wallet, tone: "info" },
+  "audit.exported": { category: "administration", icon: Download, tone: "info" },
+  "report.exported": { category: "administration", icon: Download, tone: "neutral" },
+  "jobs.run": { category: "administration", icon: SlidersHorizontal, tone: "neutral" },
 };
 
 export const UNKNOWN_ACTION: ActionMeta = {
@@ -91,4 +131,6 @@ export const CATEGORY_ICONS: Record<AuditCategory, LucideIcon> = {
   account: BadgeCheck,
   twoStep: ShieldCheck,
   access: UserCog,
+  applications: ClipboardCheck,
+  administration: SlidersHorizontal,
 };

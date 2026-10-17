@@ -1,5 +1,5 @@
 import {
-  ArrowLeft,
+  ArrowRight,
   Award,
   ChevronDown,
   ClipboardCheck,
@@ -8,32 +8,51 @@ import {
   ScanSearch,
   ScrollText,
   ShieldAlert,
+  Signature,
 } from "@/components/icons";
+import { applicantPhotoUrls } from "@/server/profile/documents";
+import { ApplicantPhoto } from "@/components/applications/applicant-photo";
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { z } from "zod";
-import type {
-  ApplicationStatus,
-  DecisionCondition,
-  LicenseStatus,
-  StatusTone,
+import {
+  VERIFICATION_ITEMS,
+  type ApplicationStatus,
+  type DecisionCondition,
+  type LicenseStatus,
+  type StatusTone,
 } from "@rebp/contracts";
+import { ApplicationHeader } from "@/components/applications/application-header";
 import { ApplicationSummary } from "@/components/applications/application-summary";
+import { LifecycleTrack } from "@/components/applications/lifecycle-track";
+import { BreadcrumbTail } from "@/components/layout/breadcrumbs";
+import { PageWidth } from "@/components/layout/page-width";
+import { LookAtPointer } from "@/components/motion/look-at-pointer";
+import { ProfileBuddy, type BuddyMood } from "@/components/profile/profile-buddy";
+import { AttentionPill, LIST_GROUP, LIST_ROW, Mark } from "@/components/review/marks";
+import { ValidationCelebration } from "@/components/review/validation-celebration";
+import { RuleRows } from "@/components/review/rule-rows";
 import {
   ApplicationStatusBadge,
   LicenceStatusBadge,
 } from "@/components/applications/status-badges";
-import { RuleList } from "@/components/eligibility/rule-list";
+import { CorrectDecisionDialog } from "@/components/review/correct-decision-dialog";
 import { DecisionForm } from "@/components/review/decision-form";
-import { SignedReview, toSignedReview } from "@/components/review/signed-review";
+import {
+  RECOMMENDATION_TONES,
+  SignedReview,
+  toSignedReview,
+} from "@/components/review/signed-review";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { PANEL } from "@/components/ui/surface";
 import { formatDateTime, formatDay } from "@/lib/format";
+import { lifecycleOf } from "@/lib/lifecycle";
+import { cn } from "@/lib/utils";
 import { asData } from "@/server/applications/applications";
 import { requireCapability } from "@/server/auth/guards";
 import { assertCanDecide } from "@/server/backoffice/decision";
@@ -44,6 +63,7 @@ import {
   divisionNames,
 } from "@/server/backoffice/review-queries";
 import { isAppError } from "@/server/errors";
+import { derivedArrangement } from "@/server/licensing/licensing";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("decide"))("title") };
@@ -78,9 +98,10 @@ export default async function DecisionPage({
   const decision = app.decisions[0];
   const pending = status === "PENDING_DECISION";
 
-  // BR-091 / BR-093: show why this approver may not decide, and disable the form.
+  // BR-091 / BR-093: show why this approver may not decide, and disable the form. The same
+  // rule decides who may correct a recorded decision (FR-M-017).
   let block: { key: string; reasons: string[] } | null = null;
-  if (pending) {
+  if (pending || decision) {
     try {
       await assertCanDecide(app.id, user);
     } catch (error) {
@@ -105,35 +126,188 @@ export default async function DecisionPage({
   const districtCodes = new Set(districts.map((d) => d.code));
   const defaultScope = territory.filter((code) => districtCodes.has(code));
 
+  const life = lifecycleOf(status);
+  const signedReview = review ? toSignedReview(review) : null;
+  const overrides = signedReview?.computed.overridden ?? {};
+  const overrideKeys = (["documentation", "eligibility"] as const).filter((k) => overrides[k]);
+  // "Not applicable" is a complete answer: count verified checks among the applicable ones.
+  const verifiedChecks = signedReview
+    ? VERIFICATION_ITEMS.filter((item) => signedReview.checks[item]?.outcome === "VERIFIED").length
+    : 0;
+  const applicableChecks = signedReview
+    ? VERIFICATION_ITEMS.filter((item) => signedReview.checks[item]?.outcome !== "NA").length
+    : VERIFICATION_ITEMS.length;
+  const blocking = computed.eligibility.rules.filter((r) => r.outcome !== "PASS").length;
+  const approved =
+    decision?.decision === "APPROVED" || decision?.decision === "APPROVED_WITH_CONDITIONS";
+  const mood: BuddyMood = decision
+    ? approved
+      ? "celebrate"
+      : "worried"
+    : pending && block
+      ? "lock"
+      : pending
+        ? "badge"
+        : "waiting";
+  const danger = (pending && Boolean(block)) || decision?.decision === "REJECTED";
+  const arrangement = decision?.practiceArrangement ?? derivedArrangement(app);
+  const corrected = decision?.correctsId
+    ? app.decisions.find((d) => d.id === decision.correctsId)
+    : undefined;
+  const arrangementLabel = (value: string) =>
+    t.has(`arrangements.${value}`) ? t(`arrangements.${value}` as "arrangements.FIRM") : value;
+
+  // The applicant's profile photo, to check against the ID (UX-035).
+  const photo = (await applicantPhotoUrls([app.applicantId])).get(app.applicantId) ?? null;
   return (
     <>
-      <PageHeader
-        eyebrow={t("decide.eyebrow")}
-        title={<span className="font-mono">{app.referenceNo}</span>}
-        description={`${app.applicant.fullName} · ${t(`categories.items.${app.category}.name`)} · ${t(`applicationTypes.${app.type}.name`)}`}
+      <BreadcrumbTail
+        label={app.referenceNo}
+        parent={{ href: "/backoffice/decisions", label: "decisions" }}
+      />
+      <PageWidth wide />
+      <ApplicationHeader
+        back={{ href: "/backoffice/decisions", label: t("decide.back") }}
+        title={app.applicant.fullName}
+        typeLine={`${t(`categories.items.${app.category}.name`)} · ${t(`applicationTypes.${app.type}.name`)}`}
+        reference={app.referenceNo}
         actions={
-          <Button asChild variant="ghost">
-            <Link href="/backoffice/decisions">
-              <ArrowLeft /> {t("decide.back")}
-            </Link>
-          </Button>
+          <>
+            <ApplicationStatusBadge status={status} />
+            <Button asChild variant="ghost" size="sm" className="group">
+              <Link href={`/backoffice/review/${app.id}` as Route}>
+                {t("decide.openReview")}
+                <ArrowRight aria-hidden />
+              </Link>
+            </Button>
+          </>
         }
       />
 
-      <div className="flex flex-wrap items-center gap-2">
-        <ApplicationStatusBadge status={status} size="lg" />
-        <Button asChild variant="link" size="sm">
-          <Link href={`/backoffice/review/${app.id}` as Route}>{t("decide.openReview")}</Link>
-        </Button>
-      </div>
+      {/* The signed review in a glance (FR-M-001): who recommends what, how the checks came out
+          and whether the officer overrode the engine — the journey underneath. */}
+      <section
+        aria-labelledby="summary-title"
+        data-tone={danger ? "danger" : undefined}
+        className="hero-surface relative flex animate-rise flex-col gap-6 overflow-hidden rounded-[1.75rem] p-5 sm:p-7"
+      >
+        <div className="flex items-center gap-4 sm:gap-6">
+          {/* The applicant, large: the face to check against the ID; opens full size (UX-035). */}
+          <ApplicantPhoto
+            name={app.applicant.fullName}
+            src={photo}
+            size="xl"
+            caption={app.referenceNo}
+            className="self-start"
+          />
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <span
+              className={cn(
+                "text-[0.7rem] font-bold tracking-widest uppercase",
+                danger ? "text-destructive" : "text-link",
+              )}
+            >
+              {t("decide.eyebrow")}
+            </span>
+            <h2
+              id="summary-title"
+              className="text-2xl leading-tight font-bold tracking-tight @3xl/main:text-3xl"
+            >
+              {decision
+                ? t(`decision.types.${decision.decision}`)
+                : review?.recommendation
+                  ? t("decide.hero.recommends", {
+                      name: review.officer.fullName,
+                      recommendation: t(`review.recommendations.${review.recommendation}.label`),
+                    })
+                  : t("decide.noReview")}
+            </h2>
+            {signedReview && (
+              <p className="max-w-xl text-sm text-muted-foreground">
+                {t("decide.hero.signed", {
+                  name: signedReview.officerName,
+                  date: formatDateTime(signedReview.signedAt, locale),
+                })}
+              </p>
+            )}
+            {signedReview && (
+              <ul
+                aria-label={t("decide.review")}
+                className="flex flex-wrap items-center gap-2 text-sm"
+              >
+                {review?.recommendation && (
+                  <li>
+                    <StatusBadge
+                      tone={RECOMMENDATION_TONES[review.recommendation] ?? "neutral"}
+                      label={t(`review.recommendations.${review.recommendation}.label`)}
+                    />
+                  </li>
+                )}
+                <li className="inline-flex items-center gap-1.5 rounded-full bg-card/70 py-0.5 pr-2.5 pl-1 text-xs font-semibold ring-1 ring-foreground/[0.06] dark:bg-surface-2/50 dark:ring-white/[0.06]">
+                  <Mark
+                    state={verifiedChecks === applicableChecks ? "done" : "todo"}
+                    className="size-5"
+                  />
+                  {t("decide.hero.checks", {
+                    done: verifiedChecks,
+                    total: applicableChecks,
+                  })}
+                </li>
+                {overrideKeys.length === 0 ? (
+                  <li className="inline-flex items-center gap-1.5 rounded-full bg-card/70 py-0.5 pr-2.5 pl-1 text-xs font-semibold ring-1 ring-foreground/[0.06] dark:bg-surface-2/50 dark:ring-white/[0.06]">
+                    <Mark state="done" className="size-5" />
+                    {t("decide.hero.noOverrides")}
+                  </li>
+                ) : (
+                  overrideKeys.map((key) => (
+                    <li key={key}>
+                      <AttentionPill>{t(`decide.hero.overridden.${key}`)}</AttentionPill>
+                    </li>
+                  ))
+                )}
+                {blocking > 0 && (
+                  <li>
+                    <AttentionPill>
+                      {t("decide.hero.rulesToLook", { count: blocking })}
+                    </AttentionPill>
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
+          <div className="relative -my-2 -mr-2 hidden shrink-0 @lg/main:block">
+            <span
+              aria-hidden
+              className={cn(
+                "absolute top-4 right-[70%] z-10 hidden rounded-2xl rounded-br-sm px-3 py-1.5 text-xs font-semibold whitespace-nowrap @3xl/main:block",
+                danger
+                  ? "bg-destructive text-white"
+                  : "bg-primary-soft text-primary-soft-foreground",
+              )}
+            >
+              {t(`decide.hero.bubble.${mood}`)}
+            </span>
+            <LookAtPointer>
+              <ProfileBuddy mood={mood} className="h-28 w-auto @3xl/main:h-32" />
+            </LookAtPointer>
+          </div>
+        </div>
+        <LifecycleTrack
+          perspective="staff"
+          index={life.index}
+          state={life.state}
+          className="rounded-2xl bg-card/70 px-2 pt-4 pb-3 ring-1 ring-foreground/[0.05] backdrop-blur-sm sm:px-4 dark:bg-surface-2/50 dark:ring-white/[0.06]"
+        />
+      </section>
 
+      <ValidationCelebration kind="decision" reference={app.referenceNo} />
       {recorded && decision && (
         <Alert variant="success" title={t("decide.recordedTitle")}>
           {t("decide.recordedBody", { letter: decision.letterNo })}
         </Alert>
       )}
 
-      {block && (
+      {pending && block && (
         <Alert variant="danger" title={t("decide.blockedTitle")} data-testid="br091-banner">
           {t.has(block.key) ? t(block.key) : t("errors.forbidden")}
           {block.reasons.length > 0 && (
@@ -148,52 +322,54 @@ export default async function DecisionPage({
         </Alert>
       )}
 
-      <div className="grid items-start gap-4 @3xl/main:grid-cols-[1.1fr_1fr]">
+      <div className="grid items-start gap-4 @3xl/main:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
         <div className="flex flex-col gap-4">
           {/* Signed review (FR-M-001) */}
-          <section
-            aria-labelledby="review-title"
-            className="flex flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
-          >
-            <h2 id="review-title" className="flex items-center gap-2 text-lg">
-              <ClipboardCheck className="size-5 text-link" aria-hidden /> {t("decide.review")}
+          <section aria-labelledby="review-title" className={cn("flex flex-col gap-4", PANEL)}>
+            <h2 id="review-title" className="flex items-center gap-2.5 text-lg">
+              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-link">
+                <ClipboardCheck className="size-[1.1rem]" aria-hidden />
+              </span>
+              {t("decide.review")}
             </h2>
-            {review ? (
-              <SignedReview review={toSignedReview(review)} locale={locale} />
+            {signedReview ? (
+              <SignedReview review={signedReview} locale={locale} />
             ) : (
               <p className="text-sm text-muted-foreground">{t("decide.noReview")}</p>
             )}
           </section>
 
-          <section
-            aria-labelledby="elig-title"
-            className="flex flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
-          >
-            <div className="flex flex-col gap-1">
-              <h2 id="elig-title" className="flex items-center gap-2 text-lg">
-                <ScanSearch className="size-5 text-link" aria-hidden /> {t("review.eligibility")}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {t("review.computedOutcome", {
-                  outcome: t(`review.eligibilityOutcomes.${computed.eligibilityOutcome}`),
-                })}
-              </p>
+          <section aria-labelledby="elig-title" className={cn("flex flex-col gap-4", PANEL)}>
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-link">
+                <ScanSearch className="size-[1.1rem]" aria-hidden />
+              </span>
+              <div className="flex min-w-0 flex-col">
+                <h2 id="elig-title" className="text-lg">
+                  {t("review.eligibility")}
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  {t("review.computedOutcome", {
+                    outcome: t(`review.eligibilityOutcomes.${computed.eligibilityOutcome}`),
+                  })}
+                </p>
+              </div>
             </div>
-            <RuleList
-              rules={computed.eligibility.rules}
-              locale={locale}
-              showIds
-              showPasses={false}
-            />
-            {computed.eligibility.rules.every((r) => r.outcome === "PASS") && (
-              <p className="text-sm text-muted-foreground">{t("decide.allRulesPass")}</p>
+            <RuleRows rules={computed.eligibility.rules} locale={locale} showPasses={false} />
+            {blocking === 0 && (
+              <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <Mark state="done" /> {t("decide.allRulesPass")}
+              </p>
             )}
           </section>
 
-          <details className="group rounded-3xl border bg-card raised">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 sm:p-6 [&::-webkit-details-marker]:hidden">
-              <span className="flex items-center gap-2 text-lg font-semibold">
-                <ScrollText className="size-5 text-link" aria-hidden /> {t("decide.application")}
+          <details className={cn(PANEL, "group p-0 sm:p-0")}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-[1.75rem] p-5 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40 sm:p-6 [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center gap-2.5 text-lg font-semibold">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-link">
+                  <ScrollText className="size-[1.1rem]" aria-hidden />
+                </span>
+                {t("decide.application")}
               </span>
               <ChevronDown
                 className="size-5 shrink-0 text-muted-foreground transition-transform duration-(--dur-2) group-open:rotate-180"
@@ -215,10 +391,13 @@ export default async function DecisionPage({
         {/* Section M form or the immutable record (FR-M-014) */}
         <section
           aria-labelledby="decision-title"
-          className="flex flex-col gap-5 rounded-3xl border bg-card p-5 raised sm:p-6 @3xl/main:sticky @3xl/main:top-20"
+          className={cn("flex flex-col gap-5 @3xl/main:sticky @3xl/main:top-20", PANEL)}
         >
-          <h2 id="decision-title" className="flex items-center gap-2 text-lg">
-            <Gavel className="size-5 text-link" aria-hidden /> {t("decide.title")}
+          <h2 id="decision-title" className="flex items-center gap-2.5 text-lg">
+            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-link">
+              <Gavel className="size-[1.1rem]" aria-hidden />
+            </span>
+            {t("decide.title")}
           </h2>
           {decision ? (
             <div className="flex flex-col gap-5" data-testid="decision-record">
@@ -243,9 +422,32 @@ export default async function DecisionPage({
                     <dd>{t(`categories.items.${decision.approvedCategory}.name`)}</dd>
                   </>
                 )}
+                {decision.correctsId && (
+                  <>
+                    <dt className="text-muted-foreground">{t("decide.record.corrects")}</dt>
+                    <dd data-testid="decision-corrects">
+                      <span className="font-mono">{corrected?.letterNo ?? "—"}</span>
+                      {decision.correctionReason && (
+                        <span className="block text-xs text-muted-foreground">
+                          {decision.correctionReason}
+                        </span>
+                      )}
+                    </dd>
+                  </>
+                )}
                 {(decision.decision === "APPROVED" ||
                   decision.decision === "APPROVED_WITH_CONDITIONS") && (
                   <>
+                    <dt className="text-muted-foreground">{t("decide.record.arrangement")}</dt>
+                    <dd data-testid="decision-arrangement-record">
+                      {arrangementLabel(arrangement)}
+                      {decision.practiceArrangement && (
+                        <span className="text-xs text-muted-foreground">
+                          {" "}
+                          · {t("decide.record.overridden")}
+                        </span>
+                      )}
+                    </dd>
                     <dt className="text-muted-foreground">{t("decide.record.scope")}</dt>
                     <dd>
                       {decision.geoScope.length === 0
@@ -273,6 +475,7 @@ export default async function DecisionPage({
                                 c.publicOnRegister === false
                                   ? t("decide.record.private")
                                   : t("decide.record.public"),
+                                c.evidenceRequired ? t("decide.record.evidenceRequired") : null,
                               ]
                                 .filter(Boolean)
                                 .join(" · ")}
@@ -307,11 +510,11 @@ export default async function DecisionPage({
                 app.licences.map((licence) => (
                   <div
                     key={licence.id}
-                    className="flex flex-col gap-3 rounded-2xl bg-success-soft p-4"
+                    className="flex flex-col gap-3 rounded-2xl bg-[linear-gradient(145deg,var(--primary-soft),color-mix(in_oklch,var(--primary)_10%,var(--card)))] p-4 ring-1 ring-primary/20"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="flex items-center gap-2">
-                        <Award className="size-5 text-success" aria-hidden />
+                        <Award className="size-5 text-link" aria-hidden />
                         <span className="flex flex-col">
                           <span className="text-xs text-muted-foreground">
                             {t("decide.record.licence")}
@@ -348,26 +551,64 @@ export default async function DecisionPage({
                 <Alert variant="warning">{t("decide.record.issuancePending")}</Alert>
               ) : null}
 
-              <Button asChild variant="outline" className="self-start">
-                <a href={`/api/files/letter/${decision.id}`} target="_blank" rel="noreferrer">
-                  <FileDown /> {t("decide.record.letter")}
-                </a>
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button asChild variant="outline" className="self-start">
+                  <a href={`/api/files/letter/${decision.id}`} target="_blank" rel="noreferrer">
+                    <FileDown /> {t("decide.record.letter")}
+                  </a>
+                </Button>
+                {!block && (
+                  <CorrectDecisionDialog
+                    decisionId={decision.id}
+                    letterNo={decision.letterNo}
+                    reasons={decision.reasons}
+                  />
+                )}
+              </div>
+
+              {/* FR-M-017: earlier records stay as they were, superseded by their correction. */}
+              {app.decisions.length > 1 && (
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-sm font-semibold text-muted-foreground">
+                    {t("decide.record.earlier")}
+                  </h3>
+                  <ul className={LIST_GROUP} data-testid="decision-history">
+                    {app.decisions.slice(1).map((d) => (
+                      <li
+                        key={d.id}
+                        className={cn(
+                          "flex flex-wrap items-center justify-between gap-2",
+                          LIST_ROW,
+                        )}
+                      >
+                        <span className="flex min-w-0 flex-col">
+                          <span className="font-mono text-sm font-semibold">{d.letterNo}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {t(`decision.types.${d.decision}`)} · {d.approver.fullName} ·{" "}
+                            {formatDateTime(d.signedAt, locale)}
+                          </span>
+                        </span>
+                        <Button asChild variant="ghost" size="sm">
+                          <a href={`/api/files/letter/${d.id}`} target="_blank" rel="noreferrer">
+                            <FileDown /> {t("decide.record.letterShort")}
+                          </a>
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ) : pending ? (
             <>
-              {review?.recommendation && (
-                <p className="text-sm text-muted-foreground">
-                  {t("decide.recommendationLine", {
-                    recommendation: t(`review.recommendations.${review.recommendation}.label`),
-                    name: review.officer.fullName,
-                  })}
-                </p>
-              )}
+              <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <Signature className="size-4 text-link" aria-hidden /> {t("decide.form.intro")}
+              </p>
               <DecisionForm
                 applicationId={app.id}
                 districts={districts.map((d) => ({ code: d.code, name: d.name }))}
                 defaultScope={defaultScope}
+                derivedArrangement={derivedArrangement(app)}
                 blocked={Boolean(block)}
               />
             </>

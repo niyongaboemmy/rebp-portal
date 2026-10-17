@@ -3,6 +3,7 @@ import type { Metadata, Route } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import {
   CONFIG_KEYS,
+  mayProposeConfig,
   type ConfigKey,
   type FeatureFlags,
   type FeeSchedule,
@@ -14,15 +15,25 @@ import {
   FlagsProposalForm,
   ThresholdsProposalForm,
 } from "@/components/admin/config-forms";
+import { HealthPanel } from "@/components/admin/health-panel";
 import { PendingConfigCard, type ConfigDiffRow } from "@/components/admin/pending-config-card";
 import { RunJobsCard } from "@/components/admin/run-jobs-card";
+import {
+  ATTENTION_CHIP,
+  ATTENTION_DOT,
+  ICON_TILE,
+  LIST_GROUP,
+  LIST_ROW,
+} from "@/components/admin/surfaces";
 import { StepUpProvider } from "@/components/security/step-up";
 import { Alert } from "@/components/ui/alert";
 import { LinkTabs } from "@/components/ui/link-tabs";
 import { PageWidth } from "@/components/layout/page-width";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { PANEL } from "@/components/ui/surface";
 import { formatDay, formatMoney } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import {
   configVersions,
   requireAnyCapability,
@@ -65,6 +76,10 @@ export default async function ConfigurationPage({
     ? (params.tab as ConfigKey)
     : "fees";
   const canEdit = capabilities.includes("config.edit");
+  // FR-ADM-003: makers are scoped per key (finance: fees; administrators: everything).
+  const canPropose = mayProposeConfig(tab, capabilities);
+  // FR-ADM-005: the health panel is for system administrators.
+  const canSeeHealth = capabilities.includes("roles.manage");
   const canApprove = capabilities.includes("config.approve");
 
   const [t, locale, current, versions] = await Promise.all([
@@ -131,12 +146,43 @@ export default async function ConfigurationPage({
   };
 
   const formKey = `${current.version}-${pending?.id ?? ""}`;
-  const formProps = { today, disabled: !canEdit || Boolean(pending) };
+  const formProps = { today, disabled: !canPropose || Boolean(pending) };
 
   return (
     <StepUpProvider hasPassword={Boolean(user.passwordHash)}>
       <PageWidth wide />
-      <PageHeader title={t("configuration.title")} description={t("configuration.subtitle")} />
+      <PageHeader
+        eyebrow={t("configuration.header.eyebrow")}
+        title={t("configuration.title")}
+        description={t("configuration.subtitle")}
+        stats={[
+          {
+            value:
+              current.version === 0
+                ? t("configuration.header.defaults")
+                : t("configuration.history.version", { version: current.version }),
+            label: t("configuration.header.inForce"),
+          },
+          {
+            value: pending ? 1 : 0,
+            label: t("configuration.header.pending"),
+            tone: pending ? "now" : "muted",
+          },
+          {
+            value: versions.length,
+            label: t("configuration.header.versions"),
+            tone: "muted",
+          },
+        ]}
+        mood={pending ? "lock" : "shield"}
+        bubble={
+          pending
+            ? canApprove && pending.makerId !== user.id
+              ? t("configuration.header.bubbleDecide")
+              : t("configuration.header.bubbleWaiting")
+            : t("configuration.header.bubbleClear")
+        }
+      />
       <LinkTabs
         label={t("configuration.title")}
         tabs={CONFIG_KEYS.map((key) => {
@@ -168,13 +214,10 @@ export default async function ConfigurationPage({
         />
       )}
 
-      <section
-        aria-labelledby="in-force-title"
-        className="flex flex-col gap-5 rounded-3xl border bg-card p-5 raised sm:p-6"
-      >
+      <section aria-labelledby="in-force-title" className={cn("flex flex-col gap-5", PANEL)}>
         <div className="flex flex-wrap items-start gap-3">
-          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground">
-            <Settings2 className="size-5" aria-hidden />
+          <span className={ICON_TILE} aria-hidden>
+            <Settings2 />
           </span>
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <h2 id="in-force-title" className="text-lg">
@@ -192,9 +235,15 @@ export default async function ConfigurationPage({
           <StatusBadge tone="good" label={t("configuration.states.inForce")} />
         </div>
 
-        {canEdit && !pending && <Alert variant="info">{t(`configuration.makerHint.${tab}`)}</Alert>}
-        {canEdit && pending && <Alert variant="warning">{t("configuration.pendingLock")}</Alert>}
-        {!canEdit && <Alert variant="info">{t("configuration.readOnly")}</Alert>}
+        {canPropose && !pending && (
+          <Alert variant="info">{t(`configuration.makerHint.${tab}`)}</Alert>
+        )}
+        {canPropose && pending && <Alert variant="warning">{t("configuration.pendingLock")}</Alert>}
+        {!canPropose && (
+          <Alert variant="info">
+            {canEdit ? t("configuration.outOfScope") : t("configuration.readOnly")}
+          </Alert>
+        )}
 
         {tab === "fees" && (
           <FeesProposalForm key={formKey} current={current.value as FeeSchedule} {...formProps} />
@@ -211,46 +260,71 @@ export default async function ConfigurationPage({
         )}
       </section>
 
-      <section aria-labelledby="history-title" className="flex flex-col gap-3">
-        <h2 id="history-title" className="inline-flex items-center gap-2 text-lg">
-          <History className="size-5 text-muted-foreground" aria-hidden />
-          {t("configuration.history.title")}
-        </h2>
+      <section aria-labelledby="history-title" className={cn("flex flex-col gap-4", PANEL)}>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          <h2 id="history-title" className="inline-flex items-center gap-2 text-lg">
+            <History className="size-5 text-link" aria-hidden />
+            {t("configuration.history.title")}
+          </h2>
+          <span className="text-xs font-medium num text-muted-foreground">
+            {t("configuration.header.versionsCount", { count: versions.length })}
+          </span>
+        </div>
         {versions.length === 0 ? (
-          <p className="rounded-2xl border bg-card p-4 text-sm text-muted-foreground">
-            {t("configuration.history.empty")}
-          </p>
+          <p className="text-sm text-muted-foreground">{t("configuration.history.empty")}</p>
         ) : (
-          <ol className="flex flex-col overflow-hidden rounded-2xl border bg-card raised">
+          <ol className={LIST_GROUP}>
             {versions.map((v) => {
               const state = versionState(v);
               return (
-                <li key={v.id} className="flex flex-col gap-1.5 border-b px-4 py-3 last:border-b-0">
-                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="font-semibold num">
-                      {t("configuration.history.version", { version: v.version })}
-                    </span>
-                    <StatusBadge tone={state.tone} label={state.label} />
-                    <span className="ml-auto text-xs num text-muted-foreground">
-                      {t("configuration.history.effective", {
-                        date: formatDay(v.effectiveFrom, locale),
-                      })}
-                    </span>
-                  </div>
-                  <p className="text-sm break-words text-foreground/80">{v.reason}</p>
-                  <p className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
-                    <span>{t("configuration.history.maker", { name: v.makerName ?? "—" })}</span>
-                    {v.checkerName && (
-                      <span>{t("configuration.history.checker", { name: v.checkerName })}</span>
+                <li key={v.id} className={cn("flex gap-3", LIST_ROW, "py-3")}>
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "mt-0.5 inline-flex h-7 min-w-9 shrink-0 items-center justify-center rounded-lg px-1.5 text-xs font-bold num",
+                      state.tone === "good"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-foreground/[0.05] text-muted-foreground dark:bg-white/[0.06]",
                     )}
-                    {v.note && <span>{t("configuration.history.note", { note: v.note })}</span>}
-                  </p>
+                  >
+                    v{v.version}
+                  </span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="font-semibold num">
+                        {t("configuration.history.version", { version: v.version })}
+                      </span>
+                      {v.status === "PENDING" ? (
+                        <span className={ATTENTION_CHIP}>
+                          <span aria-hidden className={ATTENTION_DOT} />
+                          {state.label}
+                        </span>
+                      ) : (
+                        <StatusBadge tone={state.tone} label={state.label} />
+                      )}
+                      <span className="ml-auto text-xs num text-muted-foreground">
+                        {t("configuration.history.effective", {
+                          date: formatDay(v.effectiveFrom, locale),
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-sm break-words text-foreground/80">{v.reason}</p>
+                    <p className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+                      <span>{t("configuration.history.maker", { name: v.makerName ?? "—" })}</span>
+                      {v.checkerName && (
+                        <span>{t("configuration.history.checker", { name: v.checkerName })}</span>
+                      )}
+                      {v.note && <span>{t("configuration.history.note", { note: v.note })}</span>}
+                    </p>
+                  </div>
                 </li>
               );
             })}
           </ol>
         )}
       </section>
+
+      {canSeeHealth && <HealthPanel />}
 
       {isDevMode() && canEdit && <RunJobsCard />}
     </StepUpProvider>

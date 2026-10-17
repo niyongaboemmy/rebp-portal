@@ -233,9 +233,11 @@ export default function ManageAccessSheet({
                     data-state={isGained ? "gained" : isLost ? "lost" : "kept"}
                     className={cn(
                       "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-all",
-                      isGained && "animate-in bg-success-soft text-success zoom-in-90",
+                      isGained && "animate-in bg-primary-soft text-link zoom-in-90",
                       isLost && "bg-danger-soft text-destructive line-through",
-                      !isGained && !isLost && "bg-card",
+                      !isGained &&
+                        !isLost &&
+                        "bg-card ring-1 ring-foreground/[0.06] dark:bg-surface-2/70 dark:ring-white/[0.06]",
                     )}
                   >
                     {isGained && <Plus className="size-3" aria-hidden />}

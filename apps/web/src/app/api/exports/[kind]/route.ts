@@ -1,13 +1,24 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { recordAudit } from "@/server/audit/audit";
-import { applicationsCsv, paymentsCsv, toCsv } from "@/server/backoffice/reports";
+import {
+  applicationsByReasonCsv,
+  applicationsCsv,
+  paymentsCsv,
+  toCsv,
+} from "@/server/backoffice/reports";
 import { firmRoster } from "@/server/firms/firms";
-import { apiUser, contextOf, errorResponse, HttpError } from "@/server/http";
+import { contextOf, errorResponse, HttpError } from "@/server/http";
 import { dayOf } from "@/server/time";
+import { exportUser } from "../_lib/authorize";
 
 export const dynamic = "force-dynamic";
 
-/** CSV exports (FR-RPT-005, FR-FIRM-002), restricted by capability and audited. */
+/**
+ * CSV exports (FR-RPT-005, FR-FIRM-002), restricted by capability and audited. Row-level
+ * application data is for regulator staff: reports.view *and* backoffice.access (firm users hold
+ * reports.view for their own dashboards only). Capabilities, never role names, so matrix edits
+ * apply here too.
+ */
 export async function GET(request: NextRequest, { params }: RouteContext<"/api/exports/[kind]">) {
   try {
     const { kind } = await params;
@@ -15,27 +26,23 @@ export async function GET(request: NextRequest, { params }: RouteContext<"/api/e
     let name: string;
     let actorId: string;
     if (kind === "applications") {
-      const { user } = await apiUser("reports.view");
-      if (
-        !user.roles.some(
-          (r) =>
-            r !== "APPLICANT" &&
-            r !== "SUPERVISOR" &&
-            r !== "PRINCIPAL_BROKER" &&
-            r !== "FIRM_ADMIN",
-        )
-      )
-        throw new HttpError(403, "forbidden");
+      const { user } = await exportUser(["reports.view", "backoffice.access"]);
       csv = await applicationsCsv();
       name = "applications";
       actorId = user.id;
+    } else if (kind === "applications-by-reason") {
+      // FR-RPT-001: decision reason codes and review recommendations per decided application.
+      const { user } = await exportUser(["reports.view", "backoffice.access"]);
+      csv = await applicationsByReasonCsv();
+      name = "applications-by-reason";
+      actorId = user.id;
     } else if (kind === "payments") {
-      const { user } = await apiUser("payments.view");
+      const { user } = await exportUser(["payments.view"]);
       csv = await paymentsCsv();
       name = "payments";
       actorId = user.id;
     } else if (kind === "roster") {
-      const { user } = await apiUser("firmRoles.manage");
+      const { user } = await exportUser(["firmRoles.manage"]);
       const firmId = request.nextUrl.searchParams.get("firm") ?? "";
       const roster = await firmRoster(firmId, user);
       csv = toCsv(

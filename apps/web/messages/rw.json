@@ -39,7 +39,10 @@
     "dismiss": "Funga",
     "notice": "Itangazo",
     "capsLock": "Caps Lock irakora",
-    "moreInfo": "Andi makuru"
+    "moreInfo": "Andi makuru",
+    "search": "Shakisha",
+    "noMatch": "Nta gihuye",
+    "notYet": "Si ubu"
   },
   "nav": {
     "home": "Ahabanza",
@@ -118,8 +121,8 @@
       "backoffice": "Ibiro by'ubuyobozi"
     },
     "areaHint": {
-      "portal": "Ubusabe bwawe n'impushya",
-      "backoffice": "Gusuzuma, gufata ibyemezo no kuyobora"
+      "portal": "Gusaba no gukurikirana",
+      "backoffice": "Gusuzuma no gufata ibyemezo"
     },
     "switchTo": "Jya kuri {area}",
     "layout": "Imigaragarire",
@@ -367,6 +370,7 @@
     },
     "continueWithGoogle": "Komeza ukoresheje Google",
     "googleUnavailable": "Kwinjira ukoresheje Google ntibishyizweho aha.",
+    "googleLoadFailed": "Kwinjira ukoresheje Google ntibyashobotse. Reba internet cyangwa ibyo mushakisha ihagarika, hanyuma usubize urupapuro.",
     "signIn": {
       "title": "Murakaza neza",
       "subtitle": "Injira kugira ngo ukomeze ubusabe bwawe.",
@@ -698,6 +702,19 @@
         "send": "Ohereza kode",
         "sent": "Kode yoherejwe. Yandike hasi.",
         "phoneRequired": "Banza wemeze nimero ya telefoni yawe."
+      },
+      "guide": {
+        "title": "Fungura intambwe ebyiri kugira ngo ukomeze",
+        "body": "Hitamo uburyo hepfo. Ushobora kongeraho ubundi nyuma.",
+        "steps": {
+          "pick": "Hitamo uburyo",
+          "code": "Andika kode",
+          "save": "Bika kode zo kugoboka"
+        },
+        "email": "Kode kuri imeyili (byihuse)",
+        "app": "Porogaramu y'umutekano (byizewe cyane)",
+        "quickest": "Byihuse",
+        "secure": "Byizewe cyane"
       }
     },
     "recovery": {
@@ -763,7 +780,10 @@
         "twoStep": "Fungura intambwe ebyiri",
         "recovery": "Fata kode nshya"
       }
-    }
+    },
+    "requiredTitle": "Inshingano zawe zisaba intambwe ebyiri",
+    "requiredShort": "Shyiraho uburyo bumwe kugira ngo ukomeze. Bifata nk'umunota umwe.",
+    "requiredCta": "Bishyireho ubu"
   },
   "audit": {
     "title": "Amateka y'ibikorwa",
@@ -794,7 +814,37 @@
       "signin": "Kwinjira",
       "account": "Konti",
       "twoStep": "Intambwe ebyiri",
-      "access": "Uburenganzira"
+      "access": "Uburenganzira",
+      "applications": "Ubusabe",
+      "administration": "Ubuyobozi"
+    },
+    "header": {
+      "eyebrow": "Umutekano",
+      "checked": "ibikorwa byagenzuwe",
+      "today": "uyu munsi",
+      "fortnight": "mu minsi 14",
+      "bubbleOk": "Nta cyahinduwe",
+      "bubbleBroken": "Hari icyahindutse!",
+      "events": "Ibikorwa"
+    },
+    "export": {
+      "csv": "Kohereza CSV",
+      "json": "Kohereza JSON"
+    },
+    "search": {
+      "label": "Shakisha mu bubiko bw’igenzura",
+      "actor": "Uwabikoze",
+      "actorPlaceholder": "Izina cyangwa imeri",
+      "entity": "Ikintu cyangwa nimero",
+      "entityPlaceholder": "urugero REBP-2026-000123",
+      "action": "Igikorwa",
+      "actionPlaceholder": "urugero config.",
+      "from": "Kuva",
+      "to": "Kugeza",
+      "submit": "Shakisha",
+      "clear": "Siba ibyatoranyijwe",
+      "results": "{count, plural, =0 {Nta bikorwa bihuye} other {Ibikorwa # bihuye}}{more, select, yes { (ibindi ku ipaji ikurikira)} other {}}",
+      "empty": "Nta bikorwa bihuye n’ibyo watoranyije."
     }
   },
   "privacy": {
@@ -962,7 +1012,9 @@
     "badOrigin": "Icyifuzo cyaturutse ku rubuga rutari rwitezwe.",
     "mfaRequired": "Iki gikorwa gisaba kugenzura mu ntambwe ebyiri.",
     "profileIncomplete": "Banza wuzuze umwirondoro wawe: amakuru yawe bwite akoreshwa mu busabe bwose.",
-    "cvIncomplete": "Banza wuzuze umwirondoro w'akazi: ibice iki cyiciro gisaba birabura."
+    "cvIncomplete": "Banza wuzuze umwirondoro w'akazi: ibice iki cyiciro gisaba birabura.",
+    "exportFormatInvalid": "Hitamo CSV cyangwa JSON.",
+    "decisionAlreadyCorrected": "Iki cyemezo cyamaze gukosorwa. Kosora icyemezo giheruka."
   },
   "notifications": {
     "emailVerify": {
@@ -1150,6 +1202,10 @@
     "backoffice_access": {
       "label": "Kwinjira mu biro by'ubuyobozi",
       "description": "Gukoresha urubuga rw'abakozi b'urwego rugenzura."
+    },
+    "review_assign": {
+      "label": "Gutanga no kwimura amadosiye",
+      "description": "Gutanga, kwimura cyangwa kwakira ubusabe bwose bufunguye (umuyobozi w'itsinda), no kwakira imenyesha ry'igihe cyarenze."
     }
   },
   "access": {
@@ -1252,6 +1308,14 @@
       },
       "staffRole": "Abakozi",
       "noMatches": "Nta burenganzira buhuye na “{query}”."
+    },
+    "header": {
+      "eyebrow": "Abantu n'uburenganzira",
+      "people": "konti zikora",
+      "twoStep": "zifite igenzura ry'intambwe ebyiri",
+      "noTwoStep": "zidafite igenzura ry'intambwe ebyiri",
+      "bubble": "Ni nde ukora iki",
+      "bubbleReadOnly": "Kureba gusa"
     }
   },
   "myAccess": {
@@ -1612,6 +1676,50 @@
       "configuration": "{count, plural, =0 {Nta mpinduka zitegerejwe} one {Impinduka # itegerejwe} other {Impinduka # zitegerejwe}}",
       "reports": "Reba raporo",
       "open": "Fungura"
+    },
+    "hero": {
+      "hello": "Muraho, {name}",
+      "next": "Igikurikiyeho",
+      "waiting": "{count, plural, one {Ikintu # kigutegereje} other {Ibintu # bigutegereje}}",
+      "clear": "nta kigutegereje",
+      "focus": {
+        "overdue": {
+          "title": "{count, plural, one {Dosiye # yawe yarenze igihe} other {Dosiye # zawe zarenze igihe}}",
+          "cta": "Fungura izarenze"
+        },
+        "decisions": {
+          "title": "{count, plural, one {Isuzuma # risinywe ritegereje icyemezo} other {Isuzuma # risinywe ritegereje icyemezo}}",
+          "cta": "Fata icyemezo"
+        },
+        "queue": {
+          "title": "{count, plural, one {Ubusabe # wahawe} other {Ubusabe # wahawe}}",
+          "cta": "Fungura umurongo"
+        },
+        "register": {
+          "title": "{count, plural, one {Impinduka # mu gitabo zitegereje kwemezwa} other {Impinduka # mu gitabo zitegereje kwemezwa}}",
+          "cta": "Suzuma"
+        },
+        "configuration": {
+          "title": "{count, plural, one {Impinduka # z'igenamiterere zitegereje kwemezwa} other {Impinduka # z'igenamiterere zitegereje kwemezwa}}",
+          "cta": "Suzuma"
+        },
+        "clear": {
+          "title": "Byose biri ku murongo",
+          "cta": ""
+        }
+      },
+      "bubble": {
+        "overdue": "Byarenze igihe!",
+        "decisions": "Ni wowe ufata icyemezo",
+        "queue": "Dosiye zo gusuzuma",
+        "register": "Hakenewe irindi jisho",
+        "configuration": "Emeza cyangwa wange",
+        "clear": "Byose ni sawa!"
+      }
+    },
+    "pipeline": {
+      "title": "Inzira y'isuzuma",
+      "decided": "{count, plural, one {# byafashweho icyemezo iki cyumweru} other {# byafashweho icyemezo iki cyumweru}}"
     }
   },
   "offline": {
@@ -1653,7 +1761,31 @@
     "access_permissions_changed": "Uburenganzira bwahinduwe",
     "access_permissions_reset": "Uburenganzira bwasubijwe ku bisanzwe",
     "access_account_disabled": "Konti yahagaritswe",
-    "access_account_enabled": "Konti yongeye gufungurwa"
+    "access_account_enabled": "Konti yongeye gufungurwa",
+    "audit_exported": "Ububiko bw’igenzura bwoherejwe",
+    "report_exported": "Raporo yoherejwe",
+    "config_proposed": "Impinduka y’igenamiterere yatanzwe",
+    "config_approved": "Impinduka y’igenamiterere yemejwe",
+    "config_rejected": "Impinduka y’igenamiterere yanzwe",
+    "application_created": "Ubusabe bwatangiye",
+    "application_signed": "Ubusabe bwasinywe",
+    "application_transition": "Imiterere yahindutse",
+    "application_assigned": "Ubusabe bwahawe umukozi",
+    "application_conflict_declared": "Hatangajwe inyungu zivuguruzanya",
+    "application_category_changed": "Icyiciro cyahinduwe",
+    "confirmation_overridden": "Kwemeza kwasimbuwe",
+    "document_verified": "Inyandiko yemejwe",
+    "document_rejected": "Inyandiko yanzwe",
+    "review_signed": "Isuzuma ryasinywe",
+    "decision_signed": "Icyemezo cyasinywe",
+    "decision_corrected": "Icyemezo cyakosowe",
+    "licence_issued": "Uruhushya rwatanzwe",
+    "licence_issuance_failed": "Gutanga uruhushya byanze",
+    "licence_certificate_reissued": "Icyemezo cyongeye gutangwa",
+    "register_action_proposed": "Impinduka mu gitabo zasabwe",
+    "register_action_rejected": "Impinduka mu gitabo zanzwe",
+    "payment_waived": "Amafaranga yasonewe",
+    "jobs_run": "Imirimo iteganyijwe yakozwe"
   },
   "time": {
     "justNow": "Ubu nyine",
@@ -1935,6 +2067,58 @@
     "upgradeEligible": {
       "title": "Ubu ushobora kuzamurwa mu cyiciro",
       "body": "Hashingiwe ku mateka y'uruhushya rwawe, ubu ushobora gusaba {category, select, REA {icyiciro cya Real Estate Agent} BROKER {icyiciro cya Real Estate Broker} other {icyiciro cyo hejuru}}."
+    },
+    "reviewStarted": {
+      "title": "Ubusabe bwawe burimo gusuzumwa",
+      "body": "Umukozi yatangiye gusuzuma ubusabe {reference}. Tuzakumenyesha nihagira igikenewe."
+    },
+    "reviewComplete": {
+      "title": "Isuzuma ryarangiye",
+      "body": "Isuzuma rya {reference} ryarangiye. Ubu buri ku rwego rufata icyemezo."
+    },
+    "decisionReady": {
+      "title": "Hakenewe icyemezo",
+      "body": "{officer} yasinye isuzuma rya {reference}. Riteguye icyemezo cyawe."
+    },
+    "referredInternal": {
+      "title": "Byoherejwe gusuzumwa byimbitse",
+      "body": "{officer} yohereje {reference} gusuzumwa byimbitse."
+    },
+    "unassigned": {
+      "title": "Ubusabe butegereje umukozi",
+      "body": "{reference} bwatanzwe kandi nta mukozi burahabwa. Bubahe umukozi mu murongo w'akazi."
+    },
+    "infoReminder": {
+      "title": "Igisubizo kirakenewe vuba",
+      "body": "Amakuru yasabwe kuri {reference} agomba gutangwa bitarenze {due}. Subiza kugira ngo isuzuma rikomeze."
+    },
+    "infoOverdue": {
+      "title": "Igisubizo cyaratinze",
+      "body": "Amakuru yasabwe kuri {reference} yagombaga gutangwa ku wa {due}. Subiza vuba bishoboka."
+    },
+    "infoOverdueOfficer": {
+      "title": "Igisubizo cy'usaba cyaratinze",
+      "body": "Usaba ntarasubiza ku makuru yasabwe kuri {reference} (itariki ntarengwa {due})."
+    },
+    "reassigned": {
+      "title": "Idosiye yimuriwe undi",
+      "body": "{name} yimuriye ubusabe {reference} undi mukozi."
+    },
+    "slaEscalated": {
+      "title": "Imenyesha ry'igihe cyarenze cyane",
+      "body": "Ubusabe {reference} bwarengeje igihe ntarengwa ({date}) iminsi y'akazi irenze ibiri. Mwabwimurira undi cyangwa mukabukurikirana."
+    },
+    "decisionCorrected": {
+      "title": "Ibaruwa y'icyemezo yakosowe",
+      "body": "Icyemezo ku busabe {reference} cyakosowe. Ibaruwa {letter} isimbuye ibaruwa {previous}."
+    },
+    "certificateReissued": {
+      "title": "Icyemezo gishya cyatanzwe",
+      "body": "Icyemezo gishya (verisiyo {version}) cyatanzwe ku ruhushya {licence}. Kode QR y'icyemezo cya mbere ntikigenzurwa."
+    },
+    "issuanceFailed": {
+      "title": "Gutanga uruhushya byanze",
+      "body": "Uruhushya rw'ubusabe bwemejwe {reference} ntirwashoboye gutangwa. Bizongera kugeragezwa ubwabyo; mwagenzura idosiye."
     }
   },
   "conditions": {
@@ -2045,8 +2229,10 @@
       "APPROVED_WITH_CONDITIONS": "Ubusabe bwawe bwo kwiyandikisha no guhabwa uruhushya nka {category} bwemejwe hashingiwe ku bisabwa bikurikira. Ibisabwa bigaragara ku ruhushya rwawe no ku rubuga.",
       "DEFERRED": "Icyemezo ku busabe bwawe nka {category} cyasubitswe hategerejwe amakuru y'inyongera. Subiza unyuze ku Rubuga REBP.",
       "REJECTED": "Nyuma yo gusuzuma, ubusabe bwawe bwo kwiyandikisha no guhabwa uruhushya nka {category} ntibwemejwe, kubera impamvu zikurikira.",
-      "appeal": "Ushobora gusaba mu nyandiko ko iki cyemezo cyongera gusuzumwa mu minsi 30 uhereye ku itariki y'iyi baruwa, hakurikijwe uburyo bw'Urugaga rw'Umwuga."
-    }
+      "appeal": "Ushobora gusaba mu nyandiko ko iki cyemezo cyongera gusuzumwa mu minsi 30 uhereye ku itariki y'iyi baruwa, hakurikijwe uburyo bw'Urugaga rw'Umwuga.",
+      "correction": "Iyi baruwa ikosora ibaruwa y'icyemezo {letter}. Impamvu: {reason}"
+    },
+    "evidenceRequired": "ibimenyetso by'iyubahirizwa birakenewe"
   },
   "registerResults": {
     "kind": {
@@ -2271,7 +2457,8 @@
       "brightness": "Ongera urumuri rwa ecran kugira ngo isikanwa vuba.",
       "copy": "Koporora umurongo w'igenzura",
       "copied": "Umurongo wakoporowe"
-    }
+    },
+    "conditionEvidence": "Ibimenyetso by'iyubahirizwa birakenewe"
   },
   "registerAdmin": {
     "title": "Imicungire y'igitabo rusange",
@@ -2391,7 +2578,30 @@
       "approvedToast": "Impinduka yemejwe. Uruhushya {licence} rwavuguruwe.",
       "rejectedToast": "Impinduka ku ruhushya {licence} yahakanywe.",
       "makerCheckerTitle": "Hakenewe undi muntu wa kabiri",
-      "makerChecker": "Ni wowe watanze iyi mpinduka, bityo undi muntu agomba kuyemeza cyangwa kuyihakana."
+      "makerChecker": "Ni wowe watanze iyi mpinduka, bityo undi muntu agomba kuyemeza cyangwa kuyihakana.",
+      "needsYou": "Bikeneye ko ubyemeza"
+    },
+    "header": {
+      "eyebrow": "Igitabo cy'impushya",
+      "active": "zifite agaciro",
+      "expiring": "zizarangira vuba",
+      "pending": "zitegereje kwemezwa",
+      "bubbleDecide": "{count, plural, one {Impinduka # yo gufatira icyemezo} other {Impinduka # zo gufatira icyemezo}}",
+      "bubbleWaiting": "Hategerejwe undi muntu",
+      "bubbleClear": "Igitabo kiri ku murongo"
+    },
+    "reissue": {
+      "button": "Ongera utange icyemezo",
+      "title": "Kongera gutanga icyemezo",
+      "description": "Uruhushya {licence} rufite icyemezo verisiyo {version}. Hazatangwa verisiyo nshya.",
+      "qrNote": "Kode QR y'icyemezo kiriho izerekana \"cyasimbuwe, reba igiheruka\". Nyir'uruhushya amenyeshwa.",
+      "reason": "Impamvu",
+      "reasonHint": "Urugero: icyemezo cyabuze, guhindura izina cyangwa ibisabwa (nibura inyuguti 10).",
+      "password": "Ijambobanga ryawe",
+      "passwordHint": "Kongera gutanga icyemezo bisaba ijambobanga ryawe.",
+      "submit": "Ongera utange",
+      "done": "Icyemezo verisiyo {version} cyatanzwe kuri {licence}.",
+      "version": "Verisiyo y'icyemezo"
     }
   },
   "finance": {
@@ -2406,7 +2616,9 @@
       "duplicates": "Ubwishyu bwisubiyemo bwagaragajwe",
       "duplicatesHint": "Bikeneye kugenzurwa ngo amafaranga asubizwe",
       "outstanding": "Bitegereje kwishyurwa",
-      "outstandingHint": "Ubusabe"
+      "outstandingHint": "Ubusabe",
+      "refunded": "Byasubijwe (RWF)",
+      "refundedHint": "Ibyasubijwe {count}"
     },
     "byMethod": "Ayakusanyijwe hakurikijwe uburyo",
     "amountUnit": "RWF",
@@ -2437,7 +2649,28 @@
       "status": "Imiterere",
       "receipt": "Inyemezabwishyu",
       "view": "Inyemezabwishyu",
-      "duplicate": "Bwisubiyemo"
+      "duplicate": "Bwisubiyemo",
+      "showAll": "Erekana ubwishyu {count} bwose",
+      "showLess": "Erekana bike"
+    },
+    "header": {
+      "eyebrow": "Ubwishyu",
+      "collected": "byakiriwe",
+      "awaiting": "bitegereje kwishyurwa",
+      "duplicates": "byishyuwe kabiri",
+      "bubbleAttention": "{count, plural, one {Ikintu # cyo kureba} other {Ibintu # byo kureba}}",
+      "bubbleClear": "Byose byishyuwe"
+    },
+    "revenue": {
+      "byFeeType": "Amafaranga yinjiye ku bwoko bw’amafaranga",
+      "byMonth": "Amafaranga yinjiye buri kwezi",
+      "last12": "Amezi 12 ashize · RWF",
+      "types": {
+        "registration": "Kwiyandikisha",
+        "licensing": "Uruhushya no kuruvugurura",
+        "latePenalty": "Ihazabu ryo gutinda",
+        "other": "Ibindi"
+      }
     }
   },
   "configuration": {
@@ -2574,7 +2807,8 @@
       "ownProposal": "Ni wowe wasabye iyi mpinduka. Undi wemeza agomba gufata icyemezo.",
       "waiting": "Bitegereje urwego rwemeza.",
       "makerCheckerTitle": "Hakenewe undi muntu wa kabiri",
-      "makerChecker": "Ni wowe wasabye iyi mpinduka, bityo undi muntu agomba kuyemeza cyangwa kuyihakana."
+      "makerChecker": "Ni wowe wasabye iyi mpinduka, bityo undi muntu agomba kuyemeza cyangwa kuyihakana.",
+      "needsYou": "Bikeneye ko ubyemeza"
     },
     "history": {
       "title": "Amateka",
@@ -2598,9 +2832,22 @@
         "payments": "Ubwishyu",
         "issuance": "Kongera kugerageza gutanga",
         "sla": "Imenyesha rya SLA",
-        "upgrades": "Ibyibutsa byo kuzamura icyiciro"
+        "upgrades": "Ibyibutsa byo kuzamura icyiciro",
+        "information": "Kwibutsa amakuru"
       }
-    }
+    },
+    "header": {
+      "eyebrow": "Igenamiterere",
+      "inForce": "bikurikizwa",
+      "defaults": "Ibisanzwe",
+      "pending": "bitegereje kwemezwa",
+      "versions": "verisiyo",
+      "versionsCount": "{count, plural, =0 {Nta verisiyo} one {Verisiyo #} other {Verisiyo #}}",
+      "bubbleDecide": "Bikeneye ko ubyemeza",
+      "bubbleWaiting": "Hategerejwe uwemeza",
+      "bubbleClear": "Abantu babiri kuri buri mpinduka"
+    },
+    "outOfScope": "Aya mabwiriza ateganywa n’umuyobozi wa sisitemu. Ushobora kuyareba hano."
   },
   "reports": {
     "title": "Raporo",
@@ -2638,6 +2885,23 @@
     },
     "financial": {
       "title": "Amafaranga yakusanyijwe"
+    },
+    "header": {
+      "eyebrow": "Isesengura",
+      "open": "ubusabe bukiri gukorwaho",
+      "breached": "byarenze igihe",
+      "licences": "impushya zifite agaciro",
+      "bubble": "{sla}% ku gihe"
+    },
+    "exportReasons": "Kohereza impamvu",
+    "reasons": {
+      "title": "Impamvu",
+      "rejectionReasons": "Impamvu zo kwanga",
+      "rejectionsHint": "Ibyanzwe {rejections} · ibyasubitswe {deferrals}",
+      "recommendations": "Inama z’isuzuma",
+      "signedReviews": "Isuzuma riheruka ryasinywe kuri buri busabe",
+      "reviewReasons": "Impamvu abakozi batanze zo kwanga",
+      "reviewReasonsHint": "Inama zo kwanga"
     }
   },
   "queue": {
@@ -2709,6 +2973,36 @@
       "declared": "Yatangaje ko afite inyungu zivuguruzanya.",
       "supervisor": "Ni we umugenzuzi watanzwe.",
       "firm": "Abarizwa mu kigo cy'usaba."
+    },
+    "bubble": {
+      "breached": "Hari dosiye zatinze",
+      "mine": "Reka tuzisuzume",
+      "clear": "Nta kirimo!"
+    },
+    "officerLabel": "Umukozi wahawe idosiye",
+    "allOfficers": "Abakozi bose",
+    "sortLabel": "Tondeka hakurikijwe",
+    "sorts": {
+      "deadline": "Igihe ntarengwa, ikiri hafi mbere",
+      "submitted": "Ubusabe bushya mbere",
+      "stale": "Ibimaze igihe kirekire muri iki cyiciro"
+    },
+    "inState": "{days, plural, =0 {Muri iki cyiciro kuva uyu munsi} one {Umunsi # muri iki cyiciro} other {Iminsi # muri iki cyiciro}}",
+    "bulk": {
+      "label": "Gutanga amadosiye menshi icyarimwe",
+      "select": "Hitamo {reference}",
+      "selectAll": "Hitamo byose kuri uru rupapuro",
+      "selected": "{count, plural, one {Idosiye # yatoranyijwe} other {Amadosiye # yatoranyijwe}}",
+      "officer": "Ha",
+      "assign": "Tanga ibyatoranyijwe",
+      "takeSelected": "Mpa ibyatoranyijwe",
+      "clear": "Siba ibyatoranyijwe",
+      "confirmTitle": "{count, plural, one {Gutanga idosiye #?} other {Gutanga amadosiye #?}}",
+      "confirmBody": "{count, plural, one {Idosiye #} other {Amadosiye #}} bizahabwa {name}. Amadosiye afite ukwivanga kw'inyungu azasimbukwa kandi agaragazwe.",
+      "cancel": "Hagarika",
+      "confirm": "{count, plural, one {Tanga idosiye #} other {Tanga amadosiye #}}",
+      "done": "{count, plural, one {Idosiye # yatanzwe.} other {Amadosiye # yatanzwe.}}",
+      "skipped": "{count, plural, one {Idosiye # ntiyatanzwe:} other {Amadosiye # ntiyatanzwe:}}"
     }
   },
   "review": {
@@ -2803,7 +3097,17 @@
       "licences": "{count, plural, =0 {Impushya} other {Impushya (#)}}",
       "noLicences": "Nta ruhushya afite.",
       "expires": "ruzarangira {date}",
-      "applications": "{count, plural, =0 {Ubusabe} other {Ubusabe (#)}}"
+      "applications": "{count, plural, =0 {Ubusabe} other {Ubusabe (#)}}",
+      "affiliations": "{count, plural, =0 {Ubufatanye} other {Ubufatanye (#)}}",
+      "noAffiliations": "Nta bufatanye n'ikigo bwanditswe.",
+      "period": "{from} – {to}",
+      "affiliatedSince": "kuva {date}",
+      "history": "Amateka y'impushya n'ibihano",
+      "noHistory": "Nta mateka y'uruhushya.",
+      "payments": "{count, plural, =0 {Kwishyura} other {Kwishyura (#)}}",
+      "noPayments": "Nta kwishyura kurabaho.",
+      "communications": "Ubutumwa buheruka koherezwa",
+      "noCommunications": "Nta butumwa buroherezwa."
     },
     "docTypes": {
       "proofOfIdentity": "Gihamya y'umwirondoro",
@@ -2875,7 +3179,44 @@
       "rejectTitle": "Hakana iyi nyandiko",
       "rejectDescription": "Bwira usaba ikibazo kiri kuri {document}. Azabona iyi mpamvu.",
       "reason": "Impamvu",
-      "reasonHint": "Nibura inyuguti 5, urugero: \"Ifoto y'inyandiko yaciwe hasi\"."
+      "reasonHint": "Nibura inyuguti 5, urugero: \"Ifoto y'inyandiko yaciwe hasi\".",
+      "verifiedCount": "{done} kuri {total} byemejwe",
+      "verdict": "Umwanzuro kuri {document}",
+      "rejectedState": "Byanzwe",
+      "openViewer": "Fungura inyandiko",
+      "carouselMove": "Inyandiko ibanziriza cyangwa ikurikira",
+      "position": "{n} kuri {total}",
+      "carouselHint": "Kunyuza urutoki cyangwa ukoreshe ← → wimuke hagati y'inyandiko.",
+      "notUploaded": "Ntiyashyizweho",
+      "missingCount": "{count, plural, one {Inyandiko # isabwa irabura} other {Inyandiko # zisabwa zirabura}}",
+      "state": {
+        "unavailable": {
+          "title": "Iyi dosiye ntishobora kwerekanwa",
+          "body": "Dosiye yabitswe ntiboneka cyangwa ntiyafunguka. Saba usaba kongera kuyishyiraho binyuze mu gusaba amakuru."
+        },
+        "notUploaded": {
+          "title": "Ntiraashyirwaho",
+          "body": "Iyi nyandiko isabwa ntirashyirwaho. Yisabe usaba mbere yo gusinya isuzuma."
+        },
+        "blocked": {
+          "title": "Iyi dosiye ntiboneka",
+          "body": "Ntishobora gusuzumwa uko imeze ubu."
+        },
+        "retry": "Ongera ugerageze",
+        "noPreview": {
+          "title": "Ntishobora kwerekanwa",
+          "body": "Ubu bwoko bwa dosiye ntibushobora kwerekanwa muri mushakisha."
+        },
+        "download": "Kuramo dosiye"
+      },
+      "autoNext": {
+        "next": "Inyandiko ikurikira",
+        "stay": "Guma",
+        "go": "Komeza ubu",
+        "allDone": "Inyandiko zarangiye · ikurikira",
+        "nextStep": "Andika igenzura usinye",
+        "continue": "Komeza"
+      }
     },
     "items": {
       "identity": {
@@ -2984,18 +3325,51 @@
       "computed": "Cyabazwe: {value}",
       "computedMark": "Igisubizo cyabazwe",
       "overrideReason": "Impamvu wahinduye igisubizo cyabazwe",
-      "overrideHint": "Birasabwa iyo uhinduye (nibura inyuguti 10). Ibyahinduwe bishyirwa muri raporo."
+      "overrideHint": "Birasabwa iyo uhinduye (nibura inyuguti 10). Ibyahinduwe bishyirwa muri raporo.",
+      "progress": {
+        "title": "Aho isuzuma rigeze",
+        "checks": "Igenzura {done} kuri {total} ryanditswe",
+        "done": "byakozwe",
+        "todo": "bitarakorwa",
+        "ready": "Ibice {done} kuri {total} biteguye",
+        "readyToSign": "Biteguye gushyirwaho umukono"
+      },
+      "overridden": "Byahinduwe",
+      "nextCheck": "Ikurikira",
+      "nextCheckLine": "Igenzura {n}: {label} — hitamo igisubizo",
+      "allChecksDone": "Igenzura zose esheshatu zanditswe — emeza ibisubizo hanyuma utange inama.",
+      "groups": {
+        "todo": "Ibisigaye",
+        "failed": "Byanze",
+        "done": "Byarangiye"
+      },
+      "suggested": "Byasabwe",
+      "addNote": "icyitonderwa",
+      "short": {
+        "checks": "Igenzura",
+        "documentation": "Inyandiko",
+        "eligibility": "Kwemererwa",
+        "recommendation": "Inama"
+      },
+      "done": "Byarangiye",
+      "add": "Ongeraho",
+      "edit": "Hindura",
+      "reasons": "Impamvu",
+      "reasonsNeeded": "Hitamo impamvu kandi uzisobanure",
+      "overrideNeeded": "Vuga impamvu wabihinduye",
+      "overrideOf": "{part}: impamvu byahinduwe"
     },
     "sign": {
       "title": "Sinya isuzuma",
-      "description": "Gusinya bifunga iyi nyandiko kandi byohereza ubusabe ku ntambwe ikurikira. Emeza ukoresheje ijambo ry'ibanga ryawe.",
-      "password": "Ijambo ry'ibanga ryawe",
-      "submit": "Sinya isuzuma"
+      "description": "Gusinya bifunga iyi verisiyo kandi bikohereza ubusabe.",
+      "submit": "Sinya isuzuma",
+      "outcome": "Icyifuzo"
     },
     "signed": {
       "by": "Inyandiko ya {version} yasinywe na {name} ku wa {date}",
       "methods": {
-        "PASSWORD_REAUTH": "ijambo ry'ibanga ryemejwe"
+        "PASSWORD_REAUTH": "ijambo ry'ibanga ryemejwe",
+        "CONFIRMED_MFA_SESSION": "byemejwe mu cyiciro cyagenzuwe"
       },
       "readOnly": "Gusoma gusa",
       "overridden": "Byahinduwe",
@@ -3055,6 +3429,111 @@
       "reason": "Impamvu",
       "submit": "Emeza",
       "done": "Icyemezo cyanditswe."
+    },
+    "hero": {
+      "next": {
+        "conflict": "Ufite inyungu zibangamira iri dosiye. Kwikura kugira ngo undi mukozi ariyakire.",
+        "take": "Nta muntu urasuzuma iri dosiye. Ryiyandikeho kugira ngo utangire.",
+        "start": "Idosiye ni iyawe. Tangira isuzuma kugira ngo ufungure Igice L n'igihe ntarengwa gitangire.",
+        "reviewing": "Suzuma buri nyandiko, andika igenzura esheshatu kandi utange inama. Shyiraho umukono byose bimaze kwemezwa.",
+        "waiting": "Dutegereje ko usaba asubiza ubusabe bwawe bw'amakuru.",
+        "confirmations": "Dutegereje ibyemezo usaba yasabye.",
+        "decision": "Isuzuma ryashyizweho umukono kandi riri ku bufata icyemezo.",
+        "decided": "Icyemezo cyafashwe. Isuzuma riri hasi rirasomwa gusa.",
+        "readOnly": "Ushobora gusoma iri dosiye. Ibikorwa ni iby'umukozi warihawe."
+      },
+      "bubble": {
+        "conflict": "Byaba byiza wikuye",
+        "take": "Rirategereje!",
+        "start": "Witeguye igihe ushakiye",
+        "reviewing": "Reka tugenzure byose",
+        "waiting": "Ni ah'usaba",
+        "confirmations": "Dutegereje abandi",
+        "decision": "Ryoherejwe gufatirwa icyemezo",
+        "decided": "Byose byarangiye",
+        "readOnly": "Ndareba gusa"
+      }
+    },
+    "stats": {
+      "docsVerified": "inyandiko zemejwe",
+      "rulesPassed": "amategeko yujujwe",
+      "confirmed": "ibyemezo byakiriwe",
+      "missing": "ibisabwa bibura"
+    },
+    "rulesCount": "Amategeko {done} kuri {total} yujujwe",
+    "checklistCount": "Inyandiko {done} zisabwa kuri {total} zemejwe",
+    "confirmedCount": "{done} kuri {total} byemejwe",
+    "photo": {
+      "open": "Reba ifoto ya {name}",
+      "caption": "Ifoto y'umwirondoro",
+      "alt": "Ifoto y'umwirondoro ya {name}",
+      "hint": "Yigereranye n'ifoto iri ku cyangombwa cy'irangamuntu.",
+      "missing": "{name} nta foto y'umwirondoro afite"
+    },
+    "tabs": {
+      "label": "Ibice bya dosiye",
+      "documents": "Inyandiko",
+      "application": "Ubusabe",
+      "checks": "Igenzura",
+      "review": "Isuzuma",
+      "history": "Amateka",
+      "applicant": "Usaba"
+    },
+    "dock": {
+      "eyebrow": "Igikurikiyeho",
+      "take": {
+        "label": "Mpa iyi dosiye",
+        "done": "Wahawe dosiye."
+      },
+      "start": {
+        "label": "Tangira isuzuma",
+        "done": "Isuzuma ryatangiye."
+      },
+      "verify": {
+        "label": "{left, plural, one {Genzura inyandiko #} other {Genzura inyandiko #}}"
+      },
+      "record": {
+        "label": "Andika igenzura usinye"
+      },
+      "waiting": {
+        "label": "Reba ubusabe bufunguye"
+      },
+      "confirmations": {
+        "label": "Reba kwemeza"
+      },
+      "decide": {
+        "label": "Fata icyemezo"
+      },
+      "signed": {
+        "label": "Reba isuzuma ryasinywe"
+      },
+      "nextFile": {
+        "eyebrow": "Byarangiye · uwemeza arafata icyemezo",
+        "label": "Fungura dosiye ikurikira",
+        "queue": "Subira ku rutonde"
+      }
+    },
+    "guide": {
+      "step": "Intambwe {n} kuri {total}",
+      "then": "Hanyuma",
+      "verify": "{count, plural, one {emeza cyangwa wange inyandiko #} other {emeza cyangwa wange inyandiko #}}",
+      "record": "andika igenzura esheshatu, utange inama hanyuma usinye"
+    },
+    "celebrate": {
+      "title": "Igenzura ryarangiye",
+      "stay": "Guma hano",
+      "next": "Dosiye ikurikira",
+      "review": {
+        "APPROVE": "Byasabiwe kwemezwa. Uwemeza ni we ufata icyemezo.",
+        "REFER": "Byoherejwe gusuzumwa byimbitse.",
+        "REJECT": "Byasabiwe kwangwa. Uwemeza ni we ufata icyemezo."
+      },
+      "decision": {
+        "APPROVED": "Byemejwe: uruhushya rwatanzwe.",
+        "APPROVED_WITH_CONDITIONS": "Byemejwe hamwe n'ibisabwa: uruhushya rwatanzwe.",
+        "DEFERRED": "Byasubitswe: usaba yamenyeshejwe ibikenewe.",
+        "REJECTED": "Byanzwe: usaba ahabwa ibaruwa irimo impamvu."
+      }
     }
   },
   "decide": {
@@ -3099,7 +3578,13 @@
       "validity": "Rufite agaciro kuva {from} kugeza {to}",
       "certificate": "Icyemezo (PDF)",
       "issuancePending": "Uruhushya ruri gutangwa. Ruraza kugaragara hano vuba.",
-      "letter": "Ibaruwa y'icyemezo (PDF)"
+      "letter": "Ibaruwa y'icyemezo (PDF)",
+      "corrects": "Ikosora",
+      "arrangement": "Uburyo bwo gukora umwuga",
+      "overridden": "byashyizweho n'uwemeza",
+      "evidenceRequired": "ibimenyetso birakenewe",
+      "earlier": "Ibyemezo byabanje (byakosowe)",
+      "letterShort": "Ibaruwa"
     },
     "form": {
       "recorded": "Icyemezo cyasinywe.",
@@ -3124,9 +3609,57 @@
       "reasonsOptional": "Impamvu (si ngombwa)",
       "reasons": "Impamvu",
       "reasonsHint": "Zirasabwa ku mabwiriza, isubikwa n'ihakana (nibura inyuguti 10). Zigaragara mu ibaruwa y'icyemezo.",
-      "password": "Ijambo ry'ibanga ryawe",
-      "passwordHint": "Gusinya icyemezo bisaba ijambo ry'ibanga ryawe. Ibyemezo ntibishobora guhindurwa nyuma.",
-      "submit": "Sinya icyemezo"
+      "submit": "Sinya icyemezo",
+      "details": "Ibisobanuro n'impamvu",
+      "signStep": "Shyira umukono ku cyemezo",
+      "intro": "Hitamo icyemezo, ugisobanure, hanyuma usinye.",
+      "arrangement": "Uburyo bwemewe bwo gukora umwuga",
+      "arrangementHint": "Bikomoka ku busabe: {derived}. Hitamo ubundi gusa niba icyemezo cyemera uburyo butandukanye.",
+      "derived": "bikomoka ku busabe",
+      "evidenceRequired": "Ibimenyetso by'iyubahirizwa birakenewe",
+      "evidenceRequiredHint": "Nyir'uruhushya agomba kohereza ibimenyetso ko icyo gisabwa cyubahirijwe.",
+      "signHint": "Reba incamake, hanyuma usinye. Icyemezo ntigishobora guhindurwa nyuma.",
+      "confirmTitle": "Gusinya icyemezo?",
+      "confirmBody": "Ibaruwa iratangwa kandi usaba arabimenyeshwa. Icyemezo ntigishobora guhindurwa nyuma."
+    },
+    "bubble": {
+      "empty": "Byose byarangiye!",
+      "waiting": "{count, plural, one {# yo gufatira icyemezo} other {# zo gufatira icyemezo}}"
+    },
+    "stats": {
+      "waiting": "bitegereje",
+      "approve": "byasabiwe kwemezwa",
+      "overdue": "byarengeje igihe"
+    },
+    "hero": {
+      "recommends": "{name} atanga inama: {recommendation}",
+      "signed": "Isuzuma ryashyizweho umukono na {name} ku wa {date}.",
+      "checks": "Igenzura {done} kuri {total} ryemejwe",
+      "noOverrides": "Nta byahinduwe",
+      "overridden": {
+        "documentation": "Inyandiko byahinduwe",
+        "eligibility": "Ibisabwa byahinduwe"
+      },
+      "rulesToLook": "{count, plural, one {Itegeko # ryo kureba} other {Amategeko # yo kureba}}",
+      "bubble": {
+        "badge": "Ni wowe ufata icyemezo",
+        "celebrate": "Uruhushya ruri mu nzira!",
+        "worried": "Icyemezo cyanditswe",
+        "lock": "Si wowe ufata icyemezo",
+        "waiting": "Ntibiritegura"
+      }
+    },
+    "correct": {
+      "button": "Kosora icyemezo",
+      "title": "Kosora iki cyemezo",
+      "description": "Icyemezo gishya n'ibaruwa nshya bizasimbura ibaruwa {letter}. Umwanzuro ntuhinduka.",
+      "immutableNote": "Ibyemezo byashyizweho umukono ntibihindurwa. Icy'umwimerere kigumaho, gihujwe n'ikosora.",
+      "reason": "Impamvu y'ikosora",
+      "reasonHint": "Urugero: \"gukosora ikosa ry'imyandikire mu mpamvu\" (nibura inyuguti 10).",
+      "reasons": "Impamvu zakosowe (si ngombwa)",
+      "reasonsHint": "Bigaragara mu ibaruwa nshya. Bireke uko biri kugira ngo amagambo y'umwimerere agume.",
+      "submit": "Shyira umukono ku ikosora",
+      "done": "Ikosora ryashyizweho umukono. Ibaruwa {letter} yatanzwe."
     }
   },
   "summary": {
@@ -4963,6 +5496,160 @@
       "justNow": "Ako kanya · ubu",
       "ago": "Ako kanya · hashize iminota {minutes}",
       "hint": "Uru rupapuro rwivugurura rwonyine iyo rufunguye."
+    },
+    "applicant": "Usaba"
+  },
+  "health": {
+    "title": "Imiterere ya sisitemu",
+    "description": "Ububiko, gahunda, itangwa, ubutumwa n’urunigi rw’igenzura.",
+    "checkedAt": "Byagenzuwe {when}",
+    "database": "Ububiko bw’amakuru",
+    "latency": "{ms} ms",
+    "unreachable": "Ntigerwaho",
+    "jobs": "Imirimo iteganyijwe",
+    "lastRun": "Igikorwa giheruka {when}",
+    "neverRun": "Nta gikorwa cyanditswe",
+    "issuance": "Gusubiramo itangwa ry’impushya",
+    "issuancePending": "{count, plural, =0 {Nta biri gutegereza} other {# bitegereje}}",
+    "notifications": "Kohereza ubutumwa",
+    "notificationsFailed": "{failed} byanze kuri {total} mu minsi {days}",
+    "chain": "Urunigi rw’igenzura",
+    "chainOk": "Ibikorwa {count} bitekanye",
+    "chainBroken": "Rwacitse ku gikorwa #{id}",
+    "unknown": "Ntibyagenzuwe",
+    "queue": "Umurongo w’isuzuma",
+    "queueDepth": "{open} bifunguye · {breached} byarengeje igihe",
+    "ok": "Ni byiza",
+    "attention": "Genzura",
+    "allClear": "Byose bigenda neza.",
+    "needsAttention": "{count, plural, other {Ibintu # bikeneye kugenzurwa.}}"
+  },
+  "boDash": {
+    "pulse": "Incamake",
+    "days": "{count, plural, one {umunsi #} other {iminsi #}}",
+    "underDay": "< umunsi 1",
+    "open": "Fungura",
+    "details": "Ibisobanuro",
+    "now": "Ubu",
+    "previous": "Icyumweru gishize",
+    "vsPrevious": "ugereranyije n'icyumweru gishize",
+    "kpi": {
+      "in": "Byatanzwe · iminsi 7",
+      "out": "Byafashweho icyemezo · iminsi 7",
+      "open": "Dosiye zifunguye",
+      "overdue": "Byarengeje igihe",
+      "daily14": "Buri munsi, iminsi 14 ishize",
+      "open14": "Dosiye zifunguye, iminsi 14 ishize",
+      "month": "Iminsi 30 ishize"
+    },
+    "command": {
+      "hello": "Muraho, {name}",
+      "next": "Igikurikira",
+      "clear": "Byose biratunganye: nta gitegereje",
+      "waiting": "bitegereje",
+      "slice": {
+        "overdue": "Byarengeje igihe",
+        "queue": "Dosiye zanjye",
+        "decisions": "Ibyemezo",
+        "register": "Igitabo",
+        "configuration": "Igenamiterere"
+      },
+      "hint": "Hitamo igice ujyeyo",
+      "act": {
+        "overdue": "Suzuma {count} zarengeje igihe",
+        "queue": "Fungura dosiye zanjye {count}",
+        "decisions": "Fata ibyemezo ku dosiye {count}",
+        "register": "Suzuma impinduka {count} z'igitabo",
+        "configuration": "Suzuma impinduka {count} zitegereje"
+      }
+    },
+    "live": {
+      "label": "Ako kanya",
+      "now": "ubu nyine",
+      "ago": "amasegonda {seconds} ashize",
+      "refresh": "Vugurura"
+    },
+    "flow": {
+      "title": "Urujya n'uruza",
+      "in": "Byinjiye",
+      "out": "Byafashweho icyemezo",
+      "range": "Igihe",
+      "days": "iminsi {count}",
+      "growing": "Ibitegereje +{count}",
+      "shrinking": "Ibitegereje −{count}",
+      "steady": "Ibitegereje ntibihinduka",
+      "adviceGrowing": "Dosiye ziza ziruta izifatirwa ibyemezo.",
+      "adviceSteady": "Ibyemezo bijyana n'umuvuduko w'izinjira.",
+      "assign": "Gabanya dosiye zitarahabwa umukozi",
+      "newest": "Reba izatanzwe vuba"
+    },
+    "pipeline": {
+      "title": "Inzira",
+      "open": "zifunguye",
+      "week": "byafashweho icyemezo · iminsi 7",
+      "detail": "Dosiye ziri kuri iki cyiciro",
+      "files": "Dosiye",
+      "share": "Igipimo",
+      "avgWait": "Igihe cyo gutegereza",
+      "oldest": "Izimaze igihe kirekire"
+    },
+    "sla": {
+      "title": "Igihe ntarengwa",
+      "overdue": "Byarengeje igihe",
+      "dueSoon": "Mu minsi 2",
+      "dueWeek": "Muri iki cyumweru",
+      "onTrack": "Ku gihe",
+      "onTime": "ku gihe",
+      "detail": "Dosiye zarengeje igihe cyane",
+      "none": "Nta cyarengeje igihe."
+    },
+    "decisions": {
+      "title": "Ibyemezo",
+      "approved": "byemejwe",
+      "window": "{count, plural, one {icyemezo #} other {ibyemezo #}} · iminsi 30"
+    },
+    "activity": {
+      "title": "Ibikorwa",
+      "total": "ibikorwa {count} · iminsi 30",
+      "less": "Bike",
+      "more": "Byinshi",
+      "open": "Igenzura",
+      "hint": "Hitamo umunsi urebe ibikorwa byawo"
+    },
+    "security": {
+      "title": "Umutekano",
+      "twoStep": "intambwe ebyiri",
+      "protected": "Birinzwe",
+      "unprotected": "Nta ntambwe ebyiri",
+      "accounts": "Konti",
+      "sessions": "Abinjiye ubu",
+      "new": "Nshya · iminsi 7",
+      "details": "Ibisobanuro",
+      "byRole": "Konti ku nshingano",
+      "open": "Uburenganzira",
+      "openPeople": "Fungura abantu",
+      "remind": "Reba abadafite intambwe ebyiri",
+      "hint": "Hitamo igice urebe abo ari bo"
+    },
+    "actions": {
+      "reviewOverdue": "Suzuma dosiye zarengeje igihe",
+      "planDue": "Tegura dosiye zegereje igihe",
+      "allOpen": "Reba dosiye zose zifunguye",
+      "openReports": "Fungura raporo",
+      "viewStage": "Fungura {count, plural, one {iyi dosiye} other {izi dosiye #}}"
+    },
+    "hint": {
+      "select": "Hitamo igice ukore igikorwa"
+    },
+    "guide": {
+      "title": "Kora ubu",
+      "overdue": "Dosiye {count} zarengeje igihe ntarengwa",
+      "dueSoon": "Dosiye {count} zigomba kurangira mu minsi 2",
+      "decisions": "Ibyemezo {count} biragutegereje",
+      "backlog": "Ibitegereje byiyongereyeho {count} muri iki cyumweru",
+      "applicants": "Dosiye {count} zitegereje abasaba",
+      "twoStep": "Konti {share}% gusa ni zo zikoresha intambwe ebyiri",
+      "clear": "Byose biri ku murongo. Nta kigukeneye ubu."
     }
   }
 }

@@ -6,11 +6,12 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useStepUp } from "@/components/security/step-up";
+import { ATTENTION_DOT, ICON_TILE, LIST_GROUP, LIST_ROW } from "@/components/admin/surfaces";
 import { Alert } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, FieldControl } from "@/components/ui/field";
 import { inputClass } from "@/components/ui/input";
+import { PANEL } from "@/components/ui/surface";
 import { useErrorMessage } from "@/hooks/use-error-message";
 import { cn } from "@/lib/utils";
 import { decideConfigAction } from "@/server/actions/backoffice";
@@ -70,41 +71,49 @@ export function PendingConfigCard({
       router.refresh();
     });
 
+  const needsYou = canApprove && !isOwn;
+
   return (
     <section
       aria-labelledby="pending-config-title"
-      className="flex animate-rise flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
+      className={cn("flex animate-rise flex-col gap-4", PANEL)}
       data-testid="pending-config"
     >
       <div className="flex flex-wrap items-start gap-3">
-        <span className="text-warning-strong inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-warning-soft">
-          <Hourglass className="size-5" aria-hidden />
+        <span className={cn(ICON_TILE, "relative")} aria-hidden>
+          <Hourglass />
+          <span className={cn(ATTENTION_DOT, "absolute -top-0.5 -right-0.5 ring-2 ring-card")} />
         </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 id="pending-config-title" className="text-lg">
-              {t("title", { version })}
-            </h2>
-            <Badge variant="warning">{t("badge")}</Badge>
-          </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-[0.7rem] font-bold tracking-widest text-link uppercase">
+            {needsYou ? t("needsYou") : t("badge")}
+          </span>
+          <h2 id="pending-config-title" className="text-lg">
+            {t("title", { version })}
+          </h2>
           <p className="text-xs text-muted-foreground">
             {effectiveLabel} · {makerLine}
           </p>
         </div>
       </div>
 
-      <p className="rounded-2xl bg-surface-2 px-4 py-3 text-sm break-words">{reason}</p>
+      <p className="rounded-2xl bg-primary/[0.04] px-4 py-3 text-sm break-words dark:bg-white/[0.03]">
+        {reason}
+      </p>
 
       <div className="flex flex-col gap-2">
         <h3 className="text-sm font-semibold">{t("changes", { count: diff.length })}</h3>
         {diff.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("noChanges")}</p>
         ) : (
-          <ul className="flex flex-col overflow-hidden rounded-2xl border">
+          <ul className={LIST_GROUP}>
             {diff.map((row) => (
               <li
                 key={row.key}
-                className="flex flex-col gap-1 border-b px-4 py-2.5 text-sm last:border-b-0 sm:flex-row sm:items-center sm:gap-3"
+                className={cn(
+                  "flex flex-col gap-1 text-sm @xl/main:flex-row @xl/main:items-center @xl/main:gap-3",
+                  LIST_ROW,
+                )}
               >
                 <span className="min-w-0 flex-1 font-medium">{row.label}</span>
                 <span className="inline-flex flex-wrap items-center gap-2 num">
@@ -113,7 +122,7 @@ export function PendingConfigCard({
                     {row.before}
                   </span>
                   <ArrowRight className="size-3.5 text-muted-foreground" aria-hidden />
-                  <span className="font-semibold text-primary">
+                  <span className="rounded-md bg-primary-soft px-1.5 font-semibold text-link">
                     <span className="sr-only">{t("after")} </span>
                     {row.after}
                   </span>
@@ -132,8 +141,8 @@ export function PendingConfigCard({
 
       {canApprove &&
         (isOwn ? (
-          <p className="text-warning-strong inline-flex items-center gap-1.5 text-sm font-semibold">
-            <ShieldAlert className="size-4" aria-hidden /> {t("ownProposal")}
+          <p className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+            <ShieldAlert className="size-4 text-link" aria-hidden /> {t("ownProposal")}
           </p>
         ) : (
           <div className="flex flex-col gap-3">
@@ -149,10 +158,20 @@ export function PendingConfigCard({
               </FieldControl>
             </Field>
             <div className="flex flex-wrap justify-end gap-2">
-              <Button variant="outline" disabled={pending} onClick={() => decide(false)}>
+              <Button
+                variant="outline"
+                className="rounded-full"
+                disabled={pending}
+                onClick={() => decide(false)}
+              >
                 <X /> {t("reject")}
               </Button>
-              <Button loading={pending} onClick={() => decide(true)} data-testid="approve-config">
+              <Button
+                className="rounded-full"
+                loading={pending}
+                onClick={() => decide(true)}
+                data-testid="approve-config"
+              >
                 <Check /> {t("approve")}
               </Button>
             </div>

@@ -59,7 +59,7 @@ export function PageHero({
         <div className={cn("flex flex-col gap-2", center && "items-center")}>
           <h1
             className={cn(
-              "animate-rise leading-[1.08] font-bold tracking-[-0.03em] text-balance",
+              "animate-rise leading-[1.08] font-bold tracking-[-0.02em] text-balance",
               compact
                 ? "text-[clamp(1.6rem,1.2rem+1.4vw,2.3rem)]"
                 : "text-[clamp(1.9rem,1.3rem+2vw,3rem)]",

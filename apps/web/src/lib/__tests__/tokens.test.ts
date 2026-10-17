@@ -37,6 +37,8 @@ const TEXT_PAIRS: [string, string][] = [
   ["muted-foreground", "background"],
   ["muted-foreground", "card"],
   ["muted-foreground", "muted"],
+  // Sidebar section labels (ADR-011 v4).
+  ["muted-foreground", "sidebar"],
   ["muted-foreground", "surface-3"],
   ["link", "background"],
   ["link", "card"],

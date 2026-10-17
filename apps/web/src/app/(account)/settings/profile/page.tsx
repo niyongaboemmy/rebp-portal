@@ -7,7 +7,7 @@ import { requireUser, safeNextPath } from "@/server/auth/guards";
 import { db } from "@/server/db";
 import type { DocumentType } from "@rebp/contracts";
 import { listProfileDocuments } from "@/server/profile/documents";
-import { needsProfile, profileContext, profileOf } from "@/server/profile/profile";
+import { keepsProfile, profileContext, profileOf } from "@/server/profile/profile";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("profile"))("title") };
@@ -19,8 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function ProfilePage({ searchParams }: PageProps<"/settings/profile">) {
   const { user } = await requireUser({ allowIncompleteProfile: true });
-  // Organisations and staff have no personal profile to keep.
-  if (!needsProfile(user)) redirect("/settings/security");
+  // Every person keeps a profile, staff included; organisations have none.
+  if (!keepsProfile(user)) redirect("/settings/security");
   const query = await searchParams;
   const welcome = query.welcome === "1";
   const next = safeNextPath(typeof query.next === "string" ? query.next : null);

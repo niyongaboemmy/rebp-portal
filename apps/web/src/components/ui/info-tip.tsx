@@ -54,10 +54,10 @@ export function InfoTip({
             collisionPadding={12}
             onPointerEnter={() => hover(true)}
             onPointerLeave={() => hover(false)}
-            className="z-50 max-w-72 animate-popover-in rounded-2xl bg-foreground px-3.5 py-2.5 text-xs leading-relaxed font-medium text-background shadow-lg outline-none [animation-duration:var(--dur-2)]"
+            className="z-50 max-w-72 animate-popover-in rounded-2xl bg-foreground px-3.5 py-2.5 text-xs leading-relaxed font-medium text-background shadow-lg outline-none [animation-duration:var(--dur-2)] dark:bg-popover dark:text-foreground dark:shadow-(--overlay)"
           >
             {children}
-            <Popover.Arrow className="fill-foreground" />
+            <Popover.Arrow className="fill-foreground dark:fill-popover" />
           </Popover.Content>
         </Popover.Portal>
       </Popover.Root>

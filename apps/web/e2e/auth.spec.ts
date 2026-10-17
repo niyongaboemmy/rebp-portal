@@ -182,7 +182,11 @@ test("staff must set up two-step before using the back office", async ({ page })
   await expect(page).toHaveURL(/\/settings\/security\?setup=required/);
   await page.goto("/backoffice");
   await expect(page).toHaveURL(/\/settings\/security\?setup=required/);
-  await expect(page.getByText("Your role requires two-step verification").first()).toBeVisible();
+  await expect(
+    page.getByText("Two-step verification is required for your role").first(),
+  ).toBeVisible();
+  // The guided start offers the methods directly (UX: no dead-end warning).
+  await expect(page.getByRole("link", { name: /Set it up now/ })).toBeVisible();
 
   await page.getByTestId("mfa-email").getByRole("button", { name: "Set up" }).click();
   await page.getByRole("button", { name: "Send code" }).click();

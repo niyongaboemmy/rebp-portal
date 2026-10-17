@@ -90,7 +90,7 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
             <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.6rem] bg-card shadow-[0_14px_30px_-14px_oklch(0.5_0.12_75/0.45)] dark:bg-white/[0.06]">
               <RefreshCw className="size-10" aria-hidden />
             </span>
-            <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.03em]">
+            <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.02em]">
               {t("verification.replacedTitle")}
             </h1>
             <p className="max-w-md text-sm text-foreground">
@@ -124,7 +124,7 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
             <span className="inline-flex size-20 animate-pop items-center justify-center rounded-[1.6rem] bg-card shadow-[0_14px_30px_-14px_oklch(0.4_0.15_25/0.45)] dark:bg-white/[0.06]">
               <SearchX className="size-10" aria-hidden />
             </span>
-            <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.03em]">
+            <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.02em]">
               {t("check.notFound")}
             </h1>
             <p className="font-mono text-lg font-semibold num text-foreground">{value}</p>
@@ -222,7 +222,7 @@ export default async function CheckPage({ params }: PageProps<"/check/[number]">
           <p className="text-sm font-bold tracking-widest uppercase">
             {t(`verification.verdict.${entry.status}`)}
           </p>
-          <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.03em] text-foreground">
+          <h1 className="text-[clamp(1.75rem,1.4rem+2vw,3rem)] leading-tight font-bold tracking-[-0.02em] text-foreground">
             {entry.displayName}
           </h1>
           <p className="text-base font-semibold text-foreground">

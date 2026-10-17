@@ -23,3 +23,23 @@ Custom, server-side session authentication (no hosted IdP in the pilot):
 - Passkeys (FR-ACC-005) and national SSO (FR-ACC-006) are deferred; an OIDC IdP (Keycloak) remains an R2 option.
 - The in-memory rate limiter assumes one instance; replace it before scaling out.
 - The CSP still allows inline scripts; nonce-based CSP is an R2 hardening item.
+
+## Amendment (2026-10-17): Google sign-in with an ID token, no client secret
+
+The organisation's Google OAuth client is shared with another product that uses Google Identity Services and only the
+client ID. The portal now uses the same model, which serves FR-ACC-006 (federated login).
+
+- **Browser:** `GoogleSignInButton` renders Google's own button through `accounts.google.com/gsi/client`, in popup mode
+  with FedCM. Before rendering, it fetches a one-time nonce from `POST /api/auth/google/nonce`, which stores a 10-minute
+  httpOnly copy in a cookie.
+- **Server:** `POST /api/auth/google/id-token` checks same-origin and the rate limit (`googleSignIn`, 20 per 15 min),
+  then consumes the nonce cookie. `verifyGoogleIdToken` checks the RS256 signature against Google's JWKS, which is
+  cached per Cache-Control and refetched once for an unknown `kid`. It also checks the issuer, the audience (must equal
+  `GOOGLE_CLIENT_ID`), expiry with 60 s skew, and the nonce. No package was added: the check uses `node:crypto`.
+- **Account rules are unchanged:** the identity goes through `handleGoogleIdentity`. A verified email is required,
+  there is never a silent merge into a password account, MFA still applies, and linking still needs a recent password
+  confirmation (SEC-005).
+- **Configuration:** only `GOOGLE_CLIENT_ID` is required. Every site address must be listed in the client's
+  "Authorised JavaScript origins". The Arctic redirect flow (`/api/auth/google` with its callback) stays for deployments
+  that also set `GOOGLE_CLIENT_SECRET`, but the UI no longer links to it.
+- **CSP:** `script-src`, `style-src`, `connect-src` and `frame-src` allow `https://accounts.google.com/gsi/…` only.

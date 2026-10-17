@@ -88,10 +88,18 @@ export function SkeletonHero({
 /** The PageHeader's shape inside the app shell. */
 export function SkeletonPageHeader() {
   return (
-    <div className="flex flex-col gap-2.5" aria-hidden>
-      <Skeleton className="h-9 w-2/3 max-w-sm rounded-xl" />
-      <Skeleton className="h-2 w-24 rounded-full" />
-      <Skeleton className="h-4 w-1/2 max-w-md" />
+    // The hero header's shape (UX-032): eyebrow, title, a line and stats, the companion's disc.
+    <div
+      className="flex items-center gap-4 rounded-[1.75rem] bg-card/60 p-5 ring-1 ring-primary/[0.06] sm:p-7 dark:bg-surface-2/50 dark:ring-white/[0.05]"
+      aria-hidden
+    >
+      <div className="flex flex-1 flex-col gap-2.5">
+        <Skeleton className="h-3 w-28" />
+        <Skeleton className="h-9 w-2/3 max-w-sm rounded-xl" />
+        <Skeleton className="h-4 w-1/2 max-w-md" />
+        <Skeleton className="h-4 w-2/5 max-w-xs" />
+      </div>
+      <Skeleton className="hidden size-28 rounded-full @lg/main:block" />
     </div>
   );
 }

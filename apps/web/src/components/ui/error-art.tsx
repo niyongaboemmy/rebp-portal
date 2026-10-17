@@ -9,7 +9,7 @@ export function ErrorArt({ code }: { code: string }) {
       className="relative isolate flex animate-pop items-center justify-center px-6 py-2"
     >
       <div className="absolute inset-0 -z-10 rounded-full bg-primary/10 blur-2xl" />
-      <span className="bg-gradient-to-br from-primary via-sky to-primary bg-clip-text text-[clamp(4.5rem,3rem+8vw,8rem)] leading-none font-black num tracking-tighter text-transparent">
+      <span className="bg-gradient-to-br from-primary via-sky to-primary bg-clip-text text-[clamp(4.5rem,3rem+8vw,8rem)] leading-none font-black num tracking-tight text-transparent">
         {code}
       </span>
     </div>

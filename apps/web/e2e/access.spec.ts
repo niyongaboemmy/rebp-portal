@@ -63,6 +63,14 @@ test.afterAll(async () => {
   await db.$disconnect();
 });
 
+/** Opens a person's sheet once the streamed list has replaced its placeholder (one row each). */
+async function openPerson(page: Page, email: string) {
+  await expect(page.locator('div[hidden][id^="S:"]')).toHaveCount(0);
+  const row = page.getByTestId(`person-${email}`);
+  await expect(row).toHaveCount(1);
+  await row.click();
+}
+
 test("admin finds a person, previews the impact and changes their roles", async ({ page }) => {
   const email = await createPerson("Rbac Tester");
   await signInWithEmailCode(page, ADMIN);
@@ -104,7 +112,7 @@ test("admin finds a person, previews the impact and changes their roles", async 
 test("admin cannot edit their own access", async ({ page }) => {
   await signInWithEmailCode(page, ADMIN);
   await page.goto("/backoffice/access?q=admin%40demo");
-  await page.getByTestId(`person-${ADMIN}`).click();
+  await openPerson(page, ADMIN);
   const sheet = page.getByTestId("manage-access");
   await expect(sheet.getByText("You can't change your own access.")).toBeVisible();
   await expect(sheet.getByTestId("role-toggle-AUDITOR")).toBeDisabled();
@@ -123,7 +131,7 @@ test("disabling an account signs the person out and blocks sign-in", async ({ pa
 
   await signInWithEmailCode(page, ADMIN);
   await page.goto(`/backoffice/access?q=${encodeURIComponent(email)}`);
-  await page.getByTestId(`person-${email}`).click();
+  await openPerson(page, email);
   const sheet = page.getByTestId("manage-access");
   await sheet.getByLabel("Reason (optional)").fill("Left the firm");
   await sheet.getByRole("button", { name: "Disable account" }).click();
@@ -154,6 +162,8 @@ test("disabling an account signs the person out and blocks sign-in", async ({ pa
 test("admin edits the permission matrix; guard-rails block unsafe changes", async ({ page }) => {
   await signInWithEmailCode(page, ADMIN);
   await page.goto("/backoffice/access?tab=roles");
+  // The matrix streams in: wait until React has replaced its placeholder copy.
+  await expect(page.locator('div[hidden][id^="S:"]')).toHaveCount(0);
   const matrix = page.getByTestId("permission-matrix");
   await expect(matrix).toBeVisible();
 
@@ -196,6 +206,7 @@ test("admin edits the permission matrix; guard-rails block unsafe changes", asyn
 test("auditors get a read-only view", async ({ page }) => {
   await signInWithEmailCode(page, "auditor@demo.rebp.rw");
   await page.goto("/backoffice/access?tab=roles");
+  await expect(page.locator('div[hidden][id^="S:"]')).toHaveCount(0);
   await expect(
     page.getByText("Read-only: your role can view access but not change it."),
   ).toBeVisible();

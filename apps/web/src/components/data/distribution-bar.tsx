@@ -6,16 +6,19 @@ export interface Segment {
   value: number;
 }
 
-/** Categorical slots in fixed order (never cycled): series n always gets --chart-n. */
+/**
+ * Categorical slots in fixed order (never cycled), all in the primary family (UX-033): series are
+ * told apart by lightness, a 2 px gap and the legend's text, never by a rainbow of hues.
+ */
 const SLOT_BG = [
-  "bg-chart-1",
-  "bg-chart-2",
-  "bg-chart-3",
-  "bg-chart-4",
-  "bg-chart-5",
-  "bg-chart-6",
-  "bg-chart-7",
-  "bg-chart-8",
+  "bg-primary",
+  "bg-sky",
+  "bg-primary/55",
+  "bg-sky/55",
+  "bg-primary/30",
+  "bg-sky/30",
+  "bg-primary/80",
+  "bg-primary/15",
 ];
 
 /**
@@ -35,7 +38,7 @@ export function DistributionBar({
   const total = segments.reduce((sum, s) => sum + s.value, 0);
   const visible = segments.slice(0, 8);
   return (
-    <figure className={cn("flex flex-col gap-3", className)}>
+    <figure className={cn("relative flex min-w-0 flex-col gap-3", className)}>
       <div
         className={cn(
           "flex h-3 w-full gap-0.5 overflow-hidden rounded-full",
@@ -64,21 +67,24 @@ export function DistributionBar({
           <li key={s.key} className="flex min-w-0 items-center gap-2">
             <span className={cn("size-2.5 shrink-0 rounded-full", SLOT_BG[i])} />
             <span className="truncate text-muted-foreground">{s.label}</span>
-            <span className="ml-auto font-semibold num">{s.value}</span>
+            <span className="ml-auto font-semibold num">{s.value.toLocaleString("en-US")}</span>
           </li>
         ))}
       </ul>
-      <table className="sr-only">
-        <caption>{label}</caption>
-        <tbody>
-          {visible.map((s) => (
-            <tr key={s.key}>
-              <th scope="row">{s.label}</th>
-              <td>{s.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Tables ignore sr-only's 1px width; the wrapper clips it (UX-035). */}
+      <div className="sr-only">
+        <table>
+          <caption>{label}</caption>
+          <tbody>
+            {visible.map((s) => (
+              <tr key={s.key}>
+                <th scope="row">{s.label}</th>
+                <td>{s.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

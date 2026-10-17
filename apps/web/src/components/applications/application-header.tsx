@@ -13,12 +13,15 @@ export function ApplicationHeader({
   reference,
   actions,
   back,
+  leading,
 }: {
   title: string;
   typeLine: string;
   reference: string;
   actions?: React.ReactNode;
   back?: { href: string; label: string };
+  /** Before the title, e.g. the applicant's photo on staff consoles (UX-035). */
+  leading?: React.ReactNode;
 }) {
   return (
     <header className="-mb-2 flex flex-col gap-2">
@@ -35,11 +38,14 @@ export function ApplicationHeader({
         </Link>
       )}
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h1 className="text-xl font-bold tracking-[-0.02em] @2xl/main:text-2xl">{title}</h1>
-          <span className="text-sm text-muted-foreground">
-            {typeLine} · <span className="font-mono text-xs whitespace-nowrap">{reference}</span>
-          </span>
+        <div className="flex min-w-0 items-center gap-3.5">
+          {leading}
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h1 className="text-xl font-bold tracking-[-0.02em] @2xl/main:text-2xl">{title}</h1>
+            <span className="text-sm text-muted-foreground">
+              {typeLine} · <span className="font-mono text-xs whitespace-nowrap">{reference}</span>
+            </span>
+          </div>
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>

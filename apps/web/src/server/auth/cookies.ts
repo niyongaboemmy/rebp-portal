@@ -13,6 +13,8 @@ export const COOKIE = {
   oauthState: () => name("rebp_oauth_state"),
   oauthVerifier: () => name("rebp_oauth_verifier"),
   oauthIntent: () => name("rebp_oauth_intent"),
+  /** One-time nonce bound into the Google ID token (replay protection). */
+  oauthNonce: () => name("rebp_oauth_nonce"),
 };
 
 const base = () => ({

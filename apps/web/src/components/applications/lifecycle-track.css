@@ -1,0 +1,63 @@
+/* UX-036: the journey's lines flow. Done stretches carry a light travelling along them (the work
+   has passed here); the stretch after the current step shows dashes drifting forward (where the
+   file goes next). Infinite and gentle; still under reduced motion. */
+.lt-flow {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, white 75%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  animation: lt-flow 2.4s linear infinite;
+}
+@keyframes lt-flow {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
+}
+.lt-ahead {
+  background-image: repeating-linear-gradient(90deg, var(--primary) 0 6px, transparent 6px 12px);
+  background-size: 24px 100%;
+  opacity: 0.45;
+  animation: lt-ahead 0.9s linear infinite;
+}
+@keyframes lt-ahead {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 24px 0;
+  }
+}
+/* A spark that rides the line into the current step. */
+.lt-spark {
+  animation: lt-spark 2.4s var(--ease-standard) infinite;
+}
+@keyframes lt-spark {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lt-flow,
+  .lt-ahead,
+  .lt-spark {
+    animation: none !important;
+  }
+}

@@ -39,7 +39,9 @@ export function BarList({
               <span className="truncate">{item.label}</span>
             </span>
           </div>
-          <span className="w-10 text-right text-sm font-semibold num">{item.value}</span>
+          <span className="min-w-10 text-right text-sm font-semibold num">
+            {item.value.toLocaleString("en-US")}
+          </span>
         </li>
       ))}
     </ul>

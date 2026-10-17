@@ -1,10 +1,11 @@
 import { Skeleton, SkeletonPageHeader, SkeletonStat } from "@/components/ui/skeleton";
 
-/** Back office overview: header, four stat tiles, then the work queues. */
+/** Back office overview (UX-032): the hero, the pipeline, four stat tiles, then the charts. */
 export default function BackofficeLoading() {
   return (
     <div className="flex flex-col gap-6" aria-busy data-route-loading>
       <SkeletonPageHeader />
+      <Skeleton className="h-44 rounded-[1.75rem]" />
       <div className="grid gap-4 sm:grid-cols-2 @3xl/main:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <SkeletonStat key={i} />

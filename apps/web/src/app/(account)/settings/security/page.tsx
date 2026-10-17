@@ -1,4 +1,4 @@
-import { Download } from "@/components/icons";
+import { ArrowDown, Download } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -24,7 +24,7 @@ import { requireUser } from "@/server/auth/guards";
 import { remainingRecoveryCodes } from "@/server/auth/mfa";
 import { listActiveSessions } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { isGoogleEnabled } from "@/server/env";
+import { env, isGoogleEnabled } from "@/server/env";
 import { SettingsTabs } from "@/components/layout/settings-tabs";
 import { HeroCompanion, SettingsHero } from "@/components/layout/settings-hero";
 import { AccountAvatar } from "@/components/profile/account-avatar";
@@ -98,7 +98,17 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
       <SettingsTabs current="security" />
 
       {params.setup === "required" && mfaRequired && user.mfaMethods.length === 0 && (
-        <Alert variant="warning">{t("requiredBanner")}</Alert>
+        // Says what is required and takes the user straight to where it is done.
+        <Alert variant="warning" title={t("requiredTitle")}>
+          <span className="flex flex-col items-start gap-2">
+            {t("requiredShort")}
+            <Button asChild size="sm" className="rounded-full">
+              <a href="#two-step" className="text-primary-foreground! no-underline!">
+                {t("requiredCta")} <ArrowDown aria-hidden />
+              </a>
+            </Button>
+          </span>
+        </Alert>
       )}
       {params.linked === "google" && <Alert variant="success">{t("linked")}</Alert>}
       {error && (
@@ -134,6 +144,7 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
             linked: Boolean(google),
             email: google?.email ?? null,
             available: isGoogleEnabled(),
+            clientId: env().GOOGLE_CLIENT_ID ?? null,
           }}
         />
         <ContactCard

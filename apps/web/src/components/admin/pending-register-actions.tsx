@@ -6,9 +6,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import type { LicenseStatus, RegisterAction } from "@rebp/contracts";
+import { ATTENTION_DOT, LIST_GROUP, LIST_ROW } from "@/components/admin/surfaces";
 import { LicenceStatusBadge } from "@/components/applications/status-badges";
 import { Alert } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -46,32 +46,46 @@ export function PendingRegisterActions({
 
   return (
     <>
-      <ul className="flex flex-col gap-2.5" data-testid="pending-register-actions">
+      <ul className={LIST_GROUP} data-testid="pending-register-actions">
         {rows.map((row, index) => {
           const own = row.makerId === currentUserId;
           return (
             <li
               key={row.id}
-              className="flex animate-rise flex-col gap-3 rounded-2xl border bg-card p-4 raised sm:flex-row sm:items-start"
+              className={cn(
+                "flex animate-rise flex-col gap-3 @xl/main:flex-row @xl/main:items-center",
+                LIST_ROW,
+                "py-3.5",
+              )}
               style={{ animationDelay: `${index * 40}ms` }}
             >
-              <span className="text-warning-strong inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-warning-soft">
+              <span
+                className={cn(
+                  "relative hidden size-10 shrink-0 items-center justify-center rounded-xl @md/main:inline-flex",
+                  row.action === "REVOKE"
+                    ? "bg-danger-soft text-destructive"
+                    : "bg-primary-soft text-primary-soft-foreground",
+                )}
+              >
                 <Hourglass className="size-5" aria-hidden />
+                <span
+                  aria-hidden
+                  className={cn(ATTENTION_DOT, "absolute -top-0.5 -right-0.5 ring-2 ring-card")}
+                />
               </span>
-              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span aria-hidden className={cn(ATTENTION_DOT, "@md/main:hidden")} />
                   <span className="font-semibold">
                     {t(`actions.${row.action as RegisterAction}.title`)}
                   </span>
-                  <Badge variant="warning">{t("pending.awaiting")}</Badge>
-                </div>
-                <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
-                  <span className="font-mono">{row.licence.licenceNo}</span>
-                  <span className="text-muted-foreground">·</span>
-                  <span className="min-w-0 truncate">{row.licence.displayName}</span>
+                  <span className="font-mono text-sm text-muted-foreground">
+                    {row.licence.licenceNo}
+                  </span>
                   <LicenceStatusBadge status={row.licence.status as LicenseStatus} />
-                </p>
-                <p className="text-sm break-words text-foreground/80">{row.reason}</p>
+                </div>
+                <p className="truncate text-sm font-medium">{row.licence.displayName}</p>
+                <p className="text-sm break-words text-muted-foreground">{row.reason}</p>
                 <p className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
                   <span className="font-mono">
                     {t("detail.reference", { reference: row.reference })}
@@ -92,8 +106,14 @@ export function PendingRegisterActions({
                   </span>
                 </p>
                 {own && canDecide && (
-                  <p className="text-warning-strong inline-flex items-center gap-1.5 text-xs font-semibold">
-                    <ShieldAlert className="size-3.5" aria-hidden /> {t("pending.ownProposal")}
+                  <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                    <ShieldAlert className="size-3.5 text-link" aria-hidden />{" "}
+                    {t("pending.ownProposal")}
+                  </p>
+                )}
+                {!canDecide && (
+                  <p className="text-xs font-medium text-muted-foreground">
+                    {t("pending.awaiting")}
                   </p>
                 )}
               </div>
@@ -102,6 +122,7 @@ export function PendingRegisterActions({
                   <Button
                     size="sm"
                     variant="outline"
+                    className="rounded-full"
                     disabled={own}
                     onClick={() => setDeciding({ row, approve: false })}
                   >
@@ -109,6 +130,7 @@ export function PendingRegisterActions({
                   </Button>
                   <Button
                     size="sm"
+                    className="rounded-full"
                     disabled={own}
                     onClick={() => setDeciding({ row, approve: true })}
                     data-testid={`approve-register-${row.licence.licenceNo}`}

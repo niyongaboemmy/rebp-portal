@@ -33,7 +33,7 @@ export function SheetContent({
       <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-black/45 backdrop-blur-[2px] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
       <SheetPrimitive.Content
         className={cn(
-          "fixed z-50 flex flex-col gap-4 overflow-y-auto bg-popover p-4 shadow-3 duration-(--dur-4) ease-enter data-[state=closed]:animate-out data-[state=closed]:duration-(--dur-2) data-[state=open]:animate-in",
+          "fixed z-50 flex flex-col gap-4 overflow-y-auto bg-popover p-4 shadow-(--overlay-drop) duration-(--dur-4) ease-enter data-[state=closed]:animate-out data-[state=closed]:duration-(--dur-2) data-[state=open]:animate-in",
           SIDES[side],
           className,
         )}

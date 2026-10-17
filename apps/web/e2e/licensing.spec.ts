@@ -332,9 +332,12 @@ test("officer reviews and signs; the approver decides; the licence verifies publ
     .click();
   await page.waitForURL(/\/backoffice\/review\//);
   await revealed(page);
-  if (await page.getByRole("button", { name: "Assign to me" }).isVisible())
-    await page.getByRole("button", { name: "Assign to me" }).click();
+  // The next step floats at the bottom right (UX-036): Assign to me, then Start review.
+  const assignToMe = page.getByRole("button", { name: "Assign to me" });
+  await expect(assignToMe.or(page.getByRole("button", { name: "Start review" }))).toBeVisible();
+  if (await assignToMe.isVisible()) await assignToMe.click();
   await page.getByRole("button", { name: "Start review" }).click();
+  await page.getByRole("tab", { name: /Review/ }).click();
   // Section L: record each verification (FSLA has no experience requirement → not applicable).
   for (const item of ["identity", "education", "trainingExam", "affiliation", "integrity"])
     await page.getByTestId(`check-${item}-VERIFIED`).click();
@@ -344,7 +347,6 @@ test("officer reviews and signs; the approver decides; the licence verifies publ
     .getByRole("button", { name: /^Approve/ })
     .click();
   await page.getByRole("button", { name: "Sign review" }).first().click();
-  await page.getByLabel("Your password").fill(PASSWORD);
   await page.getByRole("dialog").getByRole("button", { name: "Sign review" }).click();
   await expect
     .poll(async () => (await db.application.findUniqueOrThrow({ where: { id: app.id } })).status, {
@@ -356,8 +358,8 @@ test("officer reviews and signs; the approver decides; the licence verifies publ
   await page.goto(`/backoffice/decisions/${app.id}`);
   await revealed(page);
   await page.getByTestId("decision-APPROVED").check();
-  await page.getByLabel("Your password").fill(PASSWORD);
-  await page.getByRole("button", { name: "Sign decision" }).click();
+  await page.getByTestId("sign-decision").click();
+  await page.getByTestId("confirm-sign-decision").click();
   await expect(page.getByText("Decision recorded")).toBeVisible({ timeout: 20_000 });
 
   const licence = await db.licence.findFirstOrThrow({ where: { applicationId: app.id } });

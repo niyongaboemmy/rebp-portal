@@ -27,7 +27,7 @@ export default async function SignUpPage() {
         </>
       }
     >
-      <GoogleButton enabled={isGoogleEnabled()} />
+      <GoogleButton enabled={isGoogleEnabled()} context="signup" />
       <OrDivider />
       <SignUpForm />
     </AuthCard>

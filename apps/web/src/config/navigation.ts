@@ -66,6 +66,8 @@ export interface NavItem {
   tab?: boolean;
   /** Count shown next to the item when something is waiting. */
   badge?: NavBadgeKey;
+  /** Profile: people only (not organisations). CV: individual applicants only. */
+  audience?: "person" | "applicant";
 }
 
 export type NavSectionLabel =
@@ -118,6 +120,8 @@ export const BACKOFFICE_SECTIONS = {
     label: "queue",
     icon: Nav.ClipboardCheck,
     capability: "review.perform",
+    // Leads who take over or bulk-assign files see the queue too (the page admits either).
+    alsoFor: ["review.assign"],
     group: "sectionWork",
     milestone: "D4 — WP-3.1/3.2",
   },
@@ -229,9 +233,9 @@ export const BACKOFFICE_NAV: NavSection[] = [
 
 /** Personal settings: reached from the account menu and the command palette, not the main nav. */
 export const ACCOUNT_LINKS: NavItem[] = [
-  { href: "/settings/profile" as Route, label: "profile", icon: UserRound },
+  { href: "/settings/profile" as Route, label: "profile", icon: UserRound, audience: "person" },
   // The applicant's CV: education, training and experience (UX-018).
-  { href: "/settings/cv" as Route, label: "cv", icon: BookUser },
+  { href: "/settings/cv" as Route, label: "cv", icon: BookUser, audience: "applicant" },
   { href: "/settings/security", label: "security", icon: ShieldCheck },
   {
     href: "/settings/access",
@@ -243,8 +247,14 @@ export const ACCOUNT_LINKS: NavItem[] = [
 ];
 
 /** The account links this person may open (My access is for staff). */
-export function accountLinksFor(capabilities: readonly Capability[]): NavItem[] {
-  return ACCOUNT_LINKS.filter((item) => canSee(item, capabilities));
+export function accountLinksFor(
+  capabilities: readonly Capability[],
+  /** Who the person is: every person keeps a profile; only individual applicants a CV. */
+  kind: { person: boolean; applicant: boolean } = { person: true, applicant: true },
+): NavItem[] {
+  return ACCOUNT_LINKS.filter(
+    (item) => canSee(item, capabilities) && (!item.audience || kind[item.audience]),
+  );
 }
 
 /** Each area's home, for the area switcher. */

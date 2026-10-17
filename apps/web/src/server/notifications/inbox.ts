@@ -51,14 +51,19 @@ export async function notify(userId: string, payload: NotifyPayload): Promise<vo
 }
 
 /** Notifies every active user whose roles grant a capability (e.g. checkers for N-100). */
-export async function notifyUsersWithCapability(capability: Capability, payload: NotifyPayload) {
+/** `except`: people who must not get it (BR-091: whoever signed the review can't decide it). */
+export async function notifyUsersWithCapability(
+  capability: Capability,
+  payload: NotifyPayload,
+  except: readonly string[] = [],
+) {
   const matrix = await getPermissionMatrix();
   const roles = (Object.keys(matrix) as Role[]).filter((role) =>
     capabilitiesFor([role], matrix).includes(capability),
   );
   if (roles.length === 0) return;
   const users = await db.user.findMany({
-    where: { roles: { hasSome: roles }, disabledAt: null },
+    where: { roles: { hasSome: roles }, disabledAt: null, id: { notIn: [...except] } },
     select: { id: true },
   });
   for (const user of users) await notify(user.id, payload);

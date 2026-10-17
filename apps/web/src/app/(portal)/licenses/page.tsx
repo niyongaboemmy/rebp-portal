@@ -260,12 +260,12 @@ export default async function LicensesPage({ searchParams }: PageProps<"/license
                     <span
                       aria-hidden
                       className={cn(
-                        "relative isolate inline-flex h-9 w-14 shrink-0 items-end overflow-hidden rounded-lg p-1 text-[0.55rem] font-bold text-white",
+                        "relative isolate inline-flex h-9 w-14 shrink-0 items-end overflow-hidden rounded-lg p-1.5 text-[0.65rem] font-semibold tracking-wider text-white",
                         live ? "bg-brand" : "bg-muted-foreground/60",
                       )}
                     >
                       <span className="absolute inset-0 -z-10 bg-imigongo text-white opacity-[0.12]" />
-                      {CATEGORY_INFO[licence.category].abbreviation}
+                      {CATEGORY_INFO[licence.category].monogram}
                     </span>
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate font-semibold">

@@ -7,6 +7,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { changePasswordSchema } from "@rebp/contracts";
 import { Badge } from "@/components/ui/badge";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -28,7 +29,7 @@ import { useStepUp } from "./step-up";
 interface SignInMethodsCardProps {
   hasPassword: boolean;
   passwordChangedAt: string | null;
-  google: { linked: boolean; email: string | null; available: boolean };
+  google: { linked: boolean; email: string | null; available: boolean; clientId: string | null };
 }
 
 export function SignInMethodsCard({
@@ -99,18 +100,14 @@ export function SignInMethodsCard({
             <Button variant="ghost" size="sm" disabled={busy} onClick={unlink}>
               {t("unlinkGoogle")}
             </Button>
+          ) : google.available && google.clientId ? (
+            // Google's own button: linking returns through the ID-token endpoint (ADR-004).
+            <div className="w-56 shrink-0">
+              <GoogleSignInButton clientId={google.clientId} intent="link" context="use" />
+            </div>
           ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={!google.available}
-              asChild={google.available}
-            >
-              {google.available ? (
-                <a href="/api/auth/google?intent=link">{t("linkGoogle")}</a>
-              ) : (
-                <span>{t("linkGoogle")}</span>
-              )}
+            <Button variant="outline" size="sm" disabled>
+              <span>{t("linkGoogle")}</span>
             </Button>
           )}
         </li>
