@@ -1,7 +1,14 @@
 import type { Route } from "next";
 import { describe, expect, it } from "vitest";
 import { applyOverrides, capabilitiesFor, type PermissionMatrix, type Role } from "@rebp/contracts";
-import { isActivePath, mobileTabs, navForArea } from "../navigation";
+import {
+  activeItem,
+  canSwitchArea,
+  isActivePath,
+  mobileTabs,
+  navForArea,
+  paletteDestinations,
+} from "../navigation";
 
 const hrefs = (area: "portal" | "backoffice", roles: Role[], matrix?: PermissionMatrix) =>
   navForArea(area, capabilitiesFor(roles, matrix)).flatMap((s) =>
@@ -12,7 +19,7 @@ describe("role-filtered navigation", () => {
   it("shows applicants only their own areas", () => {
     const links = hrefs("portal", ["APPLICANT"]);
     expect(links).toContain("/dashboard");
-    expect(links).toContain("/settings/security");
+    expect(links).not.toContain("/settings/security");
     expect(links).not.toContain("/confirmations");
     expect(links).not.toContain("/backoffice");
   });
@@ -24,8 +31,10 @@ describe("role-filtered navigation", () => {
     );
   });
 
-  it("links staff to the back office and limits sections by capability", () => {
-    expect(hrefs("portal", ["REVIEWING_OFFICER"])).toContain("/backoffice");
+  it("lets staff switch areas and limits sections by capability", () => {
+    expect(canSwitchArea(capabilitiesFor(["REVIEWING_OFFICER"]))).toBe(true);
+    expect(canSwitchArea(capabilitiesFor(["APPLICANT"]))).toBe(false);
+    expect(hrefs("portal", ["REVIEWING_OFFICER"])).not.toContain("/backoffice");
     const officer = hrefs("backoffice", ["REVIEWING_OFFICER"]);
     expect(officer).toContain("/backoffice/queue");
     expect(officer).not.toContain("/backoffice/decisions");
@@ -44,8 +53,58 @@ describe("role-filtered navigation", () => {
     expect(hrefs("backoffice", ["REGISTRAR"], matrix)).not.toContain("/backoffice/reports");
   });
 
-  it("gives everyone the My access page", () => {
-    expect(hrefs("portal", ["APPLICANT"])).toContain("/settings/access");
+  it("keeps account pages and the other area reachable from the command palette", () => {
+    const applicant = paletteDestinations("portal", capabilitiesFor(["APPLICANT"])).map(
+      (i) => i.href as string,
+    );
+    expect(applicant).toContain("/settings/security");
+    expect(applicant).not.toContain("/backoffice");
+    // My access is staff-only.
+    expect(applicant).not.toContain("/settings/access");
+    const officer = paletteDestinations("portal", capabilitiesFor(["REVIEWING_OFFICER"])).map(
+      (i) => i.href as string,
+    );
+    expect(officer).toEqual(expect.arrayContaining(["/backoffice", "/settings/access"]));
+  });
+});
+
+describe("back-office groups (APP_SHELL_PLAN N2)", () => {
+  const groups = (roles: Role[]) =>
+    navForArea("backoffice", capabilitiesFor(roles)).map((s) => [
+      s.label,
+      s.items.map((i) => i.label),
+    ]);
+
+  it("puts daily work first and drops groups a role cannot use", () => {
+    expect(groups(["REVIEWING_OFFICER"])).toEqual([
+      [null, ["overview"]],
+      ["sectionWork", ["queue"]],
+      ["sectionRegistry", ["finance"]],
+      ["sectionInsights", ["reports"]],
+    ]);
+  });
+
+  it("gives auditors insight and access review", () => {
+    const auditor = groups(["AUDITOR"]).map(([label]) => label);
+    expect(auditor).toEqual(expect.arrayContaining(["sectionInsights", "sectionAdmin"]));
+  });
+
+  it("marks consoles with a count source, except reports", () => {
+    const items = navForArea(
+      "backoffice",
+      capabilitiesFor(["SYSTEM_ADMIN", "APPROVING_AUTHORITY"]),
+    ).flatMap((s) => s.items);
+    expect(items.find((i) => i.href === "/backoffice/decisions")?.badge).toBe("decisions");
+    expect(items.find((i) => i.href === "/backoffice/reports")?.badge).toBeUndefined();
+  });
+});
+
+describe("activeItem (breadcrumbs)", () => {
+  it("picks the deepest matching destination", () => {
+    const sections = navForArea("backoffice", capabilitiesFor(["REVIEWING_OFFICER"]));
+    expect(activeItem(sections, "/backoffice/queue")?.label).toBe("queue");
+    expect(activeItem(sections, "/backoffice")?.label).toBe("overview");
+    expect(activeItem(sections, "/backoffice/review/abc")).toBeUndefined();
   });
 });
 

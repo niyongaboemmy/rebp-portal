@@ -62,6 +62,14 @@ const TEXT_PAIRS: [string, string][] = [
   ["info", "info-soft"],
   ["foreground", "sidebar"],
   ["foreground", "sidebar-accent"],
+  ["avatar-1-fg", "avatar-1-bg"],
+  ["avatar-2-fg", "avatar-2-bg"],
+  ["avatar-3-fg", "avatar-3-bg"],
+  ["avatar-4-fg", "avatar-4-bg"],
+  ["avatar-5-fg", "avatar-5-bg"],
+  ["avatar-6-fg", "avatar-6-bg"],
+  ["avatar-7-fg", "avatar-7-bg"],
+  ["avatar-8-fg", "avatar-8-bg"],
 ];
 
 /** UI component boundaries and focus indicators need 3:1 (WCAG 1.4.11). */
@@ -73,6 +81,8 @@ const UI_PAIRS: [string, string][] = [
   // still reach 3:1 so the active field is unmistakable.
   ["ring", "background"],
   ["ring", "card"],
+  // The current nav item's brand-blue icon on the selection pill (ADR-011).
+  ["link", "sidebar-accent"],
 ];
 
 describe.each([

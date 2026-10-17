@@ -2,11 +2,12 @@ import type { StatusTone } from "@rebp/contracts";
 import { cn } from "@/lib/utils";
 import { ProgressRing } from "./progress-ring";
 
-/** Tone for a countdown: good → warning at 60 days → critical at 30 days (FR-PORTAL-004). */
+/**
+ * Tone for a countdown (FR-PORTAL-004): the primary family while there is time, red in the last
+ * 30 days. The renewal notice carries the "renew soon" nudge, so the ring stays calm (UX-031).
+ */
 export function validityTone(daysLeft: number): StatusTone {
-  if (daysLeft <= 0) return "critical";
   if (daysLeft <= 30) return "critical";
-  if (daysLeft <= 60) return "warning";
   return "good";
 }
 

@@ -3,6 +3,7 @@
 import {
   ArrowRight,
   CornerDownLeft,
+  History,
   Languages,
   Monitor,
   Moon,
@@ -11,19 +12,20 @@ import {
   Sun,
   type LucideIcon,
 } from "@/components/icons";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { Capability } from "@rebp/contracts";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { navForArea, PUBLIC_NAV, type NavItem } from "@/config/navigation";
+import { paletteDestinations, PUBLIC_NAV, type NavItem } from "@/config/navigation";
 import { useLocaleSwitch } from "@/hooks/use-locale-switch";
 import { LOCALE_LABELS, LOCALES } from "@/i18n/config";
+import { readRecentPages } from "@/lib/recent-pages";
 
 interface Command {
   id: string;
-  group: "go" | "search" | "prefs";
+  group: "recent" | "go" | "search" | "prefs";
   label: string;
   icon: LucideIcon;
   run: () => void;
@@ -36,6 +38,13 @@ function normalise(value: string): string {
     .toLowerCase();
 }
 
+/** Typo-tolerant match: every typed letter appears in order ("wrk q" finds "Work queue"). */
+function fuzzy(label: string, needle: string): boolean {
+  let i = 0;
+  for (const ch of label) if (ch === needle[i]) i++;
+  return i === needle.length;
+}
+
 /**
  * Command palette dialog, loaded on first open (see ./command-palette.tsx). Command palette (⌘K / Ctrl+K, or the search button): jump to any page the user can reach,
  * search the public register or check a licence, switch theme or language. A combobox +
@@ -44,16 +53,20 @@ function normalise(value: string): string {
 export default function CommandPaletteDialog({
   area,
   capabilities = [],
+  recentKey,
   open,
   setOpen,
 }: {
   area: "public" | "portal" | "backoffice";
   capabilities?: Capability[];
+  /** Signed-in areas: whose recent pages to show before anything is typed. */
+  recentKey?: string;
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
   const t = useTranslations();
   const router = useRouter();
+  const pathname = usePathname();
   const { setTheme } = useTheme();
   const { switchTo } = useLocaleSwitch();
   const [query, setQuery] = useState("");
@@ -66,10 +79,7 @@ export default function CommandPaletteDialog({
       setOpen(false);
       router.push(href as never);
     };
-    const nav: NavItem[] =
-      area === "public"
-        ? PUBLIC_NAV
-        : navForArea(area, capabilities).flatMap((section) => section.items);
+    const nav: NavItem[] = area === "public" ? PUBLIC_NAV : paletteDestinations(area, capabilities);
     const q = query.trim();
     const list: Command[] = nav.map((item) => ({
       id: `go-${item.href}`,
@@ -125,22 +135,58 @@ export default function CommandPaletteDialog({
         },
       );
     }
-    if (!q) return list;
+    if (!q) {
+      // Before typing: where you were recently (not this page), then everything else.
+      const recent: Command[] =
+        open && recentKey
+          ? readRecentPages(recentKey)
+              .filter((page) => page.href !== pathname)
+              .slice(0, 5)
+              .map((page) => ({
+                id: `recent-${page.href}`,
+                group: "recent" as const,
+                label: page.title,
+                icon: History,
+                run: go(page.href),
+              }))
+          : [];
+      return [...recent, ...list];
+    }
     const needle = normalise(q);
-    const matches = list.filter((c) => normalise(c.label).includes(needle));
+    const exact = list.filter((c) => normalise(c.label).includes(needle));
+    const loose =
+      needle.length >= 3
+        ? list.filter((c) => !exact.includes(c) && fuzzy(normalise(c.label), needle))
+        : [];
+    const matches = [...exact, ...loose];
     // Exact page matches first (Enter jumps there); register search and licence check as fallbacks.
     return [
       ...matches.filter((c) => c.group === "go"),
       ...search,
       ...matches.filter((c) => c.group === "prefs"),
     ];
-  }, [area, capabilities, query, router, setOpen, setTheme, switchTo, t]);
+  }, [
+    area,
+    capabilities,
+    open,
+    pathname,
+    query,
+    recentKey,
+    router,
+    setOpen,
+    setTheme,
+    switchTo,
+    t,
+  ]);
 
   useEffect(() => {
     listRef.current
       ?.querySelector<HTMLElement>(`[data-index="${active}"]`)
       ?.scrollIntoView({ block: "nearest" });
   }, [active]);
+
+  // Never point past the list (it can shrink as recents change).
+  const current = Math.min(active, Math.max(0, commands.length - 1));
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -151,11 +197,11 @@ export default function CommandPaletteDialog({
       setActive((i) => Math.max(0, i - 1));
     } else if (event.key === "Enter") {
       event.preventDefault();
-      commands[active]?.run();
+      commands[current]?.run();
     }
   };
 
-  const groups = (["go", "search", "prefs"] as const).filter((g) =>
+  const groups = (["recent", "go", "search", "prefs"] as const).filter((g) =>
     commands.some((c) => c.group === g),
   );
 
@@ -175,11 +221,11 @@ export default function CommandPaletteDialog({
             <input
               autoFocus
               role="combobox"
-              aria-expanded="true"
+              aria-expanded={commands.length > 0}
               aria-controls={listId}
               aria-autocomplete="list"
               aria-activedescendant={
-                commands[active] ? `${listId}-${commands[active].id}` : undefined
+                commands[current] ? `${listId}-${commands[current].id}` : undefined
               }
               aria-label={t("palette.placeholder")}
               placeholder={t("palette.placeholder")}
@@ -206,10 +252,17 @@ export default function CommandPaletteDialog({
             )}
             {groups.map((group) => (
               <li key={group} role="presentation" className="flex flex-col">
-                <span className="px-3 pt-2 pb-1 text-[0.7rem] font-bold tracking-wider text-muted-foreground uppercase">
+                <span
+                  id={`${listId}-group-${group}`}
+                  className="px-3 pt-2 pb-1 text-[0.7rem] font-bold tracking-wider text-muted-foreground uppercase"
+                >
                   {t(`palette.groups.${group}`)}
                 </span>
-                <ul role="group" className="flex flex-col">
+                <ul
+                  role="group"
+                  aria-labelledby={`${listId}-group-${group}`}
+                  className="flex flex-col"
+                >
                   {commands.map((command, index) => {
                     if (command.group !== group) return null;
                     const Icon = command.icon;
@@ -218,7 +271,7 @@ export default function CommandPaletteDialog({
                         key={command.id}
                         id={`${listId}-${command.id}`}
                         role="option"
-                        aria-selected={index === active}
+                        aria-selected={index === current}
                         data-index={index}
                         onMouseMove={() => setActive(index)}
                         onClick={command.run}
@@ -226,7 +279,7 @@ export default function CommandPaletteDialog({
                       >
                         <Icon className="size-4 shrink-0" aria-hidden />
                         <span className="min-w-0 flex-1 truncate">{command.label}</span>
-                        {index === active ? (
+                        {index === current ? (
                           <CornerDownLeft className="size-4 shrink-0 opacity-60" aria-hidden />
                         ) : (
                           <ArrowRight className="size-4 shrink-0 opacity-0" aria-hidden />

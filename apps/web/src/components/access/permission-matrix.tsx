@@ -132,7 +132,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
   return (
     <div className="flex flex-col gap-5">
       {/* Role summary cards: members and permission counts, live with the draft. */}
-      <ul className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-5">
+      <ul className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 @3xl/main:grid-cols-5">
         {ROLES.map((role) => {
           const Icon = ROLE_META[role].icon;
           const count = next[role].length;
@@ -223,7 +223,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
       {/* Desktop grid */}
       {visible.length > 0 && (
         <div
-          className="hidden overflow-auto rounded-2xl border bg-card md:block md:max-h-[70dvh]"
+          className="hidden overflow-auto rounded-2xl border bg-card @2xl/main:block @2xl/main:max-h-[70dvh]"
           data-testid="permission-matrix"
         >
           <table
@@ -234,7 +234,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               <tr>
                 <th
                   scope="col"
-                  className="sticky top-0 left-0 z-30 min-w-52 border-b bg-card p-3 text-left align-bottom xl:min-w-60"
+                  className="sticky top-0 left-0 z-30 min-w-52 border-b bg-card p-3 text-left align-bottom @5xl/main:min-w-60"
                 >
                   <span className="sr-only">{t("access.matrix.title")}</span>
                 </th>
@@ -334,7 +334,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
 
       {/* Mobile: one role at a time */}
       {visible.length > 0 && (
-        <div className="flex flex-col gap-3 md:hidden">
+        <div className="flex flex-col gap-3 @2xl/main:hidden">
           <div
             className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1"
             role="tablist"

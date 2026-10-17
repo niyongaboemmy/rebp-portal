@@ -1,16 +1,17 @@
+import { Download } from "@/components/icons";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { requiresMfa } from "@rebp/contracts";
 import { ContactCard } from "@/components/security/contact-card";
 import { MfaCard } from "@/components/security/mfa-card";
-import { ProtectionSummary } from "@/components/security/protection-summary";
+import { ProtectionSummary, protectionChecks } from "@/components/security/protection-summary";
 import { SessionsList } from "@/components/security/sessions-list";
 import { SignInMethodsCard } from "@/components/security/sign-in-methods-card";
 import { StepUpProvider } from "@/components/security/step-up";
 import { Alert } from "@/components/ui/alert";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PageHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   describeUserAgent,
@@ -24,6 +25,11 @@ import { remainingRecoveryCodes } from "@/server/auth/mfa";
 import { listActiveSessions } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { isGoogleEnabled } from "@/server/env";
+import { SettingsTabs } from "@/components/layout/settings-tabs";
+import { HeroCompanion, SettingsHero } from "@/components/layout/settings-hero";
+import { AccountAvatar } from "@/components/profile/account-avatar";
+import { ProfileBuddy } from "@/components/profile/profile-buddy";
+import { accountAvatar } from "@/server/profile/documents";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("security"))("title") };
@@ -31,22 +37,65 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** FR-ACC-004/007/008/010: the user's sign-in, two-step and session preferences in one place. */
 export default async function SecurityPage({ searchParams }: PageProps<"/settings/security">) {
-  const { user, session } = await requireUser({ allowPendingMfa: true });
+  const { user, session } = await requireUser({
+    allowPendingMfa: true,
+    allowIncompleteProfile: true,
+  });
   const params = await searchParams;
-  const [t, tAuth, google, recoveryRemaining] = await Promise.all([
+  const [t, tAuth, tProfile, google, recoveryRemaining, avatar] = await Promise.all([
     getTranslations("security"),
     getTranslations("auth.oauthErrors"),
+    getTranslations("profile"),
     db.oAuthAccount.findUnique({
       where: { userId_provider: { userId: user.id, provider: "google" } },
     }),
     remainingRecoveryCodes(user.id),
+    accountAvatar(user),
   ]);
   const error = typeof params.error === "string" ? params.error : null;
   const mfaRequired = requiresMfa(user.roles);
+  // The hero: how protected the account is, and the companion pointing at what's left (UX-013).
+  const protection = protectionChecks({
+    emailVerified: Boolean(user.emailVerifiedAt),
+    phoneVerified: Boolean(user.phoneVerifiedAt),
+    twoStepOn: user.mfaMethods.length > 0,
+    recoveryRemaining,
+  });
+  const open = protection.checks.find((c) => !c.done);
+  const bubble = t(`hero.bubble.${open?.key ?? "strong"}`);
 
   return (
     <StepUpProvider hasPassword={Boolean(user.passwordHash)}>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <SettingsHero
+        avatar={
+          <AccountAvatar
+            name={user.fullName}
+            percent={avatar.percent}
+            photoHref={avatar.photoHref}
+            label={
+              avatar.percent === null
+                ? user.fullName
+                : tProfile("progress", { percent: avatar.percent })
+            }
+          />
+        }
+        title={t("title")}
+        description={
+          open
+            ? t("hero.todo", { left: protection.checks.length - protection.done })
+            : t("hero.strong", { total: protection.checks.length })
+        }
+        companion={
+          <HeroCompanion
+            bubble={bubble}
+            label={open ? `${bubble}. ${t("hero.action")}` : bubble}
+            href={open?.href ?? "#two-step"}
+          >
+            <ProfileBuddy mood={open ? "lock" : "shield"} />
+          </HeroCompanion>
+        }
+      />
+      <SettingsTabs current="security" />
 
       {params.setup === "required" && mfaRequired && user.mfaMethods.length === 0 && (
         <Alert variant="warning">{t("requiredBanner")}</Alert>
@@ -77,7 +126,7 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
         required={mfaRequired}
       />
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-6 @5xl/main:grid-cols-2">
         <SignInMethodsCard
           hasPassword={Boolean(user.passwordHash)}
           passwordChangedAt={user.passwordChangedAt ? formatDate(user.passwordChangedAt) : null}
@@ -101,6 +150,19 @@ export default async function SecurityPage({ searchParams }: PageProps<"/setting
         <Suspense fallback={<Skeleton className="h-40" />}>
           <Sessions userId={user.id} currentId={session.id} />
         </Suspense>
+      </Card>
+
+      {/* FR-DSR-001: a machine-readable copy of my personal data. */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("data.title")}</CardTitle>
+          <CardDescription>{t("data.description")}</CardDescription>
+        </CardHeader>
+        <Button asChild variant="outline" className="self-start">
+          <a href="/api/me/export" download>
+            <Download aria-hidden /> {t("data.download")}
+          </a>
+        </Button>
       </Card>
     </StepUpProvider>
   );

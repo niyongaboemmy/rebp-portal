@@ -3,7 +3,7 @@
 import { Search } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Capability } from "@rebp/contracts";
 import { cn } from "@/lib/utils";
 
@@ -18,11 +18,14 @@ const CommandPaletteDialog = dynamic(() => import("./command-palette-dialog"), {
 export function CommandPalette({
   area,
   capabilities = [],
+  recentKey,
   className,
   compact = false,
 }: {
   area: "public" | "portal" | "backoffice";
   capabilities?: Capability[];
+  /** Signed-in areas: scope for the palette's recent pages (the user id). */
+  recentKey?: string;
   className?: string;
   /** Icon-only trigger (public header); the shortcut is shown in its tooltip. */
   compact?: boolean;
@@ -30,9 +33,19 @@ export function CommandPalette({
   const t = useTranslations("palette");
   const [open, setOpen] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  // Each opening is a fresh session (empty query, first item active), whatever closed the last one.
+  const [session, setSession] = useState(0);
+
+  const openRef = useRef(open);
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   const show = useCallback((value: boolean) => {
-    if (value) setLoaded(true);
+    if (value) {
+      setLoaded(true);
+      setSession((n) => n + 1);
+    }
     setOpen(value);
   }, []);
 
@@ -40,13 +53,12 @@ export function CommandPalette({
     const onKey = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setLoaded(true);
-        setOpen((value) => !value);
+        show(!openRef.current);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [show]);
 
   return (
     <>
@@ -85,7 +97,14 @@ export function CommandPalette({
         </button>
       )}
       {loaded && (
-        <CommandPaletteDialog area={area} capabilities={capabilities} open={open} setOpen={show} />
+        <CommandPaletteDialog
+          key={session}
+          area={area}
+          capabilities={capabilities}
+          recentKey={recentKey}
+          open={open}
+          setOpen={show}
+        />
       )}
     </>
   );

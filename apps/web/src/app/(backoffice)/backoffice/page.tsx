@@ -1,13 +1,17 @@
 import {
   Activity,
   ArrowRight,
+  ClipboardCheck,
+  Gavel,
   MonitorSmartphone,
+  ScanSearch,
   ShieldCheck,
-  Sparkles,
+  Timer,
   UsersRound,
 } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { Route } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { BarList } from "@/components/data/bar-list";
 import { ColumnChart } from "@/components/data/column-chart";
@@ -15,10 +19,12 @@ import { ProgressRing } from "@/components/data/progress-ring";
 import { Sparkline } from "@/components/data/sparkline";
 import { StatTile } from "@/components/data/stat-tile";
 import { PageHeader } from "@/components/ui/page-header";
-import { BACKOFFICE_SECTIONS } from "@/config/navigation";
+import { BACKOFFICE_SECTIONS, canSee } from "@/config/navigation";
 import { userCapabilities } from "@/server/access/permissions";
 import { requireCapability } from "@/server/auth/guards";
+import { applicationKpis, consoleCounts } from "@/server/backoffice/admin-queries";
 import { accountStats, auditActivity } from "@/server/backoffice/overview";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("nav"))("backoffice") };
@@ -38,13 +44,24 @@ export default async function BackofficeOverview() {
   ]);
   const canSeeAccounts = capabilities.includes("access.view");
   const canSeeAudit = capabilities.includes("audit.view");
-  const [accounts, activity] = await Promise.all([
+  const canSeeApplications = capabilities.includes("review.view");
+  const [accounts, activity, applications, counts] = await Promise.all([
     canSeeAccounts ? accountStats() : null,
     canSeeAudit ? auditActivity() : null,
+    canSeeApplications ? applicationKpis() : null,
+    consoleCounts(user.id, capabilities),
   ]);
-  const sections = Object.entries(BACKOFFICE_SECTIONS).filter(([, s]) =>
-    capabilities.includes(s.capability),
-  );
+  // Live hint per console tile (FR-RPT-001): what is waiting there for this user.
+  const consoleHint = (slug: string): { text: string; active: boolean } => {
+    if (slug === "reports") return { text: t("backoffice.consoleHints.reports"), active: false };
+    const count = counts[slug as keyof typeof counts] ?? null;
+    if (count === null) return { text: t("backoffice.consoleHints.open"), active: false };
+    return {
+      text: t(`backoffice.consoleHints.${slug as keyof typeof counts}`, { count }),
+      active: count > 0,
+    };
+  };
+  const sections = Object.entries(BACKOFFICE_SECTIONS).filter(([, s]) => canSee(s, capabilities));
   const dayLabel = (day: string) =>
     format.dateTime(new Date(`${day}T12:00:00Z`), { day: "numeric", month: "short" });
   const twoStepShare =
@@ -60,7 +77,7 @@ export default async function BackofficeOverview() {
       {accounts && (
         <section
           aria-label={t("backoffice.kpis")}
-          className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4"
+          className="grid grid-cols-2 gap-3 sm:gap-4 @5xl/main:grid-cols-4"
         >
           <StatTile
             icon={UsersRound}
@@ -103,8 +120,44 @@ export default async function BackofficeOverview() {
         </section>
       )}
 
+      {applications && (
+        <section
+          aria-label={t("backoffice.applicationKpis")}
+          className="grid grid-cols-2 gap-3 sm:gap-4 @5xl/main:grid-cols-4"
+        >
+          <StatTile
+            icon={ClipboardCheck}
+            label={t("backoffice.submittedWeek")}
+            value={applications.submittedThisWeek}
+            hint={t("backoffice.submittedWeekHint")}
+          />
+          <StatTile
+            icon={ScanSearch}
+            label={t("backoffice.underReview")}
+            value={applications.underReview}
+            hint={t("backoffice.underReviewHint")}
+          />
+          <StatTile
+            icon={Gavel}
+            label={t("backoffice.awaitingDecision")}
+            value={applications.awaitingDecision}
+            hint={t("backoffice.awaitingDecisionHint")}
+          />
+          <StatTile
+            icon={Timer}
+            label={t("backoffice.slaBreaches")}
+            value={applications.slaBreaches}
+            hint={
+              applications.slaBreaches > 0
+                ? t("backoffice.slaBreachesHint")
+                : t("backoffice.slaOnTrack")
+            }
+          />
+        </section>
+      )}
+
       {(activity || accounts) && (
-        <div className="grid items-start gap-4 lg:grid-cols-[1.4fr_1fr]">
+        <div className="grid items-start gap-4 @3xl/main:grid-cols-[1.4fr_1fr]">
           {activity && (
             <section
               className="flex flex-col gap-4 rounded-3xl border bg-card p-5 raised sm:p-6"
@@ -152,21 +205,27 @@ export default async function BackofficeOverview() {
         <h2 id="consoles-title" className="text-lg">
           {t("backoffice.consoles")}
         </h2>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 @5xl/main:grid-cols-6">
           {sections.map(([slug, s], index) => {
             const Icon = s.icon;
+            const hint = consoleHint(slug);
             return (
               <li key={slug} className="animate-rise" style={{ animationDelay: `${index * 40}ms` }}>
                 <Link
-                  href={`/backoffice/${slug}`}
+                  href={`/backoffice/${slug}` as Route}
                   className="group spotlight flex h-full flex-col gap-3 rounded-2xl border bg-card p-4 raised transition-[border-color,transform] duration-(--dur-2) hover:bg-primary/[0.05] active:scale-[0.98]"
                 >
                   <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary-soft-foreground transition-transform duration-(--dur-3) ease-spring group-hover:scale-110">
                     <Icon className="size-5" aria-hidden />
                   </span>
                   <span className="text-sm font-semibold">{t(`nav.${s.label}`)}</span>
-                  <span className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-ember-text">
-                    <Sparkles className="size-3" aria-hidden /> {t("common.comingSoon")}
+                  <span
+                    className={cn(
+                      "mt-auto inline-flex items-center gap-1 text-xs font-semibold",
+                      hint.active ? "text-ember-text" : "text-muted-foreground",
+                    )}
+                  >
+                    {hint.text}
                     <ArrowRight
                       className="ml-auto size-3.5 transition-transform group-hover:translate-x-0.5"
                       aria-hidden

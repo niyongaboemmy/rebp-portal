@@ -57,11 +57,19 @@ test("signed-in phones get a bottom tab bar and a More sheet", async ({ page }) 
   await tabs.getByRole("link", { name: "Applications" }).click();
   await expect(page).toHaveURL(/\/applications$/);
 
+  // More: every destination as a tile.
   await tabs.getByRole("button", { name: "More" }).click();
-  const sheet = page.getByRole("dialog");
-  await sheet.getByRole("radio", { name: "Dark" }).click();
+  const more = page.getByRole("dialog");
+  await more.getByRole("link", { name: "Licence wallet" }).click();
+  await expect(page).toHaveURL(/\/licenses$/);
+  await expect(more).toBeHidden();
+
+  // Account, theme and language live in one sheet behind the top-bar avatar (ADR-011).
+  await page.getByRole("button", { name: /^Account, / }).click();
+  const account = page.getByRole("dialog");
+  await account.getByRole("radio", { name: "Dark" }).click();
   await expect(page.locator("html")).toHaveClass(/dark/);
-  await sheet.getByRole("link", { name: "Security" }).click();
+  await account.getByRole("link", { name: "Security" }).click();
   await expect(page).toHaveURL(/\/settings\/security$/);
-  await expect(sheet).toBeHidden();
+  await expect(account).toBeHidden();
 });

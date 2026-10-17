@@ -22,7 +22,11 @@ export function LinkTabs({
   return (
     <nav
       aria-label={label}
-      className={cn("inline-flex w-full gap-1 rounded-2xl bg-muted p-1 sm:w-auto", className)}
+      className={cn(
+        // A quiet track (UX-031): the active tab is a lighter surface with a primary icon, no outline.
+        "inline-flex w-full gap-1 rounded-2xl bg-foreground/[0.04] p-1 sm:w-auto dark:bg-surface-2/60",
+        className,
+      )}
     >
       {tabs.map((tab) => (
         <Link
@@ -32,7 +36,9 @@ export function LinkTabs({
           aria-current={tab.active ? "page" : undefined}
           className={cn(
             "inline-flex tap-target flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all sm:flex-none [&_svg]:size-4",
-            tab.active ? "bg-card text-foreground" : "text-muted-foreground hover:text-foreground",
+            tab.active
+              ? "bg-card text-foreground dark:bg-surface-3 [&_svg]:text-link"
+              : "text-muted-foreground hover:bg-card/60 hover:text-foreground dark:hover:bg-surface-3/50",
           )}
         >
           {tab.icon}

@@ -74,7 +74,7 @@ export const LICENSE_STATUS_TONES: Record<LicenseStatus, StatusTone> = {
 };
 
 export const CONFIRMATION_STATUS_TONES: Record<ConfirmationStatus, StatusTone> = {
-  PENDING: "warning",
+  PENDING: "info",
   CONFIRMED: "good",
   DECLINED: "critical",
   EXPIRED: "neutral",

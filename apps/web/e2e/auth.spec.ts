@@ -2,6 +2,12 @@ import { expect, test, type Page } from "@playwright/test";
 import { totp } from "../src/server/auth/totp";
 import { db, latestCode, uniqueEmail, uniquePhone } from "./db";
 
+/**
+ * Where a signed-in applicant lands: the dashboard, or for a brand-new account (no profile yet)
+ * the profile welcome page, which returns to the dashboard once complete (UX-010).
+ */
+const HOME = /\/(dashboard|settings\/profile\?welcome=1&next=%2Fdashboard)$/;
+
 const PASSWORD = "sunny-kigali-hills-at-dawn";
 
 async function signUp(page: Page, email: string, phone: string) {
@@ -20,19 +26,23 @@ async function verifyContacts(page: Page, email: string, phone: string) {
   // Dev mode shows the simulated code on screen; "Use code" fills it in.
   const emailCard = page.getByTestId("verify-email");
   await emailCard.getByRole("button", { name: "Use code" }).click();
-  await expect(emailCard.getByLabel("6-digit code")).toHaveValue(
+  await expect(emailCard.getByLabel("Code", { exact: true })).toHaveValue(
     await latestCode(email, "emailVerify"),
   );
   await emailCard.getByRole("button", { name: "Verify" }).click();
-  await expect(emailCard.getByText("Verified")).toBeVisible();
+  // Email confirmed: the phone step opens on its own.
+  await expect(page.getByRole("tab", { name: /Mobile number/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
 
   const phoneCard = page.getByTestId("verify-phone");
   await phoneCard.getByRole("button", { name: "Use code" }).click();
-  await expect(phoneCard.getByLabel("6-digit code")).toHaveValue(
+  await expect(phoneCard.getByLabel("Code", { exact: true })).toHaveValue(
     await latestCode(phone, "phoneVerify"),
   );
   await phoneCard.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(HOME);
 }
 
 async function signIn(page: Page, email: string, password = PASSWORD) {
@@ -59,7 +69,8 @@ test("sign up, verify contacts, enable an authenticator app and sign in with two
   const phone = uniquePhone();
   await signUp(page, email, phone);
   await verifyContacts(page, email, phone);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Hello, Test");
+  // A brand-new account sets up its profile first (UX-010).
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(/your profile/i);
 
   // Enable the authenticator app from Security settings.
   await page.goto("/settings/security");
@@ -84,7 +95,7 @@ test("sign up, verify contacts, enable an authenticator app and sign in with two
   await expect(page.getByText("That code isn't right")).toBeVisible();
   await page.getByLabel("Verification code").fill(totp(secret!, Date.now() + 30_000));
   await page.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(HOME);
 
   // A recovery code also works as the second step.
   await signOut(page);
@@ -93,7 +104,7 @@ test("sign up, verify contacts, enable an authenticator app and sign in with two
   await page.getByRole("button", { name: "Use a recovery code" }).click();
   await page.getByLabel("Recovery code").fill(recoveryCode);
   await page.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(HOME);
 });
 
 test("text-message two-step as the preferred method", async ({ page }) => {
@@ -118,7 +129,7 @@ test("text-message two-step as the preferred method", async ({ page }) => {
   await expect(page.getByTestId("dev-code")).toContainText(await latestCode(phone, "mfaLoginCode"));
   await page.getByRole("button", { name: "Use code" }).click();
   await page.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(HOME);
 });
 
 test("rejects a wrong password with a generic message", async ({ page }) => {
@@ -145,7 +156,7 @@ test("password reset through an emailed code", async ({ page }) => {
   await expect(page.getByText("Password updated")).toBeVisible();
 
   await signIn(page, email, "a-brand-new-passphrase");
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(HOME);
 });
 
 test("protected pages redirect to sign-in and return afterwards", async ({ page }) => {

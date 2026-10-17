@@ -10,7 +10,7 @@ export default async function PortalLayout({ children }: { children: React.React
   return (
     <AppShell
       area="portal"
-      user={{ fullName: user.fullName, email: user.email, roles: user.roles }}
+      user={{ id: user.id, fullName: user.fullName, email: user.email, roles: user.roles }}
     >
       {children}
     </AppShell>

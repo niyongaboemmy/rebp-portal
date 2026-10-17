@@ -2,6 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { hash } from "@node-rs/argon2";
 import { db } from "./db";
+import { completeProfile } from "./profile";
+import { settle } from "./settle";
 
 /**
  * RBAC console journeys. The admin signs in with email two-step, reading the simulated code from
@@ -21,18 +23,13 @@ async function signInWithEmailCode(page: Page, email: string) {
   await expect(page).toHaveURL(/\/dashboard$/);
 }
 
-/** Waits for entrance animations so axe and assertions see the settled UI. */
-async function settle(page: Page) {
-  await page.waitForFunction(() =>
-    document.getAnimations().every((a) => a.playState !== "running"),
-  );
-}
-
 async function createPerson(fullName: string) {
   const email = `${fullName.toLowerCase().replace(/\s+/g, ".")}.${Date.now()}@e2e.rebp.rw`;
   await db.user.create({
     data: {
       email,
+      profile: completeProfile(email, fullName),
+      profileUpdatedAt: new Date(),
       fullName,
       roles: ["APPLICANT"],
       emailVerifiedAt: new Date(),
@@ -70,7 +67,9 @@ test("admin finds a person, previews the impact and changes their roles", async 
   const email = await createPerson("Rbac Tester");
   await signInWithEmailCode(page, ADMIN);
 
-  await page.getByRole("link", { name: "Back office" }).first().click();
+  // Staff switch areas from the sidebar header (ADR-011).
+  await page.getByRole("button", { name: /^Switch area/ }).click();
+  await page.getByRole("menuitem", { name: /Back office/ }).click();
   await page.getByRole("link", { name: "Access control" }).first().click();
   await expect(page.getByRole("heading", { level: 1, name: "Access control" })).toBeVisible();
 
@@ -206,17 +205,20 @@ test("auditors get a read-only view", async ({ page }) => {
   await expect(page.getByTestId("matrix-change-count")).toBeHidden();
 });
 
-test("applicants see their own access and cannot open the console", async ({ page }) => {
+test("applicants have no My access page and cannot open the console", async ({ page }) => {
   await page.goto("/sign-in");
   await page.getByLabel("Email address").fill("applicant@demo.rebp.rw");
   await page.getByLabel("Password", { exact: true }).fill(DEMO_PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
-  await page.getByRole("link", { name: "My access" }).first().click();
-  await expect(page.getByRole("heading", { level: 1, name: "My access" })).toBeVisible();
-  await expect(page.getByTestId("my-cap-application.edit")).toHaveAttribute("data-granted", "true");
-  await expect(page.getByTestId("my-cap-review.perform")).toHaveAttribute("data-granted", "false");
+  // My access is staff-only: not offered in the account menu, and the page itself is refused.
+  await page.getByRole("button", { name: /^Account, / }).click();
+  await expect(page.getByRole("menuitem", { name: "Security" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "My access" })).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await page.goto("/settings/access");
+  await expect(page).toHaveURL(/\/forbidden$/);
 
   await page.goto("/backoffice/access");
   await expect(page).toHaveURL(/\/forbidden$/);

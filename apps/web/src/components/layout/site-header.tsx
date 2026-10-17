@@ -1,6 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/ui/logo";
 import { getCurrentSession } from "@/server/auth/current";
+import { userCapabilities } from "@/server/access/permissions";
+import { profilePhotoUrl } from "@/server/profile/documents";
 import { AuthMenu } from "./auth-menu";
 import { CommandPalette } from "./command-palette";
 import { HeaderNav } from "./header-nav";
@@ -17,6 +19,9 @@ import { UserMenu } from "./user-menu";
  */
 export async function SiteHeader() {
   const [, current] = await Promise.all([getTranslations("nav"), getCurrentSession()]);
+  const [photoUrl, capabilities] = current
+    ? await Promise.all([profilePhotoUrl(current.user.id), userCapabilities(current.user)])
+    : [null, []];
   return (
     <HeaderShell>
       <div className="container-page grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
@@ -30,11 +35,16 @@ export async function SiteHeader() {
           <LanguageSwitcher className="rounded-full" />
           <ThemeSwitch />
           {current ? (
-            <UserMenu name={current.user.fullName} email={current.user.email} />
+            <UserMenu
+              name={current.user.fullName}
+              email={current.user.email}
+              photoUrl={photoUrl}
+              capabilities={capabilities}
+            />
           ) : (
             <AuthMenu />
           )}
-          <MobileNav area="public" />
+          <MobileNav />
         </div>
       </div>
     </HeaderShell>

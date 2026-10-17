@@ -1,7 +1,8 @@
-import { ArrowRight, Lock, Timer } from "@/components/icons";
+import { ArrowDown, ArrowRight, Lock, Timer } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { EligibilityDemo } from "@/components/landing/eligibility-demo";
 import { CategoryMap } from "@/components/categories/category-map";
 import { HeroGuide } from "@/components/landing/hero-guide";
 import { HeroVisual } from "@/components/landing/hero-visual";
@@ -191,12 +192,45 @@ export default async function LandingPage() {
         className="container-page flex flex-col gap-10 py-20 sm:gap-12 sm:py-28 lg:py-32"
         aria-labelledby="ladder-title"
       >
-        <div className="flex flex-col gap-2">
-          <h2 id="ladder-title">{t("landing.categoriesTitle")}</h2>
-          <SketchUnderline className="h-2.5 w-32 sm:h-3 sm:w-40" />
-          <p className="text-muted-foreground">{t("landing.categoriesSubtitle")}</p>
+        {/* Heading beside a live demo of the eligibility check (the same companion as /eligibility). */}
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] lg:gap-8">
+          <div className="flex flex-col gap-4">
+            <h2
+              id="ladder-title"
+              className="text-[clamp(1.75rem,1.3rem+1.5vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground"
+            >
+              {t("landing.categoriesTitleTop")}
+              <br />
+              {t("landing.categoriesTitleBottom")}
+            </h2>
+            <SketchUnderline className="h-2 w-28 sm:h-2.5 sm:w-32" />
+            <p className="max-w-sm text-sm text-muted-foreground sm:text-base">
+              {t("landing.categoriesSubtitle")}
+            </p>
+            <p className="max-w-sm text-sm text-muted-foreground">{t("landing.demo.lead")}</p>
+          </div>
+          <EligibilityDemo />
         </div>
-        <CategoryMap />
+
+        {/* Guide into the map: a pill that points down a flowing path to the eight stations. */}
+        <a
+          href="#career-paths"
+          className="group mx-auto flex flex-col items-center gap-2 text-center outline-none"
+        >
+          <span className="inline-flex items-center gap-2.5 rounded-full bg-primary-soft py-1.5 pr-1.5 pl-4 text-sm font-semibold text-primary-soft-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:ring-[3px] group-focus-visible:ring-ring/40 dark:bg-white/[0.06] dark:text-foreground">
+            {t("landing.pathsGuide")}
+            <span className="inline-flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:bg-white group-hover:text-primary">
+              <ArrowDown className="size-4 animate-bounce" aria-hidden />
+            </span>
+          </span>
+          <span aria-hidden data-loop className="relative h-12 w-px overflow-hidden">
+            <span className="absolute inset-0 bg-[repeating-linear-gradient(to_bottom,var(--color-primary)_0_4px,transparent_4px_9px)] opacity-40" />
+            <span className="absolute inset-x-[-2px] top-0 h-3 animate-[path-drop_1.6s_var(--ease-standard)_infinite] rounded-full bg-sun" />
+          </span>
+        </a>
+        <div id="career-paths" className="-mt-6 scroll-mt-24 sm:-mt-8">
+          <CategoryMap />
+        </div>
       </section>
 
       {/*

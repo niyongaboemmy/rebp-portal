@@ -6,7 +6,7 @@ export default async function BackofficeLayout({ children }: { children: React.R
   return (
     <AppShell
       area="backoffice"
-      user={{ fullName: user.fullName, email: user.email, roles: user.roles }}
+      user={{ id: user.id, fullName: user.fullName, email: user.email, roles: user.roles }}
     >
       {children}
     </AppShell>

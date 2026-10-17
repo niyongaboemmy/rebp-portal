@@ -6,7 +6,10 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores([
+    "public/vendor/**",
     ".next/**",
+    // Alternate build folders (NEXT_DIST_DIR, e.g. a second local server).
+    ".next-*/**",
     "src/generated/**",
     "playwright-report/**",
     "test-results/**",

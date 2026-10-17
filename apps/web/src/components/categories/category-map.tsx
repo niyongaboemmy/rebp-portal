@@ -29,6 +29,11 @@ import {
   type CategoryTier,
 } from "@rebp/contracts";
 import { Button } from "@/components/ui/button";
+import type { LadderMarker } from "./category-ladder";
+import { Standing, standingOf, type MapResult } from "./standing";
+
+export type { MapResult } from "./standing";
+
 import { cn } from "@/lib/utils";
 
 // The full requirements dialog loads on first use (NFR-PERF-005).
@@ -192,6 +197,12 @@ function pathTo(category: Category) {
   return lit;
 }
 
+const MARKER_TONE: Record<LadderMarker["kind"], string> = {
+  current: "bg-primary text-primary-foreground",
+  recommended: "bg-sun text-sun-foreground",
+  next: "bg-ember-soft text-ember-text",
+};
+
 /** How long the guided tour rests on each station. */
 const STEP_MS = 4200;
 
@@ -214,9 +225,32 @@ const subscribeReduced = (onChange: () => void) => {
  * button, anywhere outside or Escape closes them. The tour pauses while the pointer is over the
  * map or details are open. Reduced motion: no tour or travelling light.
  */
-export function CategoryMap({ className }: { className?: string }) {
+export function CategoryMap({
+  className,
+  markers,
+  result,
+}: {
+  className?: string;
+  /**
+   * Personal markers (eligibility result): stations get "You", "Best fit" or "Next" badges, the
+   * map opens on the best fit (or the current licence) and stays there (no tour).
+   */
+  markers?: LadderMarker[];
+  /**
+   * The applicant's eligibility result: station details then say where they stand for that
+   * category (you qualify / years to go / what's missing) and offer the matching next step.
+   * Without it (homepage, categories page) the details offer to check for that category.
+   */
+  result?: MapResult;
+}) {
   const tc = useTranslations("categories");
-  const [active, setActive] = useState<Category>("FSLA");
+  const tl = useTranslations("ladder");
+  const personal = Boolean(markers?.length);
+  const focus =
+    markers?.find((m) => m.kind === "recommended")?.category ??
+    markers?.find((m) => m.kind === "current")?.category ??
+    markers?.find((m) => m.kind === "next")?.category;
+  const [active, setActive] = useState<Category>(focus ?? "FSLA");
   const [open, setOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [onScreen, setOnScreen] = useState(false);
@@ -229,7 +263,7 @@ export function CategoryMap({ className }: { className?: string }) {
     () => window.matchMedia(REDUCED).matches,
     () => true,
   );
-  const touring = !reduced && !open && !hovering && onScreen;
+  const touring = !personal && !reduced && !open && !hovering && onScreen;
 
   useEffect(() => {
     const node = root.current;
@@ -281,12 +315,15 @@ export function CategoryMap({ className }: { className?: string }) {
     label: (c: Category) => tc(`items.${c}.name`),
     short: (c: Category) => tc(`short.${c}`),
     tierLabel: (tier: CategoryTier) => tc(`tiers.${tier}`),
+    markerOf: (c: Category) => markers?.find((m) => m.category === c)?.kind,
+    markerLabel: (kind: LadderMarker["kind"]) => tl(`marker.${kind}`),
   };
 
   return (
     <div
       ref={root}
       data-loop
+      data-keep-shadow
       className={cn("mx-auto flex w-full max-w-[32rem] flex-col gap-4 lg:max-w-none", className)}
       onPointerEnter={() => setHovering(true)}
       onPointerLeave={() => setHovering(false)}
@@ -301,7 +338,13 @@ export function CategoryMap({ className }: { className?: string }) {
           layout={WIDE}
           className="hidden aspect-[1000/430] lg:block"
           popover={
-            <Details category={active} onRequirements={openDialog} onClose={close} anchored />
+            <Details
+              category={active}
+              result={result}
+              onRequirements={openDialog}
+              onClose={close}
+              anchored
+            />
           }
         />
         <MapLayer {...layer} layout={TALL} className="aspect-[360/760] w-full lg:hidden" />
@@ -345,11 +388,13 @@ export function CategoryMap({ className }: { className?: string }) {
       {/* Below lg the details dock to the bottom of the screen (a bottom sheet). */}
       {open && (
         <div className="sticky bottom-3 z-30 lg:hidden">
-          <Details category={active} onRequirements={openDialog} onClose={close} />
+          <Details category={active} result={result} onRequirements={openDialog} onClose={close} />
         </div>
       )}
 
-      {dialogLoaded && <CategoryDetailDialog category={dialog} onClose={() => setDialog(null)} />}
+      {dialogLoaded && (
+        <CategoryDetailDialog category={dialog} result={result} onClose={() => setDialog(null)} />
+      )}
     </div>
   );
 }
@@ -361,11 +406,13 @@ export function CategoryMap({ className }: { className?: string }) {
  */
 function Details({
   category,
+  result,
   onRequirements,
   onClose,
   anchored = false,
 }: {
   category: Category;
+  result?: MapResult;
   onRequirements: (category: Category) => void;
   onClose: () => void;
   anchored?: boolean;
@@ -424,12 +471,9 @@ function Details({
           {tc(`items.${category}.summary`)}
         </p>
         <Needs category={category} />
+        {result && <Standing category={category} result={result} />}
         <div className="flex gap-2 pt-1">
-          <Button asChild size="sm" className="flex-1 rounded-full">
-            <Link href="/eligibility">
-              {tm("eligible")} <ArrowRight />
-            </Link>
-          </Button>
+          <PrimaryAction category={category} result={result} />
           <Button
             size="sm"
             variant="ghost"
@@ -441,6 +485,39 @@ function Details({
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The details' main button. Exploring (no result): check eligibility for this category. With a
+ * result: apply when they qualify, otherwise open what it takes (or, for their own licence,
+ * nothing more to do than read the requirements).
+ */
+function PrimaryAction({ category, result }: { category: Category; result?: MapResult }) {
+  const tm = useTranslations("landing.map");
+  const abbr = CATEGORY_INFO[category].abbreviation;
+  if (!result)
+    return (
+      <Button asChild size="sm" className="flex-1 rounded-full">
+        <Link href={`/eligibility?for=${category}`}>
+          {tm("checkFor", { category: abbr })} <ArrowRight />
+        </Link>
+      </Button>
+    );
+  const s = standingOf(category, result);
+  if (s.tone === "eligible")
+    return (
+      <Button asChild size="sm" className="flex-1 rounded-full">
+        <Link href="/sign-up">
+          {tm("applyAs", { category: abbr })} <ArrowRight />
+        </Link>
+      </Button>
+    );
+  if (s.tone === "held") return null;
+  return (
+    <Button size="sm" className="flex-1 rounded-full" onClick={result.onEdit}>
+      {tm("updateAnswers")} <PenLine />
+    </Button>
   );
 }
 
@@ -493,6 +570,8 @@ function MapLayer({
   label,
   short,
   tierLabel,
+  markerOf,
+  markerLabel,
 }: {
   layout: Layout;
   className?: string;
@@ -506,6 +585,8 @@ function MapLayer({
   label: (category: Category) => string;
   short: (category: Category) => string;
   tierLabel: (tier: CategoryTier) => string;
+  markerOf: (category: Category) => LadderMarker["kind"] | undefined;
+  markerLabel: (kind: LadderMarker["kind"]) => string;
 }) {
   const tl = useTranslations("ladder.req");
   const { w, h, vertical, at, zones } = layout;
@@ -680,6 +761,17 @@ function MapLayer({
                 <Icon filled={on} className="relative size-5 sm:size-6 lg:size-7" aria-hidden />
               </span>
             </button>
+            {/* Personal marker above the station (eligibility result). */}
+            {markerOf(category) && (
+              <span
+                className={cn(
+                  "pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 animate-pop rounded-full px-2 py-0.5 text-[0.65rem] font-bold whitespace-nowrap shadow-sm",
+                  MARKER_TONE[markerOf(category)!],
+                )}
+              >
+                {markerLabel(markerOf(category)!)}
+              </span>
+            )}
             {/* Short label below the icon: plain for the others, a "you are here" pill when selected. */}
             <span
               aria-hidden

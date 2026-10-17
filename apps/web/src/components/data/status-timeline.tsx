@@ -30,7 +30,7 @@ export function StatusTimeline({
     <ol
       className={cn(
         "relative flex flex-col",
-        responsive && "lg:flex-row lg:items-start lg:justify-between",
+        responsive && "@3xl/main:flex-row @3xl/main:items-start @3xl/main:justify-between",
         className,
       )}
     >
@@ -44,7 +44,8 @@ export function StatusTimeline({
             aria-current={step.state === "current" ? "step" : undefined}
             className={cn(
               "relative flex gap-3 pb-6 last:pb-0",
-              responsive && "lg:flex-1 lg:flex-col lg:items-center lg:pb-0 lg:text-center",
+              responsive &&
+                "@3xl/main:flex-1 @3xl/main:flex-col @3xl/main:items-center @3xl/main:pb-0 @3xl/main:text-center",
             )}
           >
             {!last && (
@@ -53,7 +54,7 @@ export function StatusTimeline({
                 className={cn(
                   "absolute top-8 bottom-0 left-[0.9375rem] w-0.5 -translate-x-1/2",
                   responsive &&
-                    "lg:top-[0.9375rem] lg:right-[-50%] lg:bottom-auto lg:left-1/2 lg:h-0.5 lg:w-auto lg:translate-x-4",
+                    "@3xl/main:top-[0.9375rem] @3xl/main:right-[-50%] @3xl/main:bottom-auto @3xl/main:left-1/2 @3xl/main:h-0.5 @3xl/main:w-auto @3xl/main:translate-x-4",
                   step.state === "done" ? "bg-primary" : "bg-border",
                 )}
               />
@@ -75,7 +76,9 @@ export function StatusTimeline({
                 <span className={cn("size-2 rounded-full", TONE_FILL.neutral, "opacity-40")} />
               )}
             </span>
-            <div className={cn("flex min-w-0 flex-col gap-0.5 pt-1", responsive && "lg:px-2")}>
+            <div
+              className={cn("flex min-w-0 flex-col gap-0.5 pt-1", responsive && "@3xl/main:px-2")}
+            >
               <span
                 className={cn(
                   "text-sm font-semibold",

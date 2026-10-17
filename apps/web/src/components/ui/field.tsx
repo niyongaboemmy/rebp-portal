@@ -5,6 +5,7 @@ import { Slot } from "radix-ui";
 import { createContext, useContext, useId } from "react";
 import { useErrorMessage } from "@/hooks/use-error-message";
 import { cn } from "@/lib/utils";
+import { InfoTip } from "./info-tip";
 import { Label } from "./label";
 
 interface FieldContextValue {
@@ -23,6 +24,8 @@ interface FieldProps extends Omit<React.ComponentProps<"div">, "children"> {
   error?: string;
   description?: React.ReactNode;
   labelAction?: React.ReactNode;
+  /** Long help goes into an ⓘ beside the label; short hints (≤ 40 characters) stay inline. */
+  compactHelp?: boolean;
   children: React.ReactNode;
 }
 
@@ -35,6 +38,7 @@ export function Field({
   error,
   description,
   labelAction,
+  compactHelp = false,
   className,
   children,
   ...props
@@ -42,6 +46,10 @@ export function Field({
   const id = useId();
   const translate = useErrorMessage();
   const message = translate(error);
+  const tip =
+    compactHelp &&
+    Boolean(description) &&
+    !(typeof description === "string" && description.length <= 40);
   const value: FieldContextValue = {
     id,
     descriptionId: `${id}-description`,
@@ -54,11 +62,14 @@ export function Field({
     <FieldContext.Provider value={value}>
       <div className={cn("flex flex-col gap-2", className)} {...props}>
         <div className="flex items-center justify-between gap-3">
-          <Label htmlFor={id}>{label}</Label>
+          <span className="inline-flex min-w-0 items-center gap-1.5">
+            <Label htmlFor={id}>{label}</Label>
+            {tip && <InfoTip id={value.descriptionId}>{description}</InfoTip>}
+          </span>
           {labelAction}
         </div>
         {children}
-        {description && !message && (
+        {description && !tip && !message && (
           <p id={value.descriptionId} className="text-xs leading-relaxed text-muted-foreground">
             {description}
           </p>

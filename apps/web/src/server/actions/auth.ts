@@ -17,7 +17,7 @@ import { enforceRateLimit, runAction } from "../action";
 import { isFullyVerified, sendContactCode, signUp, verifyContact } from "../auth/account";
 import { clearCookie, COOKIE, readCookie, setCookie } from "../auth/cookies";
 import { getCurrentSession } from "../auth/current";
-import { safeNextPath } from "../auth/guards";
+import { safeNextPath, landingFor } from "../auth/guards";
 import {
   describeChallenge,
   resendChallengeCode,
@@ -44,7 +44,9 @@ async function applyOutcome(outcome: LoginOutcome, next?: string | null) {
   }
   await setCookie(COOKIE.session(), outcome.token, outcome.expiresAt);
   await clearCookie(COOKIE.challenge());
-  return { redirectTo: isFullyVerified(outcome.user) ? safeNextPath(next) : "/verify" };
+  return {
+    redirectTo: isFullyVerified(outcome.user) ? await landingFor(outcome.user, next) : "/verify",
+  };
 }
 
 export async function signUpAction(input: SignUpInput) {

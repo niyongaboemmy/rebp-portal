@@ -53,17 +53,19 @@ that asks for a code shows it on screen with a **Use code** button, and all mess
 
 Password for all: `Rebp-Demo-Pilot-2026`. Staff accounts must set up two-step on first sign-in.
 
-| Email                   | Roles                        |
-| ----------------------- | ---------------------------- |
-| applicant@demo.rebp.rw  | Applicant                    |
-| supervisor@demo.rebp.rw | Applicant, Supervisor        |
-| principal@demo.rebp.rw  | Principal Broker, Firm admin |
-| officer@demo.rebp.rw    | Reviewing Officer            |
-| approver@demo.rebp.rw   | Approving Authority          |
-| registrar@demo.rebp.rw  | Registrar                    |
-| finance@demo.rebp.rw    | Finance Officer              |
-| admin@demo.rebp.rw      | System administrator         |
-| auditor@demo.rebp.rw    | Auditor / DPO                |
+| Email                   | Roles                                                   |
+| ----------------------- | ------------------------------------------------------- |
+| applicant@demo.rebp.rw  | Applicant                                               |
+| supervisor@demo.rebp.rw | Applicant, Supervisor                                   |
+| principal@demo.rebp.rw  | Principal Broker, Firm admin                            |
+| officer@demo.rebp.rw    | Reviewing Officer                                       |
+| approver@demo.rebp.rw   | Approving Authority                                     |
+| registrar@demo.rebp.rw  | Registrar                                               |
+| finance@demo.rebp.rw    | Finance Officer                                         |
+| admin@demo.rebp.rw      | System administrator                                    |
+| auditor@demo.rebp.rw    | Auditor / DPO                                           |
+| agent@demo.rebp.rw      | Applicant holding an FSLA licence in its renewal window |
+| firm@demo.rebp.rw       | Organisation account of Keza Realty Ltd                 |
 
 ## Quality gates
 
@@ -75,5 +77,13 @@ CI runs the same steps plus a dependency audit (`.github/workflows/ci.yml`).
 
 ## Status
 
-Foundation (Plan D1: WP-0.2, 0.3, 0.4, 0.7, 0.8, 0.9, 0.10, 0.11) is in place: monorepo, design system, navigation,
-i18n, authentication with MFA and Google, simulated OTP delivery (dev mode), RBAC with an access-control console, audit trail, CI. Application, review and licensing modules follow the plan from D2.
+Pilot Release scope (Plan §3) is implemented end to end: guided application wizard for all eight categories
+(New, Upgrade, Renewal, Firm registration), documents with scanning and encryption, the eligibility engine
+(BR catalogue), OTP e-signature over a hashed snapshot, sandbox payments, supervisor/Principal Broker
+confirmations, the Section L review console, Section M decisions with segregation of duties, licence issuance
+with PDF certificate and QR, the public register and verification page, register administration, renewal
+lifecycle jobs, firm workspace, configuration with maker-checker, reports and in-app notifications.
+
+- How to run, demo, schedule jobs, back up: [docs/runbook.md](docs/runbook.md)
+- What is covered and how it is tested: [docs/traceability.md](docs/traceability.md)
+- What comes next: [docs/backlog.md](docs/backlog.md) · decisions: [docs/decisions.md](docs/decisions.md)

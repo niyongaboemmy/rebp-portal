@@ -40,6 +40,8 @@ export function HeroScene({
       ref={ref}
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
+      // An illustration: its cards keep their real shadows in the flat light theme.
+      data-keep-shadow
       className={cn("relative [--px:0] [--py:0]", className)}
     >
       {children}
