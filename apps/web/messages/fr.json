@@ -149,8 +149,8 @@
   },
   "landing": {
     "eyebrow": "Portail officiel des licences",
-    "title": "Licences immobilières, en toute simplicité",
-    "subtitle": "Postulez, suivez et vérifiez — au même endroit.",
+    "title": "Praticiens du courtage immobilier : une licence en toute simplicité",
+    "subtitle": "L'immobilier est un vaste secteur. Nous travaillons sur les pratiques de courtage immobilier : ceux que vous connaissez comme commissionnaires.",
     "primaryCta": "Postuler",
     "verifyTitle": "Vérifier un praticien",
     "verifySubtitle": "Vérifiez n'importe quelle licence par nom ou numéro en quelques secondes.",
@@ -201,8 +201,8 @@
         "license": "Voir mes licences"
       }
     },
-    "titleLead": "Licences immobilières,",
-    "titleAccent": "en toute simplicité",
+    "titleLead": "Praticiens du courtage immobilier",
+    "titleAccent": "Une licence en toute simplicité",
     "guide": {
       "label": "Votre parcours vers une licence",
       "eligibility": "Éligibilité",

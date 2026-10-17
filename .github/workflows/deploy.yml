@@ -197,9 +197,14 @@ jobs:
         run: |
           for attempt in 1 2 3 4; do
             set +e
-            ssh cpanel "set -e; mkdir -p '$APP_DIR/releases/$RELEASE'; \
-              tar -xzf - -C '$APP_DIR/releases/$RELEASE'; \
-              APP_ROOT=\$HOME/$APP_DIR bash '$APP_DIR/releases/$RELEASE/deploy/activate.sh' '$RELEASE'" < release.tgz
+            # Inode budget: before unpacking, keep only the live release (the rollback target) and
+            # drop any half-unpacked ones; a failed unpack removes its own folder.
+            ssh cpanel "set -e; cd '$APP_DIR'; \
+              CUR=\$(basename \"\$(readlink current 2>/dev/null || echo none)\"); \
+              for d in releases/*; do [ -d \"\$d\" ] && [ \"\$(basename \"\$d\")\" != \"\$CUR\" ] && rm -rf \"\$d\"; done; true; \
+              mkdir -p 'releases/$RELEASE'; \
+              tar -xzf - -C 'releases/$RELEASE' || { rm -rf 'releases/$RELEASE'; echo 'Unpack failed: disk or inode quota? (ADR-012)' >&2; exit 1; }; \
+              APP_ROOT=\$HOME/$APP_DIR bash 'releases/$RELEASE/deploy/activate.sh' '$RELEASE'" < release.tgz
             code=$?
             set -e
             [ "$code" -ne 255 ] && exit "$code"

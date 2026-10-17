@@ -149,8 +149,8 @@
   },
   "landing": {
     "eyebrow": "Official licensing portal",
-    "title": "Real estate licensing, made simple",
-    "subtitle": "Apply, track and verify — all in one place.",
+    "title": "Real Estate Brokerage Practitioners: licensing made simple",
+    "subtitle": "Real estate is a big sector. We work on Real Estate Brokerage Practices: the people you know as commissioners.",
     "primaryCta": "Apply Now",
     "verifyTitle": "Verify a practitioner",
     "verifySubtitle": "Check any licence by name or number in seconds.",
@@ -201,8 +201,8 @@
         "license": "View my licences"
       }
     },
-    "titleLead": "Real estate licensing,",
-    "titleAccent": "made simple",
+    "titleLead": "Real Estate Brokerage Practitioners",
+    "titleAccent": "Licensing made simple",
     "guide": {
       "label": "Your path to a licence",
       "eligibility": "Eligibility",
