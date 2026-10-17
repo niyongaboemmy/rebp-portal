@@ -1,0 +1,209 @@
+name: Deploy (cPanel)
+
+# Production deploy of https://rireb.irebpmr.rw to the Namecheap cPanel account
+# (docs/DEPLOYMENT.md, ADR-012). Called by CI on every push to main once all checks pass
+# (ci.yml, job "Deploy"), or run by hand (Actions → Deploy (cPanel) → Run workflow) to redeploy
+# or roll back. Only commits that are on main can be deployed.
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to deploy
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit SHA or tag on main to deploy (rollback = an older SHA)
+        required: true
+        default: main
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  NODE_VERSION: ${{ vars.NODE_VERSION || '22' }}
+  # Build-time only. The real secrets live in .env.production on the server.
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/build
+  AUTH_SECRET: build-only-secret-not-used-at-runtime-000000
+  APP_ENCRYPTION_KEY: build-only-key-not-used-at-runtime-0000000000
+  APP_URL: ${{ vars.APP_URL || 'https://rireb.irebpmr.rw' }}
+  APP_ENV: production
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  # CI runs for pushes in parallel; only the newest commit on main deploys, so an older run
+  # finishing late can't overwrite a newer release. Manual runs (redeploy, rollback) proceed.
+  latest:
+    name: Newest commit on main?
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - id: check
+        env: { GH_TOKEN: "${{ github.token }}", REF: "${{ inputs.ref }}" }
+        run: |
+          if [ "${{ github.event_name }}" = workflow_dispatch ]; then echo go=true >> "$GITHUB_OUTPUT"; exit 0; fi
+          tip=$(gh api "repos/${{ github.repository }}/commits/main" --jq .sha)
+          if [ "$tip" = "$REF" ]; then echo go=true >> "$GITHUB_OUTPUT"
+          else echo go=false >> "$GITHUB_OUTPUT"; echo "::notice::Skipping $REF: main is now at $tip, whose run deploys it."; fi
+
+  build:
+    name: Build release
+    needs: latest
+    if: needs.latest.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      release: ${{ steps.meta.outputs.release }}
+    services:
+      # The server runs PostgreSQL 10: build, migrate and smoke test against the same major.
+      postgres:
+        image: postgres:10
+        env: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: build }
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+      - name: Only commits on main
+        run: |
+          git merge-base --is-ancestor HEAD origin/main ||
+            { echo "::error::${{ inputs.ref }} is not on main; only main is deployed."; exit 1; }
+      - id: meta
+        run: echo "release=$(date -u +%Y%m%d%H%M%S)-$(git rev-parse --short=8 HEAD)" >> "$GITHUB_OUTPUT"
+      # The server's Node preserves symlinked paths, and pnpm's symlinked layout then resolves
+      # some packages to the wrong version (pg-types → postgres-array: every page fails). A flat,
+      # npm-style node_modules makes the standalone trace symlink-free. Release builds only; set
+      # in the workspace file because pnpm re-checks the install before every script it runs.
+      - name: Flat node_modules for the release
+        run: |
+          printf '\nnodeLinker: hoisted\n' >> pnpm-workspace.yaml
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "${{ env.NODE_VERSION }}", cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+
+      # The same migrator the server runs (PostgreSQL 10 syntax adjustments included).
+      - name: Migrate (PostgreSQL 10)
+        run: node deploy/cpanel/migrate.cjs apps/web/prisma/migrations
+
+      # Turbopack keeps its build work in .next/cache; restoring it makes the build start warm.
+      - uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/src/**', 'packages/contracts/src/**', 'apps/web/next.config.ts', 'apps/web/messages/**') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+      - run: pnpm --filter @rebp/web build
+        env: { NEXT_OUTPUT: standalone }
+      - run: bash deploy/cpanel/bundle.sh release
+
+      # Run it the way Passenger does: app.cjs in an app root outside the checkout (no stray
+      # node_modules to fall back on), `current` symlinked, symlinked paths preserved.
+      - name: Smoke test the bundle
+        env:
+          PORT: "3000"
+          NODE_PRESERVE_SYMLINKS: "1"
+          BOOTSTRAP_ADMIN_EMAIL: smoke@example.org
+        run: |
+          APPROOT="$RUNNER_TEMP/app" && rm -rf "$APPROOT" && mkdir -p "$APPROOT/releases" "$APPROOT/shared/storage"
+          cp -a release "$APPROOT/releases/r1" && ln -s "$APPROOT/releases/r1" "$APPROOT/current"
+          cp release/deploy/app.cjs "$APPROOT/app.cjs"
+          (cd "$APPROOT/current" && node deploy/migrate.cjs prisma/migrations && node deploy/create-admin.cjs "$APPROOT/admin.txt")
+          grep -q '^Password: ' "$APPROOT/admin.txt"
+          (cd "$APPROOT" && node app.cjs > "$RUNNER_TEMP/server.log" 2>&1 &)
+          for _ in $(seq 1 30); do
+            curl -fsS http://localhost:3000/api/health | grep -q '"db":"up"' && break
+            sleep 2
+          done
+          fail=0
+          for p in /api/health / /register /check /categories /sign-in /sign-up /robots.txt /sitemap.xml /manifest.webmanifest; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -H 'x-forwarded-proto: https' "http://localhost:3000$p")
+            echo "$code $p"
+            case "$code" in 5*|000) fail=1 ;; esac
+          done
+          if [ "$fail" = 1 ] || grep -q "Failed to proxy\|Cannot find module\|Invalid environment" "$RUNNER_TEMP/server.log"; then
+            cat "$RUNNER_TEMP/server.log"; exit 1
+          fi
+
+      - run: tar -czf release.tgz -C release .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ steps.meta.outputs.release }}
+          path: release.tgz
+          retention-days: 14
+
+  deploy:
+    name: Deploy to cPanel
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # One deploy at a time; a newer one waits instead of cancelling this one.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    # Restricted to main in Settings → Environments; add required reviewers for an approval gate.
+    environment:
+      name: production
+      url: ${{ vars.APP_URL || 'https://rireb.irebpmr.rw' }}
+    env:
+      RELEASE: ${{ needs.build.outputs.release }}
+      APP_DIR: ${{ vars.CPANEL_APP_DIR || 'apps/rireb' }}
+    steps:
+      # Re-check right before touching the server: a newer commit may have landed meanwhile.
+      - id: fresh
+        env: { GH_TOKEN: "${{ github.token }}", REF: "${{ inputs.ref }}" }
+        run: |
+          if [ "${{ github.event_name }}" = workflow_dispatch ]; then echo go=true >> "$GITHUB_OUTPUT"; exit 0; fi
+          tip=$(gh api "repos/${{ github.repository }}/commits/main" --jq .sha)
+          if [ "$tip" = "$REF" ]; then echo go=true >> "$GITHUB_OUTPUT"
+          else echo go=false >> "$GITHUB_OUTPUT"; echo "::notice::Not deploying $REF: main moved to $tip."; fi
+
+      - uses: actions/download-artifact@v4
+        if: steps.fresh.outputs.go == 'true'
+        with: { name: "release-${{ needs.build.outputs.release }}" }
+
+      - name: Set up SSH
+        if: steps.fresh.outputs.go == 'true'
+        env:
+          SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.CPANEL_SSH_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<EOF
+          Host cpanel
+            HostName ${{ secrets.CPANEL_SSH_HOST }}
+            Port ${{ secrets.CPANEL_SSH_PORT || '21098' }}
+            User ${{ secrets.CPANEL_SSH_USER }}
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+            BatchMode yes
+            PasswordAuthentication no
+            StrictHostKeyChecking yes
+            ConnectTimeout 30
+            ServerAliveInterval 30
+          EOF
+
+      # One SSH login per deploy: the server's firewall blocks an IP for a while after a few
+      # logins in quick succession. Exit code 255 means ssh could not connect: wait and retry.
+      - name: Upload and activate (backup, migrate, health check, automatic rollback)
+        if: steps.fresh.outputs.go == 'true'
+        run: |
+          for attempt in 1 2 3 4; do
+            set +e
+            ssh cpanel "set -e; mkdir -p '$APP_DIR/releases/$RELEASE'; \
+              tar -xzf - -C '$APP_DIR/releases/$RELEASE'; \
+              APP_ROOT=\$HOME/$APP_DIR bash '$APP_DIR/releases/$RELEASE/deploy/activate.sh' '$RELEASE'" < release.tgz
+            code=$?
+            set -e
+            [ "$code" -ne 255 ] && exit "$code"
+            echo "SSH connection failed (attempt $attempt); retrying in 2 minutes"
+            sleep 120
+          done
+          exit 255

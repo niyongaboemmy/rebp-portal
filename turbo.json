@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["APP_*", "AUTH_*", "GOOGLE_*", "SMTP_*", "SMS_*", "NEXT_PUBLIC_*"]
+      "env": ["APP_*", "AUTH_*", "GOOGLE_*", "SMTP_*", "SMS_*", "NEXT_PUBLIC_*", "NEXT_OUTPUT"]
     },
     "dev": { "cache": false, "persistent": true },
     "lint": {},

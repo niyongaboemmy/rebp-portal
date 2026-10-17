@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -41,6 +42,14 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Lets a second local server build elsewhere when `.next` is locked by another one.
   ...(process.env.NEXT_DIST_DIR ? { distDir: process.env.NEXT_DIST_DIR } : {}),
+  // cPanel deploy (docs/DEPLOYMENT.md): a self-contained server of a few thousand files instead of
+  // the full node_modules tree (the hosting account has an inode cap). Traced from the monorepo root.
+  ...(process.env.NEXT_OUTPUT === "standalone"
+    ? {
+        output: "standalone" as const,
+        outputFileTracingRoot: path.join(import.meta.dirname, "../.."),
+      }
+    : {}),
   reactStrictMode: true,
   poweredByHeader: false,
   transpilePackages: ["@rebp/contracts"],
