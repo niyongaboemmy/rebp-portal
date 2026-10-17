@@ -3,7 +3,7 @@
 import type { Capability } from "@rebp/contracts";
 import { HeaderAccountMenu } from "./account-menu";
 
-/** Public-header account menu: the same items as the app shell's (ADR-011), plus "My portal". */
+/** Public-header account menu: the shell's items (ADR-011) plus "My portal" (applicants) or "Dashboard". */
 export function UserMenu({
   name,
   email,
