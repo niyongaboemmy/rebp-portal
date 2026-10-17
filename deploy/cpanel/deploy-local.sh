@@ -5,6 +5,7 @@
 #
 #   bash deploy/cpanel/deploy-local.sh [ref]        # default: origin/main
 #   DRY_RUN=/path/release.tgz bash deploy/cpanel/deploy-local.sh   # build only, keep the tarball
+#   KEEP_PLATFORMS=1 DRY_RUN=…                                       # …runnable here too (tests)
 set -euo pipefail
 
 REF="${1:-origin/main}"
@@ -55,7 +56,8 @@ for f in "deploy/node_modules/@node-rs/argon2-linux-x64-gnu" "node_modules/@node
   [ -e "$TMP/release/$f" ] || { echo "Missing Linux binary: $f"; exit 1; }
 done
 # The server is linux-x64 with glibc: drop the other platforms' binaries (disk and inodes).
-find "$TMP/release" -depth -type d -path '*/node_modules/@*/*' \
+# KEEP_PLATFORMS=1 (with DRY_RUN) keeps them, to smoke-test the release on this computer.
+[ "${KEEP_PLATFORMS:-0}" = 1 ] && [ -n "${DRY_RUN:-}" ] || find "$TMP/release" -depth -type d -path '*/node_modules/@*/*' \
   \( -name '*darwin*' -o -name '*arm64*' -o -name '*musl*' -o -name '*win32*' \) -exec rm -r {} +
 COPYFILE_DISABLE=1 tar --no-xattrs --no-mac-metadata -czf "$TMP/release.tgz" -C "$TMP/release" .
 if [ -n "${DRY_RUN:-}" ]; then

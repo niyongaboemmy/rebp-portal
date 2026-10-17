@@ -14,9 +14,11 @@ permissions:
   contents: read
 
 jobs:
+  # Fast checks (~5 min). These gate the production deploy.
   verify:
+    name: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:16-alpine
@@ -37,7 +39,6 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-
       - name: Write test environment
         working-directory: apps/web
         run: |
@@ -57,10 +58,51 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm build
       - name: Dependency audit
         run: pnpm audit --prod --audit-level high
 
+  # Build + E2E (~12 min), in parallel. Every PR must pass it before merge; on main it re-checks
+  # the merged commit but does not hold up the deploy (the PR already ran it on that code).
+  e2e:
+    name: E2E (Playwright + axe)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: rebp_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Write test environment
+        working-directory: apps/web
+        run: |
+          cat > .env.test <<EOT
+          APP_URL=http://localhost:3100
+          DATABASE_URL=postgresql://postgres:postgres@localhost:5432/rebp_test?schema=public
+          AUTH_SECRET=$(openssl rand -base64 32)
+          APP_ENCRYPTION_KEY=$(openssl rand -base64 32)
+          SMS_PROVIDER=mock
+          AUTH_BREACHED_PASSWORD_CHECK=false
+          RATE_LIMIT_SCALE=100
+          APP_ENV=dev
+          EOT
+          cp .env.test .env
+
+      - run: pnpm build
       - name: Install Playwright browser
         working-directory: apps/web
         run: pnpm exec playwright install --with-deps chromium
@@ -116,7 +158,8 @@ jobs:
           grep -q "plain-SQL word_similarity" plain.log
           test "$(psql -h localhost -U postgres -d plain -Atc "select word_similarity('mukamna', 'Uwase Mukamana Grace') > 0.35")" = t
 
-  # Production deploy to cPanel, only for pushes to main and only when every check passed.
+  # Production deploy to cPanel, only for pushes to main, once the fast checks pass (it then runs
+  # alongside E2E).
   deploy:
     name: Deploy
     needs: [verify, postgres10]
