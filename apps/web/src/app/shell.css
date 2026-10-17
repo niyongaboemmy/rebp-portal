@@ -97,8 +97,11 @@
 svg[data-icon] :where([stroke-width]) {
   stroke-width: var(--icon-stroke);
 }
+/* Sidebar icons are 18 px, so 1.4 keeps the same ~1.05 px rendered line as 1.25 at 20 px. */
 #app-sidebar,
-#app-sidebar-sheet,
+#app-sidebar-sheet {
+  --icon-stroke: 1.4;
+}
 [data-bottom-nav],
 [data-more-sheet],
 [role="menu"] {

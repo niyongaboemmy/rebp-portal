@@ -1,6 +1,5 @@
 import { sampleCv } from "./sample-cv";
 import { randomInt } from "node:crypto";
-import { crc32, deflateSync } from "node:zlib";
 import type { Category, Role } from "@/generated/prisma/client";
 import { hashPassword } from "@/server/auth/password";
 import { createSession } from "@/server/auth/session";
@@ -174,42 +173,4 @@ export async function makeFirmWithPeople() {
   return { owner, firm, principal, pb, supervisor, supervisorLicence };
 }
 
-// ---------------------------------------------------------------------------
-// Files
-// ---------------------------------------------------------------------------
-
-function chunk(type: string, data: Buffer) {
-  const length = Buffer.alloc(4);
-  length.writeUInt32BE(data.length);
-  const body = Buffer.concat([Buffer.from(type, "latin1"), data]);
-  const crc = Buffer.alloc(4);
-  crc.writeUInt32BE(crc32(body) >>> 0);
-  return Buffer.concat([length, body, crc]);
-}
-
-/** A real, decodable grayscale PNG (photo uploads are embedded in certificates). */
-export function pngOf(width = 600, height = 600): Buffer {
-  const header = Buffer.alloc(13);
-  header.writeUInt32BE(width, 0);
-  header.writeUInt32BE(height, 4);
-  header[8] = 8; // bit depth
-  header[9] = 0; // grayscale
-  const row = Buffer.alloc(width + 1, 200);
-  row[0] = 0;
-  const raw = Buffer.concat(Array.from({ length: height }, () => row));
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk("IHDR", header),
-    chunk("IDAT", deflateSync(raw)),
-    chunk("IEND", Buffer.alloc(0)),
-  ]);
-}
-
-export function pdfOf(text = "sample"): Buffer {
-  return Buffer.from(
-    `%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0/Kids[]>>endobj\n% ${text}\ntrailer<</Root 1 0 R>>\n%%EOF\n`,
-    "latin1",
-  );
-}
-
-export const EICAR = "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*";
+export { EICAR, pdfOf, pngOf } from "./files";

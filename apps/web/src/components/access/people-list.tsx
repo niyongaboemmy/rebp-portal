@@ -1,13 +1,21 @@
 "use client";
 
-import { ChevronRight, ShieldAlert, ShieldCheck, UserX } from "@/components/icons";
+import { ChevronRight, ShieldCheck, UserX } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { PermissionMatrix } from "@rebp/contracts";
+import {
+  ATTENTION_CHIP,
+  ATTENTION_DOT,
+  LIST_GROUP,
+  LIST_ROW,
+  LIST_ROW_HOVER,
+  OK_CHIP,
+} from "@/components/admin/surfaces";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { UserRow } from "@/server/access/users";
 import { RoleChip } from "./role-chip";
 
@@ -19,16 +27,24 @@ interface PeopleListProps {
   currentUserId: string;
   matrix: PermissionMatrix;
   canManage: boolean;
+  /** Profile photos by user id (UX-035); initials when absent. */
+  photos?: Record<string, string>;
 }
 
-export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleListProps) {
+export function PeopleList({
+  users,
+  currentUserId,
+  matrix,
+  canManage,
+  photos = {},
+}: PeopleListProps) {
   const t = useTranslations("access.people");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = users.find((u) => u.id === selectedId) ?? null;
 
   return (
     <>
-      <ul className="flex flex-col gap-2.5" data-testid="people-list">
+      <ul className={LIST_GROUP} data-testid="people-list">
         {users.map((user, index) => {
           const isSelf = user.id === currentUserId;
           return (
@@ -41,23 +57,28 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                 type="button"
                 onClick={() => setSelectedId(user.id)}
                 data-testid={`person-${user.email}`}
-                className="group flex w-full items-center gap-3 rounded-2xl border bg-card p-3 text-left transition-all outline-none hover:bg-primary/[0.05] hover:bg-surface-2 focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.995] sm:gap-4 sm:p-4"
+                className={cn(
+                  "group flex w-full items-center gap-3 text-left outline-none focus-visible:bg-primary/[0.05] focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:ring-inset @xl/main:gap-4",
+                  LIST_ROW,
+                  LIST_ROW_HOVER,
+                  "py-3",
+                )}
               >
                 <div className="relative">
-                  <Avatar name={user.fullName} className="size-11" />
+                  <Avatar name={user.fullName} src={photos[user.id]} className="size-10" />
                   {user.disabled && (
-                    <span className="absolute -right-1 -bottom-1 inline-flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground ring-2 ring-[var(--card)]">
+                    <span className="absolute -right-1 -bottom-1 inline-flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground ring-2 ring-card">
                       <UserX className="size-3" aria-hidden />
                     </span>
                   )}
                 </div>
-                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span className="truncate font-semibold">{user.fullName}</span>
-                    {isSelf && <Badge variant="info">{t("you")}</Badge>}
+                    {isSelf && <span className={OK_CHIP}>{t("you")}</span>}
                     {user.disabled && <Badge variant="danger">{t("disabled")}</Badge>}
                     {user.accountType === "ORGANISATION" && (
-                      <Badge variant="outline">{t("organisation")}</Badge>
+                      <Badge variant="neutral">{t("organisation")}</Badge>
                     )}
                   </div>
                   <span className="truncate text-sm text-muted-foreground">{user.email}</span>
@@ -67,14 +88,14 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                     ))}
                   </div>
                 </div>
-                <div className="hidden shrink-0 flex-col items-end gap-1.5 text-xs md:flex">
+                <div className="hidden shrink-0 flex-col items-end gap-1.5 text-xs @3xl/main:flex">
                   {user.mfaMethods.length > 0 ? (
-                    <span className="inline-flex items-center gap-1 font-semibold text-success">
-                      <ShieldCheck className="size-3.5" aria-hidden /> {t("mfaOn")}
+                    <span className={OK_CHIP}>
+                      <ShieldCheck aria-hidden /> {t("mfaOn")}
                     </span>
                   ) : (
-                    <span className="text-warning-strong inline-flex items-center gap-1 font-semibold">
-                      <ShieldAlert className="size-3.5" aria-hidden /> {t("noMfa")}
+                    <span className={ATTENTION_CHIP}>
+                      <span aria-hidden className={ATTENTION_DOT} /> {t("noMfa")}
                     </span>
                   )}
                   <span className="text-muted-foreground">
@@ -84,7 +105,7 @@ export function PeopleList({ users, currentUserId, matrix, canManage }: PeopleLi
                   </span>
                 </div>
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground transition-colors group-hover:text-link">
-                  <span className="hidden sm:inline">
+                  <span className="hidden @xl/main:inline">
                     {canManage && !isSelf ? t("manage") : t("view")}
                   </span>
                   <ChevronRight

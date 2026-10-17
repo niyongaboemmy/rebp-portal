@@ -82,7 +82,7 @@ export default async function ApplicationsPage() {
     id: app.id,
     reference: app.referenceNo,
     category: tc(`${app.category}.name`),
-    code: CATEGORY_INFO[app.category].abbreviation,
+    code: CATEGORY_INFO[app.category].monogram,
     type: tt(`${app.type}.name`),
     status: app.status,
     lastStep: app.lastStep,

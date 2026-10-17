@@ -72,9 +72,14 @@ export function fileResponse(
       "Content-Disposition": `${inline ? "inline" : "attachment"}; filename="${safe}"`,
       "Cache-Control": "private, no-store",
       "X-Content-Type-Options": "nosniff",
-      // Previews may be framed by the portal's own document viewer only.
+      // Previews may be framed by the portal's own document viewer only. A PDF must not get
+      // `default-src 'none'`: browsers render it with a built-in viewer (a plugin/extension frame)
+      // that such a policy blocks, leaving a "sad file" instead of the document (UX-035). The PDF
+      // keeps the framing restriction; images keep the strict policy.
       "Content-Security-Policy":
-        "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; frame-ancestors 'self'",
+        contentType === "application/pdf"
+          ? "frame-ancestors 'self'"
+          : "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; frame-ancestors 'self'",
     },
   });
 }

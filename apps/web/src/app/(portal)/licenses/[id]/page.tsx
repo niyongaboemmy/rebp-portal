@@ -84,6 +84,8 @@ export default async function LicenceDetailPage({ params }: PageProps<"/licenses
     label: c.code === "CUSTOM" ? (c.text ?? "") : t(`conditions.${c.code}`),
     detail: c.code === "CUSTOM" ? undefined : c.text,
     endsOn: c.endsOn || undefined,
+    // FR-M-011: the holder must send compliance evidence for this condition.
+    evidenceRequired: c.evidenceRequired === true,
   }));
   const rera = licence.category === "RERA";
 
@@ -347,6 +349,15 @@ export default async function LicenceDetailPage({ params }: PageProps<"/licenses
                     {c.endsOn && (
                       <span className="text-xs text-muted-foreground">
                         {t("wallet.conditionUntil", { date: formatDay(c.endsOn, locale) })}
+                      </span>
+                    )}
+                    {c.evidenceRequired && (
+                      <span
+                        className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold"
+                        data-testid="condition-evidence"
+                      >
+                        <span aria-hidden className="missing-mark size-2 rounded-full bg-sun" />
+                        {t("wallet.conditionEvidence")}
                       </span>
                     )}
                   </li>

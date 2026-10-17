@@ -69,3 +69,27 @@ same width.
   - The account link and settings tab are capability-filtered (`backoffice.access`), via `accountLinksFor()`.
   - The page uses `requireCapability("backoffice.access")`, so applicant-side accounts get `/forbidden`.
   - The forbidden page offers "My access" only to people who can open it.
+
+## Amendment v4 (2026-10-17): sidebar hierarchy and icon tiles
+
+Product feedback: section labels ("Work", "Registry") read like menu items, and the menu lacked a modern finish.
+
+- **Section labels** are now an eyebrow followed by a hairline rule across the column: 11 px, bold, uppercase, 0.12 em
+  tracking, muted. Groups are 24 px apart (`gap-6`, was 20 px).
+- **Items** carry three levels:
+  - idle: regular weight, 85 % foreground;
+  - hover: a soft tint;
+  - current page: a soft accent row and a semibold label.
+- **Icon tiles:** each light 16 px Lucide outline sits in a 28 px rounded tile (`foreground/4.5 %`, `white/6 %` in dark).
+- **Current page tile:** brand blue with the outline icon in white (not filled).
+  - Expanded, the light theme lightens the tile (`primary` mixed with 18 % white). The white icon keeps 3.97:1, above
+    the 3:1 minimum for graphics.
+  - On the collapsed rail it is full `primary` (5.86:1) and carries the state alone, with no row background.
+  - Flat: no glow or shadow on the tile or the count badges.
+  - Dark keeps `primary`.
+- **Section labels** use full `muted-foreground`, which is tested against `sidebar` in tokens.test (4.5:1).
+- **Count badges** are notification bubbles on the icon tile's top-right corner, the same expanded and on the rail
+  (they replace the rail's ember dot):
+  - an 18 px Sun pill (`sun` with `sun-foreground`, a tested text pair), with bold tabular digits and `99+` above 99;
+  - a 2 px ring in the row's current colour, so the bubble looks cut out of the tile;
+  - `animate-pop` on mount, which reduced motion removes.

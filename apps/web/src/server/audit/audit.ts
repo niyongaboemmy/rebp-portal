@@ -14,6 +14,16 @@ export interface AuditInput {
   userAgent?: string | null;
   /** Must not contain raw PII — use maskEmail / maskPhone. */
   metadata?: Record<string, unknown>;
+  /**
+   * FR-AUD-002: the actor's role at the time ("SYSTEM" for jobs). Derived from the actor's roles
+   * when omitted. Stored in metadata, so the table shape and the chain inputs stay unchanged.
+   */
+  actorRole?: string | null;
+  /** FR-AUD-002 before/after values; stored as a field-level diff in `metadata.changes`. */
+  before?: unknown;
+  after?: unknown;
+  /** Dotted paths whose values are hashed in the diff (FR-AUD-002 "sensitive values hashed"). */
+  sensitive?: readonly string[];
 }
 
 interface ChainFields {
@@ -43,8 +53,93 @@ export function computeAuditHash(fields: ChainFields): string {
   return createHash("sha256").update(canonicalJson(fields)).digest("hex");
 }
 
+// ---------------------------------------------------------------------------
+// FR-AUD-002: actor role and field-level before/after diff
+// ---------------------------------------------------------------------------
+
+export interface FieldChange {
+  /** Dotted path, e.g. "fees.REA.licensing". */
+  field: string;
+  before: unknown;
+  after: unknown;
+}
+
+type Leaf = string | number | boolean | null;
+
+function leaves(value: unknown, prefix: string, out: Map<string, Leaf>) {
+  if (value instanceof Date) out.set(prefix, value.toISOString());
+  else if (value && typeof value === "object" && !Array.isArray(value)) {
+    const entries = Object.entries(value as Record<string, unknown>).filter(
+      ([, v]) => v !== undefined,
+    );
+    if (entries.length === 0 && prefix) out.set(prefix, canonicalJson(value));
+    for (const [k, v] of entries) leaves(v, prefix ? `${prefix}.${k}` : k, out);
+  } else if (Array.isArray(value)) out.set(prefix, canonicalJson(value));
+  else out.set(prefix, (value ?? null) as Leaf);
+  return out;
+}
+
+/** A short, non-reversible stand-in for a sensitive value in a diff. */
+export function hashedValue(value: unknown): string {
+  return `sha256:${createHash("sha256").update(canonicalJson(value)).digest("hex").slice(0, 16)}`;
+}
+
+/**
+ * Field-level diff of two values (FR-AUD-002). Objects are compared leaf by leaf; arrays as a
+ * whole. Paths listed in `sensitive` (or below them) are hashed, never stored in clear.
+ */
+export function diffValues(
+  before: unknown,
+  after: unknown,
+  sensitive: readonly string[] = [],
+): FieldChange[] {
+  const a = leaves(before, "", new Map());
+  const b = leaves(after, "", new Map());
+  const isSensitive = (path: string) =>
+    sensitive.some((s) => path === s || path.startsWith(`${s}.`));
+  const mask = (path: string, value: Leaf | undefined) =>
+    value === undefined ? null : isSensitive(path) ? hashedValue(value) : value;
+  return [...new Set([...a.keys(), ...b.keys()])]
+    .filter((path) => a.get(path) !== b.get(path))
+    .sort()
+    .map((path) => ({
+      field: path || "value",
+      before: mask(path, a.get(path)),
+      after: mask(path, b.get(path)),
+    }));
+}
+
+/** Staff roles first (they explain the action); "SYSTEM" when there is no actor. */
+export function roleLabel(roles: readonly string[] | null | undefined): string {
+  if (!roles) return "SYSTEM";
+  const staff = roles.filter((r) => !["APPLICANT", "SUPERVISOR"].includes(r));
+  return (staff.length ? staff : roles).join(",") || "UNKNOWN";
+}
+
+async function enrichedMetadata(input: AuditInput): Promise<Record<string, unknown>> {
+  const metadata: Record<string, unknown> = { ...(input.metadata ?? {}) };
+  let role = input.actorRole;
+  if (role === undefined || role === null) {
+    if (!input.actorId) role = "SYSTEM";
+    else {
+      const actor = await db.user.findUnique({
+        where: { id: input.actorId },
+        select: { roles: true },
+      });
+      role = actor ? roleLabel(actor.roles) : "UNKNOWN";
+    }
+  }
+  metadata.actorRole ??= role;
+  if (input.before !== undefined || input.after !== undefined) {
+    metadata.changes = diffValues(input.before ?? null, input.after ?? null, input.sensitive);
+  }
+  return metadata;
+}
+
 /** Appends an event to the hash chain (FR-AUD-001, ADR-007). Serialised with an advisory lock. */
 export async function recordAudit(input: AuditInput): Promise<void> {
+  // Resolved before taking the chain lock; the result is ordinary metadata, hashed like any other.
+  const metadata = await enrichedMetadata(input);
   await db.$transaction(async (tx) => {
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(${CHAIN_LOCK_KEY})`;
     const last = await tx.auditEvent.findFirst({ orderBy: { id: "desc" }, select: { hash: true } });
@@ -57,7 +152,7 @@ export async function recordAudit(input: AuditInput): Promise<void> {
       entityId: input.entityId ?? null,
       ipAddress: input.ipAddress ?? null,
       userAgent: input.userAgent ?? null,
-      metadata: input.metadata ?? {},
+      metadata,
       prevHash: last?.hash ?? GENESIS_HASH,
     };
     await tx.auditEvent.create({

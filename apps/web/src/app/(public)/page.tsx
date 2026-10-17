@@ -119,7 +119,7 @@ export default async function LandingPage() {
               {t("landing.eyebrow")}
             </span>
 
-            <h1 className="mt-[clamp(1rem,3vh,1.75rem)] text-[clamp(2.1rem,min(4.3vw,6.6vh),3.9rem)] leading-[1.08] font-bold tracking-[-0.035em] text-balance hyphens-none">
+            <h1 className="mt-[clamp(1rem,3vh,1.75rem)] text-[clamp(2.1rem,min(4.3vw,6.6vh),3.9rem)] leading-[1.08] font-bold tracking-[-0.025em] text-balance hyphens-none">
               {t("landing.titleLead")
                 .split(" ")
                 .map((word, index) => (
@@ -197,7 +197,7 @@ export default async function LandingPage() {
           <div className="flex flex-col gap-4">
             <h2
               id="ladder-title"
-              className="text-[clamp(1.75rem,1.3rem+1.5vw,2.5rem)] leading-[1.1] tracking-[-0.03em] text-foreground"
+              className="text-[clamp(1.75rem,1.3rem+1.5vw,2.5rem)] leading-[1.1] tracking-[-0.02em] text-foreground"
             >
               {t("landing.categoriesTitleTop")}
               <br />

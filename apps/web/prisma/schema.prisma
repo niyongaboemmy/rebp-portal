@@ -624,24 +624,29 @@ model InformationRequest {
 
 /// Section M decision (FR-M-001…017). Immutable; corrections link a new record.
 model Decision {
-  id               String      @id @default(uuid()) @db.Uuid
-  applicationId    String      @db.Uuid
-  application      Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  approverId       String      @db.Uuid
-  approver         User        @relation(fields: [approverId], references: [id])
-  decision         String
-  approvedCategory Category?
-  conditions       Json        @default("[]")
-  geoScope         String[]    @default([])
-  reasons          String?
-  reasonCodes      String[]    @default([])
-  letterNo         String      @unique
-  signedAt         DateTime
-  signature        Json
-  correctsId       String?     @db.Uuid
-  createdAt        DateTime    @default(now())
+  id                  String      @id @default(uuid()) @db.Uuid
+  applicationId       String      @db.Uuid
+  application         Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  approverId          String      @db.Uuid
+  approver            User        @relation(fields: [approverId], references: [id])
+  decision            String
+  approvedCategory    Category?
+  conditions          Json        @default("[]")
+  geoScope            String[]    @default([])
+  reasons             String?
+  reasonCodes         String[]    @default([])
+  letterNo            String      @unique
+  signedAt            DateTime
+  signature           Json
+  /// FR-M-009: the approver's override of the derived practice arrangement (null = derived).
+  practiceArrangement String?
+  /// FR-M-017: a correction is a new decision linked to the one it corrects, with its reason.
+  correctsId          String?     @db.Uuid
+  correctionReason    String?
+  createdAt           DateTime    @default(now())
 
   @@index([applicationId])
+  @@index([correctsId])
 }
 
 /// Persistent practitioner / firm registration (FR-N-001).

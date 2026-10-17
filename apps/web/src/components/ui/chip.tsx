@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 export function chipClassName(selected: boolean, className?: string) {
   return cn(
     "inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium whitespace-nowrap transition-[background-color,color,transform] duration-(--dur-2) outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.96] sm:h-9 [&_svg]:size-4",
+    // Selected is a soft primary tint and edge, never a solid black fill (UX-031/032).
     selected
-      ? "bg-foreground text-background"
-      : "bg-card text-muted-foreground hover:bg-surface-3 hover:text-foreground",
+      ? "bg-primary/[0.08] font-semibold text-foreground ring-1 ring-primary/40 dark:bg-primary/[0.16] dark:ring-primary/50"
+      : "bg-card/70 text-muted-foreground ring-1 ring-foreground/[0.07] hover:bg-primary/[0.04] hover:text-foreground dark:bg-surface-2/60 dark:ring-white/[0.06] dark:hover:bg-surface-3",
     className,
   );
 }

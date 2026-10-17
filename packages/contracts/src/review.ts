@@ -89,9 +89,12 @@ export const reviewDraftSchema = z.object({
 });
 export type ReviewDraft = z.infer<typeof reviewDraftSchema>;
 
+/**
+ * FR-L-010: signing is an explicit electronic approval in the officer's two-step-verified session,
+ * confirmed in a modal (UX-036) — no password prompt.
+ */
 export const signReviewSchema = z.object({
   applicationId: z.uuid(),
-  password: z.string().min(1).max(256),
 });
 
 export const documentVerdictSchema = z.object({
@@ -124,6 +127,13 @@ export const referSchema = z.object({ applicationId: z.uuid(), reason });
 export const conflictSchema = z.object({ applicationId: z.uuid(), reason });
 export const assignSchema = z.object({ applicationId: z.uuid(), officerId: z.uuid() });
 
+/** FR-BO-005: assign a selection of queue rows to one officer in one action. */
+export const BULK_ASSIGN_MAX = 50;
+export const bulkAssignSchema = z.object({
+  applicationIds: z.array(z.uuid()).min(1, "validation.atLeastOne").max(BULK_ASSIGN_MAX),
+  officerId: z.uuid(),
+});
+
 // ---------------------------------------------------------------------------
 // Section M (FR-M-001…017, BR-091, BR-092)
 // ---------------------------------------------------------------------------
@@ -146,19 +156,34 @@ export const decisionConditionSchema = z.object({
   text: z.string().trim().max(300).optional(),
   endsOn: z.union([z.iso.date(), z.literal("")]).optional(),
   publicOnRegister: z.boolean().default(true),
+  /** FR-M-011: the holder must provide compliance evidence for this condition. */
+  evidenceRequired: z.boolean().default(false),
 });
-export type DecisionCondition = z.infer<typeof decisionConditionSchema>;
+/** Stored conditions may predate newer fields (e.g. evidenceRequired), so the input shape. */
+export type DecisionCondition = z.input<typeof decisionConditionSchema>;
+
+/** FR-M-009 (M.9): the authorised practice arrangement written on the licence. */
+export const LICENCE_ARRANGEMENTS = [
+  "AFFILIATED",
+  "INDEPENDENT",
+  "REFERRAL_ONLY",
+  "FIRM_PRINCIPAL",
+  "FIRM",
+  "ESTABLISH_OR_JOIN_REBF",
+] as const;
+export type LicenceArrangement = (typeof LICENCE_ARRANGEMENTS)[number];
 
 export const decisionSchema = z
   .object({
     applicationId: z.uuid(),
     decision: z.enum(DECISIONS),
     approvedCategory: z.enum(CATEGORIES).optional(),
+    /** FR-M-009: override of the arrangement derived from Sections F/G (approvals only). */
+    practiceArrangement: z.enum(LICENCE_ARRANGEMENTS).optional(),
     conditions: z.array(decisionConditionSchema).max(10).default([]),
     geoScope: z.array(z.string().max(20)).max(40).default([]),
     reasons: z.string().trim().max(2000).optional(),
     reasonCodes: z.array(z.enum(REJECTION_REASON_CODES)).max(8).default([]),
-    password: z.string().min(1).max(256),
   })
   .superRefine((value, ctx) => {
     // FR-M-012: reasons are mandatory for conditional, deferred and rejected decisions.
@@ -170,6 +195,19 @@ export const decisionSchema = z
       ctx.addIssue({ code: "custom", path: ["reasonCodes"], message: "validation.atLeastOne" });
   });
 export type DecisionInput = z.input<typeof decisionSchema>;
+
+/**
+ * FR-M-017: decisions are immutable; a correction (e.g. a clerical error in the reasons) is a new
+ * decision record linked to the one it corrects, confirmed like the original.
+ */
+export const correctDecisionSchema = z.object({
+  decisionId: z.uuid(),
+  /** Why the decision is corrected (kept on the record and in the audit trail). */
+  reason,
+  /** The corrected reasons text for the letter; omitted keeps the original wording. */
+  reasons: z.string().trim().max(2000, "validation.tooLong").optional(),
+});
+export type CorrectDecisionInput = z.input<typeof correctDecisionSchema>;
 
 // ---------------------------------------------------------------------------
 // Register administration (FR-RA-001/002, FR-WF-010/011)
@@ -206,6 +244,13 @@ export const registerActionSchema = z
   });
 export type RegisterActionInput = z.input<typeof registerActionSchema>;
 
+/** FR-N-012: reissue the certificate (lost, name or condition change); the old QR is superseded. */
+export const reissueCertificateSchema = z.object({
+  licenceId: z.uuid(),
+  reason,
+  password: z.string().min(1).max(256),
+});
+
 export const decideRegisterActionSchema = z.object({ id: z.uuid(), approve: z.boolean(), note });
 
 export const endAffiliationSchema = z.object({
@@ -219,6 +264,11 @@ export const endAffiliationSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const QUEUE_VIEWS = ["mine", "unassigned", "all", "sla", "decision"] as const;
+/** FR-BO-001 sorts: deadline first (default), newest submission, longest in the current state. */
+export const QUEUE_SORTS = ["deadline", "submitted", "stale"] as const;
+export type QueueSort = (typeof QUEUE_SORTS)[number];
+/** The "officer" filter: an officer id, or "none" for unassigned files. */
+export const QUEUE_UNASSIGNED = "none";
 
 export const queueQuerySchema = z.object({
   view: z.enum(QUEUE_VIEWS).optional().catch(undefined),
@@ -226,6 +276,11 @@ export const queueQuerySchema = z.object({
   category: z.enum(CATEGORIES).optional().catch(undefined),
   type: z.enum(APPLICATION_TYPES).optional().catch(undefined),
   q: z.string().trim().max(80).optional().catch(undefined),
+  officer: z
+    .union([z.literal(QUEUE_UNASSIGNED), z.uuid()])
+    .optional()
+    .catch(undefined),
+  sort: z.enum(QUEUE_SORTS).optional().catch(undefined),
   page: z.coerce.number().int().min(1).max(10_000).optional().catch(undefined),
 });
 export type QueueQuery = z.infer<typeof queueQuerySchema>;

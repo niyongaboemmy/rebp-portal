@@ -5,7 +5,8 @@ export function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "flex flex-col gap-5 rounded-2xl border bg-card p-5 text-card-foreground raised sm:p-6",
+        // Glass over the pane's wash, a hairline, no shadow (UX-031/032) — the same as PANEL.
+        "glass flex flex-col gap-5 rounded-[1.75rem] p-5 text-card-foreground ring-1 ring-primary/[0.08] sm:p-6 dark:ring-white/[0.06]",
         className,
       )}
       {...props}

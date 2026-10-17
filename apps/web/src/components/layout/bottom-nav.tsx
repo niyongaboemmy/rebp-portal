@@ -36,7 +36,7 @@ export function BottomNav({
       className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 md:hidden print:hidden short:bottom-[max(0.5rem,env(safe-area-inset-bottom))]"
     >
       <ul
-        className="mx-auto grid h-16 max-w-md rounded-[1.75rem] border border-border bg-card px-1.5 shadow-3 short:h-12"
+        className="mx-auto grid h-16 max-w-md rounded-[1.75rem] bg-popover px-1.5 shadow-(--overlay) short:h-12"
         style={{ gridTemplateColumns: `repeat(${tabs.length + 1}, minmax(0, 1fr))` }}
       >
         {tabs.map((item) => {

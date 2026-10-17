@@ -1,6 +1,6 @@
 import "server-only";
 import { createCipheriv, createDecipheriv, createHash, hkdfSync, randomBytes } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { env } from "../env";
 
@@ -13,6 +13,8 @@ import { env } from "../env";
 export interface BlobStore {
   put(key: string, data: Buffer): Promise<void>;
   get(key: string): Promise<Buffer>;
+  /** Whether a blob is stored under the key (a cheap check, no decryption). */
+  has(key: string): Promise<boolean>;
 }
 
 const MAGIC = Buffer.from("RB1");
@@ -58,10 +60,52 @@ const localStore: BlobStore = {
   async get(key) {
     return openBlob(await readFile(resolveKey(key)));
   },
+  async has(key) {
+    try {
+      await access(resolveKey(key));
+      return true;
+    } catch {
+      return false;
+    }
+  },
 };
 
 export const blobStore: BlobStore = localStore;
 
 export function sha256Hex(data: Buffer): string {
   return createHash("sha256").update(data).digest("hex");
+}
+
+/** File signatures the portal accepts (FR-DOC-003): PDF, PNG, JPEG, WebP. */
+function looksLike(mimeType: string, bytes: Buffer): boolean {
+  const head = (n: number) => bytes.subarray(0, n);
+  if (mimeType === "application/pdf") {
+    if (head(5).toString("latin1") !== "%PDF-") return false;
+    // A PDF that declares no pages (or only an empty page tree) renders as a viewer error;
+    // treat it as unreadable so the officer gets the designed state instead (UX-035).
+    const text = bytes.toString("latin1");
+    const counts = [...text.matchAll(/\/Type\s*\/Pages\b[^>]*?\/Count\s+(\d+)/g)].map((m) =>
+      Number(m[1]),
+    );
+    return counts.length === 0 || counts.some((n) => n > 0);
+  }
+  if (mimeType === "image/png") return head(4).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
+  if (mimeType === "image/jpeg") return head(3).equals(Buffer.from([0xff, 0xd8, 0xff]));
+  if (mimeType === "image/webp")
+    return (
+      head(4).toString("latin1") === "RIFF" && bytes.subarray(8, 12).toString("latin1") === "WEBP"
+    );
+  return bytes.length > 0;
+}
+
+/**
+ * Whether a stored file can actually be shown (UX-034/035): it exists, decrypts, and its bytes
+ * are the type it claims — so a viewer shows a designed state instead of a broken frame.
+ */
+export async function blobReadable(key: string, mimeType: string): Promise<boolean> {
+  try {
+    return looksLike(mimeType, await blobStore.get(key));
+  } catch {
+    return false;
+  }
 }

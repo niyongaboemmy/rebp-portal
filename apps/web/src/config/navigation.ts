@@ -66,6 +66,8 @@ export interface NavItem {
   tab?: boolean;
   /** Count shown next to the item when something is waiting. */
   badge?: NavBadgeKey;
+  /** Only for people with a personal profile (individual applicants): Profile and CV. */
+  profileOnly?: boolean;
 }
 
 export type NavSectionLabel =
@@ -118,6 +120,8 @@ export const BACKOFFICE_SECTIONS = {
     label: "queue",
     icon: Nav.ClipboardCheck,
     capability: "review.perform",
+    // Leads who take over or bulk-assign files see the queue too (the page admits either).
+    alsoFor: ["review.assign"],
     group: "sectionWork",
     milestone: "D4 — WP-3.1/3.2",
   },
@@ -229,9 +233,9 @@ export const BACKOFFICE_NAV: NavSection[] = [
 
 /** Personal settings: reached from the account menu and the command palette, not the main nav. */
 export const ACCOUNT_LINKS: NavItem[] = [
-  { href: "/settings/profile" as Route, label: "profile", icon: UserRound },
+  { href: "/settings/profile" as Route, label: "profile", icon: UserRound, profileOnly: true },
   // The applicant's CV: education, training and experience (UX-018).
-  { href: "/settings/cv" as Route, label: "cv", icon: BookUser },
+  { href: "/settings/cv" as Route, label: "cv", icon: BookUser, profileOnly: true },
   { href: "/settings/security", label: "security", icon: ShieldCheck },
   {
     href: "/settings/access",
@@ -243,8 +247,14 @@ export const ACCOUNT_LINKS: NavItem[] = [
 ];
 
 /** The account links this person may open (My access is for staff). */
-export function accountLinksFor(capabilities: readonly Capability[]): NavItem[] {
-  return ACCOUNT_LINKS.filter((item) => canSee(item, capabilities));
+export function accountLinksFor(
+  capabilities: readonly Capability[],
+  /** Individual applicants keep a profile and CV; staff and organisations don't. */
+  hasProfile = true,
+): NavItem[] {
+  return ACCOUNT_LINKS.filter(
+    (item) => canSee(item, capabilities) && (hasProfile || !item.profileOnly),
+  );
 }
 
 /** Each area's home, for the area switcher. */

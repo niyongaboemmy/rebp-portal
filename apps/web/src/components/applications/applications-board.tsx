@@ -19,7 +19,7 @@ export interface BoardItem {
   id: string;
   reference: string;
   category: string;
-  /** The category's short code, for the card's tile (e.g. "REA"). */
+  /** The category's two-letter code, for the card's tile (e.g. "RA"). */
   code: string;
   type: string;
   status: ApplicationStatus;
@@ -162,7 +162,7 @@ export function ApplicationsBoard({ items, locale }: { items: BoardItem[]; local
                 >
                   <div className="flex items-start gap-3">
                     {/* The category as a tile; a dot when there's something unread. */}
-                    <span className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,var(--primary-soft),color-mix(in_oklch,var(--primary)_14%,var(--card)))] text-[0.7rem] font-bold text-link">
+                    <span className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,var(--primary-soft),color-mix(in_oklch,var(--primary)_16%,var(--card)))] text-sm font-semibold tracking-wider text-link ring-1 ring-primary/10 dark:ring-white/[0.06]">
                       {item.code}
                       {item.unread > 0 && (
                         <span

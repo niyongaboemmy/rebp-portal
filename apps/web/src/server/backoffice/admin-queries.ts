@@ -61,6 +61,7 @@ export async function searchLicences({ q, page = 1 }: { q?: string; page?: numbe
         id: true,
         licenceNo: true,
         displayName: true,
+        holderId: true,
         category: true,
         status: true,
         expiresAt: true,
@@ -102,6 +103,7 @@ export async function licenceAdminDetail(id: string) {
       issuedAt: true,
       expiresAt: true,
       flags: true,
+      certificateVersion: true,
       registrant: { select: { registrationNo: true } },
       holder: { select: { fullName: true } },
       firm: { select: { legalName: true, tradingName: true } },
@@ -194,6 +196,7 @@ export async function awaitingPayment() {
       type: true,
       lateRenewal: true,
       updatedAt: true,
+      applicantId: true,
       applicant: { select: { fullName: true } },
     },
   });
@@ -247,7 +250,16 @@ export async function consoleCounts(userId: string, capabilities: readonly Capab
     has("review.perform")
       ? db.application.count({ where: { assignedOfficerId: userId, status: { in: [...WORKING] } } })
       : null,
-    has("decision.make") ? db.application.count({ where: { status: "PENDING_DECISION" } }) : null,
+    // BR-091: files this person reviewed or was assigned aren't theirs to decide.
+    has("decision.make")
+      ? db.application.count({
+          where: {
+            status: "PENDING_DECISION",
+            OR: [{ assignedOfficerId: null }, { assignedOfficerId: { not: userId } }],
+            reviews: { none: { officerId: userId } },
+          },
+        })
+      : null,
     has("register.administer") || has("register.revoke")
       ? db.registerAction.count({ where: { status: "PENDING" } })
       : null,

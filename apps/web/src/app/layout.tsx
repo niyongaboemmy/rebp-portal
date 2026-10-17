@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { Providers } from "@/components/providers/providers";
-import { figtree, jetbrainsMono } from "./fonts";
+import { jetbrainsMono, quicksand } from "./fonts";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${figtree.variable} ${jetbrainsMono.variable}`}
+      className={`${quicksand.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-dvh">
         <a

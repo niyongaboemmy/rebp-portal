@@ -93,7 +93,7 @@ export default async function CheckIndexPage() {
               </span>
               <div className="flex flex-col gap-2">
                 <h1
-                  className="animate-rise text-[clamp(2.1rem,1.4rem+2.6vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.035em] text-balance"
+                  className="animate-rise text-[clamp(2.1rem,1.4rem+2.6vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.025em] text-balance"
                   style={{ animationDelay: "60ms" }}
                 >
                   {t("check.title")}

@@ -52,6 +52,8 @@ export const rateLimiter = (globalForLimiter.rateLimiter ??= createMemoryRateLim
 /** Named policies so limits live in one place. */
 export const RATE_LIMITS = {
   signIn: { limit: 10, windowMs: 15 * 60_000 },
+  /** Google ID-token sign-in and its nonce requests. */
+  googleSignIn: { limit: 20, windowMs: 15 * 60_000 },
   signUp: { limit: 5, windowMs: 60 * 60_000 },
   otpSend: { limit: 5, windowMs: 15 * 60_000 },
   otpVerify: { limit: 10, windowMs: 15 * 60_000 },

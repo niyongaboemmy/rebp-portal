@@ -18,6 +18,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
+    "db:seed:applications": "tsx prisma/seed-applications.ts",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "icons": "node scripts/gen-fluent-icons.mjs && node scripts/gen-nav-icons.mjs"

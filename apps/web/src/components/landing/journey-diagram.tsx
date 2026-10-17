@@ -365,7 +365,7 @@ function Stage({
       <span
         key={`num-${step.key}`}
         aria-hidden
-        className="absolute -right-2 -bottom-10 -z-10 animate-rise font-display text-[13rem] leading-none font-black tracking-tighter text-foreground/[0.04] select-none dark:text-white/[0.04]"
+        className="absolute -right-2 -bottom-10 -z-10 animate-rise font-display text-[13rem] leading-none font-black tracking-tight text-foreground/[0.04] select-none dark:text-white/[0.04]"
       >
         {String(index + 1).padStart(2, "0")}
       </span>

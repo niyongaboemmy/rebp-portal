@@ -21,10 +21,8 @@ export function DropdownMenuContent({
       <DropdownMenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          // Frosted glass panel: hairline light edge, layered soft shadow, springs in from its trigger.
-          "z-50 min-w-52 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-2xl bg-popover/90 p-2 text-popover-foreground backdrop-blur-2xl backdrop-saturate-150",
-          "shadow-[inset_0_1px_0_rgb(255_255_255/0.7),inset_0_0_0_1px_oklch(0.4_0.05_264/0.06),0_1px_2px_oklch(0.3_0.08_264/0.08),0_20px_44px_-16px_oklch(0.3_0.12_264/0.4)]",
-          "dark:bg-popover/92 dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.08),inset_0_0_0_1px_rgb(255_255_255/0.06),0_24px_52px_-16px_rgb(0_0_0/0.85)]",
+          // Flat panel (ADR-009 v9): the popover tone, a hairline edge and one soft drop; springs in from its trigger.
+          "z-50 min-w-52 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-2xl bg-popover p-2 text-popover-foreground shadow-(--overlay)",
           "data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
           className,
         )}
@@ -53,7 +51,7 @@ export function DropdownMenuIcon({
     <span
       aria-hidden
       className={cn(
-        "inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft/70 transition-[background-color,transform] duration-(--dur-3) ease-spring group-data-[highlighted]:scale-105 group-data-[highlighted]:bg-primary dark:bg-white/[0.06] [&_svg]:text-link! group-data-[highlighted]:[&_svg]:text-primary-foreground!",
+        "inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft/70 transition-[background-color,transform] duration-(--dur-3) ease-spring group-data-[highlighted]:scale-105 group-data-[highlighted]:bg-primary dark:bg-primary/[0.14] [&_svg]:text-link! group-data-[highlighted]:[&_svg]:text-primary-foreground!",
         className,
       )}
     >
@@ -123,7 +121,7 @@ export function DropdownMenuSubContent({
       <DropdownMenuPrimitive.SubContent
         sideOffset={sideOffset}
         className={cn(
-          "z-50 min-w-48 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 text-popover-foreground shadow-3 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+          "z-50 min-w-48 overflow-hidden rounded-2xl bg-popover p-1.5 text-popover-foreground shadow-(--overlay) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
           className,
         )}
         {...props}
@@ -207,7 +205,7 @@ export function DropdownMenuRow({
   trailing?: React.ReactNode;
   /** A dot in the tile's corner (e.g. "new"). */
   badge?: boolean;
-  /** Marks the current page: semibold title and a Sun dot instead of the arrow. */
+  /** Marks the current choice: a light primary wash, a calm white tile and a check (no arrow). */
   current?: boolean;
   className?: string;
 }) {
@@ -216,8 +214,11 @@ export function DropdownMenuRow({
       <span
         aria-hidden
         className={cn(
-          "relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft/70 shadow-[inset_0_1px_0_rgb(255_255_255/0.35)] transition-[background-color,transform] duration-(--dur-3) ease-spring group-data-[highlighted]:scale-105 group-data-[highlighted]:-rotate-3 group-data-[highlighted]:bg-primary dark:bg-white/[0.06] [&_svg]:size-[1.05rem]! [&_svg]:text-link! group-data-[highlighted]:[&_svg]:text-primary-foreground!",
+          "relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft/70 transition-[background-color,transform] duration-(--dur-3) ease-spring group-data-[highlighted]:scale-105 group-data-[highlighted]:-rotate-3 group-data-[highlighted]:bg-primary dark:bg-primary/[0.14] [&_svg]:size-[1.05rem]! [&_svg]:text-link! group-data-[highlighted]:[&_svg]:text-primary-foreground!",
           ROW_TONE[tone].tile,
+          // The selected row stays calm on highlight: no solid tile, no tilt.
+          current &&
+            "bg-card group-data-[highlighted]:scale-100 group-data-[highlighted]:rotate-0 group-data-[highlighted]:bg-card dark:bg-white/[0.1] dark:group-data-[highlighted]:bg-white/[0.1] group-data-[highlighted]:[&_svg]:text-link!",
         )}
       >
         {icon}
@@ -234,7 +235,7 @@ export function DropdownMenuRow({
       {trailing !== undefined ? (
         trailing
       ) : current ? (
-        <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-sun" />
+        <Check aria-hidden className="size-4! shrink-0 text-link!" />
       ) : (
         <ArrowRight
           aria-hidden
@@ -243,7 +244,13 @@ export function DropdownMenuRow({
       )}
     </>
   );
-  const rowClass = cn("items-center", ROW_TONE[tone].row, className);
+  const rowClass = cn(
+    "items-center",
+    ROW_TONE[tone].row,
+    current &&
+      "bg-primary/[0.07] data-[highlighted]:bg-primary/[0.1] dark:bg-primary/[0.14] dark:data-[highlighted]:bg-primary/[0.18]",
+    className,
+  );
   if (href) {
     return (
       <DropdownMenuItem asChild className={rowClass} onSelect={onSelect}>

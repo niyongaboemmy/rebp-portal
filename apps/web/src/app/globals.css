@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 /* Authenticated shell: layout tokens, sidebar-state variants, content width (ADR-011). */
 @import "./shell.css";
+@import "./dashboard.css";
 
 /* Dark mode follows the `.dark` class set by next-themes (UX-008). */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -115,6 +116,10 @@
   --shadow-soft:
     0 1px 2px oklch(0.21 0.02 250 / 0.05), 0 8px 24px -12px oklch(0.21 0.02 250 / 0.14);
   --shadow-3: 0 2px 4px oklch(0.21 0.02 250 / 0.06), 0 24px 48px -16px oklch(0.21 0.02 250 / 0.22);
+  /* Floating layers (menus, sheets, dialogs, tooltips, the bottom bar): flat — a hairline edge and
+     one soft, low drop; no bevels, no glass. --overlay-drop is the drop alone (for bordered edges). */
+  --overlay-drop: 0 18px 40px -22px oklch(0.3 0.1 264 / 0.3);
+  --overlay: 0 0 0 1px oklch(0.4 0.05 264 / 0.08), var(--overlay-drop);
   --highlight: 0 0 0 transparent;
   /* Recessed band (sections that sit "below" the page): white here, deeper than the page in dark. */
   --sunken: oklch(1 0 0);
@@ -140,7 +145,8 @@
   --foreground: oklch(0.965 0.004 250);
   --card: oklch(0.198 0.016 268);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.232 0.018 268);
+  /* Close to the card tone, so overlays sit in the page instead of on a grey slab (ADR-009 v9). */
+  --popover: oklch(0.196 0.016 268);
   --popover-foreground: var(--foreground);
   --surface-2: oklch(0.232 0.018 268);
   --surface-3: oklch(0.265 0.02 268);
@@ -211,13 +217,23 @@
   --shadow-1: 0 0 0 transparent;
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.35);
   --shadow-3: 0 24px 48px -16px oklch(0 0 0 / 0.6);
+  --overlay-drop: 0 18px 40px -24px oklch(0 0 0 / 0.5);
+  --overlay: 0 0 0 1px oklch(1 0 0 / 0.08), var(--overlay-drop);
   --highlight: 0 0 0 transparent;
   --sunken: oklch(0.135 0.012 268);
 }
 
 @theme inline {
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
+  /* Quicksand weight scale (ADR-009 v15): text one step above its thin 400, emphasis capped at 700,
+     so text reads clearly and headings stay smooth, never solid. */
+  --font-weight-normal: 500;
+  --font-weight-medium: 600;
+  --font-weight-semibold: 650;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 700;
+  --font-weight-black: 700;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
 
   --color-background: var(--background);
@@ -349,7 +365,9 @@
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
-    font-feature-settings: "ss01", "cv11";
+    /* Quicksand reads thin at 400; text sits one step up (ADR-009 v15). */
+    font-weight: 500;
+    font-feature-settings: "calt";
   }
 
   h1,
@@ -357,7 +375,8 @@
   h3,
   h4 {
     @apply font-display text-balance;
-    letter-spacing: -0.02em;
+    /* Quicksand's round counters need their natural spacing; negative tracking makes them touch. */
+    letter-spacing: 0;
     /* Kinyarwanda has long agglutinated words; never overflow a 320 px screen. */
     overflow-wrap: anywhere;
     hyphens: auto;
@@ -367,17 +386,17 @@
   h1 {
     font-size: clamp(1.5rem, 1.25rem + 1.4vw, 2.25rem);
     line-height: 1.12;
-    font-weight: 750;
+    font-weight: 600;
   }
   h2 {
     font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
     line-height: 1.2;
-    font-weight: 700;
+    font-weight: 600;
   }
   h3 {
     font-size: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
     line-height: 1.3;
-    font-weight: 650;
+    font-weight: 600;
   }
 
   p {
@@ -2488,45 +2507,48 @@ form.search-glow:focus-within {
 /* UX-028: the applications heroes. Light: a soft primary wash. Dark: the app's own card surface
    (never a muddy navy blend) lit by a soft glow behind the companion, a faint cool counter-glow,
    a hairline and a top highlight — the same family as the shell's surfaces. */
-.hero-surface {
-  background: linear-gradient(
-    120deg,
-    color-mix(in oklch, var(--primary) 10%, var(--card)),
-    var(--card) 70%
-  );
-  /* No shadows: a hairline only. */
-  box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary) 10%, transparent);
-}
-.hero-surface[data-tone="danger"] {
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklch, var(--destructive) 9%, var(--card)),
-    var(--card) 65%
-  );
-}
-.dark .hero-surface {
-  background:
-    radial-gradient(
-      ellipse 42% 90% at 88% 30%,
-      color-mix(in oklch, var(--primary) 26%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 40% 70% at 0% 100%,
-      color-mix(in oklch, var(--primary) 8%, transparent),
-      transparent 70%
-    ),
-    var(--card);
-  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
-}
-.dark .hero-surface[data-tone="danger"] {
-  background:
-    radial-gradient(
-      ellipse 42% 90% at 88% 30%,
-      color-mix(in oklch, var(--destructive) 20%, transparent),
-      transparent 70%
-    ),
-    var(--card);
+/* In the components layer, so utilities (bg-*, ring-*) on the same element win. */
+@layer components {
+  .hero-surface {
+    background: linear-gradient(
+      120deg,
+      color-mix(in oklch, var(--primary) 10%, var(--card)),
+      var(--card) 70%
+    );
+    /* No shadows: a hairline only. */
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary) 10%, transparent);
+  }
+  .hero-surface[data-tone="danger"] {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--destructive) 9%, var(--card)),
+      var(--card) 65%
+    );
+  }
+  .dark .hero-surface {
+    background:
+      radial-gradient(
+        ellipse 42% 90% at 88% 30%,
+        color-mix(in oklch, var(--primary) 26%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 70% at 0% 100%,
+        color-mix(in oklch, var(--primary) 8%, transparent),
+        transparent 70%
+      ),
+      var(--card);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+  .dark .hero-surface[data-tone="danger"] {
+    background:
+      radial-gradient(
+        ellipse 42% 90% at 88% 30%,
+        color-mix(in oklch, var(--destructive) 20%, transparent),
+        transparent 70%
+      ),
+      var(--card);
+  }
 }
 
 /* UX-030: a physical card (TiltCard). Tilt from --rx/--ry, glare and foil from --gx/--gy. */
@@ -2673,40 +2695,53 @@ form.search-glow:focus-within {
 /* UX-031: smooth light surfaces. The content pane carries a faint wash of the primary family,
    and panels are glass over it — translucent white and a primary-tinted hairline,
    never a flat white block or a drop shadow. Dark keeps its card surfaces. */
-.ambient {
-  background:
-    radial-gradient(
-      55% 38% at 92% 0%,
-      color-mix(in oklch, var(--primary) 7%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      45% 32% at 0% 22%,
-      color-mix(in oklch, var(--sky) 7%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      50% 30% at 60% 100%,
-      color-mix(in oklch, var(--primary) 4%, transparent),
-      transparent 70%
-    ),
-    var(--background);
+/* In the components layer, so utilities (bg-*, ring-*) on the same element win. */
+@layer components {
+  .ambient {
+    background:
+      radial-gradient(
+        55% 38% at 92% 0%,
+        color-mix(in oklch, var(--primary) 7%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        45% 32% at 0% 22%,
+        color-mix(in oklch, var(--sky) 7%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        50% 30% at 60% 100%,
+        color-mix(in oklch, var(--primary) 4%, transparent),
+        transparent 70%
+      ),
+      var(--background);
+  }
+  .dark .ambient {
+    background:
+      radial-gradient(
+        55% 38% at 92% 0%,
+        color-mix(in oklch, var(--primary) 6%, transparent),
+        transparent 70%
+      ),
+      var(--background);
+  }
+  .glass {
+    /* Translucent, not blurred: a backdrop filter would make the panel the containing block of
+       every fixed popup inside it (tooltips, menus) and misplace them. The hairline comes from the
+       element's own ring utility. */
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.92), rgb(255 255 255 / 0.74));
+  }
+  .dark .glass {
+    background: var(--card);
+  }
 }
-.dark .ambient {
-  background:
-    radial-gradient(
-      55% 38% at 92% 0%,
-      color-mix(in oklch, var(--primary) 6%, transparent),
-      transparent 70%
-    ),
-    var(--background);
+
+/* Quicksand headings (ADR-009 v14), unlayered so they win over call-site utilities: the rounded face
+   is drawn at a medium weight with its natural spacing, as in the chosen specimen. Bold classes and
+   negative tracking tuned for earlier faces would make it heavy and let round letters touch. */
+:is(h1, h2, h3, h4, .font-display):is(.font-bold, .font-extrabold, .font-black, .font-semibold) {
+  font-weight: 600;
 }
-.glass {
-  /* Translucent, not blurred: a backdrop filter would make the panel the containing block of
-     every fixed popup inside it (tooltips, menus) and misplace them. The hairline comes from the
-     element's own ring utility. */
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.92), rgb(255 255 255 / 0.74));
-}
-.dark .glass {
-  background: var(--card);
+:is(h1, h2, h3, h4, .font-display):is([class*="tracking-tight"], [class*="tracking-[-"]) {
+  letter-spacing: 0;
 }

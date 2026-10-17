@@ -46,7 +46,7 @@ export async function CategoriesHero() {
           </span>
           <div className="flex flex-col gap-2">
             <h1
-              className="animate-rise text-[clamp(2.1rem,1.4rem+2.6vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.035em] text-balance"
+              className="animate-rise text-[clamp(2.1rem,1.4rem+2.6vw,3.5rem)] leading-[1.05] font-bold tracking-[-0.025em] text-balance"
               style={{ animationDelay: "60ms" }}
             >
               {t("title")}
@@ -88,7 +88,7 @@ export async function CategoriesHero() {
           >
             {STATS.map((s) => (
               <div key={s.label} className="flex flex-col">
-                <dd className="text-3xl leading-none font-bold num tracking-[-0.03em]">
+                <dd className="text-3xl leading-none font-bold num tracking-[-0.02em]">
                   {s.value}
                 </dd>
                 <dt className="mt-1 text-xs text-muted-foreground">{s.label}</dt>

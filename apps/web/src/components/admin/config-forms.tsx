@@ -11,6 +11,7 @@ import {
   type FeeSchedule,
   type RuleThresholds,
 } from "@rebp/contracts";
+import { LIST_GROUP, LIST_HEAD, LIST_ROW } from "@/components/admin/surfaces";
 import { useStepUp } from "@/components/security/step-up";
 import { Button } from "@/components/ui/button";
 import { Field, FieldControl } from "@/components/ui/field";
@@ -58,10 +59,10 @@ export function FeesProposalForm({ current, today, disabled }: FormProps<FeeSche
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
       <fieldset disabled={disabled} className="flex flex-col gap-5">
         <legend className="sr-only">{t("configuration.tabs.fees")}</legend>
-        <ul className="flex flex-col overflow-hidden rounded-2xl border">
+        <ul className={LIST_GROUP}>
           <li
             aria-hidden
-            className="hidden grid-cols-[1fr_9rem_9rem] gap-3 border-b bg-surface-2 px-4 py-2 text-xs font-semibold text-muted-foreground sm:grid"
+            className={cn("hidden grid-cols-[1fr_9rem_9rem] gap-3 @xl/main:grid", LIST_HEAD)}
           >
             <span>{t("configuration.fees.category")}</span>
             <span>{t("configuration.fees.registration")}</span>
@@ -70,13 +71,19 @@ export function FeesProposalForm({ current, today, disabled }: FormProps<FeeSche
           {CATEGORIES.map((cat) => (
             <li
               key={cat}
-              className="grid grid-cols-2 gap-3 border-b px-4 py-3 last:border-b-0 sm:grid-cols-[1fr_9rem_9rem] sm:items-center"
+              className={cn(
+                "grid grid-cols-2 gap-3 @xl/main:grid-cols-[1fr_9rem_9rem] @xl/main:items-center",
+                LIST_ROW,
+                "py-3",
+              )}
             >
-              <span className="col-span-2 text-sm font-semibold sm:col-span-1">
+              <span className="col-span-2 text-sm font-semibold @xl/main:col-span-1">
                 {t(`categories.items.${cat}.name`)}
               </span>
               <Field
-                label={<span className="sm:sr-only">{t("configuration.fees.registration")}</span>}
+                label={
+                  <span className="@xl/main:sr-only">{t("configuration.fees.registration")}</span>
+                }
                 error={numberError(errors.value?.fees?.[cat]?.registration)}
                 className="gap-1"
               >
@@ -91,7 +98,9 @@ export function FeesProposalForm({ current, today, disabled }: FormProps<FeeSche
                 </FieldControl>
               </Field>
               <Field
-                label={<span className="sm:sr-only">{t("configuration.fees.licensing")}</span>}
+                label={
+                  <span className="@xl/main:sr-only">{t("configuration.fees.licensing")}</span>
+                }
                 error={numberError(errors.value?.fees?.[cat]?.licensing)}
                 className="gap-1"
               >
@@ -108,7 +117,7 @@ export function FeesProposalForm({ current, today, disabled }: FormProps<FeeSche
             </li>
           ))}
         </ul>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 @xl/main:grid-cols-2">
           <Field
             label={t("configuration.fees.latePenalty")}
             description={t("configuration.fees.latePenaltyHint")}
@@ -189,7 +198,7 @@ export function ThresholdsProposalForm({ current, today, disabled }: FormProps<R
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
       <fieldset disabled={disabled} className="flex flex-col gap-5">
         <legend className="sr-only">{t("configuration.tabs.thresholds")}</legend>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 @xl/main:grid-cols-2 @4xl/main:grid-cols-3">
           {THRESHOLD_FIELDS.map((name) => (
             <Field
               key={name}
@@ -257,7 +266,7 @@ export function FlagsProposalForm({ current, today, disabled }: FormProps<Featur
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
       <fieldset disabled={disabled} className="flex flex-col gap-5">
         <legend className="sr-only">{t("configuration.tabs.flags")}</legend>
-        <div className="flex flex-col overflow-hidden rounded-2xl border">
+        <div className={LIST_GROUP}>
           {FLAG_FIELDS.map((name) => (
             <Controller
               key={name}
@@ -270,7 +279,7 @@ export function FlagsProposalForm({ current, today, disabled }: FormProps<Featur
                   description={t(`configuration.flags.fields.${name}.hint`)}
                   checked={field.value}
                   onChange={field.onChange}
-                  className="rounded-none border-0 border-b last:border-b-0"
+                  className="rounded-none bg-transparent ring-0 dark:bg-transparent"
                 />
               )}
             />
@@ -304,7 +313,12 @@ function SwitchRow({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center gap-4 rounded-2xl border p-4", className)}>
+    <div
+      className={cn(
+        "flex items-center gap-4 rounded-2xl bg-card p-4 ring-1 ring-foreground/[0.07] dark:bg-surface-2/50 dark:ring-white/[0.06]",
+        className,
+      )}
+    >
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <label htmlFor={id} className="text-sm font-semibold">
           {label}
@@ -336,7 +350,7 @@ function ProposalMeta({
 }) {
   const t = useTranslations("configuration.form");
   return (
-    <div className="grid gap-4 sm:grid-cols-[14rem_1fr]">
+    <div className="grid gap-4 @xl/main:grid-cols-[14rem_1fr]">
       <Field label={t("effectiveFrom")} description={t("effectiveHint")} error={effectiveError}>
         <FieldControl>
           <Input type="date" {...effective} />
@@ -361,7 +375,7 @@ function SubmitRow({ pending, disabled }: { pending: boolean; disabled: boolean 
   return (
     <div className="flex flex-wrap items-center justify-end gap-3">
       <p className="text-xs text-muted-foreground">{t("submitHint")}</p>
-      <Button type="submit" loading={pending} disabled={disabled}>
+      <Button type="submit" className="rounded-full" loading={pending} disabled={disabled}>
         <Send /> {t("submit")}
       </Button>
     </div>

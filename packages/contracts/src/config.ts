@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { DEFAULT_FEE_SCHEDULE, feeScheduleSchema } from "./fees";
+import type { Capability } from "./roles";
 import { DEFAULT_THRESHOLDS, type RuleThresholds } from "./rules";
 
 /**
@@ -86,3 +87,21 @@ export const decideConfigSchema = z.object({
   approve: z.boolean(),
   note: z.string().trim().max(500).optional(),
 });
+
+/**
+ * Who may be the maker for each key (FR-ADM-003, Appendix D): config.edit plus one of the area
+ * capabilities below. Finance makes fee schedules; system administrators (roles.manage) make
+ * everything. Capabilities, not role names, so a matrix edit is honoured everywhere.
+ */
+export const CONFIG_MAKER_SCOPE: Record<ConfigKey, readonly Capability[]> = {
+  fees: ["payments.manage", "roles.manage"],
+  thresholds: ["roles.manage"],
+  flags: ["roles.manage"],
+};
+
+export function mayProposeConfig(key: ConfigKey, capabilities: readonly Capability[]): boolean {
+  return (
+    capabilities.includes("config.edit") &&
+    CONFIG_MAKER_SCOPE[key].some((c) => capabilities.includes(c))
+  );
+}

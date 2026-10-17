@@ -9,16 +9,17 @@ import {
   Pause,
   PenLine,
   Play,
+  RotateCw,
   Undo2,
   type LucideIcon,
 } from "@/components/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { LICENSE_STATUS_TONES, type LicenseStatus, type RegisterAction } from "@rebp/contracts";
+import { ATTENTION_CHIP, ATTENTION_DOT, LIST_GROUP, LIST_ROW } from "@/components/admin/surfaces";
 import { LicenceStatusBadge } from "@/components/applications/status-badges";
 import { TONE_SOFT_BG, TONE_TEXT } from "@/components/data/tones";
 import { Alert } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
@@ -27,6 +28,7 @@ import { formatDateTime, formatDay } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { LicenceAdminDetail } from "@/server/backoffice/admin-queries";
 import { RegisterActionDialog } from "./register-action-dialog";
+import { ReissueCertificateDialog } from "./reissue-certificate-dialog";
 
 /** Which statuses each action applies to (mirrors the register-admin transitions, FR-RA-001). */
 const ACTIONS: {
@@ -57,6 +59,9 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
   const { set } = useUrlState();
   const [open, setOpen] = useState(true);
   const [action, setAction] = useState<RegisterAction | null>(null);
+  const [reissuing, setReissuing] = useState(false);
+  // FR-N-012: a certificate can be reissued while the licence is in force.
+  const canReissue = ["ACTIVE", "SUSPENDED", "EXPIRED"].includes(licence.status);
 
   const close = () => {
     setOpen(false);
@@ -111,6 +116,10 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
             <dd className="num">{formatDay(licence.issuedAt, locale)}</dd>
             <dt className="text-muted-foreground">{t("registerAdmin.columns.expires")}</dt>
             <dd className="num">{formatDay(licence.expiresAt, locale)}</dd>
+            <dt className="text-muted-foreground">{t("registerAdmin.reissue.version")}</dt>
+            <dd className="num" data-testid="certificate-version">
+              {licence.certificateVersion}
+            </dd>
           </dl>
 
           {licence.flags.length > 0 && (
@@ -121,9 +130,10 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
               <ul className="flex flex-wrap gap-1.5">
                 {licence.flags.map((flag) => (
                   <li key={flag}>
-                    <Badge variant="warning">
-                      <Flag aria-hidden /> {flagLabel(flag)}
-                    </Badge>
+                    <span className={ATTENTION_CHIP}>
+                      <span aria-hidden className={ATTENTION_DOT} />
+                      <Flag className="size-3.5" aria-hidden /> {flagLabel(flag)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -158,6 +168,16 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
                     <Icon aria-hidden /> {t(`registerAdmin.actions.${a}.button`)}
                   </Button>
                 ))}
+                {canReissue && (
+                  <Button
+                    variant="ghost"
+                    className="justify-start"
+                    onClick={() => setReissuing(true)}
+                    data-testid="reissue-certificate"
+                  >
+                    <RotateCw aria-hidden /> {t("registerAdmin.reissue.button")}
+                  </Button>
+                )}
               </div>
             </section>
           )}
@@ -176,11 +196,11 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
             {licence.events.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t("registerAdmin.detail.noHistory")}</p>
             ) : (
-              <ol className="flex flex-col overflow-hidden rounded-2xl border bg-card">
+              <ol className={LIST_GROUP}>
                 {licence.events.map((event) => {
                   const tone = LICENSE_STATUS_TONES[event.toStatus as LicenseStatus] ?? "neutral";
                   return (
-                    <li key={event.id} className="flex gap-3 border-b px-4 py-3 last:border-b-0">
+                    <li key={event.id} className={cn("flex gap-3", LIST_ROW, "py-3")}>
                       <span
                         className={cn(
                           "inline-flex size-9 shrink-0 items-center justify-center rounded-full",
@@ -233,6 +253,14 @@ export function LicenceAdminSheet({ licence, canAdminister, today }: LicenceAdmi
           </section>
         </div>
       </SheetContent>
+      {reissuing && (
+        <ReissueCertificateDialog
+          licenceId={licence.id}
+          licenceNo={licence.licenceNo}
+          version={licence.certificateVersion}
+          onClose={() => setReissuing(false)}
+        />
+      )}
       {action && (
         <RegisterActionDialog
           key={action}

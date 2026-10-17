@@ -21,6 +21,7 @@ import {
   Wallet,
   type LucideIcon,
 } from "@/components/icons";
+import { CategoryTile } from "@/components/applications/category-tile";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { Route } from "next";
@@ -68,9 +69,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** The applicant's own security-relevant events (FR-AUD-005); staff-only access changes excluded. */
-const FEED_ACTIONS = Object.keys(AUDIT_ACTIONS).filter(
-  (action) => !action.startsWith("access.") && action !== "auth.mfa_challenged",
-);
+const FEED_ACTIONS = Object.entries(AUDIT_ACTIONS)
+  .filter(
+    ([action, meta]) =>
+      ["signin", "account", "twoStep"].includes(meta.category) && action !== "auth.mfa_challenged",
+  )
+  .map(([action]) => action);
 
 type Todo = {
   key: string;
@@ -648,9 +652,7 @@ export default async function DashboardPage() {
                         className="group flex flex-col gap-3 rounded-2xl p-3.5 ring-1 ring-foreground/[0.07] transition-[background-color,box-shadow] duration-(--dur-2) hover:bg-primary/[0.03] hover:ring-primary/25 dark:bg-surface-2/50 dark:ring-white/[0.06] dark:hover:bg-surface-3"
                       >
                         <span className="flex items-start gap-3">
-                          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(145deg,var(--primary-soft),color-mix(in_oklch,var(--primary)_14%,var(--card)))] text-[0.65rem] font-bold text-link">
-                            {CATEGORY_INFO[app.category].abbreviation}
-                          </span>
+                          <CategoryTile category={app.category} />
                           <span className="flex min-w-0 flex-1 flex-col">
                             <span className="truncate text-sm font-semibold">
                               {category(app.category)}

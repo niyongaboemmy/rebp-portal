@@ -21,6 +21,7 @@ import {
   type PermissionOverride,
   type Role,
 } from "@rebp/contracts";
+import { LIST_GROUP, LIST_ROW } from "@/components/admin/surfaces";
 import { useStepUp } from "@/components/security/step-up";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -132,7 +133,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
   return (
     <div className="flex flex-col gap-5">
       {/* Role summary cards: members and permission counts, live with the draft. */}
-      <ul className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 @3xl/main:grid-cols-5">
+      <ul className="-mx-2 flex snap-x [scrollbar-width:none] gap-3 overflow-x-auto px-2 pb-2 @xl/main:mx-0 @xl/main:grid @xl/main:grid-cols-2 @xl/main:overflow-visible @xl/main:px-0 @3xl/main:grid-cols-5">
         {ROLES.map((role) => {
           const Icon = ROLE_META[role].icon;
           const count = next[role].length;
@@ -144,7 +145,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               onMouseEnter={() => setHover({ role })}
               onMouseLeave={() => setHover({})}
               className={cn(
-                "min-w-44 snap-start rounded-2xl border bg-card p-3.5 transition-all duration-200",
+                "min-w-44 snap-start rounded-2xl bg-card p-3.5 ring-1 ring-foreground/[0.06] transition-[transform,background-color] duration-200 dark:bg-surface-2/70 dark:ring-white/[0.06]",
                 hover.role === role && "-translate-y-0.5 role-ring",
               )}
             >
@@ -162,12 +163,17 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               <p className="mt-2.5 flex items-center gap-1.5 text-xs text-muted-foreground">
                 {t("access.matrix.permissionCount", { count })}
                 {delta !== 0 && (
-                  <Badge variant={delta > 0 ? "success" : "danger"} className="px-1.5 py-0">
+                  <Badge
+                    className={cn(
+                      "px-1.5 py-0",
+                      delta > 0 ? "bg-primary-soft text-link" : "bg-danger-soft text-destructive",
+                    )}
+                  >
                     {delta > 0 ? `+${delta}` : delta}
                   </Badge>
                 )}
                 {isStaffRole(role) && (
-                  <Badge variant="outline" className="ml-auto px-1.5 py-0">
+                  <Badge variant="neutral" className="ml-auto px-1.5 py-0">
                     {t("access.matrix.staffRole")}
                   </Badge>
                 )}
@@ -177,8 +183,8 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
         })}
       </ul>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative sm:w-80">
+      <div className="flex flex-col gap-3 @3xl/main:flex-row @3xl/main:items-center @3xl/main:justify-between">
+        <div className="relative @3xl/main:w-80">
           <Search
             className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden
@@ -207,7 +213,12 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
             <Lock className="size-3" /> {t("access.matrix.legend.locked")}
           </span>
           {canEdit && hasOverrides && (
-            <Button variant="ghost" size="sm" onClick={() => setResetOpen(true)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="rounded-full"
+              onClick={() => setResetOpen(true)}
+            >
               <RotateCcw /> {t("access.matrix.resetDefaults")}
             </Button>
           )}
@@ -215,7 +226,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
       </div>
 
       {visible.length === 0 && (
-        <p className="py-8 text-center text-muted-foreground">
+        <p className="rounded-2xl bg-foreground/[0.025] py-8 text-center text-sm text-muted-foreground dark:bg-white/[0.03]">
           {t("access.matrix.noMatches", { query: filter })}
         </p>
       )}
@@ -223,7 +234,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
       {/* Desktop grid */}
       {visible.length > 0 && (
         <div
-          className="hidden overflow-auto rounded-2xl border bg-card @2xl/main:block @2xl/main:max-h-[70dvh]"
+          className="hidden overflow-auto rounded-2xl bg-card ring-1 ring-foreground/[0.07] @2xl/main:block @2xl/main:max-h-[70dvh] dark:ring-white/[0.06]"
           data-testid="permission-matrix"
         >
           <table
@@ -234,7 +245,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               <tr>
                 <th
                   scope="col"
-                  className="sticky top-0 left-0 z-30 min-w-52 border-b bg-card p-3 text-left align-bottom @5xl/main:min-w-60"
+                  className="sticky top-0 left-0 z-30 min-w-52 border-b border-foreground/[0.06] bg-card p-3 text-left align-bottom @5xl/main:min-w-60 dark:border-white/[0.06]"
                 >
                   <span className="sr-only">{t("access.matrix.title")}</span>
                 </th>
@@ -247,7 +258,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
                       style={roleStyle(role)}
                       onMouseEnter={() => setHover({ role })}
                       className={cn(
-                        "sticky top-0 z-20 min-w-[4.75rem] border-b bg-card px-1 py-3 align-bottom transition-colors",
+                        "sticky top-0 z-20 min-w-[4.75rem] border-b border-foreground/[0.06] bg-card px-1 py-3 align-bottom transition-colors dark:border-white/[0.06]",
                         hover.role === role && "bg-muted",
                       )}
                     >
@@ -273,7 +284,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
                     <th
                       scope="colgroup"
                       colSpan={ROLES.length + 1}
-                      className="bg-muted/70 py-2 text-left text-[0.7rem] font-bold tracking-wider text-muted-foreground uppercase"
+                      className="border-b border-foreground/[0.06] bg-foreground/[0.03] py-2 text-left text-[0.7rem] font-bold tracking-wider text-muted-foreground uppercase dark:border-white/[0.06] dark:bg-white/[0.03]"
                     >
                       {/* The label (not the full-width cell) is sticky, so it stays put when scrolling sideways. */}
                       <span className="sticky left-3 px-3">{t(`capabilityGroups.${group}`)}</span>
@@ -285,7 +296,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
                         scope="row"
                         onMouseEnter={() => setHover({ cap })}
                         className={cn(
-                          "sticky left-0 z-10 border-b bg-card p-3 text-left font-normal transition-colors",
+                          "sticky left-0 z-10 border-b border-foreground/[0.06] bg-card p-3 text-left font-normal transition-colors dark:border-white/[0.06]",
                           hover.cap === cap && "bg-muted",
                         )}
                       >
@@ -336,7 +347,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
       {visible.length > 0 && (
         <div className="flex flex-col gap-3 @2xl/main:hidden">
           <div
-            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1"
+            className="-mx-2 flex [scrollbar-width:none] gap-2 overflow-x-auto px-2 pb-1"
             role="tablist"
             aria-label={t("access.matrix.chooseRole")}
           >
@@ -357,7 +368,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               </button>
             ))}
           </div>
-          <ul className="flex flex-col divide-y rounded-2xl border bg-card" role="tabpanel">
+          <ul className={LIST_GROUP} role="tabpanel">
             {visible.map((cap) => {
               const lock = cellLock(mobileRole, cap);
               const granted = next[mobileRole].includes(cap);
@@ -365,7 +376,12 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               return (
                 <li
                   key={cap}
-                  className={cn("flex items-center gap-3 p-3.5", invalid && "bg-danger-soft")}
+                  className={cn(
+                    "flex items-center gap-3",
+                    LIST_ROW,
+                    "py-3",
+                    invalid && "bg-danger-soft",
+                  )}
                 >
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-1.5 text-sm font-semibold">
@@ -411,7 +427,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
               : "invisible translate-y-6 opacity-0",
           )}
         >
-          <div className="pointer-events-auto flex w-full max-w-xl items-center gap-2 rounded-2xl bg-foreground p-2 pl-4 text-background shadow-2xl">
+          <div className="pointer-events-auto flex w-full max-w-xl items-center gap-2 rounded-full bg-primary p-2 pl-5 text-primary-foreground ring-1 ring-primary/30">
             <span
               className="flex-1 text-sm font-semibold"
               aria-live="polite"
@@ -422,7 +438,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
             <Button
               variant="ghost"
               size="sm"
-              className="text-background hover:bg-background/10"
+              className="rounded-full text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
               onClick={() => setDraft(new Map())}
               tabIndex={changes.length ? 0 : -1}
             >
@@ -431,6 +447,7 @@ export function PermissionMatrixEditor({ matrix, roleCounts, canEdit }: Permissi
             <Button
               size="sm"
               variant="accent"
+              className="rounded-full"
               onClick={() => setReviewOpen(true)}
               tabIndex={changes.length ? 0 : -1}
             >
@@ -593,7 +610,10 @@ function MatrixCell({
   return (
     <td
       onMouseEnter={onHover}
-      className={cn("border-b p-1 text-center transition-colors", highlighted && "bg-muted/60")}
+      className={cn(
+        "border-b border-foreground/[0.06] p-1 text-center transition-colors dark:border-white/[0.06]",
+        highlighted && "bg-primary/[0.035] dark:bg-surface-3/60",
+      )}
     >
       {lock ? (
         <Tooltip>

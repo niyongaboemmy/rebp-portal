@@ -45,6 +45,8 @@ export async function reviewConsole(applicationId: string) {
               size: true,
               scanStatus: true,
               createdAt: true,
+              // Server-side only: whether the stored file still exists (never sent to the browser).
+              storageKey: true,
             },
           },
         },
@@ -162,3 +164,20 @@ export async function decisionConsole(applicationId: string) {
   });
 }
 export type DecisionConsole = NonNullable<Awaited<ReturnType<typeof decisionConsole>>>;
+
+/**
+ * The officer's next file once this one is signed (UX-036): their earliest-due assigned file still
+ * to review, or null (the floating button then leads back to the queue).
+ */
+export async function nextFileFor(userId: string, exceptId: string) {
+  const next = await db.application.findFirst({
+    where: {
+      assignedOfficerId: userId,
+      id: { not: exceptId },
+      status: { in: ["SUBMITTED", "UNDER_REVIEW", "FURTHER_ASSESSMENT"] },
+    },
+    orderBy: [{ slaDueAt: { sort: "asc", nulls: "last" } }, { submittedAt: "asc" }],
+    select: { id: true, referenceNo: true },
+  });
+  return next;
+}

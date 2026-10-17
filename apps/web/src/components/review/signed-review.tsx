@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { AttentionPill, LIST_GROUP, LIST_ROW, Mark, type MarkState } from "./marks";
 
 export interface SignedReviewData {
   version: number;
@@ -34,11 +35,11 @@ export interface SignedReviewData {
   signature: { method?: string; at?: string } | null;
 }
 
-const OUTCOME_TONE: Record<VerificationOutcome, StatusTone> = {
-  VERIFIED: "good",
-  PENDING: "info",
-  FAILED: "critical",
-  NA: "neutral",
+const CHECK_MARK: Record<VerificationOutcome, MarkState> = {
+  VERIFIED: "done",
+  PENDING: "todo",
+  FAILED: "failed",
+  NA: "none",
 };
 
 export const RECOMMENDATION_TONES: Record<string, StatusTone> = {
@@ -49,7 +50,8 @@ export const RECOMMENDATION_TONES: Record<string, StatusTone> = {
 
 /**
  * A signed Section L review (FR-L-010): read-only, with the signature, BR-090 override flags and
- * reasons. Server-compatible; shown in the review console and on the decision screen.
+ * reasons. Server-compatible; shown in the review console and on the decision screen. Checks read
+ * as one list group with soft ticks; overrides carry a Sun dot.
  */
 export function SignedReview({
   review,
@@ -66,8 +68,10 @@ export function SignedReview({
   const overridden = review.computed.overridden ?? {};
   return (
     <article className={cn("flex flex-col gap-5", className)} data-testid="signed-review">
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-success-soft px-4 py-3 text-sm">
-        <Signature className="size-5 shrink-0 text-success" aria-hidden />
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-primary/[0.06] px-4 py-3 text-sm ring-1 ring-primary/20 dark:bg-primary/[0.12]">
+        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-soft text-link">
+          <Signature className="size-4" aria-hidden />
+        </span>
         <span className="min-w-0 flex-1">
           {t("signed.by", {
             version: review.version,
@@ -86,23 +90,32 @@ export function SignedReview({
         </Badge>
       </div>
 
-      <dl className="grid gap-2 sm:grid-cols-2">
+      <dl className={cn(LIST_GROUP, "grid @xl/main:grid-cols-2 @xl/main:divide-y-0")}>
         {VERIFICATION_ITEMS.map((item) => {
           const check = review.checks[item];
           return (
-            <div key={item} className="flex flex-col gap-1.5 rounded-xl bg-surface-2 px-3.5 py-3">
-              <dt className="text-sm font-semibold">{t(`items.${item}.label`)}</dt>
-              <dd className="flex flex-col gap-1">
-                {check ? (
-                  <StatusBadge
-                    tone={OUTCOME_TONE[check.outcome]}
-                    label={t(`outcomes.${check.outcome}`)}
-                  />
-                ) : (
-                  <span className="text-xs text-muted-foreground">—</span>
-                )}
-                {check?.note && <span className="text-xs text-muted-foreground">{check.note}</span>}
-              </dd>
+            <div
+              key={item}
+              className={cn(
+                "flex items-start gap-3 @xl/main:border-b @xl/main:border-foreground/[0.06] @xl/main:dark:border-white/[0.06] @xl/main:[&:nth-last-child(-n+2)]:border-b-0",
+                LIST_ROW,
+              )}
+            >
+              <Mark state={check ? CHECK_MARK[check.outcome] : "todo"} className="mt-px" />
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <dt className="text-sm font-semibold">{t(`items.${item}.label`)}</dt>
+                <dd className="flex flex-col gap-0.5 text-xs text-muted-foreground">
+                  <span
+                    className={cn(
+                      "font-semibold",
+                      check?.outcome === "FAILED" ? "text-destructive" : "text-foreground",
+                    )}
+                  >
+                    {check ? t(`outcomes.${check.outcome}`) : "—"}
+                  </span>
+                  {check?.note && <span>{check.note}</span>}
+                </dd>
+              </span>
             </div>
           );
         })}
@@ -113,7 +126,7 @@ export function SignedReview({
         <dd className="flex flex-col gap-1">
           <span className="flex flex-wrap items-center gap-2 font-medium">
             {review.documentation ? t(`documentationOutcomes.${review.documentation}`) : "—"}
-            {overridden.documentation && <Badge variant="warning">{t("signed.overridden")}</Badge>}
+            {overridden.documentation && <AttentionPill>{t("signed.overridden")}</AttentionPill>}
           </span>
           {review.documentationOverrideReason && (
             <span className="text-muted-foreground">{review.documentationOverrideReason}</span>
@@ -123,7 +136,7 @@ export function SignedReview({
         <dd className="flex flex-col gap-1">
           <span className="flex flex-wrap items-center gap-2 font-medium">
             {review.eligibility ? t(`eligibilityOutcomes.${review.eligibility}`) : "—"}
-            {overridden.eligibility && <Badge variant="warning">{t("signed.overridden")}</Badge>}
+            {overridden.eligibility && <AttentionPill>{t("signed.overridden")}</AttentionPill>}
           </span>
           {review.eligibilityOverrideReason && (
             <span className="text-muted-foreground">{review.eligibilityOverrideReason}</span>

@@ -6,12 +6,14 @@ const isDev = process.env.NODE_ENV !== "production";
 // SEC-002. Inline scripts are needed by Next.js hydration; a nonce-based CSP is tracked for R2.
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-  "style-src 'self' 'unsafe-inline'",
+  // Google Identity Services: the sign-in button's script, styles, iframe and FedCM calls (ADR-004).
+  `script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client${isDev ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style",
   // Register map tiles (OpenFreeMap streets, EOX Sentinel-2 cloudless 2016 satellite).
   "img-src 'self' data: blob: https://lh3.googleusercontent.com https://tiles.openfreemap.org https://tiles.maps.eox.at",
   "font-src 'self' data:",
-  `connect-src 'self' https://tiles.openfreemap.org https://tiles.maps.eox.at${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://tiles.openfreemap.org https://tiles.maps.eox.at https://accounts.google.com/gsi/${isDev ? " ws:" : ""}`,
+  "frame-src 'self' https://accounts.google.com/gsi/",
   // MapLibre renders in a blob: web worker.
   "worker-src 'self' blob:",
   "frame-ancestors 'none'",

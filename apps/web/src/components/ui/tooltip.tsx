@@ -18,13 +18,13 @@ export function TooltipContent({
       <TooltipPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          "z-50 max-w-64 animate-in rounded-lg bg-foreground px-3 py-1.5 text-xs leading-relaxed text-background shadow-lg fade-in-0 zoom-in-95",
+          "z-50 max-w-64 animate-in rounded-lg bg-foreground px-3 py-1.5 text-xs leading-relaxed text-background shadow-lg fade-in-0 zoom-in-95 dark:bg-popover dark:text-foreground dark:shadow-(--overlay)",
           className,
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="fill-foreground" />
+        <TooltipPrimitive.Arrow className="fill-foreground dark:fill-popover" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );

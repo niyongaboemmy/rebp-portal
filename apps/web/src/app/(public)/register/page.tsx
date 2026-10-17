@@ -290,7 +290,7 @@ export default async function RegisterPage({ searchParams }: PageProps<"/registe
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 flex-col gap-1">
-            <h1 className="text-[clamp(1.6rem,1.2rem+1.2vw,2.1rem)] leading-none font-bold tracking-[-0.03em]">
+            <h1 className="text-[clamp(1.6rem,1.2rem+1.2vw,2.1rem)] leading-none font-bold tracking-[-0.02em]">
               {t("nav.short.register")}
             </h1>
             <SketchUnderline className="h-2 w-20 sm:h-2.5 sm:w-24" />

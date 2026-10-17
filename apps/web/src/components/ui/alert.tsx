@@ -8,7 +8,7 @@ const alertVariants = cva(
     variants: {
       variant: {
         info: "bg-info-soft text-foreground [&>svg]:text-info",
-        success: "bg-success-soft text-foreground [&>svg]:text-success",
+        success: "bg-primary-soft text-foreground [&>svg]:text-link",
         warning: "bg-warning-soft text-foreground [&>svg]:text-warning",
         danger: "bg-danger-soft text-foreground [&>svg]:text-destructive",
       },

@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { env } from "@/server/env";
+import { GoogleSignInButton } from "./google-sign-in-button";
 
 function GoogleMark() {
   return (
@@ -12,10 +14,19 @@ function GoogleMark() {
   );
 }
 
-/** Full-page navigation (not fetch) so the OAuth redirect and its cookies work. */
-export async function GoogleButton({ enabled, next }: { enabled: boolean; next?: string }) {
+/** Google's button (ID-token sign-in, no client secret); a disabled placeholder when not configured. */
+export async function GoogleButton({
+  enabled,
+  next,
+  context = "signin",
+}: {
+  enabled: boolean;
+  next?: string;
+  context?: "signin" | "signup";
+}) {
   const t = await getTranslations("auth");
-  if (!enabled) {
+  const clientId = env().GOOGLE_CLIENT_ID;
+  if (!enabled || !clientId) {
     return (
       <Button
         variant="outline"
@@ -28,14 +39,7 @@ export async function GoogleButton({ enabled, next }: { enabled: boolean; next?:
       </Button>
     );
   }
-  const query = new URLSearchParams({ intent: "signin", ...(next ? { next } : {}) });
-  return (
-    <Button asChild variant="outline" size="lg" className="w-full rounded-full">
-      <a href={`/api/auth/google?${query.toString()}`}>
-        <GoogleMark /> {t("continueWithGoogle")}
-      </a>
-    </Button>
-  );
+  return <GoogleSignInButton clientId={clientId} context={context} next={next} />;
 }
 
 export async function OrDivider() {

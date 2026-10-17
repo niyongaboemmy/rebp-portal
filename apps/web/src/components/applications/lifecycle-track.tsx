@@ -13,6 +13,7 @@ import {
 } from "@/components/icons";
 import { LIFECYCLE, type LifecycleState, type LifecycleStep } from "@/lib/lifecycle";
 import { cn } from "@/lib/utils";
+import "./lifecycle-track.css";
 
 const ICONS: Record<LifecycleStep, LucideIcon> = {
   fill: PenLine,
@@ -33,11 +34,14 @@ export function LifecycleTrack({
   index,
   state,
   compact = false,
+  perspective = "applicant",
   className,
 }: {
   index: number;
   state: LifecycleState;
   compact?: boolean;
+  /** Whose side the captions speak from: "You / Regulator", or for staff "Applicant / Regulator". */
+  perspective?: "applicant" | "staff";
   className?: string;
 }) {
   const t = useTranslations("lifecycle");
@@ -120,14 +124,24 @@ export function LifecycleTrack({
               {i < LIFECYCLE.length - 1 && (
                 <span
                   aria-hidden
-                  className="absolute top-5 left-[calc(50%+1.5rem)] h-0.5 w-[calc(100%-3rem)] overflow-hidden rounded-full bg-foreground/[0.08] dark:bg-white/[0.1]"
+                  className="absolute top-[1.1875rem] left-[calc(50%+1.5rem)] h-1 w-[calc(100%-3rem)] rounded-full bg-foreground/[0.07] dark:bg-white/[0.08]"
                 >
+                  {/* Done: filled, with light flowing along it (UX-036). */}
                   <span
                     className={cn(
-                      "block h-full origin-left rounded-full bg-primary transition-transform duration-(--dur-5) ease-(--ease-enter)",
+                      "relative block h-full origin-left overflow-hidden rounded-full bg-[linear-gradient(90deg,color-mix(in_oklch,var(--primary)_70%,var(--sky)),var(--primary))] transition-transform duration-(--dur-5) ease-(--ease-enter)",
                       done ? "scale-x-100" : "scale-x-0",
                     )}
-                  />
+                  >
+                    {done && <span className="lt-flow absolute inset-0" />}
+                  </span>
+                  {/* Into the current step: a spark riding the line, then dashes drifting ahead. */}
+                  {!complete && i === index - 1 && (
+                    <span className="lt-spark absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_2px_color-mix(in_oklch,var(--primary)_60%,transparent)]" />
+                  )}
+                  {!complete && i === index && state !== "stopped" && (
+                    <span className="lt-ahead absolute inset-0 rounded-full" />
+                  )}
                 </span>
               )}
               <span
@@ -162,7 +176,7 @@ export function LifecycleTrack({
               {/* Whose turn it is: the applicant's three steps, then the regulator's. */}
               {(i === 0 || i === 3) && (
                 <span className="hidden text-[0.6rem] font-bold tracking-widest text-muted-foreground uppercase @lg/track:block">
-                  {i === 0 ? t("you") : t("regulator")}
+                  {i === 0 ? (perspective === "staff" ? t("applicant") : t("you")) : t("regulator")}
                 </span>
               )}
             </li>

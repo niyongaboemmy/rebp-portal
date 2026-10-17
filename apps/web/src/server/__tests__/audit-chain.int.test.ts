@@ -42,11 +42,16 @@ describe("audit trail (FR-AUD-001…003, ADR-007)", () => {
         db.$executeRawUnsafe("SET LOCAL session_replication_role = replica"),
         db.auditEvent.update({ where: { id: event.id }, data: { metadata } }),
       ]);
-    await tamper({ amount: 1 });
-    const broken = await verifyAuditChain();
-    expect(broken.ok).toBe(false);
-    expect(broken.brokenAtId).toBe(event.id);
-    await tamper({ amount: 100 });
+    try {
+      await tamper({ amount: 1 });
+      const broken = await verifyAuditChain();
+      expect(broken.ok).toBe(false);
+      expect(broken.brokenAtId).toBe(event.id);
+    } finally {
+      // Restore exactly what was stored (recordAudit adds fields such as actorRole, FR-AUD-002),
+      // even when an assertion fails: the test database's chain outlives this run.
+      await tamper(event.metadata as object);
+    }
     expect(await verifyAuditChain()).toMatchObject({ ok: true });
   });
 });

@@ -2,11 +2,13 @@ import "server-only";
 import {
   CONFIG_DEFAULTS,
   CONFIG_SCHEMAS,
+  mayProposeConfig,
   type ConfigKey,
   type ConfigValue,
   type ProposeConfigInput,
 } from "@rebp/contracts";
 import type { User } from "@/generated/prisma/client";
+import { userCapabilities } from "../access/permissions";
 import { recordAudit } from "../audit/audit";
 import type { RequestContext } from "../auth/types";
 import { db } from "../db";
@@ -67,7 +69,16 @@ export async function getConfig<K extends ConfigKey>(
     : { key, version: 0, value: CONFIG_DEFAULTS[key] as ConfigValue<K>, effectiveFrom: null };
 }
 
+/**
+ * FR-ADM-003: the maker must hold config.edit and the area capability for the key
+ * (CONFIG_MAKER_SCOPE). Enforced here so every entry point gets it, not only one server action.
+ */
+export async function assertConfigMaker(key: ConfigKey, maker: Pick<User, "roles">) {
+  if (!mayProposeConfig(key, await userCapabilities(maker))) throw new AppError("forbidden");
+}
+
 export async function proposeConfig(input: ProposeConfigInput, maker: User, ctx: RequestContext) {
+  await assertConfigMaker(input.key, maker);
   const pending = await db.configVersion.findFirst({
     where: { key: input.key, status: "PENDING" },
   });
@@ -76,6 +87,8 @@ export async function proposeConfig(input: ProposeConfigInput, maker: User, ctx:
     where: { key: input.key },
     orderBy: { version: "desc" },
   });
+  // FR-AUD-002: before = the version in force now, after = the proposal.
+  const inForce = await getConfig(input.key);
   const row = await db.configVersion.create({
     data: {
       key: input.key,
@@ -91,7 +104,14 @@ export async function proposeConfig(input: ProposeConfigInput, maker: User, ctx:
     entityType: "ConfigVersion",
     entityId: row.id,
     actorId: maker.id,
-    metadata: { key: input.key, version: row.version, effectiveFrom: input.effectiveFrom },
+    metadata: {
+      key: input.key,
+      version: row.version,
+      effectiveFrom: input.effectiveFrom,
+      baseVersion: inForce.version,
+    },
+    before: inForce.value,
+    after: input.value,
     ...ctx,
   });
   // N-100: the checker is told a change awaits approval.
@@ -115,6 +135,7 @@ export async function decideConfig(
   if (!row || row.status !== "PENDING") throw new AppError("notFound");
   // Maker-checker: the person who proposed a change can never approve it (FR-ADM-003).
   if (row.makerId === checker.id) throw new AppError("makerChecker");
+  const inForce = await getConfig(row.key as ConfigKey);
   const { count } = await db.configVersion.updateMany({
     where: { id, status: "PENDING" },
     data: {
@@ -131,7 +152,15 @@ export async function decideConfig(
     entityType: "ConfigVersion",
     entityId: id,
     actorId: checker.id,
-    metadata: { key: row.key, version: row.version },
+    metadata: {
+      key: row.key,
+      version: row.version,
+      baseVersion: inForce.version,
+      status: { before: "PENDING", after: approve ? "ACTIVE" : "REJECTED" },
+    },
+    // FR-AUD-002: the change decided on (in force → proposed); `status` says which way it went.
+    before: inForce.value,
+    after: row.value,
     ...ctx,
   });
 }

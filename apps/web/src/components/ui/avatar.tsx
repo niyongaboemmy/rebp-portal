@@ -1,11 +1,8 @@
 import { cn, initials } from "@/lib/utils";
 
-/** Number of curated colour pairs (`--avatar-N-bg/fg` in globals.css, contrast-tested). */
-const AVATAR_TONES = 8;
-
 /**
- * Initials avatar, or the person's photo when there is one (UX-015: the profile photo). The colour comes from the name, so each person stays recognisable, but only
- * from a curated, calm set that sits well next to the brand blue (ADR-011, U4).
+ * Initials avatar, or the person's photo when there is one (UX-015: the profile photo). Initials
+ * sit on the primary family's soft gradient, the same for everyone (UX-035: primary colours only).
  */
 export function Avatar({
   name,
@@ -17,15 +14,14 @@ export function Avatar({
   src?: string | null;
   className?: string;
 }) {
-  const tone = ([...name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % AVATAR_TONES) + 1;
   return (
     <span
       aria-hidden
       className={cn(
-        "relative inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full font-display text-sm font-bold",
+        // Primary family only (UX-035): a soft blue gradient and blue initials for everyone.
+        "relative inline-flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(145deg,var(--primary-soft),color-mix(in_oklch,var(--primary)_18%,var(--card)))] font-display text-sm font-bold text-link",
         className,
       )}
-      style={{ background: `var(--avatar-${tone}-bg)`, color: `var(--avatar-${tone}-fg)` }}
     >
       {initials(name)}
       {src && (

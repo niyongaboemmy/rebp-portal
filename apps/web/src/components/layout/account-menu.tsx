@@ -55,6 +55,8 @@ export interface AccountUser {
   roleLabel?: string;
   /** The profile photo, when the person has uploaded one (UX-015). */
   photoUrl?: string | null;
+  /** Keeps a personal profile and CV (individual applicants); otherwise those links are hidden. */
+  hasProfile?: boolean;
 }
 
 interface AccountMenuProps {
@@ -81,11 +83,12 @@ export function accountLinks(
   area: AppArea | null,
   canSwitchArea: boolean,
   capabilities: readonly Capability[],
+  hasProfile = true,
 ): NavItem[] {
   const links: NavItem[] = [];
   if (area === null) links.push(AREA_HOME.portal);
   else if (canSwitchArea) links.push(AREA_HOME[area === "portal" ? "backoffice" : "portal"]);
-  return [...links, ...accountLinksFor(capabilities)];
+  return [...links, ...accountLinksFor(capabilities, hasProfile)];
 }
 
 function Identity({ user, className }: { user: AccountUser; className?: string }) {
@@ -138,7 +141,7 @@ function AccountMenuItems({
         user={user}
         className="mb-1 rounded-xl bg-primary-soft/60 p-2.5 dark:bg-primary/[0.12]"
       />
-      {accountLinks(area, canSwitchArea, capabilities).map((item) => {
+      {accountLinks(area, canSwitchArea, capabilities, user.hasProfile).map((item) => {
         const Icon = linkIcon(item, area);
         return (
           <DropdownMenuItem key={item.href} asChild>
@@ -326,7 +329,7 @@ export function AccountSheet(props: AccountMenuProps) {
         <SheetDescription className="sr-only">{user.fullName}</SheetDescription>
         <Identity user={user} className="pr-10" />
         <ul className="flex flex-col gap-1">
-          {accountLinks(area, canSwitchArea, capabilities).map((item) => {
+          {accountLinks(area, canSwitchArea, capabilities, user.hasProfile).map((item) => {
             const Icon = linkIcon(item, area);
             return (
               <li key={item.href}>

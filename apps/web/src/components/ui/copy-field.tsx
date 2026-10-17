@@ -52,7 +52,7 @@ export function CopyField({
         />
         <Check
           className={cn(
-            "absolute size-5 text-success transition-all duration-(--dur-3) ease-spring",
+            "absolute size-5 text-link transition-all duration-(--dur-3) ease-spring",
             copied ? "scale-100 opacity-100" : "scale-50 opacity-0",
           )}
           aria-hidden

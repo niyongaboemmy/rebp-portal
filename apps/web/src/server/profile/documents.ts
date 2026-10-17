@@ -285,3 +285,46 @@ async function syncOpenApplications(user: User, ctx: RequestContext) {
   });
   for (const app of open) await syncProfileDocuments(app, user, ctx);
 }
+
+/**
+ * Applicants' current profile photos for staff lists (UX-035): user id → the URL of the staff
+ * photo route, one query for a whole page. Users without a photo are absent (initials show).
+ */
+export async function applicantPhotoUrls(userIds: readonly string[]) {
+  const ids = [...new Set(userIds)];
+  if (ids.length === 0) return new Map<string, string>();
+  const photos = await db.profileDocument.findMany({
+    where: {
+      userId: { in: ids },
+      type: "photo",
+      removedAt: null,
+      status: { notIn: ["INFECTED", "REJECTED_FILE"] },
+    },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, userId: true },
+  });
+  const urls = new Map<string, string>();
+  for (const p of photos)
+    if (!urls.has(p.userId))
+      urls.set(p.userId, `/api/backoffice/applicants/${p.userId}/photo?v=${p.id}`);
+  return urls;
+}
+
+/** The applicant's current profile photo for staff (UX-035); access is checked by the route. */
+export async function readApplicantPhoto(userId: string) {
+  const doc = await db.profileDocument.findFirst({
+    where: {
+      userId,
+      type: "photo",
+      removedAt: null,
+      status: { notIn: ["INFECTED", "REJECTED_FILE"] },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (!doc) throw new AppError("notFound");
+  return {
+    bytes: await blobStore.get(doc.storageKey),
+    mimeType: doc.mimeType,
+    fileName: doc.fileName,
+  };
+}

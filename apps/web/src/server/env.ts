@@ -78,4 +78,8 @@ export const appEnv = (): AppEnv => env().APP_ENV ?? (isProduction() ? "producti
 
 /** Dev mode: OTP codes are returned to the UI instead of relying on a real mail/SMS gateway. */
 export const isDevMode = () => appEnv() === "dev";
-export const isGoogleEnabled = () => Boolean(env().GOOGLE_CLIENT_ID && env().GOOGLE_CLIENT_SECRET);
+/** Google sign-in needs only the client ID: the browser gets a signed ID token (ADR-004 amendment). */
+export const isGoogleEnabled = () => Boolean(env().GOOGLE_CLIENT_ID);
+/** The legacy redirect flow (/api/auth/google) also needs the secret; kept for deployments that set it. */
+export const isGoogleRedirectEnabled = () =>
+  Boolean(env().GOOGLE_CLIENT_ID && env().GOOGLE_CLIENT_SECRET);

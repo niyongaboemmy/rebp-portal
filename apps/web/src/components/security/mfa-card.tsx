@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyRound, Mail, MessageSquare, Smartphone, Star } from "@/components/icons";
+import { AlertTriangle, KeyRound, Mail, MessageSquare, Smartphone, Star } from "@/components/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,7 +8,6 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { MFA_METHODS, otpSchema, type MfaMethod } from "@rebp/contracts";
 import { z } from "zod";
-import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -113,7 +112,8 @@ export function MfaCard({
     });
 
   return (
-    <Card id="two-step">
+    // scroll-mt: the page's "Set it up now" jumps here; :target briefly rings the card.
+    <Card id="two-step" className="scroll-mt-24 target:ring-2 target:ring-primary/40">
       <CardHeader className="flex-row flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1.5">
           <CardTitle>{t("mfa.title")}</CardTitle>
@@ -124,7 +124,44 @@ export function MfaCard({
         </Badge>
       </CardHeader>
 
-      {required && enabled.length === 0 && <Alert variant="warning">{t("requiredBanner")}</Alert>}
+      {required && enabled.length === 0 && (
+        // A guided start, not just a warning: the steps, and buttons that open setup directly.
+        <div className="flex flex-col gap-4 rounded-2xl bg-warning-soft p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 size-5 shrink-0 text-warning" aria-hidden />
+            <div className="flex flex-col gap-0.5">
+              <p className="font-semibold">{t("mfa.guide.title")}</p>
+              <p className="text-sm text-muted-foreground">{t("mfa.guide.body")}</p>
+            </div>
+          </div>
+          <ol className="grid gap-2 sm:grid-cols-3">
+            {(["pick", "code", "save"] as const).map((step, index) => (
+              <li
+                key={step}
+                className="flex items-center gap-2.5 rounded-xl bg-card/70 px-3 py-2 text-sm dark:bg-white/[0.05]"
+              >
+                <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                  {index + 1}
+                </span>
+                {t(`mfa.guide.steps.${step}`)}
+              </li>
+            ))}
+          </ol>
+          <div className="flex flex-wrap gap-2">
+            <Button className="rounded-full" disabled={busy} onClick={() => startSetup("EMAIL")}>
+              <Mail aria-hidden /> {t("mfa.guide.email")}
+            </Button>
+            <Button
+              variant="outline"
+              className="rounded-full"
+              disabled={busy}
+              onClick={() => startSetup("TOTP")}
+            >
+              <Smartphone aria-hidden /> {t("mfa.guide.app")}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <ul className="flex flex-col divide-y rounded-xl border">
         {MFA_METHODS.map((method) => {
@@ -146,6 +183,12 @@ export function MfaCard({
                   <p className="flex flex-wrap items-center gap-2 font-semibold">
                     {t(`mfa.methods.${method}.name`)}
                     {isOn && <Badge variant="success">{t("mfa.statusOn")}</Badge>}
+                    {!isOn && enabled.length === 0 && method === "EMAIL" && (
+                      <Badge variant="outline">{t("mfa.guide.quickest")}</Badge>
+                    )}
+                    {!isOn && enabled.length === 0 && method === "TOTP" && (
+                      <Badge variant="outline">{t("mfa.guide.secure")}</Badge>
+                    )}
                     {isPreferred && (
                       <Badge variant="accent">
                         <Star /> {t("mfa.preferred")}

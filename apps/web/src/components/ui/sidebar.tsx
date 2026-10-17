@@ -238,7 +238,7 @@ export function SidebarContent({
   return (
     <div
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-3 py-3 sb-collapsed:items-center sb-collapsed:gap-3 sb-collapsed:px-2",
+        "flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-contain px-3 py-3 sb-collapsed:items-center sb-collapsed:gap-3 sb-collapsed:px-2",
         className,
       )}
     >
@@ -283,9 +283,11 @@ export function SidebarGroup({
       className="flex w-full flex-col gap-1 sb-collapsed:before:mx-auto sb-collapsed:before:mb-2 sb-collapsed:before:block sb-collapsed:before:h-px sb-collapsed:before:w-6 sb-collapsed:before:bg-border sb-collapsed:first:before:hidden"
     >
       {label && (
+        // A section heading, not another item: small caps-style eyebrow, letter-spaced and muted,
+        // trailed by a hairline rule across the column (ADR-011 v4).
         <p
           id={labelId}
-          className="px-3 pb-1 text-xs font-medium text-muted-foreground sb-collapsed:sr-only"
+          className="flex items-center gap-2.5 px-3.5 pb-1.5 text-[0.6875rem] leading-4 font-bold tracking-[0.12em] text-muted-foreground uppercase after:h-px after:flex-1 after:bg-foreground/[0.07] dark:after:bg-white/[0.07] sb-collapsed:sr-only"
         >
           {label}
         </p>
@@ -336,33 +338,29 @@ export function SidebarMenuButton({
             aria-current={active ? "page" : undefined}
             // With a count the name becomes "Work queue, 4 waiting" (it starts with the visible label).
             aria-label={hasBadge ? `${label}, ${badge!.label}` : undefined}
-            className="group/item relative flex h-(--nav-item-h,2.75rem) w-full items-center gap-3 rounded-[1rem] px-3.5 text-sm font-medium text-sidebar-foreground/80 transition-colors duration-(--dur-2) outline-none hover:bg-foreground/[0.05] hover:text-sidebar-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-semibold aria-[current=page]:text-foreground dark:hover:bg-white/[0.05] pointer-coarse:h-11 sb-collapsed:size-11 sb-collapsed:justify-center sb-collapsed:px-0"
+            className="group/item relative flex h-(--nav-item-h,2.75rem) w-full items-center gap-3 rounded-[1rem] pr-3 pl-2 text-sm font-normal text-sidebar-foreground/85 transition-colors duration-(--dur-2) outline-none hover:bg-foreground/[0.04] hover:text-sidebar-foreground focus-visible:ring-[3px] focus-visible:ring-ring/40 aria-[current=page]:bg-sidebar-accent/70 aria-[current=page]:font-semibold aria-[current=page]:text-foreground dark:hover:bg-white/[0.04] pointer-coarse:h-11 sb-collapsed:size-11 sb-collapsed:justify-center sb-collapsed:px-0 sb-collapsed:hover:bg-transparent sb-collapsed:aria-[current=page]:bg-transparent"
           >
-            <span className="relative inline-flex shrink-0">
-              {/* Outline icons throughout (Fluent 2 Regular at a medium weight); the current page's
-                  icon is brand blue on the soft pill, its label stays dark for full contrast. */}
+            {/* Icon tile (ADR-011 v4): a soft rounded square anchors each light Lucide outline. On the
+                current page the tile is brand blue with the outline icon in white (a lighter blue when
+                expanded, full blue on the rail), so "you are here" reads at a glance. */}
+            <span className="relative inline-flex size-7 shrink-0 items-center justify-center rounded-[0.6rem] bg-foreground/[0.045] transition-[background-color,transform] duration-(--dur-2) group-hover/item:bg-foreground/[0.08] group-active/item:scale-95 group-aria-[current=page]/item:bg-[color-mix(in_oklch,var(--primary)_82%,white)] dark:bg-white/[0.06] dark:group-hover/item:bg-white/[0.1] dark:group-aria-[current=page]/item:bg-primary sb-collapsed:size-9 sb-collapsed:rounded-[0.8rem] sb-collapsed:group-aria-[current=page]/item:bg-primary">
               <Icon
                 aria-hidden
-                className="size-5 text-sidebar-foreground/80 group-hover/item:text-sidebar-foreground group-aria-[current=page]/item:text-link"
+                className="size-4 text-sidebar-foreground/75 group-hover/item:text-sidebar-foreground group-aria-[current=page]/item:text-primary-foreground"
               />
               {hasBadge && (
+                // A real notification badge (ADR-011 v4): a Sun bubble on the tile's corner, cut out of
+                // the row by a ring in the row's own colour, and popping in when it appears. The count
+                // is also in the link's accessible name, so this stays decorative.
                 <span
                   aria-hidden
-                  className="absolute -top-0.5 -right-1 hidden size-2 rounded-full bg-ember ring-2 ring-sidebar forced-colors:bg-[CanvasText] sb-collapsed:block"
-                />
-              )}
-            </span>
-            <span className="min-w-0 flex-1 truncate sb-collapsed:sr-only">{label}</span>
-            {hasBadge && (
-              <>
-                <span
-                  aria-hidden
-                  className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-primary-soft px-1.5 text-[0.7rem] leading-5 font-semibold num text-primary-soft-foreground sb-collapsed:hidden"
+                  className="absolute -top-1.5 -right-2 inline-flex h-[1.125rem] min-w-[1.125rem] animate-pop items-center justify-center rounded-full bg-sun px-1 text-[0.625rem] leading-none font-bold num text-sun-foreground ring-2 ring-sidebar group-hover/item:ring-[color-mix(in_oklch,var(--foreground)_4%,var(--sidebar))] group-aria-[current=page]/item:ring-[color-mix(in_oklch,var(--sidebar-accent)_70%,var(--sidebar))] dark:group-hover/item:ring-[color-mix(in_oklch,white_4%,var(--sidebar))] forced-colors:bg-[CanvasText] forced-colors:text-[Canvas] sb-collapsed:-right-1.5 sb-collapsed:group-aria-[current=page]/item:ring-sidebar"
                 >
                   {badge!.count > 99 ? "99+" : badge!.count}
                 </span>
-              </>
-            )}
+              )}
+            </span>
+            <span className="min-w-0 flex-1 truncate sb-collapsed:sr-only">{label}</span>
           </Link>
         </TooltipTrigger>
         {collapsed && (

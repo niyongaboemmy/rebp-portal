@@ -36,7 +36,7 @@ export function ColumnChart({
   const labelEvery = Math.ceil(columns.length / 7);
 
   return (
-    <figure className={cn("flex flex-col gap-2", className)}>
+    <figure className={cn("relative flex min-w-0 flex-col gap-2", className)}>
       <figcaption className="sr-only">{label}</figcaption>
       <div className="relative h-36" onMouseLeave={() => setActive(null)}>
         <div className="absolute inset-x-0 bottom-0 h-px bg-border" aria-hidden />
@@ -79,23 +79,26 @@ export function ColumnChart({
           </span>
         ))}
       </div>
-      <table className="sr-only" aria-describedby={id}>
-        <caption id={id}>{label}</caption>
-        <thead>
-          <tr>
-            <th scope="col">{label}</th>
-            <th scope="col">{valueLabel}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {columns.map((c) => (
-            <tr key={c.key}>
-              <th scope="row">{c.label}</th>
-              <td>{c.value}</td>
+      {/* Tables ignore sr-only's 1px width; the wrapper clips it (UX-035). */}
+      <div className="sr-only">
+        <table aria-describedby={id}>
+          <caption id={id}>{label}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{label}</th>
+              <th scope="col">{valueLabel}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {columns.map((c) => (
+              <tr key={c.key}>
+                <th scope="row">{c.label}</th>
+                <td>{c.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

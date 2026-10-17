@@ -1,5 +1,7 @@
 "use client";
 
+import { Controller } from "react-hook-form";
+import { Select } from "@/components/ui/select";
 import { Ban, MessageSquare, Play, ShieldCheck, UserPlus } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -107,14 +109,17 @@ export function ReviewActions({
   );
 }
 
-function RequestInfoDialog({
+/** FR-L-007: ask the applicant for information; `compact` is the review footer's trigger. */
+export function RequestInfoDialog({
   applicationId,
   sections,
   documents,
+  compact = false,
 }: {
   applicationId: string;
   sections: readonly SectionKey[];
   documents: readonly DocumentType[];
+  compact?: boolean;
 }) {
   const t = useTranslations("review.request");
   const tr = useTranslations("review");
@@ -157,8 +162,13 @@ function RequestInfoDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" data-testid="request-information">
-          <MessageSquare /> {t("open")}
+        <Button
+          variant={compact ? "ghost" : "outline"}
+          data-testid="request-information"
+          className={cn(compact && "px-3 @xl/main:px-4")}
+        >
+          <MessageSquare />
+          <span className={cn(compact && "@max-xl/main:sr-only")}>{t("open")}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
@@ -169,28 +179,31 @@ function RequestInfoDialog({
         <form onSubmit={submit} noValidate className="flex flex-col gap-5">
           <Field label={t("template")} error={errors.template?.message}>
             <FieldControl>
-              <select
-                {...form.register("template", {
-                  onChange: (event) => {
-                    const previous = form.getValues("message");
-                    const known = INFO_REQUEST_TEMPLATES.some(
-                      (k) => t(`templates.${k}.message`) === previous,
-                    );
-                    if (!previous || known)
-                      form.setValue(
-                        "message",
-                        t(`templates.${event.target.value as "custom"}.message`),
+              <Controller
+                control={form.control}
+                name="template"
+                render={({ field }) => (
+                  <Select
+                    value={field.value}
+                    onBlur={field.onBlur}
+                    onChange={(value) => {
+                      if (!value) return;
+                      field.onChange(value);
+                      // A template fills the message unless the officer has written their own.
+                      const previous = form.getValues("message");
+                      const known = INFO_REQUEST_TEMPLATES.some(
+                        (k) => t(`templates.${k}.message`) === previous,
                       );
-                  },
-                })}
-                className={cn(inputClass, "bg-card dark:bg-transparent")}
-              >
-                {INFO_REQUEST_TEMPLATES.map((key) => (
-                  <option key={key} value={key}>
-                    {t(`templates.${key}.label`)}
-                  </option>
-                ))}
-              </select>
+                      if (!previous || known)
+                        form.setValue("message", t(`templates.${value as "custom"}.message`));
+                    }}
+                    options={INFO_REQUEST_TEMPLATES.map((key) => ({
+                      value: key,
+                      label: t(`templates.${key}.label`),
+                    }))}
+                  />
+                )}
+              />
             </FieldControl>
           </Field>
           <Field
@@ -214,7 +227,7 @@ function RequestInfoDialog({
               {sections.map((key) => (
                 <label
                   key={key}
-                  className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl bg-surface-2 px-3.5 py-2.5 text-sm"
+                  className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm ring-1 ring-foreground/[0.07] transition-colors hover:bg-primary/[0.035] has-[[data-state=checked]]:bg-primary/[0.06] has-[[data-state=checked]]:ring-primary/30 dark:ring-white/[0.06] dark:hover:bg-surface-3"
                 >
                   <Checkbox
                     checked={chosenSections.includes(key)}
@@ -236,7 +249,7 @@ function RequestInfoDialog({
               {documents.map((type) => (
                 <label
                   key={type}
-                  className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl bg-surface-2 px-3.5 py-2.5 text-sm"
+                  className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm ring-1 ring-foreground/[0.07] transition-colors hover:bg-primary/[0.035] has-[[data-state=checked]]:bg-primary/[0.06] has-[[data-state=checked]]:ring-primary/30 dark:ring-white/[0.06] dark:hover:bg-surface-3"
                 >
                   <Checkbox
                     checked={chosenDocuments.includes(type)}

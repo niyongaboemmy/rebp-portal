@@ -23,7 +23,7 @@ import { createConfirmations } from "../confirmations/confirmations";
 import { db } from "../db";
 import { AppError } from "../errors";
 import { devCodeFor, sendEmail, sendSms } from "../notifications";
-import { notify } from "../notifications/inbox";
+import { notify, notifyUsersWithCapability } from "../notifications/inbox";
 import { addWorkingDays } from "../time";
 import { autoAssign } from "../backoffice/assignment";
 import {
@@ -289,7 +289,14 @@ export async function markSubmitted(app: Application, actorId: string | null) {
     email: true,
     sms: true,
   });
-  await autoAssign(app.id);
+  // Nobody free of conflicts (or auto-assignment off): the reviewers see it waiting (UX-032).
+  if (!(await autoAssign(app.id)))
+    await notifyUsersWithCapability("review.perform", {
+      code: "N-030",
+      messageKey: "unassigned",
+      values: { reference: app.referenceNo },
+      href: `/backoffice/queue?view=unassigned`,
+    });
 }
 
 /** Resubmission after an information request or a declined confirmation (FR-WF-002). */

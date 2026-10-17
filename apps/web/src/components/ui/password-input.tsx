@@ -74,8 +74,8 @@ const STRENGTH_COLOURS = [
   "bg-destructive",
   "bg-destructive",
   "bg-warning",
-  "bg-success",
-  "bg-success",
+  "bg-primary",
+  "bg-primary",
 ];
 
 /** Visual strength hint; the server enforces the actual policy. */
@@ -130,14 +130,14 @@ export function PasswordChecklist({
           key={rule.key}
           className={cn(
             "inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-(--dur-2)",
-            rule.ok ? "text-success" : "text-muted-foreground",
+            rule.ok ? "text-link" : "text-muted-foreground",
           )}
         >
           <span
             className={cn(
               "inline-flex size-4 items-center justify-center rounded-full border transition-all duration-(--dur-3) ease-spring",
               rule.ok
-                ? "scale-100 border-transparent bg-success text-card"
+                ? "scale-100 border-transparent bg-primary text-primary-foreground"
                 : "scale-90 border-input",
             )}
             aria-hidden

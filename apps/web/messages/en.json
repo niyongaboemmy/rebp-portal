@@ -39,7 +39,10 @@
     "dismiss": "Dismiss",
     "notice": "Notice",
     "capsLock": "Caps Lock is on",
-    "moreInfo": "More information"
+    "moreInfo": "More information",
+    "search": "Search",
+    "noMatch": "No match",
+    "notYet": "Not yet"
   },
   "nav": {
     "home": "Home",
@@ -118,8 +121,8 @@
       "backoffice": "Back office"
     },
     "areaHint": {
-      "portal": "Your applications and licences",
-      "backoffice": "Review, decide and administer"
+      "portal": "Apply and track",
+      "backoffice": "Review and decide"
     },
     "switchTo": "Go to {area}",
     "layout": "Layout",
@@ -367,6 +370,7 @@
     },
     "continueWithGoogle": "Continue with Google",
     "googleUnavailable": "Google sign-in is not configured in this environment.",
+    "googleLoadFailed": "Google sign-in couldn't load. Check your connection or browser blocking, then reload the page.",
     "signIn": {
       "title": "Welcome back",
       "subtitle": "Sign in to continue your application.",
@@ -698,6 +702,19 @@
         "send": "Send code",
         "sent": "Code sent. Enter it below.",
         "phoneRequired": "Verify your mobile number first."
+      },
+      "guide": {
+        "title": "Turn on two-step to continue",
+        "body": "Pick a method below. You can add more later.",
+        "steps": {
+          "pick": "Choose a method",
+          "code": "Enter the code",
+          "save": "Save your recovery codes"
+        },
+        "email": "Use email codes (quickest)",
+        "app": "Use an authenticator app (most secure)",
+        "quickest": "Quickest",
+        "secure": "Most secure"
       }
     },
     "recovery": {
@@ -763,7 +780,10 @@
         "twoStep": "Turn on two-step",
         "recovery": "Get new recovery codes"
       }
-    }
+    },
+    "requiredTitle": "Two-step verification is required for your role",
+    "requiredShort": "Set up one method to keep using the back office. It takes about a minute.",
+    "requiredCta": "Set it up now"
   },
   "audit": {
     "title": "Audit trail",
@@ -794,7 +814,37 @@
       "signin": "Sign-in",
       "account": "Account",
       "twoStep": "Two-step",
-      "access": "Access"
+      "access": "Access",
+      "applications": "Applications",
+      "administration": "Administration"
+    },
+    "header": {
+      "eyebrow": "Security",
+      "checked": "events verified",
+      "today": "today",
+      "fortnight": "in 14 days",
+      "bubbleOk": "Nothing tampered with",
+      "bubbleBroken": "Something changed!",
+      "events": "Events"
+    },
+    "export": {
+      "csv": "Export CSV",
+      "json": "Export JSON"
+    },
+    "search": {
+      "label": "Search the audit trail",
+      "actor": "Actor",
+      "actorPlaceholder": "Name or email",
+      "entity": "Entity or reference",
+      "entityPlaceholder": "e.g. REBP-2026-000123",
+      "action": "Action",
+      "actionPlaceholder": "e.g. config.",
+      "from": "From",
+      "to": "To",
+      "submit": "Search",
+      "clear": "Clear filters",
+      "results": "{count, plural, =0 {No events match} one {# event matches} other {# events match}}{more, select, yes { (more on the next page)} other {}}",
+      "empty": "No events match these filters."
     }
   },
   "privacy": {
@@ -962,7 +1012,9 @@
     "badOrigin": "The request came from an unexpected site.",
     "mfaRequired": "Two-step verification is required for this action.",
     "profileIncomplete": "Complete your profile first: your personal details are reused in every application.",
-    "cvIncomplete": "Complete your CV first: the parts this category needs are missing."
+    "cvIncomplete": "Complete your CV first: the parts this category needs are missing.",
+    "exportFormatInvalid": "Choose CSV or JSON for the export.",
+    "decisionAlreadyCorrected": "This decision has already been corrected. Correct the latest record instead."
   },
   "notifications": {
     "emailVerify": {
@@ -1150,6 +1202,10 @@
     "backoffice_access": {
       "label": "Open the back office",
       "description": "Use the regulator's staff console."
+    },
+    "review_assign": {
+      "label": "Assign and reassign files",
+      "description": "Assign, reassign or take over any open application (team lead), and receive SLA escalations."
     }
   },
   "access": {
@@ -1252,6 +1308,14 @@
       },
       "staffRole": "Staff",
       "noMatches": "No permissions match “{query}”."
+    },
+    "header": {
+      "eyebrow": "People and permissions",
+      "people": "active accounts",
+      "twoStep": "with two-step",
+      "noTwoStep": "without two-step",
+      "bubble": "Who can do what",
+      "bubbleReadOnly": "View only"
     }
   },
   "myAccess": {
@@ -1612,6 +1676,50 @@
       "configuration": "{count, plural, =0 {No pending changes} one {# pending change} other {# pending changes}}",
       "reports": "View reports",
       "open": "Open"
+    },
+    "hero": {
+      "hello": "Hello, {name}",
+      "next": "Next for you",
+      "waiting": "{count, plural, one {# item waiting on you} other {# items waiting on you}}",
+      "clear": "nothing waiting on you",
+      "focus": {
+        "overdue": {
+          "title": "{count, plural, one {# of your files is past its due date} other {# of your files are past their due date}}",
+          "cta": "Open overdue"
+        },
+        "decisions": {
+          "title": "{count, plural, one {# signed review awaits your decision} other {# signed reviews await your decision}}",
+          "cta": "Decide"
+        },
+        "queue": {
+          "title": "{count, plural, one {# application assigned to you} other {# applications assigned to you}}",
+          "cta": "Open queue"
+        },
+        "register": {
+          "title": "{count, plural, one {# register change awaits approval} other {# register changes await approval}}",
+          "cta": "Review"
+        },
+        "configuration": {
+          "title": "{count, plural, one {# configuration change awaits approval} other {# configuration changes await approval}}",
+          "cta": "Review"
+        },
+        "clear": {
+          "title": "You're all caught up",
+          "cta": ""
+        }
+      },
+      "bubble": {
+        "overdue": "Past due!",
+        "decisions": "Your call",
+        "queue": "Files to check",
+        "register": "Needs a second pair of eyes",
+        "configuration": "Approve or reject",
+        "clear": "All clear!"
+      }
+    },
+    "pipeline": {
+      "title": "Review pipeline",
+      "decided": "{count, plural, one {# decided this week} other {# decided this week}}"
     }
   },
   "offline": {
@@ -1653,7 +1761,31 @@
     "access_permissions_changed": "Permissions changed",
     "access_permissions_reset": "Permissions reset to default",
     "access_account_disabled": "Account disabled",
-    "access_account_enabled": "Account re-enabled"
+    "access_account_enabled": "Account re-enabled",
+    "audit_exported": "Audit trail exported",
+    "report_exported": "Report exported",
+    "config_proposed": "Configuration change proposed",
+    "config_approved": "Configuration change approved",
+    "config_rejected": "Configuration change rejected",
+    "application_created": "Application started",
+    "application_signed": "Application signed",
+    "application_transition": "Status changed",
+    "application_assigned": "Application assigned",
+    "application_conflict_declared": "Conflict of interest declared",
+    "application_category_changed": "Category changed",
+    "confirmation_overridden": "Confirmation overridden",
+    "document_verified": "Document verified",
+    "document_rejected": "Document rejected",
+    "review_signed": "Review signed",
+    "decision_signed": "Decision signed",
+    "decision_corrected": "Decision corrected",
+    "licence_issued": "Licence issued",
+    "licence_issuance_failed": "Licence issuance failed",
+    "licence_certificate_reissued": "Certificate reissued",
+    "register_action_proposed": "Register change proposed",
+    "register_action_rejected": "Register change rejected",
+    "payment_waived": "Fee waived",
+    "jobs_run": "Scheduled jobs ran"
   },
   "time": {
     "justNow": "Just now",
@@ -1935,6 +2067,58 @@
     "upgradeEligible": {
       "title": "You can now upgrade",
       "body": "Based on your licence history you can now apply for {category, select, REA {Real Estate Agent} BROKER {Real Estate Broker} other {a higher category}}."
+    },
+    "reviewStarted": {
+      "title": "Your application is being reviewed",
+      "body": "An officer has started reviewing application {reference}. We'll tell you if anything is needed."
+    },
+    "reviewComplete": {
+      "title": "Review complete",
+      "body": "The review of {reference} is done. It's now with the approving authority for a decision."
+    },
+    "decisionReady": {
+      "title": "Decision needed",
+      "body": "{officer} signed the review of {reference}. It's ready for your decision."
+    },
+    "referredInternal": {
+      "title": "Referred for further assessment",
+      "body": "{officer} referred {reference} for further assessment."
+    },
+    "unassigned": {
+      "title": "Application waiting for an officer",
+      "body": "{reference} was submitted and has no officer yet. Assign it from the work queue."
+    },
+    "infoReminder": {
+      "title": "Reply due soon",
+      "body": "The information requested on {reference} is due by {due}. Please respond so the review can continue."
+    },
+    "infoOverdue": {
+      "title": "Reply overdue",
+      "body": "The information requested on {reference} was due on {due}. Please respond as soon as possible."
+    },
+    "infoOverdueOfficer": {
+      "title": "Applicant reply overdue",
+      "body": "The applicant hasn't answered the information request on {reference} (due {due})."
+    },
+    "reassigned": {
+      "title": "File reassigned",
+      "body": "{name} reassigned application {reference} to another officer."
+    },
+    "slaEscalated": {
+      "title": "Service level escalation",
+      "body": "Application {reference} is more than two working days past its due date ({date}). Please reassign or follow up."
+    },
+    "decisionCorrected": {
+      "title": "Decision letter corrected",
+      "body": "The decision on application {reference} was corrected. Letter {letter} replaces letter {previous}."
+    },
+    "certificateReissued": {
+      "title": "New certificate issued",
+      "body": "A new certificate (version {version}) was issued for licence {licence}. The QR code on the previous certificate no longer verifies."
+    },
+    "issuanceFailed": {
+      "title": "Licence issuance failed",
+      "body": "The licence for approved application {reference} could not be issued. It will be retried automatically; please check the file."
     }
   },
   "conditions": {
@@ -2045,8 +2229,10 @@
       "APPROVED_WITH_CONDITIONS": "Your application for registration and licensing as {category} has been approved subject to the conditions below. The conditions are shown on your licence and in the portal.",
       "DEFERRED": "The decision on your application as {category} has been deferred pending additional information. Please respond through the REBP Portal.",
       "REJECTED": "After review, your application for registration and licensing as {category} has not been approved, for the reasons below.",
-      "appeal": "You may request reconsideration of this decision in writing within 30 days of this letter, in line with the Professional Body's procedures."
-    }
+      "appeal": "You may request reconsideration of this decision in writing within 30 days of this letter, in line with the Professional Body's procedures.",
+      "correction": "This letter corrects decision letter {letter}. Reason: {reason}"
+    },
+    "evidenceRequired": "compliance evidence required"
   },
   "registerResults": {
     "kind": {
@@ -2271,7 +2457,8 @@
       "brightness": "Turn your screen brightness up for a quick scan.",
       "copy": "Copy verification link",
       "copied": "Link copied"
-    }
+    },
+    "conditionEvidence": "Compliance evidence required"
   },
   "registerAdmin": {
     "title": "Register administration",
@@ -2391,7 +2578,30 @@
       "approvedToast": "Change approved. Licence {licence} is updated.",
       "rejectedToast": "Change for {licence} rejected.",
       "makerCheckerTitle": "A second person is needed",
-      "makerChecker": "You proposed this change, so someone else must approve or reject it."
+      "makerChecker": "You proposed this change, so someone else must approve or reject it.",
+      "needsYou": "Needs your approval"
+    },
+    "header": {
+      "eyebrow": "Licence register",
+      "active": "valid",
+      "expiring": "expiring soon",
+      "pending": "awaiting approval",
+      "bubbleDecide": "{count, plural, one {# change to decide} other {# changes to decide}}",
+      "bubbleWaiting": "Waiting for a second person",
+      "bubbleClear": "The register is in order"
+    },
+    "reissue": {
+      "button": "Reissue certificate",
+      "title": "Reissue the certificate",
+      "description": "Licence {licence} is on certificate version {version}. A new version will be issued.",
+      "qrNote": "The QR code on the current certificate will show \"superseded, see current\". The holder is notified.",
+      "reason": "Reason",
+      "reasonHint": "For example lost certificate, name change or condition change (at least 10 characters).",
+      "password": "Your password",
+      "passwordHint": "Reissuing a certificate needs your password.",
+      "submit": "Reissue",
+      "done": "Certificate version {version} issued for {licence}.",
+      "version": "Certificate version"
     }
   },
   "finance": {
@@ -2406,7 +2616,9 @@
       "duplicates": "Duplicates flagged",
       "duplicatesHint": "Need a refund check",
       "outstanding": "Awaiting payment",
-      "outstandingHint": "Applications"
+      "outstandingHint": "Applications",
+      "refunded": "Refunded (RWF)",
+      "refundedHint": "{count, plural, one {# refund} other {# refunds}}"
     },
     "byMethod": "Collected by method",
     "amountUnit": "RWF",
@@ -2437,7 +2649,28 @@
       "status": "Status",
       "receipt": "Receipt",
       "view": "Receipt",
-      "duplicate": "Duplicate"
+      "duplicate": "Duplicate",
+      "showAll": "Show all {count} payments",
+      "showLess": "Show fewer"
+    },
+    "header": {
+      "eyebrow": "Payments",
+      "collected": "collected",
+      "awaiting": "awaiting payment",
+      "duplicates": "duplicates",
+      "bubbleAttention": "{count, plural, one {# item to look at} other {# items to look at}}",
+      "bubbleClear": "All settled"
+    },
+    "revenue": {
+      "byFeeType": "Revenue by fee type",
+      "byMonth": "Revenue by month",
+      "last12": "Last 12 months · RWF",
+      "types": {
+        "registration": "Registration",
+        "licensing": "Licensing and renewal",
+        "latePenalty": "Late renewal penalty",
+        "other": "Other or unitemised"
+      }
     }
   },
   "configuration": {
@@ -2574,7 +2807,8 @@
       "ownProposal": "You proposed this change. Another approver must decide.",
       "waiting": "Waiting for an approving authority.",
       "makerCheckerTitle": "A second person is needed",
-      "makerChecker": "You proposed this change, so someone else must approve or reject it."
+      "makerChecker": "You proposed this change, so someone else must approve or reject it.",
+      "needsYou": "Needs your approval"
     },
     "history": {
       "title": "History",
@@ -2598,9 +2832,22 @@
         "payments": "Payments",
         "issuance": "Issuance retries",
         "sla": "SLA warnings",
-        "upgrades": "Upgrade nudges"
+        "upgrades": "Upgrade nudges",
+        "information": "Information reminders"
       }
-    }
+    },
+    "header": {
+      "eyebrow": "Settings",
+      "inForce": "in force",
+      "defaults": "Defaults",
+      "pending": "awaiting approval",
+      "versions": "versions",
+      "versionsCount": "{count, plural, =0 {No versions} one {# version} other {# versions}}",
+      "bubbleDecide": "Your approval is needed",
+      "bubbleWaiting": "Waiting for an approver",
+      "bubbleClear": "Two people for every change"
+    },
+    "outOfScope": "These settings are proposed by a system administrator. You can view them here."
   },
   "reports": {
     "title": "Reports",
@@ -2638,6 +2885,23 @@
     },
     "financial": {
       "title": "Collections"
+    },
+    "header": {
+      "eyebrow": "Insights",
+      "open": "open applications",
+      "breached": "past their SLA",
+      "licences": "valid licences",
+      "bubble": "{sla}% on time"
+    },
+    "exportReasons": "Export reasons",
+    "reasons": {
+      "title": "Reasons",
+      "rejectionReasons": "Rejection reasons",
+      "rejectionsHint": "{rejections, plural, one {# rejection} other {# rejections}} · {deferrals, plural, one {# deferral} other {# deferrals}}",
+      "recommendations": "Review recommendations",
+      "signedReviews": "Latest signed review per application",
+      "reviewReasons": "Reasons officers gave to reject",
+      "reviewReasonsHint": "Reject recommendations"
     }
   },
   "queue": {
@@ -2709,6 +2973,36 @@
       "declared": "They declared a conflict of interest.",
       "supervisor": "They are the named supervisor.",
       "firm": "They belong to the applicant's firm."
+    },
+    "bubble": {
+      "breached": "Some files are overdue",
+      "mine": "Let's check them",
+      "clear": "Queue's clear!"
+    },
+    "officerLabel": "Assigned officer",
+    "allOfficers": "All officers",
+    "sortLabel": "Sort by",
+    "sorts": {
+      "deadline": "Deadline, soonest first",
+      "submitted": "Newest submissions first",
+      "stale": "Longest in current state"
+    },
+    "inState": "{days, plural, =0 {In this state since today} one {# day in this state} other {# days in this state}}",
+    "bulk": {
+      "label": "Bulk assignment",
+      "select": "Select {reference}",
+      "selectAll": "Select all on this page",
+      "selected": "{count, plural, one {# file selected} other {# files selected}}",
+      "officer": "Assign to",
+      "assign": "Assign selected",
+      "takeSelected": "Assign selected to me",
+      "clear": "Clear selection",
+      "confirmTitle": "{count, plural, one {Assign # file?} other {Assign # files?}}",
+      "confirmBody": "{count, plural, one {# file} other {# files}} will go to {name}. Files with a conflict of interest are skipped and listed.",
+      "cancel": "Cancel",
+      "confirm": "{count, plural, one {Assign # file} other {Assign # files}}",
+      "done": "{count, plural, one {# file assigned.} other {# files assigned.}}",
+      "skipped": "{count, plural, one {# file wasn't assigned:} other {# files weren't assigned:}}"
     }
   },
   "review": {
@@ -2803,7 +3097,17 @@
       "licences": "{count, plural, =0 {Licences} other {Licences (#)}}",
       "noLicences": "No licences held.",
       "expires": "expires {date}",
-      "applications": "{count, plural, =0 {Applications} other {Applications (#)}}"
+      "applications": "{count, plural, =0 {Applications} other {Applications (#)}}",
+      "affiliations": "{count, plural, =0 {Affiliations} other {Affiliations (#)}}",
+      "noAffiliations": "No firm affiliations on record.",
+      "period": "{from} – {to}",
+      "affiliatedSince": "since {date}",
+      "history": "Licence history and sanctions",
+      "noHistory": "No licence history.",
+      "payments": "{count, plural, =0 {Payments} other {Payments (#)}}",
+      "noPayments": "No payments yet.",
+      "communications": "Latest messages sent",
+      "noCommunications": "No messages sent yet."
     },
     "docTypes": {
       "proofOfIdentity": "Proof of identity",
@@ -2875,7 +3179,44 @@
       "rejectTitle": "Reject this document",
       "rejectDescription": "Tell the applicant what is wrong with the {document}. They will see this reason.",
       "reason": "Reason",
-      "reasonHint": "At least 5 characters, e.g. \"The scan is cut off at the bottom\"."
+      "reasonHint": "At least 5 characters, e.g. \"The scan is cut off at the bottom\".",
+      "verifiedCount": "{done} of {total} verified",
+      "verdict": "Verdict for {document}",
+      "rejectedState": "Rejected",
+      "openViewer": "Open viewer",
+      "carouselMove": "Previous or next document in the viewer",
+      "position": "{n} of {total}",
+      "carouselHint": "Swipe or use ← → to move between documents.",
+      "notUploaded": "Not uploaded",
+      "missingCount": "{count, plural, one {# required document missing} other {# required documents missing}}",
+      "state": {
+        "unavailable": {
+          "title": "This file can't be shown",
+          "body": "The stored file is missing or couldn't be opened. Ask the applicant to upload it again with an information request."
+        },
+        "notUploaded": {
+          "title": "Not uploaded yet",
+          "body": "This required document hasn't been uploaded. Request it from the applicant before you sign the review."
+        },
+        "blocked": {
+          "title": "This file isn't available",
+          "body": "It can't be reviewed in its current state."
+        },
+        "retry": "Try again",
+        "noPreview": {
+          "title": "Preview not available",
+          "body": "This file type can't be shown in the browser."
+        },
+        "download": "Download file"
+      },
+      "autoNext": {
+        "next": "Next document",
+        "stay": "Stay",
+        "go": "Go now",
+        "allDone": "Documents done · next",
+        "nextStep": "Record the checks and sign",
+        "continue": "Continue"
+      }
     },
     "items": {
       "identity": {
@@ -2984,18 +3325,51 @@
       "computed": "Computed: {value}",
       "computedMark": "Computed outcome",
       "overrideReason": "Why you changed the computed outcome",
-      "overrideHint": "Required when you override (at least 10 characters). Overrides are reported."
+      "overrideHint": "Required when you override (at least 10 characters). Overrides are reported.",
+      "progress": {
+        "title": "Review progress",
+        "checks": "{done} of {total} checks recorded",
+        "done": "done",
+        "todo": "to do",
+        "ready": "{done} of {total} parts ready",
+        "readyToSign": "Ready to sign"
+      },
+      "overridden": "Overridden",
+      "nextCheck": "Next",
+      "nextCheckLine": "Check {n}: {label} — choose an outcome",
+      "allChecksDone": "All six checks recorded — now confirm the outcomes and recommend.",
+      "groups": {
+        "todo": "To do",
+        "failed": "Failed",
+        "done": "Done"
+      },
+      "suggested": "Suggested",
+      "addNote": "note",
+      "short": {
+        "checks": "Checks",
+        "documentation": "Documents",
+        "eligibility": "Eligibility",
+        "recommendation": "Recommend"
+      },
+      "done": "Done",
+      "add": "Add",
+      "edit": "Edit",
+      "reasons": "Reasons",
+      "reasonsNeeded": "Choose the reasons and explain them",
+      "overrideNeeded": "Say why you changed it",
+      "overrideOf": "{part}: why changed"
     },
     "sign": {
       "title": "Sign the review",
-      "description": "Signing locks this version and sends the application on. Confirm with your password.",
-      "password": "Your password",
-      "submit": "Sign review"
+      "description": "Signing locks this version and sends the application on.",
+      "submit": "Sign review",
+      "outcome": "Recommendation"
     },
     "signed": {
       "by": "Version {version} signed by {name} on {date}",
       "methods": {
-        "PASSWORD_REAUTH": "password confirmed"
+        "PASSWORD_REAUTH": "password confirmed",
+        "CONFIRMED_MFA_SESSION": "confirmed in a verified session"
       },
       "readOnly": "Read-only",
       "overridden": "Overridden",
@@ -3055,6 +3429,111 @@
       "reason": "Reason",
       "submit": "Confirm",
       "done": "Confirmation recorded."
+    },
+    "hero": {
+      "next": {
+        "conflict": "You have a conflict of interest with this file. Recuse so another officer can take it.",
+        "take": "Nobody is reviewing this file yet. Assign it to yourself to begin.",
+        "start": "The file is yours. Start the review to open Section L and run the review deadline.",
+        "reviewing": "Check each document, record the six checks and recommend. Sign when everything is ticked.",
+        "waiting": "Waiting for the applicant to answer your information request.",
+        "confirmations": "Waiting for the confirmations the applicant asked for.",
+        "decision": "The review is signed and with the approving authority for a decision.",
+        "decided": "A decision has been recorded. The review below is read-only.",
+        "readOnly": "You can read this file. Actions are for the assigned officer."
+      },
+      "bubble": {
+        "conflict": "Better step aside",
+        "take": "Up for grabs!",
+        "start": "Ready when you are",
+        "reviewing": "Let's check it all",
+        "waiting": "Over to the applicant",
+        "confirmations": "Waiting on others",
+        "decision": "Sent for decision",
+        "decided": "All done here",
+        "readOnly": "Just looking"
+      }
+    },
+    "stats": {
+      "docsVerified": "documents verified",
+      "rulesPassed": "rules passed",
+      "confirmed": "confirmations in",
+      "missing": "required missing"
+    },
+    "rulesCount": "{done} of {total} rules pass",
+    "checklistCount": "{done} of {total} required documents verified",
+    "confirmedCount": "{done} of {total} confirmed",
+    "photo": {
+      "open": "View {name}'s photo",
+      "caption": "Profile photo",
+      "alt": "Profile photo of {name}",
+      "hint": "Compare it with the photo on the proof of identity.",
+      "missing": "{name} has no profile photo"
+    },
+    "tabs": {
+      "label": "Parts of this file",
+      "documents": "Documents",
+      "application": "Application",
+      "checks": "Checks",
+      "review": "Review",
+      "history": "History",
+      "applicant": "Applicant"
+    },
+    "dock": {
+      "eyebrow": "Next step",
+      "take": {
+        "label": "Assign to me",
+        "done": "Assigned to you."
+      },
+      "start": {
+        "label": "Start review",
+        "done": "Review started."
+      },
+      "verify": {
+        "label": "{left, plural, one {Check # document} other {Check # documents}}"
+      },
+      "record": {
+        "label": "Record checks and sign"
+      },
+      "waiting": {
+        "label": "See the open request"
+      },
+      "confirmations": {
+        "label": "See confirmations"
+      },
+      "decide": {
+        "label": "Make the decision"
+      },
+      "signed": {
+        "label": "See the signed review"
+      },
+      "nextFile": {
+        "eyebrow": "Done here · the approver decides",
+        "label": "Open my next file",
+        "queue": "Back to the queue"
+      }
+    },
+    "guide": {
+      "step": "Step {n} of {total}",
+      "then": "Then",
+      "verify": "{count, plural, one {verify or reject # document} other {verify or reject # documents}}",
+      "record": "record the six checks, recommend and sign"
+    },
+    "celebrate": {
+      "title": "Validation completed",
+      "stay": "Stay here",
+      "next": "Next file",
+      "review": {
+        "APPROVE": "Recommended for approval. The approver decides next.",
+        "REFER": "Referred for further assessment.",
+        "REJECT": "Recommended for rejection. The approver decides next."
+      },
+      "decision": {
+        "APPROVED": "Approved: the licence is issued.",
+        "APPROVED_WITH_CONDITIONS": "Approved with conditions: the licence is issued.",
+        "DEFERRED": "Deferred: the applicant is told what's needed.",
+        "REJECTED": "Rejected: the applicant receives the letter with the reasons."
+      }
     }
   },
   "decide": {
@@ -3099,7 +3578,13 @@
       "validity": "Valid {from} to {to}",
       "certificate": "Certificate (PDF)",
       "issuancePending": "The licence is being issued. It will appear here shortly.",
-      "letter": "Decision letter (PDF)"
+      "letter": "Decision letter (PDF)",
+      "corrects": "Corrects",
+      "arrangement": "Practice arrangement",
+      "overridden": "set by the approver",
+      "evidenceRequired": "evidence required",
+      "earlier": "Earlier records (corrected)",
+      "letterShort": "Letter"
     },
     "form": {
       "recorded": "Decision signed.",
@@ -3124,9 +3609,57 @@
       "reasonsOptional": "Reasons (optional)",
       "reasons": "Reasons",
       "reasonsHint": "Required for conditions, deferral and rejection (at least 10 characters). They appear in the decision letter.",
-      "password": "Your password",
-      "passwordHint": "Signing a decision needs your password. Decisions can't be changed afterwards.",
-      "submit": "Sign decision"
+      "submit": "Sign decision",
+      "details": "Details and reasons",
+      "signStep": "Sign the decision",
+      "intro": "Choose the decision, explain it, then sign.",
+      "arrangement": "Authorised practice arrangement",
+      "arrangementHint": "Derived from the application: {derived}. Choose another only if the decision authorises a different arrangement.",
+      "derived": "from the application",
+      "evidenceRequired": "Compliance evidence required",
+      "evidenceRequiredHint": "The holder must send proof that the condition is met.",
+      "signHint": "Check the summary, then sign. Decisions can't be changed afterwards.",
+      "confirmTitle": "Sign the decision?",
+      "confirmBody": "The letter is issued and the applicant is told. Decisions can't be changed afterwards."
+    },
+    "bubble": {
+      "empty": "All caught up!",
+      "waiting": "{count, plural, one {# to decide} other {# to decide}}"
+    },
+    "stats": {
+      "waiting": "waiting",
+      "approve": "recommended for approval",
+      "overdue": "overdue"
+    },
+    "hero": {
+      "recommends": "{name} recommends: {recommendation}",
+      "signed": "Review signed by {name} on {date}.",
+      "checks": "{done} of {total} checks verified",
+      "noOverrides": "No overrides",
+      "overridden": {
+        "documentation": "Documentation overridden",
+        "eligibility": "Eligibility overridden"
+      },
+      "rulesToLook": "{count, plural, one {# rule to look at} other {# rules to look at}}",
+      "bubble": {
+        "badge": "Your call",
+        "celebrate": "Licence on its way!",
+        "worried": "Decision recorded",
+        "lock": "Not yours to decide",
+        "waiting": "Not ready yet"
+      }
+    },
+    "correct": {
+      "button": "Correct decision",
+      "title": "Correct this decision",
+      "description": "A new decision record and letter will replace letter {letter}. The outcome stays the same.",
+      "immutableNote": "Signed decisions can't be edited. The original stays on record, linked to the correction.",
+      "reason": "Reason for the correction",
+      "reasonHint": "For example \"correction of a clerical error in the reasons\" (at least 10 characters).",
+      "reasons": "Corrected reasons (optional)",
+      "reasonsHint": "Shown in the new letter. Leave as is to keep the original wording.",
+      "submit": "Sign correction",
+      "done": "Correction signed. Letter {letter} issued."
     }
   },
   "summary": {
@@ -4963,6 +5496,160 @@
       "justNow": "Live · just now",
       "ago": "Live · {minutes} min ago",
       "hint": "This page refreshes itself while open."
+    },
+    "applicant": "Applicant"
+  },
+  "health": {
+    "title": "System health",
+    "description": "Database, scheduler, issuance, notifications and the audit chain.",
+    "checkedAt": "Checked {when}",
+    "database": "Database",
+    "latency": "{ms} ms round-trip",
+    "unreachable": "Unreachable",
+    "jobs": "Scheduled jobs",
+    "lastRun": "Last activity {when}",
+    "neverRun": "No run recorded yet",
+    "issuance": "Licence issuance retries",
+    "issuancePending": "{count, plural, =0 {None waiting} one {# approval waiting} other {# approvals waiting}}",
+    "notifications": "Notification delivery",
+    "notificationsFailed": "{failed} failed of {total} in {days} days",
+    "chain": "Audit chain",
+    "chainOk": "{count} events intact",
+    "chainBroken": "Broken at event #{id}",
+    "unknown": "Not checked",
+    "queue": "Review queue",
+    "queueDepth": "{open} open · {breached} past SLA",
+    "ok": "OK",
+    "attention": "Check",
+    "allClear": "Everything is running normally.",
+    "needsAttention": "{count, plural, one {# item needs attention.} other {# items need attention.}}"
+  },
+  "boDash": {
+    "pulse": "Pulse",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "underDay": "< 1 day",
+    "open": "Open",
+    "details": "Details",
+    "now": "Now",
+    "previous": "Previous week",
+    "vsPrevious": "vs previous week",
+    "kpi": {
+      "in": "Submitted · 7d",
+      "out": "Decided · 7d",
+      "open": "Open files",
+      "overdue": "Overdue",
+      "daily14": "Daily, last 14 days",
+      "open14": "Open files, last 14 days",
+      "month": "Last 30 days"
+    },
+    "command": {
+      "hello": "Hello, {name}",
+      "next": "Next",
+      "clear": "All clear: nothing is waiting",
+      "waiting": "waiting",
+      "slice": {
+        "overdue": "Overdue",
+        "queue": "My files",
+        "decisions": "Decisions",
+        "register": "Register",
+        "configuration": "Configuration"
+      },
+      "hint": "Select a slice to go there",
+      "act": {
+        "overdue": "Review {count} overdue",
+        "queue": "Open my {count, plural, one {file} other {# files}}",
+        "decisions": "Decide {count, plural, one {# file} other {# files}}",
+        "register": "Review {count} register {count, plural, one {change} other {changes}}",
+        "configuration": "Review {count} pending {count, plural, one {change} other {changes}}"
+      }
+    },
+    "live": {
+      "label": "Live",
+      "now": "just now",
+      "ago": "{seconds}s ago",
+      "refresh": "Refresh now"
+    },
+    "flow": {
+      "title": "Flow",
+      "in": "In",
+      "out": "Decided",
+      "range": "Range",
+      "days": "{count}d",
+      "growing": "Backlog +{count}",
+      "shrinking": "Backlog −{count}",
+      "steady": "Backlog steady",
+      "adviceGrowing": "More files are arriving than are being decided.",
+      "adviceSteady": "Decisions are keeping pace with new files.",
+      "assign": "Assign unassigned files",
+      "newest": "See newest submissions"
+    },
+    "pipeline": {
+      "title": "Pipeline",
+      "open": "open",
+      "week": "decided · 7d",
+      "detail": "Files in this stage now",
+      "files": "Files",
+      "share": "Share",
+      "avgWait": "Avg wait",
+      "oldest": "Waiting longest"
+    },
+    "sla": {
+      "title": "Deadlines",
+      "overdue": "Overdue",
+      "dueSoon": "Due in 2 days",
+      "dueWeek": "Due this week",
+      "onTrack": "On track",
+      "onTime": "on time",
+      "detail": "Most overdue files",
+      "none": "Nothing is overdue."
+    },
+    "decisions": {
+      "title": "Decisions",
+      "approved": "approved",
+      "window": "{count, plural, one {# decision} other {# decisions}} · 30 days"
+    },
+    "activity": {
+      "title": "Activity",
+      "total": "{count} events · 30 days",
+      "less": "Less",
+      "more": "More",
+      "open": "Audit trail",
+      "hint": "Select a day to open its events"
+    },
+    "security": {
+      "title": "Security",
+      "twoStep": "two-step",
+      "protected": "Protected",
+      "unprotected": "No two-step",
+      "accounts": "Accounts",
+      "sessions": "Live sessions",
+      "new": "New · 7d",
+      "details": "Details",
+      "byRole": "Accounts by role",
+      "open": "Access control",
+      "openPeople": "Open people",
+      "remind": "See who has no two-step",
+      "hint": "Select a slice to see who"
+    },
+    "actions": {
+      "reviewOverdue": "Review overdue files",
+      "planDue": "Plan files due soon",
+      "allOpen": "See all open files",
+      "openReports": "Open reports",
+      "viewStage": "Open {count, plural, one {this file} other {these # files}}"
+    },
+    "hint": {
+      "select": "Select a slice to act on it"
+    },
+    "guide": {
+      "title": "Do now",
+      "overdue": "{count, plural, one {# file is} other {# files are}} past the deadline",
+      "dueSoon": "{count, plural, one {# file is} other {# files are}} due within 2 days",
+      "decisions": "{count, plural, one {# decision is} other {# decisions are}} waiting for you",
+      "backlog": "The backlog grew by {count} this week",
+      "applicants": "{count, plural, one {# file is} other {# files are}} waiting on applicants",
+      "twoStep": "Only {share}% of accounts use two-step sign-in",
+      "clear": "Everything is on track. Nothing needs you right now."
     }
   }
 }

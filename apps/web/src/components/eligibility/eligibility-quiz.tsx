@@ -207,7 +207,7 @@ export function EligibilityQuiz({ target }: { target?: Category }) {
           </span>
           <div className="flex flex-col gap-2">
             <h1
-              className="animate-rise text-[clamp(1.75rem,1.2rem+2vw,2.75rem)] leading-[1.08] font-bold tracking-[-0.03em] text-balance"
+              className="animate-rise text-[clamp(1.75rem,1.2rem+2vw,2.75rem)] leading-[1.08] font-bold tracking-[-0.02em] text-balance"
               style={{ animationDelay: "60ms" }}
             >
               {t("title")}

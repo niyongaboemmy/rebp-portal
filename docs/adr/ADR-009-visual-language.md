@@ -152,3 +152,163 @@ only in the side navigation, where the airy line weight was what we wanted.
   Because these items also feed the mobile bottom bar, the More sheet and the command palette, those surfaces show
   the same nav glyphs. The sidebar toggle in the top bar stays Fluent.
 - Both sets share `IconProps`, so navigation config can mix them. `pnpm --filter @rebp/web icons` regenerates both.
+
+## Amendment v9 (2026-10-17) — flat overlays in both themes
+
+Product feedback: in dark mode the menus (area switcher, account and help menus) read as heavy slabs. The causes were a
+popover tone far above the page (`0.232` vs `0.165` L), bevelled inset highlights, a near-black drop shadow and
+bubble-like icon tiles.
+
+- **One overlay recipe:** `bg-popover` plus `shadow-(--overlay)`, a 1 px hairline edge and one soft, low drop.
+  `--overlay-drop` is the drop alone, for surfaces that already have a border edge (sheets). There's no glass, no
+  bevel and no translucency. This covers DropdownMenu (and therefore every menu, select and searchable menu),
+  submenus, dialogs (including the command palette), sheets and the mobile bottom bar.
+- **Dark `--popover`** is now `oklch(0.196 0.016 268)`, close to `--card`, so overlays sit in the page.
+- **Menu icon tiles** use a primary tint (`dark:bg-primary/[0.14]`) with no inset highlight.
+- **Tooltips and info tips** stay inverse in light mode. In dark they use the overlay surface instead of a white slab.
+
+## Amendment v10 (2026-10-17) — Inter for UI, Plus Jakarta Sans for headings (supersedes the Figtree line)
+
+Product feedback: Figtree read as soft and informal for a regulator's licensing service. Figtree's rounded geometry is
+friendly, but at body sizes it lacks the crisp, institutional tone that dense forms, registers and back-office tables
+need.
+
+- **Inter** (variable, with the `opsz` axis) for UI and body text. It is the screen workhorse that product teams and
+  public-sector design systems choose (education.gov.uk mandates it). It has a tall x-height, true tabular figures
+  and broad Latin Extended coverage for French and Kinyarwanda. Features `cv05` (tailed l) and `cv08` (serifed I)
+  keep I, l and 1 distinct in names and references.
+- **Plus Jakarta Sans** (variable) for `h1–h4` and `font-display`. It adds warmth and character to headings and hero
+  numbers without losing professionalism. It is already compact, so the heading tracking is −0.015 em (was −0.02)
+  and tighter call-site values moved up one step: −0.035 to −0.025, −0.03 to −0.02, `tracking-tighter` to
+  `tracking-tight`.
+- **JetBrains Mono** is unchanged for codes.
+- **Cost:** two variable families instead of one, both self-hosted and subset by `next/font`, with no runtime request.
+- **Rejected:** Geist (reads as developer tooling), Public Sans (US-federal identity, plainer headings), and Inter
+  alone (professional, but the headings lose character).
+
+## Amendment v11 (2026-10-17) — Manrope, lighter weights (supersedes v10)
+
+Product feedback on v10: Inter with Plus Jakarta Sans headings at 700–800 read as too solid. The product owner
+compared four smooth candidates (Manrope, DM Sans, Outfit, Urbanist) in the same dashboard mock and chose Manrope.
+
+- **Manrope** (variable, 200–800) is the one family for UI, body and headings: smooth open curves, an even stroke,
+  tabular figures and Latin Extended. JetBrains Mono stays for codes. That makes one text family download again
+  (v10 had two).
+- **Lighter weights everywhere.** The Tailwind weight tokens are remapped in `@theme`:
+  - `font-bold` is 650, `font-extrabold` 700 and `font-black` 750; `font-semibold` stays 600.
+  - Base headings: h1 650, h2 650, h3 600 (were 750, 700 and 650).
+- Heading tracking stays at −0.015 em, with call-site values as set in v10.
+
+## Amendment v12 (2026-10-17) — Nunito (supersedes the Manrope choice in v11)
+
+The product owner asked for a rounded, modern face. They compared Nunito, M PLUS Rounded 1c, Quicksand and Rubik in
+the same dashboard mock and chose **Nunito** (variable, 200–1000, Latin Extended).
+
+- Nunito has fully rounded stroke ends on a balanced skeleton: warm and modern, and still crisp in forms and tables.
+- It is the one family for UI, body and headings. JetBrains Mono stays for codes.
+- The lighter weight mapping from v11 stays (`font-bold` 650, `font-extrabold` 700, `font-black` 750; h1/h2 650, h3
+  600), and so does the −0.015 em heading tracking.
+
+## Amendment v13 (2026-10-17) — Fredoka headings with Nunito text (refines v12)
+
+The product owner asked for more options and chose **Fredoka** (variable, 300–700) for `h1–h4` and `font-display`,
+with **Nunito** kept for UI and body text.
+
+- Fredoka's bubbly, fully rounded shapes give the brand a friendly, modern character where text is large.
+- Heading weights are 600, 600 and 550 (h1, h2, h3), with tracking at 0.
+- An unlayered rule in globals.css caps bold, extrabold and black at 600 on headings and display text. The same rule
+  neutralises negative tracking utilities there, so call sites tuned for earlier faces don't render Fredoka heavy or
+  with touching letters.
+
+## Amendment v14 (2026-10-17) — Quicksand, light (supersedes v10–v13)
+
+The product owner reviewed several rounds of candidates and found the professional grotesques too solid. From a set
+of 12 light, elegant faces, with live weight controls, they chose **Quicksand** (variable, 300–700, Latin Extended)
+at its default weights.
+
+- **One family** for UI, body and headings, a rounded geometric with soft, airy strokes. JetBrains Mono stays for
+  codes.
+- **Weights:** text is 400 and headings (h1–h4 and `font-display`) are 500. The unlayered heading rule caps bold
+  classes at 500 and sets negative tracking to 0. The Tailwind weight tokens are remapped: `font-bold` 600,
+  `font-extrabold` 650, `font-black` 700.
+- **Trade-off:** Quicksand's strokes are thin at small sizes. Contrast still comes from the colour tokens (tested in
+  tokens.test). If small text reads faint on low-end screens in the pilot, raise body text to 500 before changing
+  the face.
+
+## Amendment v15 (2026-10-17) — Quicksand one step heavier
+
+The product owner asked for a little more weight than v14.
+
+- **Text** (body and `font-normal`) is 500, `font-medium` 600 and `font-semibold` 650.
+- **Bold steps:** `font-bold`, `font-extrabold` and `font-black` are all 700, which is Quicksand's maximum.
+- **Headings** (h1–h4 and `font-display`, including the unlayered cap) are 600.
+
+## Amendment v16 (2026-10-17): back-office dashboard and status colour semantics (UX-040)
+
+**Colour by meaning, used consistently in charts, rings, pills and badges:**
+
+| Meaning                  | Colour                                            | Examples                                  |
+| ------------------------ | ------------------------------------------------- | ----------------------------------------- |
+| Waiting or queued        | Sun yellow (amber-yellow for "awaiting decision") | Counts, "Next", open files, due this week |
+| In progress              | Primary blue                                      | Under review, submissions                 |
+| Waiting on the applicant | Ember                                             | Action required                           |
+| Done or good             | Success green                                     | Decided, on time, approved, two-step on   |
+| Overdue or rejected      | Destructive red                                   | The only red on the page                  |
+
+Text never relies on colour alone: every segment has a labelled legend with its count.
+
+**Smooth, not solid.**
+
+- Rings are 10 units thick on a soft track.
+- The pipeline bar is a 32 % tint of each stage colour with a 3 px stage-colour baseline, not a solid slab. Counts sit
+  in a card chip, so they meet 4.5:1 on any stage colour.
+- Every tile is glass, with no heavy shadow.
+
+**Overview v2**, at `app/(backoffice)/backoffice/page.tsx` with `components/dashboard/*`, is a bento of summary tiles.
+Each opens a detail dialog.
+
+| Tile            | What it shows                                                                                      | Detail                                              |
+| --------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Command strip   | "Back office" h1, a waiting ring split by where items wait, the single next action and a Live pill | —                                                   |
+| Four pulse KPIs | Count-up number, change against the previous week (green or amber by direction) and a sparkline    | Dialog with the full trend                          |
+| Flow            | In against decided over 7, 14 or 30 days, with the net backlog chip                                | —                                                   |
+| Pipeline        | A segmented bar and a row per stage with typical wait                                              | Count, share, wait and the oldest reference numbers |
+| Deadlines       | Ring by due date                                                                                   | The most overdue reference numbers                  |
+| Decisions       | Outcome mix over 30 days                                                                           | —                                                   |
+| Security        | Two-step adoption, accounts, live sessions and new accounts                                        | Accounts by role                                    |
+| Activity        | 30-day heat strip                                                                                  | —                                                   |
+| Consoles        | Chips with Sun count bubbles                                                                       | —                                                   |
+
+- **Charts** are hand-rolled SVG with HTML text. They have pointer and keyboard crosshairs and an sr-only data table,
+  which sits inside an `sr-only` div because a table ignores `width: 1px` and would widen the page.
+- **Live:** `router.refresh()` runs every 60 s while the tab is visible. The infinite ping animation is ignored by
+  e2e `settle()`.
+- **Data** comes from `server/backoffice/overview.ts` (`flowSeries`, `pipelineDetail`, `slaHealth`, `decisionMix`):
+  aggregates and reference numbers only, gated by capability.
+
+## Amendment v17 (2026-10-17): dashboard palette, blue-led, with yellow for awaiting (supersedes the v16 colour table)
+
+Product feedback: green, orange and teal (`--sky`) don't belong to the brand's primary colours, the dashboard showed
+too much yellow, and "awaiting is yellow".
+
+- **Primary blue** is the dominant colour. Tints (22–100 %) carry work in hand, done and neutral states:
+  - pipeline stages Submitted → Under review → Action required → Further assessment;
+  - the flow chart, with In as a light blue and Decided as primary;
+  - on track, approved, protected accounts, the Live dot, KPI trends and positive change chips.
+- **Sun yellow** means awaiting, and is used sparingly:
+  - the "Awaiting decision" pipeline stage;
+  - the Decisions slice of the waiting ring;
+  - the "decisions waiting for you" nudge;
+  - items due within 2 days, "Next" and the count bubbles.
+- **Destructive red** is only for overdue and rejected.
+- **Not used on the dashboard:** `--success`, `--warning`, `--ember` and `--sky`.
+- **Flat:** the pipeline bar is soft tints with no baseline borders; rings are thin, tiles are glass, with no shadows.
+- **Guiding links:** every chart element is selectable. A selected ring segment shows its next step as a button, and
+  the button is hidden when its count is 0. Destinations are exact filtered views (`DashLinks`, built on the server
+  from capabilities):
+  - queue by view, status, sort or reference number;
+  - access control by `noMfa` or role;
+  - the audit trail for a single day;
+  - decisions, register, configuration and reports.
+- **"Do now"** shows up to three prioritised nudges: overdue → due soon → decisions → backlog → applicants →
+  two-step. Each is one fact and one action.
