@@ -101,7 +101,7 @@ export default async function LandingPage() {
           aria-hidden
           className="absolute inset-x-0 top-0 -z-10 h-80 bg-imigongo-fade text-link opacity-[0.05]"
         />
-        <div className="container-page grid gap-[clamp(1.5rem,5vh,4rem)] py-[clamp(1.5rem,6vh,5rem)] lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-14">
+        <div className="container-page grid grid-cols-[minmax(0,1fr)] gap-[clamp(1.5rem,5vh,4rem)] py-[clamp(1.5rem,6vh,5rem)] lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           {/*
             Hero copy, minimal and guided, in the brand blue: an official badge, a compact headline
             whose words resolve in turn (the accent phrase in primary with the Sun double underline
@@ -172,7 +172,7 @@ export default async function LandingPage() {
           </div>
 
           {/* Below lg the stage comes first (visual, then the message); beside the copy from lg. */}
-          <HeroVisual className="max-lg:order-first lg:max-w-[min(100%,calc((100svh-14rem)*1.45))]" />
+          <HeroVisual className="max-lg:order-first lg:max-w-[min(100%,calc((100svh-14rem)*1.45))] xl:pl-12" />
         </div>
       </section>
 
@@ -193,7 +193,7 @@ export default async function LandingPage() {
         aria-labelledby="ladder-title"
       >
         {/* Heading beside a live demo of the eligibility check (the same companion as /eligibility). */}
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] lg:gap-8">
+        <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 xl:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] xl:gap-8">
           <div className="flex flex-col gap-4">
             <h2
               id="ladder-title"
@@ -257,7 +257,7 @@ export default async function LandingPage() {
             {TRUST.map(({ key }, index) => (
               <li key={key}>
                 <Reveal stagger={index}>
-                  <div className="group flex items-center gap-4 p-5 sm:p-6 lg:gap-5 lg:p-8">
+                  <div className="group flex items-center gap-4 p-5 sm:p-6 md:flex-col md:items-start lg:flex-row lg:items-center lg:gap-5 lg:p-8">
                     <span className="relative inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-white/12 shadow-[inset_0_1px_0_rgb(255_255_255/0.25)] transition-transform duration-(--dur-3) ease-spring group-hover:scale-105 group-hover:-rotate-3 lg:size-16">
                       <TrustGraphic kind={key} />
                     </span>
