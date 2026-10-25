@@ -109,7 +109,7 @@ const WIDE: Layout = {
   h: 430,
   vertical: false,
   at: {
-    RERA: { x: 80, y: 345 },
+    RERA: { x: 80, y: 320 },
     FSLA: { x: 215, y: 270 },
     REA: { x: 390, y: 220 },
     BROKER: { x: 570, y: 180 },
